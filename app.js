@@ -83,4 +83,10 @@ wss.on('request', function(request) {
             term.write(data.data);
         }
     });
+    conn.on('error', function() {
+        term.end();
+    });
+    conn.on('close', function() {
+        term.end();
+    })
 })
