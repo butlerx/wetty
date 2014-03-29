@@ -3,6 +3,8 @@ wetty = Web + tty
 
 Terminal over http. Wetty is an alternative to ajaxterm/anyterm but much better than them because wetty uses ChromeOS' javascript terminal emulator (hterm) which is a full fledged implementation of terminal emulation. Also it uses websockets instead of Ajax and hence better response time.
 
+![Wetty](/terminal.jpg?raw=true)
+
 Install
 -------
 
@@ -17,8 +19,6 @@ Run on http:
   `node app.js -p 3000`
 
 If you run it as root it will launch /bin/login (where you can specify the username), else it will launch ssh to localhost with the node process' user as the ssh login username.
-
-![Wetty](/terminal.jpg?raw=true)
 
 Run on https:
 ------------
