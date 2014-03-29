@@ -1,0 +1,10 @@
+{
+    "name": "Wetty",
+    "version": "0.0.5",
+    "dependencies": {
+        "express": "3.5.1",
+        "websocket": "",
+        "pty.js": "",
+        "optimist": ""
+    }
+}
