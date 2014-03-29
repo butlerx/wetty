@@ -1,7 +1,7 @@
 wetty = Web + tty
 -----------------
 
-Terminal over http. Wetty is like ajaxterm but much better because it uses ChromeOS' terminal emulator (hterm) which has much better terminal emulation implementation. Also it uses websockets instead of Ajax.
+Terminal over http. Wetty is an alternative to ajaxterm/anyterm but much better than them because wetty uses ChromeOS' javascript terminal emulator (hterm) which is a full fledged implementation of terminal emulation. Also it uses websockets instead of Ajax and hence better response time.
 
 Install
 -------
@@ -16,11 +16,13 @@ Run on http:
 -----------
   `node app.js -p 3000`
 
-If you run it as root it will launch /bin/login (where you can specify the username), else it will launch ssh to localhost as the node's user as login username.
+If you run it as root it will launch /bin/login (where you can specify the username), else it will launch ssh to localhost with the node process' user as the ssh login username.
+
+![Wetty](/terminal.jpg?raw=true)
 
 Run on https:
 ------------
-If you don't have ssl certificates from CA you can create a self signed certificate using this command:
+Always use SSL! If you don't have ssl certificates from CA you can create a self signed certificate using this command:
 
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 30000 -nodes`
 
