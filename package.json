@@ -1,10 +1,23 @@
 {
-    "name": "Wetty",
-    "version": "0.0.5",
-    "dependencies": {
-        "express": "3.5.1",
-        "websocket": "",
-        "pty.js": "",
-        "optimist": ""
-    }
+  "name": "wetty",
+  "version": "0.0.5",
+  "dependencies": {
+    "express": "3.5.1",
+    "websocket": "",
+    "pty.js": "",
+    "optimist": ""
+  },
+  "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/krishnasrinivas/wetty.git"
+  },
+  "author": "Krishna Srinivas <krishna.srinivas@gmail.com> (https://github.com/krishnasrinivas)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/krishnasrinivas/wetty/issues"
+  },
+  "homepage": "https://github.com/krishnasrinivas/wetty"
 }
