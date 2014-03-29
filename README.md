@@ -1,18 +1,20 @@
-wetty = Web + tty
+Wetty = Web + tty
 -----------------
 
-Terminal over http. Wetty is an alternative to ajaxterm/anyterm but much better than them because wetty uses ChromeOS' javascript terminal emulator (hterm) which is a full fledged implementation of terminal emulation. Also it uses websockets instead of Ajax and hence better response time.
+Terminal over http. Wetty is an alternative to ajaxterm/anyterm but much better than them because wetty uses ChromeOS'  terminal emulator (hterm) which is a full fledged implementation of terminal emulation written entirely in Javascript. Also it uses websockets instead of Ajax and hence better response time.
+
+hterm source - https://chromium.googlesource.com/apps/libapps/+/master/hterm/
 
 ![Wetty](/terminal.png?raw=true)
 
 Install
 -------
 
-  `git clone https://github.com/krishnasrinivas/wetty`
+*  `git clone https://github.com/krishnasrinivas/wetty`
   
-  `cd wetty`
+*  `cd wetty`
 
-  `npm install`
+*  `npm install`
 
 Run on http:
 -----------
@@ -22,7 +24,7 @@ If you run it as root it will launch /bin/login (where you can specify the usern
 
 Run on https:
 ------------
-Always use SSL! If you don't have ssl certificates from CA you can create a self signed certificate using this command:
+Always use https! If you don't have ssl certificates from CA you can create a self signed certificate using this command:
 
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 30000 -nodes`
 
