@@ -3,6 +3,8 @@ wetty = Web + tty
 
 Terminal over http. Wetty is like ajaxterm but much better because it uses ChromeOS' terminal emulator (hterm) which has much better terminal emulation implementation. Also it uses websockets instead of Ajax.
 
+Note: tested only on Chrome (hterm was written for Chrome.)
+
 Install
 -------
 
