@@ -64,11 +64,19 @@ wss.on('request', function(request) {
     conn.on('message', function(msg) {
         var data = JSON.parse(msg.utf8Data);
         if (!term) {
-            term = pty.spawn('/bin/login', [], {
-                name: 'xterm-256color',
-                cols: 80,
-                rows: 30
-            });
+            if (process.getuid() == 0) {
+                term = pty.spawn('/bin/login', [], {
+                    name: 'xterm-256color',
+                    cols: 80,
+                    rows: 30
+                });
+            } else {
+                term = pty.spawn('ssh', ['localhost'], {
+                    name: 'xterm-256color',
+                    cols: 80,
+                    rows: 30
+                });                
+            }
             term.on('data', function(data) {
                 conn.send(JSON.stringify({
                     data: data

@@ -30,7 +30,7 @@ Wetty.prototype.onTerminalResize = function(col, row) {
         }));
 };
 
-ws = new WebSocket(((window.location.protocol === 'https:') ? 'wss://' : 'ws://') + window.location.host, 'wetty');
+ws = new WebSocket(((window.location.protocol === 'https:') ? 'wss://' : 'ws://') + window.location.host + '/wetty', 'wetty');
 ws.onopen = function() {
     lib.init(function() {
         term = new hterm.Terminal();
