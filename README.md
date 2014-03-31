@@ -53,3 +53,6 @@ Put the following config in nginx's conf:
 
 In the browser you have to use: 'http://yourserver.com/wetty'. Note that if your nginx is configured for https you should run wetty without ssl.
 
+Issues
+------
+Does not work on Firefox as hterm was written for Chrome. So works well on Chrome.
