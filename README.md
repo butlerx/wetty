@@ -55,4 +55,4 @@ In the browser you have to use: 'http://yourserver.com/wetty'. Note that if your
 
 Issues
 ------
-Does not work on Firefox as hterm was written for Chrome. So works well on Chrome.
+Does not work on Firefox as hterm was written for ChromeOS. So works well on Chrome.
