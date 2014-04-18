@@ -20,7 +20,9 @@ Run on http:
 -----------
   `node app.js -p 3000`
 
-If you run it as root it will launch /bin/login (where you can specify the username), else it will launch ssh to localhost with the node process' user as the ssh login username.
+If you run it as root it will launch /bin/login (where you can specify the username), else it will launch ssh to localhost and you can specify the sshport using --sshport option and specify username in address bar like this:
+
+  `https://yourserver:3000/wetty/ssh/<username>`
 
 Run on https:
 ------------
@@ -51,7 +53,7 @@ Put the following config in nginx's conf:
 	    proxy_set_header X-NginX-Proxy true;
     }
 
-In the browser you have to use: 'http://yourserver.com/wetty'. Note that if your nginx is configured for https you should run wetty without ssl.
+In the browser you have to use: 'http://yourserver.com/wetty' if you are running as root else 'http://yourserver.com/wetty/ssh/<username>'. Note that if your nginx is configured for https you should run wetty without ssl.
 
 Issues
 ------

@@ -21,10 +21,6 @@ var opts = require('optimist')
             demand: false,
             description: 'ssh server port'
         },
-        sshuser: {
-            demand: false,
-            description: 'ssh user'
-        },
         port: {
             demand: true,
             alias: 'p',
@@ -34,14 +30,9 @@ var opts = require('optimist')
 
 var runhttps = false;
 var sshport = 22;
-var sshuser = '';
 
 if (opts.sshport) {
     sshport = opts.sshport;
-}
-
-if (opts.sshuser) {
-    sshuser = opts.sshuser + '@';
 }
 
 if (opts.sslkey && opts.sslcert) {
@@ -59,6 +50,9 @@ process.on('uncaughtException', function(e) {
 var httpserv;
 
 var app = express();
+app.get('/wetty/ssh/:user', function(req, res) {
+    res.sendfile(__dirname + '/public/wetty/index.html');
+});
 app.use('/', express.static(path.join(__dirname, 'public')));
 
 if (runhttps) {
@@ -77,8 +71,15 @@ var wss = new ws({
 
 wss.on('request', function(request) {
     var term;
+    var sshuser = '';
     var conn = request.accept('wetty', request.origin);
     console.log((new Date()) + ' Connection accepted.');
+    if (request.resource.match('^/wetty/ssh/')) {
+        sshuser = request.resource;
+        sshuser = sshuser.replace('/wetty/ssh/', '');
+    }
+    if (sshuser)
+        sshuser = sshuser + '@';
     conn.on('message', function(msg) {
         var data = JSON.parse(msg.utf8Data);
         if (!term) {
