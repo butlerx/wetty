@@ -22,7 +22,7 @@ Run on http:
 
 If you run it as root it will launch /bin/login (where you can specify the username), else it will launch ssh to localhost and you can specify the sshport using --sshport option and specify username in address bar like this:
 
-  `https://yourserver:3000/wetty/ssh/<username>`
+  `http://yourserver:3000/wetty/ssh/<username>`
 
 Run on https:
 ------------
