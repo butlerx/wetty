@@ -34,6 +34,7 @@ And then run:
 
   `node app.js --sslkey key.pem --sslcert cert.pem -p 3000`
 
+Again, if you run it as root it will launch /bin/login, else it will launch ssh to localhost as explained above.
 
 Run wetty behind nginx:
 ----------------------
@@ -53,7 +54,12 @@ Put the following config in nginx's conf:
 	    proxy_set_header X-NginX-Proxy true;
     }
 
-In the browser you have to use: 'http://yourserver.com/wetty' if you are running as root else 'http://yourserver.com/wetty/ssh/<username>'. Note that if your nginx is configured for https you should run wetty without ssl.
+If you are running app.js as root and have nginx proxy you have to use:
+    `http://yourserver.com/wetty`
+Else if you are running app.js as a regular user you have to use:
+    `http://yourserver.com/wetty/ssh/<username>`
+
+Note that if your nginx is configured for https you should run wetty without ssl.
 
 Issues
 ------
