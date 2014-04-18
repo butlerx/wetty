@@ -1,6 +1,6 @@
 {
   "name": "wetty",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "dependencies": {
     "express": "3.5.1",
     "websocket": "",

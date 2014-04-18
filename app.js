@@ -17,14 +17,32 @@ var opts = require('optimist')
             demand: false,
             description: 'path to SSL certificate'
         },
+        sshport: {
+            demand: false,
+            description: 'ssh server port'
+        },
+        sshuser: {
+            demand: false,
+            description: 'ssh user'
+        },
         port: {
             demand: true,
             alias: 'p',
-            description: 'port'
+            description: 'wetty listen port'
         }
     }).boolean('allow_discovery').argv;
 
 var runhttps = false;
+var sshport = 22;
+var sshuser = '';
+
+if (opts.sshport) {
+    sshport = opts.sshport;
+}
+
+if (opts.sshuser) {
+    sshuser = opts.sshuser + '@';
+}
 
 if (opts.sslkey && opts.sslcert) {
     runhttps = true;
@@ -71,7 +89,7 @@ wss.on('request', function(request) {
                     rows: 30
                 });
             } else {
-                term = pty.spawn('ssh', ['localhost'], {
+                term = pty.spawn('ssh', [sshuser + 'localhost', '-p', sshport], {
                     name: 'xterm-256color',
                     cols: 80,
                     rows: 30
