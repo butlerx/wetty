@@ -6,7 +6,6 @@ var ws = require('websocket').server;
 var pty = require('pty.js');
 var fs = require('fs');
 
-
 var opts = require('optimist')
     .options({
         sslkey: {
@@ -17,9 +16,17 @@ var opts = require('optimist')
             demand: false,
             description: 'path to SSL certificate'
         },
+        sshhost: {
+            demand: false,
+            description: 'ssh server host'
+        },
         sshport: {
             demand: false,
             description: 'ssh server port'
+        },
+        sshuser: {
+            demand: false,
+            description: 'ssh user'
         },
         port: {
             demand: true,
@@ -30,9 +37,19 @@ var opts = require('optimist')
 
 var runhttps = false;
 var sshport = 22;
+var sshhost = 'localhost';
+var globalsshuser = '';
 
 if (opts.sshport) {
     sshport = opts.sshport;
+}
+
+if (opts.sshhost) {
+    sshhost = opts.sshhost;
+}
+
+if (opts.sshuser) {
+    globalsshuser = opts.sshuser;
 }
 
 if (opts.sslkey && opts.sslcert) {
@@ -41,7 +58,6 @@ if (opts.sslkey && opts.sslcert) {
     opts.ssl['key'] = fs.readFileSync(path.resolve(opts.sslkey));
     opts.ssl['cert'] = fs.readFileSync(path.resolve(opts.sslcert));
 }
-
 
 process.on('uncaughtException', function(e) {
     console.error('Error: ' + e);
@@ -78,8 +94,11 @@ wss.on('request', function(request) {
         sshuser = request.resource;
         sshuser = sshuser.replace('/wetty/ssh/', '');
     }
-    if (sshuser)
+    if (sshuser) {
         sshuser = sshuser + '@';
+    } else if (globalsshuser) {
+        sshuser = globalsshuser + '@';
+    }
     conn.on('message', function(msg) {
         var data = JSON.parse(msg.utf8Data);
         if (!term) {
@@ -90,11 +109,11 @@ wss.on('request', function(request) {
                     rows: 30
                 });
             } else {
-                term = pty.spawn('ssh', [sshuser + 'localhost', '-p', sshport], {
+                term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport], {
                     name: 'xterm-256color',
                     cols: 80,
                     rows: 30
-                });                
+                });
             }
             term.on('data', function(data) {
                 conn.send(JSON.stringify({
