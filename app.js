@@ -114,7 +114,7 @@ wss.on('request', function(request) {
                     rows: 30
                 });
             } else {
-                term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport], {
+                term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport, '-o', 'PreferredAuthentications=password'], {
                     name: 'xterm-256color',
                     cols: 80,
                     rows: 30
