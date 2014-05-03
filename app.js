@@ -5,6 +5,11 @@ var path = require('path');
 var ws = require('websocket').server;
 var pty = require('pty.js');
 var fs = require('fs');
+var waitpid = require('waitpid');
+
+process.on('SIGCHLD', function(args){
+    waitpid(-1);
+});
 
 var opts = require('optimist')
     .options({

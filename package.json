@@ -5,7 +5,8 @@
     "express": "3.5.1",
     "websocket": "",
     "pty.js": "",
-    "optimist": ""
+    "optimist": "",
+    "waitpid": ""
   },
   "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
   "main": "app.js",
