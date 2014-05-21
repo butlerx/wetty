@@ -33,16 +33,21 @@ var opts = require('optimist')
             demand: false,
             description: 'ssh user'
         },
+        sshauth: {
+            demand: false,
+            description: 'defaults to "password", you can use "publickey,password" instead'
+        },
         port: {
             demand: true,
             alias: 'p',
             description: 'wetty listen port'
-        }
+        },
     }).boolean('allow_discovery').argv;
 
 var runhttps = false;
 var sshport = 22;
 var sshhost = 'localhost';
+var sshauth = 'password';
 var globalsshuser = '';
 
 if (opts.sshport) {
@@ -51,6 +56,10 @@ if (opts.sshport) {
 
 if (opts.sshhost) {
     sshhost = opts.sshhost;
+}
+
+if (opts.sshauth) {
+	sshauth = opts.sshauth
 }
 
 if (opts.sshuser) {
@@ -114,7 +123,7 @@ wss.on('request', function(request) {
                     rows: 30
                 });
             } else {
-                term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport, '-o', 'PreferredAuthentications=password'], {
+                term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport, '-o', 'PreferredAuthentications=' + sshauth], {
                     name: 'xterm-256color',
                     cols: 80,
                     rows: 30
