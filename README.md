@@ -84,3 +84,18 @@ Issues
 ------
 
 Does not work on Firefox as hterm was written for ChromeOS. So works well on Chrome.
+
+Dockerized Version
+------------------
+
+This repo includes a Dockerfile you can use to run a Dockerized version of wetty.  You can run
+whatever you want!
+
+Just do:
+
+```
+docker run --name term -p 3000 -dt nathanleclaire/wetty
+```
+
+Visit the appropriate URL in your browser (`[localhost|$(boot2docker ip)]:PORT`).  
+The username is `term` and the password is `term`.
