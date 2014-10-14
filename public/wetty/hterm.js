@@ -6954,7 +6954,8 @@ hterm.Terminal.prototype.onPaste_ = function(e) {
  * React when the user tries to copy from the scrollPort.
  */
 hterm.Terminal.prototype.onCopy_ = function(e) {
-  e.preventDefault();
+  /* comment this line so that browser copies the selection */
+  // e.preventDefault();
   setTimeout(this.copySelectionToClipboard.bind(this), 0);
 };
 
