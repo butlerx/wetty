@@ -8,7 +8,9 @@ var fs = require('fs');
 var waitpid = require('waitpid');
 
 process.on('SIGCHLD', function(args){
+    console.error((new Date()) + " Got SIGCHLD: waiting for child process to terminate ... ")
     waitpid(-1);
+    console.error((new Date()) + " Child processed ended")
 });
 
 var opts = require('optimist')
@@ -129,11 +131,15 @@ wss.on('request', function(request) {
                     rows: 30
                 });
             }
+            console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser)
             term.on('data', function(data) {
                 conn.send(JSON.stringify({
                     data: data
                 }));
             });
+            term.on('exit', function(code) {
+                console.log((new Date()) + " PID=" + term.pid + " ENDED")
+            })
         }
         if (!data)
             return;
