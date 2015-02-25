@@ -7,12 +7,6 @@ var pty = require('pty.js');
 var fs = require('fs');
 var waitpid = require('waitpid');
 
-process.on('SIGCHLD', function(args){
-    console.error((new Date()) + " Got SIGCHLD: waiting for child process to terminate ... ")
-    waitpid(-1);
-    console.error((new Date()) + " Child processed ended")
-});
-
 var opts = require('optimist')
     .options({
         sslkey: {
