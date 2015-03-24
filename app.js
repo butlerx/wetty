@@ -7,10 +7,6 @@ var pty = require('pty.js');
 var fs = require('fs');
 var waitpid = require('waitpid');
 
-process.on('SIGCHLD', function(args){
-    waitpid(-1);
-});
-
 var opts = require('optimist')
     .options({
         sslkey: {
@@ -129,11 +125,15 @@ wss.on('request', function(request) {
                     rows: 30
                 });
             }
+            console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser)
             term.on('data', function(data) {
                 conn.send(JSON.stringify({
                     data: data
                 }));
             });
+            term.on('exit', function(code) {
+                console.log((new Date()) + " PID=" + term.pid + " ENDED")
+            })
         }
         if (!data)
             return;
