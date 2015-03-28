@@ -1,24 +1,28 @@
 {
-  "name": "wetty",
-  "version": "0.0.9",
-  "dependencies": {
-    "express": "3.5.1",
-    "websocket": "",
-    "pty.js": "git+https://github.com/terryschen/pty.js",
-    "optimist": "",
-    "waitpid": ""
-  },
-  "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
-  "main": "app.js",
-  "devDependencies": {},
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/krishnasrinivas/wetty.git"
-  },
-  "author": "Krishna Srinivas <krishna.srinivas@gmail.com> (https://github.com/krishnasrinivas)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/krishnasrinivas/wetty/issues"
-  },
-  "homepage": "https://github.com/krishnasrinivas/wetty"
+    "name": "wetty",
+    "version": "0.0.9",
+    "dependencies": {
+        "express": "3.5.1",
+        "websocket": "",
+        "pty.js": "git+https://github.com/terryschen/pty.js",
+        "optimist": "",
+        "waitpid": ""
+    },
+    "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
+    "main": "app.js",
+    "devDependencies": {},
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/krishnasrinivas/wetty.git"
+    },
+    "author": "Krishna Srinivas <krishna.srinivas@gmail.com> (https://github.com/krishnasrinivas)",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/krishnasrinivas/wetty/issues"
+    },
+    "homepage": "https://github.com/krishnasrinivas/wetty",
+    "preferGlobal": "true",
+    "bin": {
+        "wetty": "./bin/wetty.js"
+    }
 }
