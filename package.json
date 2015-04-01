@@ -3,10 +3,18 @@
     "version": "0.0.9",
     "dependencies": {
         "express": "3.5.1",
-        "websocket": "",
+        "websocket": "^1.0",
         "pty.js": "git+https://github.com/terryschen/pty.js",
-        "optimist": "",
-        "waitpid": ""
+        "optimist": "^0.6",
+        "waitpid": "^0.1"
+    },
+    "devDependencies": {
+        "load-grunt-tasks": "^3.0",
+        "grunt": "^0.4",
+        "grunt-shell": "^1.1",
+        "grunt-mkdir": "^0.1",
+        "grunt-git": "^0.3",
+        "grunt-contrib-clean": "^0.6"
     },
     "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
     "main": "app.js",
