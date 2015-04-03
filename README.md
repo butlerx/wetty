@@ -80,11 +80,6 @@ Else if you are running `app.js` as a regular user you have to use:
 
 **Note that if your Nginx is configured for HTTPS you should run wetty without SSL.**
 
-Issues
-------
-
-Does not work on Firefox as hterm was written for ChromeOS. So works well on Chrome.
-
 Dockerized Version
 ------------------
 
@@ -94,8 +89,23 @@ whatever you want!
 Just do:
 
 ```
-docker run --name term -p 3000 -dt nathanleclaire/wetty
+    docker run --name term -p 3000 -dt nathanleclaire/wetty
 ```
 
 Visit the appropriate URL in your browser (`[localhost|$(boot2docker ip)]:PORT`).  
 The username is `term` and the password is `term`.
+
+Run wetty as a service daemon
+-----------------------------
+
+Install wetty globally with -g option:
+
+```bash
+    $ sudo npm install wetty -g
+    $ sudo cp /usr/local/lib/node_modules/wetty/bin/wetty.conf /etc/init
+    $ sudo start wetty
+```
+
+This will start wetty on port 3000. If you want to change the port or redirect stdout/stderr you should change the last line in `wetty.conf` file, something like this:
+
+    exec sudo -u root wetty -p 80 >> /var/log/wetty.log 2>&1
