@@ -18,7 +18,6 @@
     },
     "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
     "main": "app.js",
-    "devDependencies": {},
     "repository": {
         "type": "git",
         "url": "git://github.com/krishnasrinivas/wetty.git"

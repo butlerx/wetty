@@ -16044,7 +16044,7 @@ lib.resource.add('hterm/audio/bell', 'audio/ogg;base64',
 );
 
 lib.resource.add('hterm/concat/date', 'text/plain',
-'сб, 28 мар 2015 14:29:28 +0000' +
+'Fri, 03 Apr 2015 09:02:15 +0000' +
 ''
 );
 
