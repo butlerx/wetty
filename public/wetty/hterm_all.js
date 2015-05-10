@@ -6465,6 +6465,8 @@ hterm.Keyboard.KeyMap.prototype.onCtrlC_ = function(e, keyDef) {
       if (this.keyboard.terminal.clearSelectionAfterCopy) {
         setTimeout(selection.collapseToEnd.bind(selection), 50);
       }
+      if (this.keyboard.terminal.prefs_.get('enable-clipboard-notice'))
+        setTimeout(this.keyboard.terminal.showOverlay.bind(this.keyboard.terminal, hterm.notifyCopyMessage, 500), 200);
       return hterm.Keyboard.KeyActions.PASS;
     }
 
