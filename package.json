@@ -4,9 +4,8 @@
     "dependencies": {
         "express": "3.5.1",
         "websocket": "^1.0",
-        "pty.js": "git+https://github.com/terryschen/pty.js",
-        "optimist": "^0.6",
-        "waitpid": "^0.1"
+        "pty.js": "^0.2.7-1",
+        "optimist": "^0.6"
     },
     "devDependencies": {
         "load-grunt-tasks": "^3.0",
