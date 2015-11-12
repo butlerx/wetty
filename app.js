@@ -90,7 +90,7 @@ if (runhttps) {
     });
 }
 
-var io = server(httpserv);
+var io = server(httpserv,{path: '/wetty/socket.io'});
 io.on('connection', function(socket){
     var sshuser = '';
     var request = socket.request;
