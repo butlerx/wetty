@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "dependencies": {
         "express": "3.5.1",
-        "websocket": "^1.0",
+        "socket.io": "^1.3.7",
         "pty.js": "^0.2.7-1",
         "optimist": "^0.6"
     },

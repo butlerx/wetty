@@ -2,7 +2,7 @@ var express = require('express');
 var http = require('http');
 var https = require('https');
 var path = require('path');
-var ws = require('websocket').server;
+var server = require('socket.io');
 var pty = require('pty.js');
 var fs = require('fs');
 
@@ -90,62 +90,45 @@ if (runhttps) {
     });
 }
 
-var wss = new ws({
-    httpServer: httpserv
-});
-
-wss.on('request', function(request) {
-    var term;
+var io = server(httpserv);
+io.on('connection', function(socket){
     var sshuser = '';
-    var conn = request.accept('wetty', request.origin);
+    var request = socket.request;
     console.log((new Date()) + ' Connection accepted.');
-    if (request.resource.match('^/wetty/ssh/')) {
-        sshuser = request.resource;
-        sshuser = sshuser.replace('/wetty/ssh/', '');
-    }
-    if (sshuser) {
-        sshuser = sshuser + '@';
+    if (match = request.headers.referer.match('/wetty/ssh/.+$')) {
+        sshuser = match[0].replace('/wetty/ssh/', '') + '@';
     } else if (globalsshuser) {
         sshuser = globalsshuser + '@';
     }
-    conn.on('message', function(msg) {
-        var data = JSON.parse(msg.utf8Data);
-        if (!term) {
-            if (process.getuid() == 0) {
-                term = pty.spawn('/bin/login', [], {
-                    name: 'xterm-256color',
-                    cols: 80,
-                    rows: 30
-                });
-            } else {
-                term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport, '-o', 'PreferredAuthentications=' + sshauth], {
-                    name: 'xterm-256color',
-                    cols: 80,
-                    rows: 30
-                });
-            }
-            console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser)
-            term.on('data', function(data) {
-                conn.send(JSON.stringify({
-                    data: data
-                }));
-            });
-            term.on('exit', function(code) {
-                console.log((new Date()) + " PID=" + term.pid + " ENDED")
-            })
-        }
-        if (!data)
-            return;
-        if (data.rowcol) {
-            term.resize(data.col, data.row);
-        } else if (data.data) {
-            term.write(data.data);
-        }
+
+    var term;
+    if (process.getuid() == 0) {
+        term = pty.spawn('/bin/login', [], {
+            name: 'xterm-256color',
+            cols: 80,
+            rows: 30
+        });
+    } else {
+        term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport, '-o', 'PreferredAuthentications=' + sshauth], {
+            name: 'xterm-256color',
+            cols: 80,
+            rows: 30
+        });
+    }
+    console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser)
+    term.on('data', function(data) {
+        socket.emit('output', data);
     });
-    conn.on('error', function() {
+    term.on('exit', function(code) {
+        console.log((new Date()) + " PID=" + term.pid + " ENDED")
+    });
+    socket.on('resize', function(data) {
+        term.resize(data.col, data.row);
+    });
+    socket.on('input', function(data) {
+        term.write(data);
+    });
+    socket.on('disconnect', function() {
         term.end();
     });
-    conn.on('close', function() {
-        term.end();
-    })
 })
