@@ -1,5 +1,6 @@
 var term;
-var ws;
+var socket = io(location.origin, {path: '/wetty/socket.io'})
+var buf = '';
 
 function Wetty(argv) {
     this.argv_ = argv;
@@ -16,23 +17,16 @@ Wetty.prototype.run = function() {
 }
 
 Wetty.prototype.sendString_ = function(str) {
-    ws.send(JSON.stringify({
-        data: str
-    }));
+    socket.emit('input', str);
 };
 
 Wetty.prototype.onTerminalResize = function(col, row) {
-    if (ws)
-        ws.send(JSON.stringify({
-            rowcol: true,
-            col: col,
-            row: row
-        }));
+    socket.emit('resize', { col: col, row: row });
 };
 
-ws = new WebSocket(((window.location.protocol === 'https:') ? 'wss://' : 'ws://') + window.location.host + window.location.pathname, 'wetty');
-ws.onopen = function() {
+socket.on('connect', function() {
     lib.init(function() {
+        hterm.defaultStorage = new lib.Storage.Local();
         term = new hterm.Terminal();
         window.term = term;
         term.decorate(document.getElementById('terminal'));
@@ -44,23 +38,27 @@ ws.onopen = function() {
         term.prefs_.set('use-default-window-copy', true);
 
         term.runCommandClass(Wetty, document.location.hash.substr(1));
-        ws.send(JSON.stringify({
-            rowcol: true,
+        socket.emit('resize', {
             col: term.screenSize.width,
             row: term.screenSize.height
-        }));
+        });
+
+        if (buf && buf != '')
+        {
+            term.io.writeUTF16(buf);
+            buf = '';
+        }
     });
-}
-ws.onmessage = function(msg) {
-    if (!msg || !msg.data)
+});
+
+socket.on('output', function(data) {
+    if (!term) {
+        buf += data;
         return;
-    var data = JSON.parse(msg.data);
-    if (term)
-        term.io.writeUTF16(data.data);
-}
-ws.onerror = function(e) {
-    console.log("WebSocket connection error");
-}
-ws.onclose = function() {
-    console.log("WebSocket connection closed");
-}
+    }
+    term.io.writeUTF16(data);
+});
+
+socket.on('disconnect', function() {
+    console.log("Socket.io connection closed");
+});
