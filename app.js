@@ -37,12 +37,18 @@ var opts = require('optimist')
             alias: 'p',
             description: 'wetty listen port'
         },
+        command: {
+            demand: false,
+            alias: 'c',
+            description: 'command to run in shell, defaults to /bin/login'
+        },
     }).boolean('allow_discovery').argv;
 
 var runhttps = false;
 var sshport = 22;
 var sshhost = 'localhost';
 var sshauth = 'password';
+var command = '/bin/login';
 var globalsshuser = '';
 
 if (opts.sshport) {
@@ -66,6 +72,10 @@ if (opts.sslkey && opts.sslcert) {
     opts['ssl'] = {};
     opts.ssl['key'] = fs.readFileSync(path.resolve(opts.sslkey));
     opts.ssl['cert'] = fs.readFileSync(path.resolve(opts.sslcert));
+}
+
+if (opts.command) {
+  command = opts.command;
 }
 
 process.on('uncaughtException', function(e) {
@@ -103,7 +113,7 @@ io.on('connection', function(socket){
 
     var term;
     if (process.getuid() == 0) {
-        term = pty.spawn('/bin/login', [], {
+        term = pty.spawn(command, [], {
             name: 'xterm-256color',
             cols: 80,
             rows: 30
