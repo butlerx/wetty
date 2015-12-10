@@ -39,7 +39,7 @@ function createServer(port, sslopts) {
     });
 }
 
-function getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey) {
+function getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey, command) {
   const { request } = socket;
   const match = request.headers.referer.match('.+/ssh/.+$');
   const sshAddress = sshuser ? `${sshuser}@${sshhost}` : sshhost;
@@ -57,10 +57,12 @@ function getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey)
   const sshRemoteOptsBase = [
     sshPath,
     ssh,
+    '-t',
     '-p',
     sshport,
     '-o',
     `PreferredAuthentications=${sshauth}`,
+    `"${command}"`,
   ];
   let sshRemoteOpts;
 
@@ -75,12 +77,31 @@ function getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey)
   ];
 }
 
-export default function start(port, sshuser, sshpass, sshhost, sshport, sshauth, sshkey, sslopts) {
+export default function start(
+  port,
+  sshuser,
+  sshpass,
+  sshhost,
+  sshport,
+  sshauth,
+  sshkey,
+  sslopts,
+  command,
+) {
   const events = new EventEmitter();
   const io = server(createServer(port, sslopts), { path: '/wetty/socket.io' });
   io.on('connection', socket => {
     console.log(`${new Date()} Connection accepted.`);
-    const [args, ssh] = getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey);
+    const [args, ssh] = getCommand(
+      socket,
+      sshuser,
+      sshpass,
+      sshhost,
+      sshport,
+      sshauth,
+      sshkey,
+      command,
+    );
     const term = pty.spawn('/usr/bin/env', args, {
       name: 'xterm-256color',
       cols: 80,

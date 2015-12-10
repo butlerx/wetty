@@ -6,46 +6,51 @@ import wetty from './wetty';
 const opts = optimist
   .options({
     sslkey: {
-      demand: false,
+      demand     : false,
       description: 'path to SSL key',
     },
     sslcert: {
-      demand: false,
+      demand     : false,
       description: 'path to SSL certificate',
     },
     sshhost: {
-      demand: false,
+      demand     : false,
       description: 'ssh server host',
     },
     sshport: {
-      demand: false,
+      demand     : false,
       description: 'ssh server port',
     },
     sshuser: {
-      demand: false,
+      demand     : false,
       description: 'ssh user',
     },
     sshpass: {
-      demand: false,
+      demand     : false,
       description: 'ssh password',
     },
     sshauth: {
-      demand: false,
+      demand     : false,
       description: 'defaults to "password", you can use "publickey,password" instead',
     },
     sshkey: {
-      demand: false,
+      demand     : false,
       description:
         'path to an optional client private key (connection will be password-less and insecure!)',
     },
     port: {
-      demand: false,
-      alias: 'p',
+      demand     : false,
+      alias      : 'p',
       description: 'wetty listen port',
     },
+    command: {
+      demand     : false,
+      alias      : 'c',
+      description: 'command to run in shell, defaults to /bin/login',
+    },
     help: {
-      demand: false,
-      alias: 'h',
+      demand     : false,
+      alias      : 'h',
       description: 'Print help message',
     },
   })
@@ -56,13 +61,7 @@ if (opts.help) {
   process.exit(0);
 }
 
-const sshuser = opts.sshuser || process.env.SSHUSER || '';
-const sshpass = opts.sshpass || process.env.SSHPASS || '';
-const sshhost = opts.sshhost || process.env.SSHHOST || 'localhost';
-const sshauth = opts.sshauth || process.env.SSHAUTH || 'password,keyboard-interactive';
-const sshport = opts.sshport || process.env.SSHPORT || 22;
 const sshkey = opts.sshkey || process.env.SSHKEY || '';
-const port = opts.port || process.env.PORT || 3000;
 
 loadSSL(opts)
   .then(ssl => {
@@ -86,7 +85,17 @@ process.on('uncaughtException', err => {
   console.error(`Error: ${err}`);
 });
 
-const tty = wetty(port, sshuser, sshpass, sshhost, sshport, sshauth, sshkey, opts.ssl);
+const tty = wetty(
+  opts.port || process.env.PORT || 3000,
+  opts.sshuser || process.env.SSHUSER || '',
+  opts.sshpass || process.env.SSHPASS || '',
+  opts.sshhost || process.env.SSHHOST || 'localhost',
+  opts.sshport || process.env.SSHPOST || 22,
+  opts.sshauth || process.env.SSHAUTH || 'password,keyboard-interactive',
+  sshkey,
+  opts.ssl,
+  opts.command || process.env.COMMAND || '',
+);
 tty.on('exit', code => {
   console.log(`exit with code: ${code}`);
 });
