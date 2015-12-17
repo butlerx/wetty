@@ -1,3 +1,5 @@
+'use strict';
+
 var express = require('express');
 var http = require('http');
 var https = require('https');
@@ -41,7 +43,8 @@ var opts = require('optimist')
 
 var runhttps = false;
 var sshport = 22;
-var sshhost = 'localhost';
+var globalsshhost = 'localhost';
+var sshhost = globalsshhost;
 var sshauth = 'password';
 var globalsshuser = '';
 
@@ -54,7 +57,7 @@ if (opts.sshhost) {
 }
 
 if (opts.sshauth) {
-	sshauth = opts.sshauth
+	sshauth = opts.sshauth;
 }
 
 if (opts.sshuser) {
@@ -63,9 +66,9 @@ if (opts.sshuser) {
 
 if (opts.sslkey && opts.sslcert) {
     runhttps = true;
-    opts['ssl'] = {};
-    opts.ssl['key'] = fs.readFileSync(path.resolve(opts.sslkey));
-    opts.ssl['cert'] = fs.readFileSync(path.resolve(opts.sslcert));
+    opts.ssl = {};
+    opts.ssl.key = fs.readFileSync(path.resolve(opts.sslkey));
+    opts.ssl.cert = fs.readFileSync(path.resolve(opts.sslcert));
 }
 
 process.on('uncaughtException', function(e) {
@@ -76,6 +79,9 @@ var httpserv;
 
 var app = express();
 app.get('/wetty/ssh/:user', function(req, res) {
+    res.sendfile(__dirname + '/public/wetty/index.html');
+});
+app.get('/wetty/ssh/:user/:host', function(req, res) {
     res.sendfile(__dirname + '/public/wetty/index.html');
 });
 app.use('/', express.static(path.join(__dirname, 'public')));
@@ -95,14 +101,23 @@ io.on('connection', function(socket){
     var sshuser = '';
     var request = socket.request;
     console.log((new Date()) + ' Connection accepted.');
-    if (match = request.headers.referer.match('/wetty/ssh/.+$')) {
-        sshuser = match[0].replace('/wetty/ssh/', '') + '@';
-    } else if (globalsshuser) {
-        sshuser = globalsshuser + '@';
+    var match = request.headers.referer.match('/wetty/ssh/.+/.+$');
+    if (match) {
+        sshuser = match[0].split('/')[3] + '@';
+        sshhost = match[0].split('/')[4];
+    } else {
+        match = request.headers.referer.match('/wetty/ssh/.+$');
+        if(match){
+            sshuser = match[0].split('/')[3] + '@';
+            sshhost = globalsshhost;
+        }else{
+            sshuser = globalsshuser + '@';
+            sshhost = globalsshhost;
+        }
     }
 
     var term;
-    if (process.getuid() == 0) {
+    if (process.getuid() === 0) {
         term = pty.spawn('/bin/login', [], {
             name: 'xterm-256color',
             cols: 80,
@@ -115,12 +130,12 @@ io.on('connection', function(socket){
             rows: 30
         });
     }
-    console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser)
+    console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser);
     term.on('data', function(data) {
         socket.emit('output', data);
     });
     term.on('exit', function(code) {
-        console.log((new Date()) + " PID=" + term.pid + " ENDED")
+        console.log((new Date()) + " PID=" + term.pid + " ENDED with code "+code);
     });
     socket.on('resize', function(data) {
         term.resize(data.col, data.row);
@@ -131,4 +146,4 @@ io.on('connection', function(socket){
     socket.on('disconnect', function() {
         term.end();
     });
-})
+});
