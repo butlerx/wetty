@@ -37,6 +37,10 @@ var opts = require('optimist')
             alias: 'p',
             description: 'wetty listen port'
         },
+        host: {
+            demand: false,
+            description: 'wetty listen host'
+        },
     }).boolean('allow_discovery').argv;
 
 var runhttps = false;
@@ -44,6 +48,7 @@ var sshport = 22;
 var sshhost = 'localhost';
 var sshauth = 'password';
 var globalsshuser = '';
+var listen_host = null;
 
 if (opts.sshport) {
     sshport = opts.sshport;
@@ -68,6 +73,10 @@ if (opts.sslkey && opts.sslcert) {
     opts.ssl['cert'] = fs.readFileSync(path.resolve(opts.sslcert));
 }
 
+if (opts.host) {
+    listen_host = opts.host;
+}
+
 process.on('uncaughtException', function(e) {
     console.error('Error: ' + e);
 });
@@ -81,11 +90,11 @@ app.get('/wetty/ssh/:user', function(req, res) {
 app.use('/', express.static(path.join(__dirname, 'public')));
 
 if (runhttps) {
-    httpserv = https.createServer(opts.ssl, app).listen(opts.port, function() {
+    httpserv = https.createServer(opts.ssl, app).listen(opts.port, listen_host, function() {
         console.log('https on port ' + opts.port);
     });
 } else {
-    httpserv = http.createServer(app).listen(opts.port, function() {
+    httpserv = http.createServer(app).listen(opts.port, listen_host, function() {
         console.log('http on port ' + opts.port);
     });
 }
