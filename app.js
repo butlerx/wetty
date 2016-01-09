@@ -112,7 +112,7 @@ io.on('connection', function(socket){
     }
 
     var term;
-    if (process.getuid() == 0) {
+    if (process.getuid() == 0 || opts.command) {
         term = pty.spawn(command, [], {
             name: 'xterm-256color',
             cols: 80,
