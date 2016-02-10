@@ -116,4 +116,8 @@ FAQ
 
 #### What browsers are supported?
 
-Wetty supports all browsers that Google's hterm supports. Wetty has been [reported](https://github.com/krishnasrinivas/wetty/issues/45#issuecomment-181448586) to work on Google Chrome, Firefox and IE 11. Although IE 11 requires [a small fix](http://stackoverflow.com/questions/13102116/access-denied-for-localstorage-in-ie10#20848924).
+Wetty supports all browsers that Google's hterm supports. Wetty has been [reported](https://github.com/krishnasrinivas/wetty/issues/45#issuecomment-181448586) to work on Google Chrome, Firefox and IE 11.
+
+#### Why isn't Wetty working with IE?
+
+[This fix](https://stackoverflow.com/questions/13102116/access-denied-for-localstorage-in-ie10#20848924) has been known to help some users.
