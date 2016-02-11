@@ -39,6 +39,10 @@ var opts = require('optimist')
             alias: 'p',
             description: 'wetty listen port'
         },
+        whitelist: {
+            demand: false,
+            description: 'whitelist of username/hosts, you can connect to'
+        }
     }).boolean('allow_discovery').argv;
 
 var runhttps = false;
@@ -47,6 +51,7 @@ var globalsshhost = 'localhost';
 var sshhost = globalsshhost;
 var sshauth = 'password';
 var globalsshuser = '';
+var whitelist = ['^.*@localhost$'];
 
 if (opts.sshport) {
     sshport = opts.sshport;
@@ -69,6 +74,19 @@ if (opts.sslkey && opts.sslcert) {
     opts.ssl = {};
     opts.ssl.key = fs.readFileSync(path.resolve(opts.sslkey));
     opts.ssl.cert = fs.readFileSync(path.resolve(opts.sslcert));
+}
+
+if (opts.whitelist) {
+    whitelist = opts.whitelist.split(',');
+}
+
+function checkWhitelist(target){
+    for (var idx = 0; idx<whitelist.length; idx++) {
+        if(target.match(whitelist[idx])) {
+            return true;
+        }
+    }
+    return false;
 }
 
 process.on('uncaughtException', function(e) {
@@ -105,6 +123,13 @@ io.on('connection', function(socket){
     if (match) {
         sshuser = match[0].split('/')[3] + '@';
         sshhost = match[0].split('/')[4];
+        var target = sshuser+sshhost;
+        if (!checkWhitelist(target)) {
+            console.log('whitelist error');
+            socket.emit('output', 'whitelist error');
+            socket.disconnect();
+            return;
+        }
     } else {
         match = request.headers.referer.match('/wetty/ssh/.+$');
         if(match){
