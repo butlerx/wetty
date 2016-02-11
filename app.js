@@ -41,7 +41,7 @@ var opts = require('optimist')
         },
         whitelist: {
             demand: false,
-            description: 'whitelist of username/hosts, you can connect to'
+            description: 'whitelist of usernames/hosts you can connect to. Given as comma separated list of the form "^.*@localhost$,^user@hostname$".'
         }
     }).boolean('allow_discovery').argv;
 
