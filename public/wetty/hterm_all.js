@@ -8376,6 +8376,9 @@ hterm.ScrollPort.prototype.decorate = function(div) {
   // the collision.
   this.screen_ = doc.createElement('x-screen');
   this.screen_.setAttribute('contenteditable', '');
+  this.screen_.setAttribute('spellcheck', 'false');
+  this.screen_.setAttribute('autocorrect', 'false');
+  this.screen_.setAttribute('autocomplete', 'false');
   this.screen_.setAttribute('role', 'textbox');
   this.screen_.setAttribute('tabindex', '-1');
   this.screen_.style.cssText = (
@@ -8526,7 +8529,7 @@ hterm.ScrollPort.prototype.getForegroundColor = function() {
 };
 
 hterm.ScrollPort.prototype.setForegroundColor = function(color) {
-  this.screen_.style.color = color;
+  //this.screen_.style.color = color;
 };
 
 hterm.ScrollPort.prototype.getBackgroundColor = function() {
@@ -12826,14 +12829,17 @@ hterm.TextAttributes.prototype.isDefault = function() {
  *     attributes.
  */
 hterm.TextAttributes.prototype.createContainer = function(opt_textContent) {
-  if (this.isDefault())
-    return this.document_.createTextNode(opt_textContent);
+  //if (this.isDefault())
+  //  return this.document_.createTextNode(opt_textContent);
 
   var span = this.document_.createElement('span');
   var style = span.style;
 
-  if (this.foreground != this.DEFAULT_COLOR)
+  if (this.foreground != this.DEFAULT_COLOR) {
     style.color = this.foreground;
+  } else {
+    style.color = this.defaultForeground;
+  }
 
   if (this.background != this.DEFAULT_COLOR)
     style.backgroundColor = this.background;
@@ -12894,6 +12900,7 @@ hterm.TextAttributes.prototype.createContainer = function(opt_textContent) {
  *     this attributes instance.
  */
 hterm.TextAttributes.prototype.matchesContainer = function(obj) {
+  return false;
   if (typeof obj == 'string' || obj.nodeType == 3)
     return this.isDefault();
 
