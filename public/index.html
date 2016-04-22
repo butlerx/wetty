@@ -25,6 +25,12 @@
 
 <body>
     <div id="terminal"></div>
+	<script type="application/javascript">
+window.addEventListener('beforeunload', function(e) {
+	e.returnValue = "Are you sure?";
+	return e.returnValue;
+});
+	</script>
 </body>
 
 </html>
