@@ -32,6 +32,10 @@ var opts = require('optimist')
             demand: false,
             description: 'defaults to "password", you can use "publickey,password" instead'
         },
+	host: {
+	    demand: false,
+            description: 'wetty listen host'
+	},
         port: {
             demand: true,
             alias: 'p',
@@ -81,11 +85,11 @@ app.get('/wetty/ssh/:user', function(req, res) {
 app.use('/', express.static(path.join(__dirname, 'public')));
 
 if (runhttps) {
-    httpserv = https.createServer(opts.ssl, app).listen(opts.port, function() {
+    httpserv = https.createServer(opts.ssl, app).listen(opts.port, opts.host, function() {
         console.log('https on port ' + opts.port);
     });
 } else {
-    httpserv = http.createServer(app).listen(opts.port, function() {
+    httpserv = http.createServer(app).listen(opts.port, opts.host, function() {
         console.log('http on port ' + opts.port);
     });
 }
