@@ -74,6 +74,12 @@ if (require.main === module) {
           type: 'number',
           default: parseInt(process.env.PORT, 10) || 3000,
         },
+        host: {
+          demand: false,
+          description: 'wetty listen host',
+          default: '0.0.0.0',
+          type: 'string',
+        },
         command: {
           demand: false,
           alias: 'c',

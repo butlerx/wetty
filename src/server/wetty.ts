@@ -7,7 +7,7 @@ import server from './server';
 import getCommand from './command';
 import term from './term';
 import loadSSL from './ssl';
-import { SSL, SSH, SSLBuffer } from './interfaces';
+import { SSL, SSH, SSLBuffer, Server } from './interfaces';
 
 export default class WeTTy extends EventEmitter {
   /**
@@ -16,8 +16,7 @@ export default class WeTTy extends EventEmitter {
    */
   public start(
     ssh: SSH = { user: '', host: 'localhost', auth: 'password', port: 22 },
-    basePath: string = '/wetty/',
-    serverPort: number = 3000,
+    serverConf: Server = { base: '/wetty/', port: 3000, host: '0.0.0.0' },
     command: string = '',
     ssl?: SSL
   ): Promise<void> {
@@ -33,7 +32,7 @@ export default class WeTTy extends EventEmitter {
         );
       }
 
-      const io = server(basePath, serverPort, sslBuffer);
+      const io = server(serverConf, sslBuffer);
       /**
        * Wetty server connected too
        * @fires WeTTy#connnection
