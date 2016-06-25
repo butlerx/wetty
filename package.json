@@ -4,7 +4,7 @@
     "dependencies": {
         "express": "3.5.1",
         "socket.io": "^1.3.7",
-        "pty.js": "^0.3.0",
+        "pty.js": "learnlinux/pty.js#f125ff0",
         "optimist": "^0.6"
     },
     "devDependencies": {
