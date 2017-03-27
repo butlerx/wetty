@@ -36,6 +36,8 @@ socket.on('connect', function() {
         term.prefs_.set('ctrl-c-copy', true);
         term.prefs_.set('ctrl-v-paste', true);
         term.prefs_.set('use-default-window-copy', true);
+	term.prefs_.set('send-encoding', 'raw')
+	term.prefs_.set('receive-encoding', 'raw')
 
         term.runCommandClass(Wetty, document.location.hash.substr(1));
         socket.emit('resize', {
@@ -45,7 +47,7 @@ socket.on('connect', function() {
 
         if (buf && buf != '')
         {
-            term.io.writeUTF16(buf);
+            term.io.writeUTF8(buf);
             buf = '';
         }
     });
@@ -56,7 +58,7 @@ socket.on('output', function(data) {
         buf += data;
         return;
     }
-    term.io.writeUTF16(data);
+    term.io.writeUTF8(data);
 });
 
 socket.on('disconnect', function() {
