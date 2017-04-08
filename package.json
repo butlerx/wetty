@@ -1,34 +1,34 @@
 {
-    "name": "wetty",
-    "version": "0.2.0",
-    "dependencies": {
-        "express": "3.5.1",
-        "socket.io": "^1.3.7",
-        "pty.js": "^0.3.0",
-        "optimist": "^0.6"
-    },
-    "devDependencies": {
-        "load-grunt-tasks": "^3.0",
-        "grunt": "^0.4",
-        "grunt-shell": "^1.1",
-        "grunt-mkdir": "^0.1",
-        "grunt-git": "^0.3",
-        "grunt-contrib-clean": "^0.6"
-    },
-    "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
-    "main": "app.js",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/krishnasrinivas/wetty.git"
-    },
-    "author": "Krishna Srinivas <krishna.srinivas@gmail.com> (https://github.com/krishnasrinivas)",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/krishnasrinivas/wetty/issues"
-    },
-    "homepage": "https://github.com/krishnasrinivas/wetty",
-    "preferGlobal": "true",
-    "bin": {
-        "wetty": "./bin/wetty.js"
-    }
+  "name": "wetty",
+  "version": "0.2.0",
+  "dependencies": {
+    "express": "3.5.1",
+    "socket.io": "^1.3.7",
+    "pty.js": "^0.3.0",
+    "optimist": "^0.6"
+  },
+  "devDependencies": {
+    "load-grunt-tasks": "^3.0",
+    "grunt": "^0.4",
+    "grunt-shell": "^1.1",
+    "grunt-mkdir": "^0.1",
+    "grunt-git": "^0.3",
+    "grunt-contrib-clean": "^0.6"
+  },
+  "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/krishnasrinivas/wetty.git"
+  },
+  "author": "Krishna Srinivas <krishna.srinivas@gmail.com> (https://github.com/krishnasrinivas)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/krishnasrinivas/wetty/issues"
+  },
+  "homepage": "https://github.com/krishnasrinivas/wetty",
+  "preferGlobal": "true",
+  "bin": {
+    "wetty": "./bin/wetty.js"
+  }
 }

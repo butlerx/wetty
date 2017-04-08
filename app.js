@@ -102,19 +102,26 @@ io.on('connection', function(socket){
     }
 
     var term;
-    if (process.getuid() == 0) {
+    if (process.getuid() == 0 && sshhost == 'localhost') {
         term = pty.spawn('/bin/login', [], {
             name: 'xterm-256color',
             cols: 80,
             rows: 30
         });
-    } else {
+    } else if (sshuser) {
         term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport, '-o', 'PreferredAuthentications=' + sshauth], {
             name: 'xterm-256color',
             cols: 80,
             rows: 30
         });
+    } else {
+        term = pty.spawn('./bin/ssh', [sshhost, '-p', sshport, '-o', 'PreferredAuthentications=' + sshauth], {
+            name: 'xterm-256color',
+            cols: 80,
+            rows: 30
+        });
     }
+
     console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser)
     term.on('data', function(data) {
         socket.emit('output', data);
