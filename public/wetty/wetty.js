@@ -59,6 +59,11 @@ socket.on('output', function(data) {
     term.io.writeUTF16(data);
 });
 
+socket.on('logout', function(data) {
+      console.log("user logout");
+      document.getElementById("overlay").style.display = "block";
+});
+
 socket.on('disconnect', function() {
     console.log("Socket.io connection closed");
 });
