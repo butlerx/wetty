@@ -3,10 +3,9 @@ MAINTAINER Nathan LeClaire <nathan@docker.com>
 
 ADD . /app
 WORKDIR /app
-RUN apt-get update && apt-get upgrade
+RUN apt-get update && apt-get upgrade -y
 RUN npm install
 
 EXPOSE 3000
 
-ENTRYPOINT ["node"]
-CMD ["app.js"]
+CMD node app.js
