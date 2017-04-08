@@ -39,7 +39,7 @@
 
 <body>
     <div id="overlay"><input type="button" onclick="javascript:location.reload();" value="reconnect" /></div>
-    <div id="terminal"></div>
+    <div id="terminal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
 	<script type="application/javascript">
 window.addEventListener('beforeunload', function(e) {
 	e.returnValue = "Are you sure?";
