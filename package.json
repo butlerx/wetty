@@ -13,7 +13,11 @@
     "grunt-shell": "^1.1",
     "grunt-mkdir": "^0.1",
     "grunt-git": "^0.3",
-    "grunt-contrib-clean": "^0.6"
+    "grunt-contrib-clean": "^0.6",
+    "eslint": "3.16.1",
+    "eslint-config-standard": "6.2.1",
+    "eslint-plugin-promise": "3.5.0",
+    "eslint-plugin-standard": "2.1.0"
   },
   "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
   "main": "app.js",
@@ -30,5 +34,9 @@
   "preferGlobal": "true",
   "bin": {
     "wetty": "./bin/wetty.js"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "fix": "eslint . --fix"
   }
 }

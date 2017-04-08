@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  wetty:
+    image: node:boron
+    container_name: wetty
+    build: .
+    tty: true
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      SSHHOST: 'localhost'
+      SSHPORT: 22
