@@ -84,7 +84,6 @@ const startServer = (theArgs, {
     const sshuser = getUsername(theArgs, socket.request);
 
     const term = startTerminal(theArgs, sshuser);
-    console.log('term: ', term);
     if (onTerminalStart){
       onTerminalStart(term, sshuser);
     }
