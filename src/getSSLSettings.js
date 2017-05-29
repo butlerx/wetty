@@ -61,7 +61,7 @@ const getSSLArgsFromCommandLine = () => {
     sshauth: opts.sshauth ? opts.sshauth : defaultArgs.sshauth,
     globalsshuser: opts.sshuser? opts.sshuser: defaultArgs.globalsshuser,
     port:  opts.port ? opts.port: defaultArgs.port,
-    ssl: (opts.sslkey && opts.sslcert) ? { key: opts.sslkey, cert: opts.sslcert} : undefined,
+    ssl: (opts.sslkey && opts.sslcert) ? { key: opts.sslkey, cert: opts.sslcert} : defaultArgs.ssl,
   };
   return args;
 };
