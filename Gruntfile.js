@@ -32,5 +32,5 @@ module.exports = grunt => {
 
   grunt.initConfig(config);
 
-  grunt.registerTask('update-hterm', ['mkdir:tmp', 'gitclone:hterm', 'shell:build_hterm', 'clean']);
+  grunt.registerTask('default', ['mkdir:tmp', 'gitclone:hterm', 'shell:build_hterm', 'clean']);
 };

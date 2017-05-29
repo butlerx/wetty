@@ -1,46 +1,47 @@
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8">
     <title>Wetty - The WebTTY Terminal Emulator</title>
     <script src="/wetty/hterm_all.js"></script>
     <script src="/wetty/socket.io/socket.io.js"></script>
     <script src="/wetty/wetty.js"></script>
     <style>
-        html,
-        body {
-            height: 100%;
-            width: 100%;
-            margin: 0px;
-        }
-        #overlay {
-            position: absolute;
-            height: 100%;
-            width: 100%;
-            background-color: rgba(0,0,0,0.75);;
-            display: none;
-            z-index: 100;
-        }
-        #overlay input {
-            display: block;
-            margin: auto;
-            position: relative;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        #terminal {
-            display: block;
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
+      html, body {
+        height: 100%;
+        width: 100%;
+        margin: 0px;
+      }
+      #overlay {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0,0,0,0.75);;
+        display: none;
+      }
+      #overlay input {
+        display: block;
+        margin: auto;
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      #terminal {
+        display: block;
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
     </style>
-</head>
-
-<body>
+  </head>
+  <body>
     <div id="overlay"><input type="button" onclick="javascript:location.reload();" value="reconnect" /></div>
-    <div id="terminal"autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
-</body>
-
+    <div id="terminal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+    <script type="application/javascript">
+      window.addEventListener('beforeunload', function(e) {
+        e.returnValue = "Are you sure?";
+        return e.returnValue;
+      });
+    </script>
+  </body>
 </html>
