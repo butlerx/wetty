@@ -48,18 +48,38 @@ const getSSLObject = opts => {
   return undefined;
 };
 
-const getArgs = opts => {
+
+const getDefaultSSLArgs = () => {
+  return ({
+    runhttps: false,
+    sshport: 22,
+    sshhost: 'localhost',
+    sshauth: 'password',
+    globalsshuser: '',
+    port: undefined,
+    ssl: undefined,
+  });
+};
+
+const getSSLArgsFromCommandLine = () => {
+  const defaultArgs = getDefaultSSLArgs();
+  const opts = getOptions();
+
   const args = {
-    runhttps: (opts.sslkey && opts.sslcert) ? true: false,
-    sshport: opts.sshport ? opts.sshport: 22,
-    sshhost: opts.sshhost ? opts.sshhost: 'localhost',
-    sshauth: opts.sshauth ? opts.sshauth : 'password',
-    globalsshuser: opts.sshuser? opts.sshuser: '',
+    runhttps: (opts.sslkey && opts.sslcert) ? true: defaultArgs.runhttps,
+    sshport: opts.sshport ? opts.sshport: defaultArgs.sshport,
+    sshhost: opts.sshhost ? opts.sshhost: defaultArgs.sshhost,
+    sshauth: opts.sshauth ? opts.sshauth : defaultArgs.sshauth,
+    globalsshuser: opts.sshuser? opts.sshuser: defaultArgs.globalsshuser,
+    port:  opts.port ? opts.port: defaultArgs.port,
     ssl: getSSLObject(opts),
-    port:  opts.port,
   };
   return args;
 };
 
-module.exports = () => getArgs(getOptions());
+
+module.exports = {
+  getSSLArgsFromCommandLine,
+  getDefaultSSLArgs,
+};
 

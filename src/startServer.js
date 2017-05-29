@@ -1,13 +1,13 @@
-var express = require('express');
-var http = require('http');
-var https = require('https');
-var path = require('path');
-var server = require('socket.io');
-var pty = require('pty.js');
+const express = require('express');
+const http = require('http');
+const https = require('https');
+const path = require('path');
+const server = require('socket.io');
+const pty = require('pty.js');
 
 const createRoutes = () => {
-  var app = express();
-  app.get('/wetty/ssh/:user', function(req, res) {
+  const app = express();
+  app.get('/wetty/ssh/:user', (req, res) => {
     res.sendfile(__dirname + '/public/wetty/index.html');
   });
   app.use('/', express.static(path.join(__dirname, 'public')));
@@ -15,7 +15,7 @@ const createRoutes = () => {
 };
 
 const getUsername = (theArgs, request) => {
-  var sshuser = '';
+  let sshuser = '';
   const match = request.headers.referer.match('/wetty/ssh/.+$');
   if (match) {
     sshuser = match[0].replace('/wetty/ssh/', '') + '@';
@@ -23,11 +23,10 @@ const getUsername = (theArgs, request) => {
     sshuser = theArgs.globalsshuser + '@';
   }
   return sshuser;
-
 };
 
-const startTerminal = (theArgs, sshuser, onTerminalStart) => {
-  var term;
+const startTerminal = (theArgs, sshuser) => {
+  let term;
   if (process.getuid() == 0) {
     term = pty.spawn('/bin/login', [], {
       name: 'xterm-256color',
@@ -45,41 +44,47 @@ const startTerminal = (theArgs, sshuser, onTerminalStart) => {
 };
 
 const startServer = (theArgs, { onConnectionAccepted, onServerListen, onTerminalStart, onTerminalExit }) => {
-
   const app = createRoutes();
 
-  var httpserv;
+  let httpserv;
   if (theArgs.runhttps) {
-    httpserv = https.createServer(theArgs.ssl, app).listen(theArgs.port, () => { onServerListen(true); });
+    httpserv = https.createServer(theArgs.ssl, app).listen(theArgs.port, () => { if (onServerListen) {onServerListen(true); }});
   } else {
-    httpserv = http.createServer(app).listen(theArgs.port, () => { onServerListen(false); });
+    httpserv = http.createServer(app).listen(theArgs.port, () => { if (onServerListen) { onServerListen(false); }});
   }
 
-  var io = server(httpserv,{path: '/wetty/socket.io'});
-  io.on('connection', function(socket){
-    onConnectionAccepted();
+  const io = server(httpserv,{path: '/wetty/socket.io'});
+  io.on('connection', (socket) => {
+    if (onConnectionAccepted){
+      onConnectionAccepted();
+    }
 
     const sshuser = getUsername(theArgs, socket.request);
 
-    const term = startTerminal(theArgs, sshuser, onTerminalStart );
-    onTerminalStart();
-    term.on('data', function(data) {
+    const term = startTerminal(theArgs, sshuser);
+    console.log('term: ', term);
+    if (onTerminalStart){
+      onTerminalStart(term, sshuser);
+    }
+    term.on('data', (data) => {
       socket.emit('output', data);
     });
-    term.on('exit', function(code) {
-      onTerminalExit();
+    term.on('exit', (code) => {
+      if (onTerminalExit){
+        onTerminalExit(term);
+      }
     });
-    socket.on('resize', function(data) {
+    socket.on('resize', (data) => {
       term.resize(data.col, data.row);
     });
-    socket.on('input', function(data) {
+    socket.on('input', (data) => {
       term.write(data);
     });
-    socket.on('disconnect', function() {
+    socket.on('disconnect', () => {
       term.end();
     });
   })
-
+  return httpserv;
 };
 
 module.exports = startServer;
