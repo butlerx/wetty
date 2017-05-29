@@ -16,7 +16,7 @@
         "grunt-contrib-clean": "^0.6"
     },
     "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
-    "main": "app.js",
+    "main": "src/index.js",
     "repository": {
         "type": "git",
         "url": "git://github.com/krishnasrinivas/wetty.git"
