@@ -49,7 +49,23 @@ const readSSLOptions = sslOpts => ({
   cert: fs.readFileSync(path.resolve(opts.sslcert)),
 });
 
-const startServer = (theArgs, { onConnectionAccepted, onServerListen, onTerminalStart, onTerminalExit }) => {
+const tryTerminalAction = (action, onTerminalError) => {
+  try{
+    action();
+  }catch(err){
+    if (onTerminalError){
+      onTerminalError(err);
+    }
+  }
+};
+
+const startServer = (theArgs, {
+  onConnectionAccepted,
+  onServerListen,
+  onTerminalStart,
+  onTerminalExit ,
+  onTerminalError,
+}) => {
   const app = createRoutes();
 
   let httpserv;
@@ -81,15 +97,21 @@ const startServer = (theArgs, { onConnectionAccepted, onServerListen, onTerminal
       }
     });
     socket.on('resize', (data) => {
-      term.resize(data.col, data.row);
+      tryTerminalAction(() => {
+        term.resize(data.col, data.row);
+      }, onTerminalError)
     });
     socket.on('input', (data) => {
-      term.write(data);
+      tryTerminalAction(() => {
+        term.write(data);
+      }, onTerminalError)
     });
     socket.on('disconnect', () => {
-      term.end();
+      tryTerminalAction(() => {
+        term.end();
+      }, onTerminalError)
     });
-  })
+  });
   return httpserv;
 };
 
