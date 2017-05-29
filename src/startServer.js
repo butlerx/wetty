@@ -4,6 +4,7 @@ const https = require('https');
 const path = require('path');
 const server = require('socket.io');
 const pty = require('pty.js');
+const fs = require('fs');
 
 const createRoutes = () => {
   const app = express();
@@ -43,12 +44,17 @@ const startTerminal = (theArgs, sshuser) => {
   return term;
 };
 
+const readSSLOptions = sslOpts => ({
+  key:  fs.readFileSync(path.resolve(opts.sslkey)),
+  cert: fs.readFileSync(path.resolve(opts.sslcert)),
+});
+
 const startServer = (theArgs, { onConnectionAccepted, onServerListen, onTerminalStart, onTerminalExit }) => {
   const app = createRoutes();
 
   let httpserv;
   if (theArgs.runhttps) {
-    httpserv = https.createServer(theArgs.ssl, app).listen(theArgs.port, () => { if (onServerListen) {onServerListen(true); }});
+    httpserv = https.createServer(readSSLOptions(theArgs.ssl), app).listen(theArgs.port, () => { if (onServerListen) {onServerListen(true); }});
   } else {
     httpserv = http.createServer(app).listen(theArgs.port, () => { if (onServerListen) { onServerListen(false); }});
   }

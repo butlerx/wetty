@@ -41,8 +41,8 @@ const getOptions = () => {
 const getSSLObject = opts => {
   if (opts.sslkey && opts.sslcert){
     return ({
-      key:  fs.readFileSync(path.resolve(opts.sslkey)),
-      cert: fs.readFileSync(path.resolve(opts.sslcert)),
+      key:  opts.sslkey,
+      cert: opts.sslcert,
     });
   }
   return undefined;
