@@ -3,7 +3,6 @@ const startServer = require('./startServer');
 const getSSLArgsFromCommandLine = require('./getSSLSettings.js').getSSLArgsFromCommandLine;
 const getDefaultSSLArgs = require('./getSSLSettings').getDefaultSSLArgs;
 
-
 const runApp = () => {
   process.on('uncaughtException', function(e) {
     console.error('Wetty Error: ' + e);

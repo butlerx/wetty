@@ -1,6 +1,18 @@
 const optimist = require('optimist');
 const path = require('path');
 
+const getDefaultSSLArgs = () => {
+  return ({
+    runhttps: false,
+    sshport: 22,
+    sshhost: 'localhost',
+    sshauth: 'password',
+    globalsshuser: '',
+    port: undefined,
+    ssl: undefined,
+  });
+};
+
 const getOptions = () => {
   return (
     optimist
@@ -38,29 +50,6 @@ const getOptions = () => {
   );
 };
 
-const getSSLObject = opts => {
-  if (opts.sslkey && opts.sslcert){
-    return ({
-      key:  opts.sslkey,
-      cert: opts.sslcert,
-    });
-  }
-  return undefined;
-};
-
-
-const getDefaultSSLArgs = () => {
-  return ({
-    runhttps: false,
-    sshport: 22,
-    sshhost: 'localhost',
-    sshauth: 'password',
-    globalsshuser: '',
-    port: undefined,
-    ssl: undefined,
-  });
-};
-
 const getSSLArgsFromCommandLine = () => {
   const defaultArgs = getDefaultSSLArgs();
   const opts = getOptions();
@@ -72,11 +61,10 @@ const getSSLArgsFromCommandLine = () => {
     sshauth: opts.sshauth ? opts.sshauth : defaultArgs.sshauth,
     globalsshuser: opts.sshuser? opts.sshuser: defaultArgs.globalsshuser,
     port:  opts.port ? opts.port: defaultArgs.port,
-    ssl: getSSLObject(opts),
+    ssl: (opts.sslkey && opts.sslcert) ? { key: opts.sslkey, cert: opts.sslcert} : undefined,
   };
   return args;
 };
-
 
 module.exports = {
   getSSLArgsFromCommandLine,
