@@ -1,0 +1,1 @@
+kill $(ps aux | grep "ssh" | awk '{print $2}')
