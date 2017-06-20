@@ -11,20 +11,16 @@ hterm source - https://chromium.googlesource.com/apps/libapps/+/master/hterm/
 
 ![Wetty](/terminal.png?raw=true)
 
-This fork has a few of the open prs from the original merged in as well as scripts to make running
+This fork has a few of the open PR's from the original merged in as well as scripts to make running
 in docker better.
 
-Install
--------
+## Install
 
-*  `git clone https://github.com/krishnasrinivas/wetty`
+- `git clone https://github.com/krishnasrinivas/wetty`
+- `cd wetty`
+- `yarn`
 
-*  `cd wetty`
-
-*  `npm install`
-
-Run on HTTP:
------------
+## Run on HTTP
 
     node app.js -p 3000
 
@@ -40,10 +36,9 @@ You can also specify the SSH user name in the address bar like this:
 
   `http://yourserver:3000/wetty/ssh/<username>`
 
-Run on HTTPS:
-------------
+## Run on HTTPS
 
-Always use HTTPS! If you don't have SSL certificates from a CA you can
+Always use HTTPS. If you don't have SSL certificates from a CA you can
 create a self signed certificate using this command:
 
   `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 30000 -nodes`
@@ -55,8 +50,7 @@ And then run:
 Again, if you run it as root it will launch `/bin/login`, else it will
 launch SSH to `localhost` or a specified host as explained above.
 
-Run wetty behind nginx:
-----------------------
+## Run wetty behind nginx
 
 Put the following configuration in nginx's conf:
 
@@ -83,8 +77,7 @@ Else if you are running `app.js` as a regular user you have to use:
 
 **Note that if your Nginx is configured for HTTPS you should run wetty without SSL.**
 
-Dockerized Version
-------------------
+## Dockerized Version
 
 This repo includes a Dockerfile you can use to run a Dockerized version of wetty. You can run
 whatever you want!
@@ -101,8 +94,7 @@ The default username is `term` and the password is `term`, if you did not modify
 
 If you dont want  to build the image yourself just remove the line `build; .`
 
-Run wetty as a service daemon
------------------------------
+## Run wetty as a service daemon
 
 Install wetty globally with -g option:
 
@@ -118,3 +110,7 @@ like this:
 ```
 exec sudo -u root wetty -p 80 >> /var/log/wetty.log 2>&1
 ```
+## Clean-up
+
+If users dont fully disconnect when finished ssh connections will actually be kept open the simplest
+way to deal with this is run `/app/bin/cleanup` on a cron job.
