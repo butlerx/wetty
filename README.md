@@ -11,6 +11,9 @@ hterm source - https://chromium.googlesource.com/apps/libapps/+/master/hterm/
 
 ![Wetty](/terminal.png?raw=true)
 
+This fork has a few of the open prs from the original merged in as well as scripts to make running
+in docker better.
+
 Install
 -------
 
@@ -58,16 +61,16 @@ Run wetty behind nginx:
 Put the following configuration in nginx's conf:
 
     location /wetty {
-	    proxy_pass http://127.0.0.1:3000/wetty;
-	    proxy_http_version 1.1;
-	    proxy_set_header Upgrade $http_upgrade;
-	    proxy_set_header Connection "upgrade";
-	    proxy_read_timeout 43200000;
+      proxy_pass http://127.0.0.1:3000/wetty;
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+      proxy_read_timeout 43200000;
 
-	    proxy_set_header X-Real-IP $remote_addr;
-	    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-	    proxy_set_header Host $http_host;
-	    proxy_set_header X-NginX-Proxy true;
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_set_header X-NginX-Proxy true;
     }
 
 If you are running `app.js` as `root` and have an Nginx proxy you have to use:
@@ -83,17 +86,20 @@ Else if you are running `app.js` as a regular user you have to use:
 Dockerized Version
 ------------------
 
-This repo includes a Dockerfile you can use to run a Dockerized version of wetty.  You can run
+This repo includes a Dockerfile you can use to run a Dockerized version of wetty. You can run
 whatever you want!
 
-Just do:
+Just modify docker-compose and run:
 
 ```
-    docker run --name term -p 3000 -dt krishnasrinivas/wetty
+docker-compose up -d
 ```
 
-Visit the appropriate URL in your browser (`[localhost|$(boot2docker ip)]:PORT`).  
-The username is `term` and the password is `term`.
+Visit the appropriate URL in your browser (`[localhost|$(boot2docker ip)]:PORT`).
+
+The default username is `term` and the password is `term`, if you did not modify `SSHHOST`
+
+If you dont want  to build the image yourself just remove the line `build; .`
 
 Run wetty as a service daemon
 -----------------------------
@@ -106,6 +112,9 @@ Install wetty globally with -g option:
     $ sudo start wetty
 ```
 
-This will start wetty on port 3000. If you want to change the port or redirect stdout/stderr you should change the last line in `wetty.conf` file, something like this:
-
-    exec sudo -u root wetty -p 80 >> /var/log/wetty.log 2>&1
+This will start wetty on port 3000. If you want to change the port or redirect
+stdout/stderr you should change the last line in `wetty.conf` file, something
+like this:
+```
+exec sudo -u root wetty -p 80 >> /var/log/wetty.log 2>&1
+```
