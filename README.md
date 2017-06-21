@@ -16,7 +16,7 @@ in docker better.
 
 ## Install
 
-- `git clone https://github.com/krishnasrinivas/wetty`
+- `git clone https://github.com/butlerx/wetty`
 - `cd wetty`
 - `yarn`
 
