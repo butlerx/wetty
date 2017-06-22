@@ -1,7 +1,7 @@
-FROM node:boron
+FROM node:boron-apline
 MAINTAINER Nathan LeClaire <nathan@docker.com>
 ADD . /app
 WORKDIR /app
-RUN apt-get update && apt-get upgrade -y && yarn
+RUN apk add --update build-base && yarn
 EXPOSE 3000
 CMD yarn start
