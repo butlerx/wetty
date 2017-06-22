@@ -25,6 +25,8 @@ Wetty.prototype.onTerminalResize = function(col, row) {
 };
 
 socket.on('connect', function() {
+  document.getElementById("overlay").style.display = "none";
+  window.addEventListener('beforeunload', handler, false);
   lib.init(function() {
     hterm.defaultStorage = new lib.Storage.Local();
     term = new hterm.Terminal();
@@ -59,10 +61,16 @@ socket.on('output', function(data) {
 });
 
 socket.on('logout', function(data) {
-  console.log("user logout");
   document.getElementById("overlay").style.display = "block";
+  window.removeEventListener('beforeunload', handler, false);
 });
 
 socket.on('disconnect', function() {
-  console.log("Socket.io connection closed");
+  document.getElementById("overlay").style.display = "block";
+  window.removeEventListener('beforeunload', handler, false);
 });
+
+function handler (e) {
+  e.returnValue = "Are you sure?";
+  return e.returnValue;
+}

@@ -81,9 +81,21 @@ process.on('uncaughtException', e => {
 let httpserv;
 
 const app = express();
+// For using wetty at /wetty on a vhost
 app.get('/wetty/ssh/:user', (req, res) => {
   res.sendfile(`${__dirname}/public/wetty/index.html`);
 });
+app.get('/wetty/', (req, res) => {
+  res.sendfile(`${__dirname}/public/wetty/index.html`);
+});
+// For using wetty on a vhost by itself
+app.get('/ssh/:user', (req, res) => {
+  res.sendfile(`${__dirname}/public/wetty/index.html`);
+});
+app.get('/', (req, res) => {
+  res.sendfile(`${__dirname}/public/wetty/index.html`);
+});
+// For serving css and javascript
 app.use('/', express.static(path.join(__dirname, 'public')));
 
 if (runhttps) {
@@ -101,9 +113,9 @@ io.on('connection', socket => {
   let sshuser = '';
   const request = socket.request;
   console.log(`${new Date()} Connection accepted.`);
-  const match = request.headers.referer.match('/wetty/ssh/.+$');
+  const match = request.headers.referer.match('.+/ssh/.+$');
   if (match) {
-    sshuser = `${match[0].replace('/wetty/ssh/', '')}@`;
+    sshuser = `${match[0].split('/ssh/').pop()}@`;
   } else if (globalsshuser) {
     sshuser = `${globalsshuser}@`;
   }
