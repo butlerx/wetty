@@ -81,6 +81,7 @@ process.on('uncaughtException', e => {
 let httpserv;
 
 const app = express();
+app.use(require('serve-favicon')(`${__dirname}/public/favicon.ico`));
 // For using wetty at /wetty on a vhost
 app.get('/wetty/ssh/:user', (req, res) => {
   res.sendfile(`${__dirname}/public/wetty/index.html`);
