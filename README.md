@@ -20,9 +20,15 @@ in docker better.
 - `cd wetty`
 - `yarn`
 
+or
+
+`yarn add wetty.js`
+
 ## Run on HTTP
 
-    node app.js -p 3000
+``` bash
+node app.js -p 3000
+```
 
 If you run it as root it will launch `/bin/login` (where you can specify
 the user name), else it will launch `ssh` and connect by default to
@@ -34,18 +40,26 @@ SSH user using the `--sshuser` option.
 
 You can also specify the SSH user name in the address bar like this:
 
-  `http://yourserver:3000/wetty/ssh/<username>`
+`http://yourserver:3000/wetty/ssh/<username>`
+
+or
+
+`http://yourserver:3000/ssh/<username>`
 
 ## Run on HTTPS
 
 Always use HTTPS. If you don't have SSL certificates from a CA you can
 create a self signed certificate using this command:
 
-  `openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 30000 -nodes`
+```
+openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 30000 -nodes
+```
 
 And then run:
 
-    node app.js --sslkey key.pem --sslcert cert.pem -p 3000
+```
+node app.js --sslkey key.pem --sslcert cert.pem -p 3000
+```
 
 Again, if you run it as root it will launch `/bin/login`, else it will
 launch SSH to `localhost` or a specified host as explained above.
@@ -69,11 +83,21 @@ Put the following configuration in nginx's conf:
 
 If you are running `app.js` as `root` and have an Nginx proxy you have to use:
 
-    http://yourserver.com/wetty
+```
+http://yourserver.com/wetty
+```
 
-Else if you are running `app.js` as a regular user you have to use:
+Else if you are running `app.js` as a regular user you can use:
 
-    http://yourserver.com/wetty/ssh/<username>
+```
+http://yourserver.com/wetty/ssh/<username>
+```
+
+or
+
+```
+http://yourserver.com/wetty
+```
 
 **Note that if your Nginx is configured for HTTPS you should run wetty without SSL.**
 
@@ -96,12 +120,23 @@ If you dont want  to build the image yourself just remove the line `build; .`
 
 ## Run wetty as a service daemon
 
-Install wetty globally with -g option:
+Install wetty globally with global option:
+
+### init.d
 
 ```bash
-    $ sudo npm install wetty -g
-    $ sudo cp /usr/local/lib/node_modules/wetty/bin/wetty.conf /etc/init
-    $ sudo start wetty
+$ sudo yarn global add wetty.js
+$ sudo cp /usr/local/lib/node_modules/wetty.js/bin/wetty.conf /etc/init
+$ sudo start wetty
+```
+
+### systemd
+
+```bash
+$ yarn global add wetty.js
+$ cp ~/.config/yarn/global/node_modules/wetty.js/bin/wetty.service  ~/.config/systemd/user/
+$ systemctl --user enable wetty
+$ systemctl --user start wetty
 ```
 
 This will start wetty on port 3000. If you want to change the port or redirect
@@ -113,4 +148,4 @@ exec sudo -u root wetty -p 80 >> /var/log/wetty.log 2>&1
 ## Clean-up
 
 If users dont fully disconnect when finished ssh connections will actually be kept open the simplest
-way to deal with this is run `/app/bin/cleanup` on a cron job.
+way to deal with this is run `bin/cleanup` on a cron job.
