@@ -9,11 +9,9 @@ Description=Wetty Web Terminal
 After=network.target
 
 [Service]
-User=root
-Group=root
 
-WorkingDirectory=/home/akadmin/pack/wetty # CHANGE ME
-ExecStart=/usr/bin/node app.js -p 9123 --host 127.0.0.1
+WorkingDirectory=$HOME/.config/yarn/global/node_modules/wetty.js/
+ExecStart=/usr/bin/node app.js -p 3000 --host 127.0.0.1
 
 [Install]
 WantedBy=multi-user.target
