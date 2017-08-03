@@ -1,7 +1,7 @@
-const wetty = require('./package.js');
-const fs = require('fs');
+#! /usr/bin/env node
+const wetty = require('./wetty.js');
+const fs = require('fs-extra');
 const path = require('path');
-
 const optimist = require('optimist');
 
 const opts = optimist
@@ -36,64 +36,52 @@ const opts = optimist
       description: 'wetty listen port',
     },
     help: {
-      demand     : false,
-      alias      : 'h',
+      demand: false,
+      alias: 'h',
       description: 'Print help message',
     },
   })
   .boolean('allow_discovery').argv;
 
-<<<<<<< HEAD
-let runhttps = process.env.HTTPS || false;
-let globalsshuser = process.env.SSHUSER || '';
-let sshhost = process.env.SSHHOST || 'localhost';
-let sshauth = process.env.SSHAUTH || 'password,keyboard-interactive';
-let sshport = process.env.SSHPOST || 22;
-let port = process.env.PORT || 3000;
-
-if (opts.sshport) {
-  sshport = opts.sshport;
-}
-
-if (opts.sshhost) {
-  sshhost = opts.sshhost;
-}
-
-if (opts.sshauth) {
-  sshauth = opts.sshauth;
-}
-
-if (opts.sshuser) {
-  globalsshuser = opts.sshuser;
-=======
 if (opts.help) {
   optimist.showHelp();
   process.exit(0);
->>>>>>> Modularize the wetty service and add events (#18)
 }
 
-const globalsshuser = opts.sshuser || process.env.SSHUSER || '';
+const sshuser = opts.sshuser || process.env.SSHUSER || '';
 const sshhost = opts.sshhost || process.env.SSHHOST || 'localhost';
-const sshauth = opts.sshauth || process.env.SSHAUTH || 'password';
+const sshauth = opts.sshauth || process.env.SSHAUTH || 'password,keyboard-interactive';
 const sshport = opts.sshport || process.env.SSHPOST || 22;
 const port = opts.port || process.env.PORT || 3000;
 
-if (opts.sslkey && opts.sslcert) {
-  opts['ssl'] = {};
-  opts.ssl['key'] = fs.readFileSync(path.resolve(opts.sslkey));
-  opts.ssl['cert'] = fs.readFileSync(path.resolve(opts.sslcert));
-}
-
-process.on('uncaughtException', e => {
-  console.error(`Error: ${e}`);
+loadSSL(opts).then(ssl => {
+  opts.ssl = ssl;
 });
 
-const e = wetty.serve(port, globalsshuser, sshhost, sshport, sshauth, opts.ssl);
+process.on('uncaughtException', err => {
+  console.error(`Error: ${err}`);
+});
 
-e.on('exit', code => {
+const tty = wetty.serve(port, sshuser, sshhost, sshport, sshauth, opts.ssl);
+
+tty.on('exit', code => {
   console.log(`exit with code: ${code}`);
 });
 
-e.on('disconnect', () => {
+tty.on('disconnect', () => {
   console.log('disconnect');
 });
+
+async function loadSSL({ sslkey, sslcert }) {
+  try {
+    return sslkey && sslcert
+      ? {
+          key: await fs.readFile(path.resolve(sslkey)),
+          cert: await fs.readFile(path.resolve(sslcert)),
+        }
+      : {};
+  } catch (err) {
+    console.err(err);
+    process.exit(1);
+  }
+}
