@@ -1,12 +1,10 @@
-const express = require('express');
-const http = require('http');
-const https = require('https');
-const path = require('path');
-const server = require('socket.io');
-const pty = require('pty.js');
+const wetty = require('./package.js');
 const fs = require('fs');
+const path = require('path');
 
-const opts = require('optimist')
+const optimist = require('optimist');
+
+const opts = optimist
   .options({
     sslkey: {
       demand: false,
@@ -37,9 +35,15 @@ const opts = require('optimist')
       alias: 'p',
       description: 'wetty listen port',
     },
+    help: {
+      demand     : false,
+      alias      : 'h',
+      description: 'Print help message',
+    },
   })
   .boolean('allow_discovery').argv;
 
+<<<<<<< HEAD
 let runhttps = process.env.HTTPS || false;
 let globalsshuser = process.env.SSHUSER || '';
 let sshhost = process.env.SSHHOST || 'localhost';
@@ -61,14 +65,20 @@ if (opts.sshauth) {
 
 if (opts.sshuser) {
   globalsshuser = opts.sshuser;
+=======
+if (opts.help) {
+  optimist.showHelp();
+  process.exit(0);
+>>>>>>> Modularize the wetty service and add events (#18)
 }
 
-if (opts.port) {
-  port = opts.port;
-}
+const globalsshuser = opts.sshuser || process.env.SSHUSER || '';
+const sshhost = opts.sshhost || process.env.SSHHOST || 'localhost';
+const sshauth = opts.sshauth || process.env.SSHAUTH || 'password';
+const sshport = opts.sshport || process.env.SSHPOST || 22;
+const port = opts.port || process.env.PORT || 3000;
 
 if (opts.sslkey && opts.sslcert) {
-  runhttps = true;
   opts['ssl'] = {};
   opts.ssl['key'] = fs.readFileSync(path.resolve(opts.sslkey));
   opts.ssl['cert'] = fs.readFileSync(path.resolve(opts.sslcert));
@@ -78,93 +88,12 @@ process.on('uncaughtException', e => {
   console.error(`Error: ${e}`);
 });
 
-let httpserv;
+const e = wetty.serve(port, globalsshuser, sshhost, sshport, sshauth, opts.ssl);
 
-const app = express();
-app.use(require('serve-favicon')(`${__dirname}/public/favicon.ico`));
-// For using wetty at /wetty on a vhost
-app.get('/wetty/ssh/:user', (req, res) => {
-  res.sendfile(`${__dirname}/public/wetty/index.html`);
+e.on('exit', code => {
+  console.log(`exit with code: ${code}`);
 });
-app.get('/wetty/', (req, res) => {
-  res.sendfile(`${__dirname}/public/wetty/index.html`);
-});
-// For using wetty on a vhost by itself
-app.get('/ssh/:user', (req, res) => {
-  res.sendfile(`${__dirname}/public/wetty/index.html`);
-});
-app.get('/', (req, res) => {
-  res.sendfile(`${__dirname}/public/wetty/index.html`);
-});
-// For serving css and javascript
-app.use('/', express.static(path.join(__dirname, 'public')));
 
-if (runhttps) {
-  httpserv = https.createServer(opts.ssl, app).listen(port, () => {
-    console.log(`https on port ${port}`);
-  });
-} else {
-  httpserv = http.createServer(app).listen(port, () => {
-    console.log(`http on port ${port}`);
-  });
-}
-
-const io = server(httpserv, { path: '/wetty/socket.io' });
-io.on('connection', socket => {
-  let sshuser = '';
-  const request = socket.request;
-  console.log(`${new Date()} Connection accepted.`);
-  const match = request.headers.referer.match('.+/ssh/.+$');
-  if (match) {
-    sshuser = `${match[0].split('/ssh/').pop()}@`;
-  } else if (globalsshuser) {
-    sshuser = `${globalsshuser}@`;
-  }
-
-  let term;
-  if (process.getuid() === 0 && sshhost === 'localhost') {
-    term = pty.spawn('/usr/bin/env', ['login'], {
-      name: 'xterm-256color',
-      cols: 80,
-      rows: 30,
-    });
-  } else if (sshuser) {
-    term = pty.spawn(
-      'ssh',
-      [sshuser + sshhost, '-p', sshport, '-o', `PreferredAuthentications=${sshauth}`],
-      {
-        name: 'xterm-256color',
-        cols: 80,
-        rows: 30,
-      },
-    );
-  } else {
-    term = pty.spawn(
-      './bin/ssh',
-      [sshhost, '-p', sshport, '-o', `PreferredAuthentications=${sshauth}`],
-      {
-        name: 'xterm-256color',
-        cols: 80,
-        rows: 30,
-      },
-    );
-  }
-
-  console.log(`${new Date()} PID=${term.pid} STARTED on behalf of user=${sshuser}`);
-  term.on('data', data => {
-    socket.emit('output', data);
-  });
-  term.on('exit', code => {
-    console.log(`${new Date()} PID=${term.pid} ENDED`);
-    socket.emit('logout');
-  });
-  socket.on('resize', ({ col, row }) => {
-    term.resize(col, row);
-  });
-  socket.on('input', data => {
-    term.write(data);
-  });
-  socket.on('disconnect', () => {
-    term.end();
-  });
+e.on('disconnect', () => {
+  console.log('disconnect');
 });
