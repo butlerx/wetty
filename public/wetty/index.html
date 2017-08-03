@@ -3,9 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>Wetty - The WebTTY Terminal Emulator</title>
-    <script src="/wetty/hterm_all.js"></script>
     <script src="/wetty/socket.io/socket.io.js"></script>
-    <script src="/wetty/wetty.js"></script>
     <style>
       html, body {
         height: 100%;
@@ -38,5 +36,6 @@
   <body>
     <div id="overlay"><input type="button" onclick="location.reload();" value="reconnect" /></div>
     <div id="terminal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+    <script src="/wetty/wetty.min.js"></script>
   </body>
 </html>

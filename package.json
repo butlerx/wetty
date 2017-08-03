@@ -4,22 +4,37 @@
   "dependencies": {
     "express": "^4.15.3",
     "optimist": "^0.6",
+    "pre-commit": "^1.2.2",
     "pty.js": "^0.3.1",
     "serve-favicon": "^2.4.3",
     "socket.io": "^1.3.7"
   },
   "devDependencies": {
-    "eslint": "3.16.1",
-    "eslint-config-standard": "6.2.1",
+    "babel-cli": "6.24.1",
+    "babel-core": "6.24.1",
+    "babel-eslint": "7.2.3",
+    "babel-plugin-add-module-exports": "0.2.1",
+    "babel-plugin-es6-promise": "1.1.1",
+    "babel-plugin-syntax-async-functions": "6.13.0",
+    "babel-plugin-transform-async-to-generator": "6.24.1",
+    "babel-plugin-transform-object-assign": "6.22.0",
+    "babel-preset-es2015": "6.24.1",
+    "del": "^3.0.0",
+    "es6-promise": "^4.1.1",
+    "eslint": "3.19.0",
+    "eslint-config-standard": "10.2.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
     "eslint-plugin-promise": "3.5.0",
-    "eslint-plugin-standard": "2.1.0",
-    "grunt": "^0.4",
-    "grunt-contrib-clean": "^0.6",
-    "grunt-git": "^0.3",
-    "grunt-mkdir": "^0.1",
-    "grunt-shell": "^1.1",
-    "load-grunt-tasks": "^3.0"
+    "eslint-plugin-react": "6.10.3",
+    "eslint-plugin-standard": "3.0.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-minify": "^1.0.0",
+    "gulp-shell": "^0.6.3"
   },
+  "pre-commit": ["fix", "commit"],
   "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
   "repository": {
     "type": "git",
@@ -34,16 +49,15 @@
   "preferGlobal": "true",
   "main": "app.js",
   "bin": {
-    "wetty": "./bin/wetty.js"
+    "wetty": "./app.js"
   },
-  "files": [
-    "bin",
-    "public"
-  ],
+  "files": ["bin", "public"],
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "build": "grunt",
-    "start": "node app.js"
+    "build": "gulp",
+    "start": "node app.js",
+    "commit": "git add public",
+    "fix": "eslint . --fix"
   }
 }

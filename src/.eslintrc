@@ -1,7 +1,12 @@
 {
   'env': {
     'es6'    : true,
-    'node'   : true,
+    'browser': true,
+  },
+  'globals': {
+    'hterm': true,
+    'lib': true,
+    'io': true
   },
   "extends": [
     'eslint:recommended'
@@ -44,17 +49,6 @@
     ],
     'no-var': [
       'error',
-    ],
-    'no-console': [
-      'error',
-      {
-        'allow': [
-          'warn',
-          'trace',
-          'log',
-          'error'
-        ]
-      }
     ],
     'prefer-arrow-callback': [
       'error',
