@@ -7,37 +7,37 @@ const optimist = require('optimist');
 const opts = optimist
   .options({
     sslkey: {
-      demand: false,
+      demand     : false,
       description: 'path to SSL key',
     },
     sslcert: {
-      demand: false,
+      demand     : false,
       description: 'path to SSL certificate',
     },
     sshhost: {
-      demand: false,
+      demand     : false,
       description: 'ssh server host',
     },
     sshport: {
-      demand: false,
+      demand     : false,
       description: 'ssh server port',
     },
     sshuser: {
-      demand: false,
+      demand     : false,
       description: 'ssh user',
     },
     sshauth: {
-      demand: false,
+      demand     : false,
       description: 'defaults to "password", you can use "publickey,password" instead',
     },
     port: {
-      demand: false,
-      alias: 'p',
+      demand     : false,
+      alias      : 'p',
       description: 'wetty listen port',
     },
     help: {
-      demand: false,
-      alias: 'h',
+      demand     : false,
+      alias      : 'h',
       description: 'Print help message',
     },
   })
@@ -72,16 +72,22 @@ tty.on('disconnect', () => {
   console.log('disconnect');
 });
 
-async function loadSSL({ sslkey, sslcert }) {
-  try {
-    return sslkey && sslcert
-      ? {
-          key: await fs.readFile(path.resolve(sslkey)),
-          cert: await fs.readFile(path.resolve(sslcert)),
-        }
-      : {};
-  } catch (err) {
-    console.err(err);
-    process.exit(1);
-  }
+function loadSSL({ sslkey, sslcert }) {
+  return new Promise((resolve, reject) => {
+    if (sslkey && sslcert) {
+      const ssl = {};
+      fs
+        .readFile(path.resolve(sslkey))
+        .then(key => {
+          ssl.key = key;
+        })
+        .then(fs.readFile(path.resolve(sslcert)))
+        .then(cert => {
+          ssl.cert = cert;
+        })
+        .then(resolve(ssl))
+        .catch(reject);
+    }
+    resolve({});
+  });
 }
