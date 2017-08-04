@@ -1,4 +1,4 @@
-const socket = io(location.origin, {path: '/wetty/socket.io'});
+const socket = io(location.origin, { path: '/wetty/socket.io' });
 let term;
 let buf = '';
 
@@ -59,7 +59,7 @@ socket.on('connect', () => {
   });
 });
 
-socket.on('output', (data) => {
+socket.on('output', data => {
   if (!term) {
     buf += data;
     return;
@@ -77,7 +77,7 @@ socket.on('disconnect', () => {
   window.removeEventListener('beforeunload', handler, false);
 });
 
-function handler (event) {
-  event.returnValue = 'Are you sure?';
-  return event.returnValue;
+function handler(e) {
+  e.returnValue = 'Are you sure?';
+  return e.returnValue;
 }

@@ -45,10 +45,8 @@ exports.serve = (port, globalsshuser, sshhost, sshport, sshauth, sslopts) => {
     const request = socket.request;
     console.log(`${new Date()} Connection accepted.`);
     const match = request.headers.referer.match('.+/ssh/.+$');
-    const ssh = match
-      ? `${match[0].split('/ssh/').pop()}@${sshhost}`
-      : globalsshuser ? `${globalsshuser}@${sshhost}` : sshhost;
-
+    const sshAddress = globalsshuser ? `${globalsshuser}@${sshhost}` : sshhost;
+    const ssh = match ? `${match[0].split('/ssh/').pop()}@${sshhost}` : sshAddress;
     const cmd = process.getuid() === 0 && sshhost === 'localhost' ? '/bin/login' : './bin/ssh';
     const args = cmd === './bin/ssh' ? [ssh, '-p', sshport, '-o', `PreferredAuthentications=${sshauth}`] : [];
     const term = pty.spawn(cmd, args, {
