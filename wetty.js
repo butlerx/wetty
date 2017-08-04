@@ -42,19 +42,15 @@ exports.serve = (port, globalsshuser, sshhost, sshport, sshauth, sslopts) => {
   const events = new EventEmitter();
   const io = server(httpserv, { path: '/wetty/socket.io' });
   io.on('connection', socket => {
-    const request = socket.request;
+    const { request } = socket;
     console.log(`${new Date()} Connection accepted.`);
     const match = request.headers.referer.match('.+/ssh/.+$');
-    const ssh = match
-      ? `${match[0].split('/ssh/').pop()}@${sshhost}`
-      : globalsshuser
-        ? `${globalsshuser}@${sshhost}`
-        : sshhost;
+    const sshAddress = globalsshuser ? `${globalsshuser}@${sshhost}` : sshhost;
+    const ssh = match ? `${match[0].split('/ssh/').pop()}@${sshhost}` : sshAddress;
 
-    const args =
-      process.getuid() === 0 && sshhost === 'localhost'
-        ? ['login']
-        : [ssh, '-p', sshport, '-o', `PreferredAuthentications=${sshauth}`];
+    const args = process.getuid() === 0 && sshhost === 'localhost'
+      ? ['login']
+      : [ssh, '-p', sshport, '-o', `PreferredAuthentications=${sshauth}`];
     const term = pty.spawn('/usr/bin/env', args, {
       name: 'xterm-256color',
       cols: 80,
