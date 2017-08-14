@@ -48,7 +48,7 @@ export default (port, globalsshuser, sshhost, sshport, sshauth, sslopts) => {
     const ssh = match ? `${match[0].split('/ssh/').pop()}@${sshhost}` : sshAddress;
 
     const args = process.getuid() === 0 && sshhost === 'localhost'
-      ? ['login']
+      ? ['login', '-h', socket.client.conn.remoteAddress.split(':')[3]]
       : [ssh, '-p', sshport, '-o', `PreferredAuthentications=${sshauth}`];
     const term = pty.spawn('/usr/bin/env', args, {
       name: 'xterm-256color',
