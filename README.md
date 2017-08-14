@@ -7,7 +7,7 @@ terminal emulator (hterm) which is a full fledged implementation of
 terminal emulation written entirely in Javascript. Also it uses
 websockets instead of Ajax and hence better response time.
 
-hterm source - https://chromium.googlesource.com/apps/libapps/+/master/hterm/
+[hterm source](https://chromium.googlesource.com/apps/libapps/+/master/hterm/)
 
 ![Wetty](/terminal.png?raw=true)
 
@@ -116,7 +116,7 @@ Visit the appropriate URL in your browser (`[localhost|$(boot2docker ip)]:PORT`)
 
 The default username is `term` and the password is `term`, if you did not modify `SSHHOST`
 
-If you dont want  to build the image yourself just remove the line `build; .`
+If you dont want to build the image yourself just remove the line `build; .`
 
 ## Run wetty as a service daemon
 
@@ -154,9 +154,3 @@ Wetty supports all browsers that Google's hterm supports. Wetty has been [report
 ### Why isn't Wetty working with IE?
 
 [This fix](https://stackoverflow.com/questions/13102116/access-denied-for-localstorage-in-ie10#20848924) has been known to help some users.
-
-### Clean-up
-
-If users dont fully disconnect when finished ssh connections will actually be kept open the simplest
-way to deal with this is run `bin/cleanup` on a cron job.
-
