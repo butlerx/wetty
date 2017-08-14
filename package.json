@@ -2,6 +2,7 @@
   "name": "wetty.js",
   "version": "0.3.0",
   "dependencies": {
+    "@std/esm": "^0.2.2",
     "express": "^4.15.3",
     "fs-extra": "^4.0.1",
     "optimist": "^0.6",
@@ -23,10 +24,10 @@
     "del": "^3.0.0",
     "es6-promise": "^4.1.1",
     "eslint": "3.19.0",
-    "eslint-config-standard": "10.2.1",
     "eslint-config-airbnb": "^15.1.0",
-    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-config-standard": "10.2.1",
     "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.1.0",
@@ -53,6 +54,10 @@
   "main": "app.js",
   "bin": {
     "wetty": "./app.js"
+  },
+  "@std/esm": {
+    "esm": "js",
+    "cjs": "true"
   },
   "files": ["bin", "public"],
   "scripts": {
