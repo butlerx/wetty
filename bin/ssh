@@ -1,16 +1,15 @@
-#!/usr/bin/env perl
+#!/usr/bin/env sh
 
-my $user_at_address = $ARGV[0];
-my @u_a = split(/@/, $user_at_address);
-if (defined $u_a[1]) {
-    if ( $^O == 'linux' ) {
-        exec ("/usr/bin/ssh $u_a[0]\@$u_a[1]");
-    }
-} else {
-    print "Enter your username: ";
-    my $username = <STDIN>;
-    chomp ( $username );
-    if ( $^O == 'linux' ) {
-        exec ("/usr/bin/ssh $username\@$u_a[0]");
-    }
-}
+userAtAddress="$1"
+USER=$(echo "$userAtAddress" | cut -d"@" -f1);
+HOST=$(echo "$userAtAddress" | cut -d"@" -f2);
+
+if [ "$USER" = "$HOST" ]
+then
+  printf "Enter your username: "
+  read -r USER
+  USER=$(echo "${USER}" | tr -d '[:space:]')
+  ssh "$USER"@"$HOST"
+else
+  ssh "$userAtAddress"
+fi
