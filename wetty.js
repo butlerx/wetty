@@ -1,27 +1,27 @@
-const express = require('express');
-const http = require('http');
-const https = require('https');
-const path = require('path');
-const server = require('socket.io');
-const pty = require('pty.js');
-const EventEmitter = require('events');
-const favicon = require('serve-favicon');
+import express from 'express';
+import http from 'http';
+import https from 'https';
+import path from 'path';
+import server from 'socket.io';
+import pty from 'pty.js';
+import EventEmitter from 'events';
+import favicon from 'serve-favicon';
 
 const app = express();
 app.use(favicon(`${__dirname}/public/favicon.ico`));
 // For using wetty at /wetty on a vhost
 app.get('/wetty/ssh/:user', (req, res) => {
-  res.sendfile(`${__dirname}/public/wetty/index.html`);
+  res.sendFile(`${__dirname}/public/wetty/index.html`);
 });
 app.get('/wetty/', (req, res) => {
-  res.sendfile(`${__dirname}/public/wetty/index.html`);
+  res.sendFile(`${__dirname}/public/wetty/index.html`);
 });
 // For using wetty on a vhost by itself
 app.get('/ssh/:user', (req, res) => {
-  res.sendfile(`${__dirname}/public/wetty/index.html`);
+  res.sendFile(`${__dirname}/public/wetty/index.html`);
 });
 app.get('/', (req, res) => {
-  res.sendfile(`${__dirname}/public/wetty/index.html`);
+  res.sendFile(`${__dirname}/public/wetty/index.html`);
 });
 // For serving css and javascript
 app.use('/', express.static(path.join(__dirname, 'public')));
@@ -36,9 +36,8 @@ function createServer(port, sslopts) {
     });
 }
 
-exports.serve = (port, globalsshuser, sshhost, sshport, sshauth, sslopts) => {
+export default (port, globalsshuser, sshhost, sshport, sshauth, sslopts) => {
   const httpserv = createServer(port, sslopts);
-
   const events = new EventEmitter();
   const io = server(httpserv, { path: '/wetty/socket.io' });
   io.on('connection', socket => {
@@ -69,12 +68,12 @@ exports.serve = (port, globalsshuser, sshhost, sshport, sshauth, sslopts) => {
     socket.on('resize', ({ col, row }) => {
       term.resize(col, row);
     });
-    socket.on('input', term.write);
+    socket.on('input', input => term.write(input));
     socket.on('disconnect', () => {
       term.end();
+      term.destroy();
       events.emit('disconnect');
     });
   });
-
   return events;
 };
