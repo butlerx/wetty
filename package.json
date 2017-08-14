@@ -1,6 +1,6 @@
 {
   "name": "wetty.js",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "dependencies": {
     "@std/esm": "^0.2.2",
     "express": "^4.15.3",
@@ -38,7 +38,10 @@
     "gulp-minify": "^1.0.0",
     "gulp-shell": "^0.6.3"
   },
-  "pre-commit": ["fix", "commit"],
+  "pre-commit": [
+    "fix",
+    "commit"
+  ],
   "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
   "repository": {
     "type": "git",
@@ -59,7 +62,10 @@
     "esm": "js",
     "cjs": "true"
   },
-  "files": ["bin", "public"],
+  "files": [
+    "bin",
+    "public"
+  ],
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
