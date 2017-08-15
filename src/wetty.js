@@ -41,10 +41,11 @@ socket.on('connect', () => {
     term.prefs_.set('use-default-window-copy', true);
     term.prefs_.set('send-encoding', 'raw');
     term.prefs_.set('receive-encoding', 'raw');
+    term.prefs_.set('font-size', 14);
     term.scrollPort_.screen_.setAttribute('spellcheck', 'false');
     term.scrollPort_.screen_.setAttribute('autocorrect', 'false');
     term.scrollPort_.screen_.setAttribute('autocomplete', 'false');
-    term.scrollPort_.screen_.setAttribute('contenteditable', 'true');
+    term.scrollPort_.screen_.setAttribute('contenteditable', 'false');
 
     term.runCommandClass(Wetty, document.location.hash.substr(1));
     socket.emit('resize', {
