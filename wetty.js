@@ -46,7 +46,7 @@ export default (port, globalsshuser, sshhost, sshport, sshauth, sslopts) => {
     const match = request.headers.referer.match('.+/ssh/.+$');
     const sshAddress = globalsshuser ? `${globalsshuser}@${sshhost}` : sshhost;
     const ssh = match ? `${match[0].split('/ssh/').pop()}@${sshhost}` : sshAddress;
-    const cmd = process.getuid() === 0 && sshhost === 'localhost' ? '/bin/login' : './bin/ssh';
+    const cmd = process.getuid() === 0 && sshhost === 'localhost' ? '/usr/bin/login' : './bin/ssh';
     const args =
       cmd === './bin/ssh'
         ? [ssh, '-p', sshport, '-o', `PreferredAuthentications=${sshauth}`]
