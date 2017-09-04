@@ -54,7 +54,7 @@
   },
   "homepage": "https://github.com/butlerx/wetty",
   "preferGlobal": "true",
-  "main": "app.js",
+  "main": "index.js",
   "bin": {
     "wetty": "./app.js"
   },
@@ -64,7 +64,10 @@
   },
   "files": [
     "bin",
-    "public"
+    "public",
+    "app.js",
+    "cli.js",
+    "wetty.js"
   ],
   "scripts": {
     "lint": "eslint .",
