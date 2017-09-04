@@ -1,6 +1,6 @@
 {
   "name": "wetty.js",
-  "version": "0.4.0",
+  "version": "0.4.2",
   "dependencies": {
     "@std/esm": "^0.2.2",
     "express": "^4.15.3",
