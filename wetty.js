@@ -36,20 +36,35 @@ function createServer(port, sslopts) {
     });
 }
 
-export default (port, globalsshuser, sshhost, sshport, sshauth, sslopts) => {
+function getCommand(socket, sshuser, sshhost, sshport, sshauth) {
+  const { request } = socket;
+  const match = request.headers.referer.match('.+/ssh/.+$');
+  const sshAddress = sshuser ? `${sshuser}@${sshhost}` : sshhost;
+  const ssh = match ? `${match[0].split('/ssh/').pop()}@${sshhost}` : sshAddress;
+
+  return [
+    process.getuid() === 0 && sshhost === 'localhost'
+      ? ['login', '-h', socket.client.conn.remoteAddress.split(':')[3]]
+      : [
+        path.join(__dirname, 'bin/ssh'),
+        ssh,
+        '-p',
+        sshport,
+        '-o',
+        `PreferredAuthentications=${sshauth}`,
+      ],
+    ssh,
+  ];
+}
+
+export default function start(port, sshuser, sshhost, sshport, sshauth, sslopts) {
   const httpserv = createServer(port, sslopts);
   const events = new EventEmitter();
   const io = server(httpserv, { path: '/wetty/socket.io' });
   io.on('connection', socket => {
-    const { request } = socket;
     console.log(`${new Date()} Connection accepted.`);
-    const match = request.headers.referer.match('.+/ssh/.+$');
-    const sshAddress = globalsshuser ? `${globalsshuser}@${sshhost}` : sshhost;
-    const ssh = match ? `${match[0].split('/ssh/').pop()}@${sshhost}` : sshAddress;
 
-    const args = process.getuid() === 0 && sshhost === 'localhost'
-      ? ['login', '-h', socket.client.conn.remoteAddress.split(':')[3]]
-      : [ssh, '-p', sshport, '-o', `PreferredAuthentications=${sshauth}`];
+    const [args, ssh] = getCommand(socket, sshuser, sshhost, sshport, sshauth);
     const term = pty.spawn('/usr/bin/env', args, {
       name: 'xterm-256color',
       cols: 80,
@@ -76,4 +91,4 @@ export default (port, globalsshuser, sshhost, sshport, sshauth, sslopts) => {
     });
   });
   return events;
-};
+}
