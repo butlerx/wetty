@@ -42,7 +42,7 @@ var opts = require('optimist')
 var runhttps = false;
 var sshport = 22;
 var sshhost = 'localhost';
-var sshauth = 'password';
+var sshauth = 'password,keyboard-interactive';
 var globalsshuser = '';
 
 if (opts.sshport) {
@@ -103,7 +103,7 @@ io.on('connection', function(socket){
 
     var term;
     if (process.getuid() == 0) {
-        term = pty.spawn('/bin/login', [], {
+        term = pty.spawn('/usr/bin/env', ['login'], {
             name: 'xterm-256color',
             cols: 80,
             rows: 30
