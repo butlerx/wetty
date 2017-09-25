@@ -109,3 +109,15 @@ Install wetty globally with -g option:
 This will start wetty on port 3000. If you want to change the port or redirect stdout/stderr you should change the last line in `wetty.conf` file, something like this:
 
     exec sudo -u root wetty -p 80 >> /var/log/wetty.log 2>&1
+    
+    
+FAQ
+---
+
+#### What browsers are supported?
+
+Wetty supports all browsers that Google's hterm supports. Wetty has been [reported](https://github.com/krishnasrinivas/wetty/issues/45#issuecomment-181448586) to work on Google Chrome, Firefox and IE 11.
+
+#### Why isn't Wetty working with IE?
+
+[This fix](https://stackoverflow.com/questions/13102116/access-denied-for-localstorage-in-ie10#20848924) has been known to help some users.
