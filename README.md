@@ -14,16 +14,12 @@ hterm source - https://chromium.googlesource.com/apps/libapps/+/master/hterm/
 Install
 -------
 
-*  `git clone https://github.com/krishnasrinivas/wetty`
-
-*  `cd wetty`
-
-*  `npm install`
+*  `npm install -g wetty`
 
 Run on HTTP:
 -----------
 
-    node app.js -p 3000
+    wetty -p 3000
 
 If you run it as root it will launch `/bin/login` (where you can specify
 the user name), else it will launch `ssh` and connect by default to
@@ -47,7 +43,7 @@ create a self signed certificate using this command:
 
 And then run:
 
-    node app.js --sslkey key.pem --sslcert cert.pem -p 3000
+    wetty --sslkey key.pem --sslcert cert.pem -p 3000
 
 Again, if you run it as root it will launch `/bin/login`, else it will
 launch SSH to `localhost` or a specified host as explained above.
