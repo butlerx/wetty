@@ -27,7 +27,7 @@ or
 ## Run on HTTP
 
 ``` bash
-node app.js -p 3000
+node bin/index.js -p 3000
 ```
 
 If you run it as root it will launch `/bin/login` (where you can specify
@@ -58,13 +58,13 @@ openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 30000 -no
 And then run:
 
 ```
-node app.js --sslkey key.pem --sslcert cert.pem -p 3000
+node bin/index.js --sslkey key.pem --sslcert cert.pem -p 3000
 ```
 
 Again, if you run it as root it will launch `/bin/login`, else it will
 launch SSH to `localhost` or a specified host as explained above.
 
-## Run wetty behind nginx
+## Run wetty behind nginx or apache
 
 Put the following configuration in nginx's conf:
 
@@ -81,13 +81,26 @@ Put the following configuration in nginx's conf:
       proxy_set_header X-NginX-Proxy true;
     }
 
-If you are running `app.js` as `root` and have an Nginx proxy you have to use:
+Put the following configuration in apache's conf:
+
+      RewriteCond %{REQUEST_URI}  ^/wetty/socket.io [NC]
+      RewriteCond %{QUERY_STRING} transport=websocket [NC]
+      RewriteRule /wetty/socket.io/(.*) ws://localhost:9123/wetty/socket.io/$1 [P,L]
+
+      <LocationMatch ^/wetty/(.*)>
+              DirectorySlash On
+              Require all granted
+              ProxyPassMatch http://127.0.0.1:9123
+              ProxyPassReverse /wetty/
+      </LocationMatch>
+
+If you are running `bin/index.js` as `root` and have an Nginx proxy you have to use:
 
 ```
 http://yourserver.com/wetty
 ```
 
-Else if you are running `app.js` as a regular user you can use:
+Else if you are running `bin/index.js` as a regular user you can use:
 
 ```
 http://yourserver.com/wetty/ssh/<username>
