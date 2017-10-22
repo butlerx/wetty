@@ -74,16 +74,22 @@ tty.on('disconnect', () => {
   console.log('disconnect');
 });
 
-async function loadSSL({ sslkey, sslcert }) {
-  try {
+function loadSSL({ sslkey, sslcert }) {
+  return new Promise((resolve, reject) => {
+    const ssl = {};
     if (sslkey && sslcert) {
-      return {
-        key : await fs.readFile(path.resolve(sslkey)),
-        cert: await fs.readFile(path.resolve(sslcert)),
-      };
+      fs
+        .readFile(path.resolve(sslkey))
+        .then(key => {
+          ssl.key = key;
+        })
+        .then(fs.readFile(path.resolve(sslcert)))
+        .then(cert => {
+          ssl.cert = cert;
+        })
+        .then(resolve(ssl))
+        .catch(reject);
     }
-    return {};
-  } catch (err) {
-    throw err;
-  }
+    resolve(ssl);
+  });
 }
