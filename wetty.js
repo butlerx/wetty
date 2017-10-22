@@ -62,7 +62,9 @@ export default function start(port, sshuser, sshhost, sshport, sshauth, sslopts)
     });
 
     console.log(`${new Date()} PID=${term.pid} STARTED on behalf of user=${ssh}`);
-    term.on('data', data => socket.emit('output', data));
+    term.on('data', data => {
+      socket.emit('output', data);
+    });
     term.on('exit', code => {
       console.log(`${new Date()} PID=${term.pid} ENDED`);
       socket.emit('logout');
