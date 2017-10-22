@@ -53,9 +53,14 @@ const sshauth = opts.sshauth || process.env.SSHAUTH || 'password,keyboard-intera
 const sshport = opts.sshport || process.env.SSHPOST || 22;
 const port = opts.port || process.env.PORT || 3000;
 
-loadSSL(opts).then(ssl => {
-  opts.ssl = ssl;
-});
+loadSSL(opts)
+  .then(ssl => {
+    opts.ssl = ssl;
+  })
+  .catch(err => {
+    console.error(`Error: ${err}`);
+    process.exit(1);
+  });
 
 process.on('uncaughtException', err => {
   console.error(`Error: ${err}`);
@@ -69,22 +74,16 @@ tty.on('disconnect', () => {
   console.log('disconnect');
 });
 
-function loadSSL({ sslkey, sslcert }) {
-  return new Promise((resolve, reject) => {
+async function loadSSL({ sslkey, sslcert }) {
+  try {
     if (sslkey && sslcert) {
-      const ssl = {};
-      fs
-        .readFile(path.resolve(sslkey))
-        .then(key => {
-          ssl.key = key;
-        })
-        .then(fs.readFile(path.resolve(sslcert)))
-        .then(cert => {
-          ssl.cert = cert;
-        })
-        .then(resolve(ssl))
-        .catch(reject);
+      return {
+        key : await fs.readFile(path.resolve(sslkey)),
+        cert: await fs.readFile(path.resolve(sslcert)),
+      };
     }
-    resolve({});
-  });
+    return {};
+  } catch (err) {
+    throw err;
+  }
 }

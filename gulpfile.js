@@ -37,4 +37,4 @@ gulp.task(
 );
 
 gulp.task('default', ['compress']);
-gulp.task('upgrade', ['hterm', 'compress'], () => del(['./libapps']));
+gulp.task('upgrade', ['hterm'], () => del(['./libapps']));

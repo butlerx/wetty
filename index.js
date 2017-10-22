@@ -1,2 +1,2 @@
 require('@std/esm');
-module.exports = require('./wetty');
+module.exports = require('./wetty').default;

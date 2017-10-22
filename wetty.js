@@ -63,7 +63,6 @@ export default function start(port, sshuser, sshhost, sshport, sshauth, sslopts)
   const io = server(httpserv, { path: '/wetty/socket.io' });
   io.on('connection', socket => {
     console.log(`${new Date()} Connection accepted.`);
-
     const [args, ssh] = getCommand(socket, sshuser, sshhost, sshport, sshauth);
     const term = pty.spawn('/usr/bin/env', args, {
       name: 'xterm-256color',
@@ -72,17 +71,13 @@ export default function start(port, sshuser, sshhost, sshport, sshauth, sslopts)
     });
 
     console.log(`${new Date()} PID=${term.pid} STARTED on behalf of user=${ssh}`);
-    term.on('data', data => {
-      socket.emit('output', data);
-    });
+    term.on('data', data => socket.emit('output', data));
     term.on('exit', code => {
       console.log(`${new Date()} PID=${term.pid} ENDED`);
       socket.emit('logout');
       events.emit('exit', code);
     });
-    socket.on('resize', ({ col, row }) => {
-      term.resize(col, row);
-    });
+    socket.on('resize', ({ col, row }) => term.resize(col, row));
     socket.on('input', input => term.write(input));
     socket.on('disconnect', () => {
       term.end();
