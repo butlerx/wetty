@@ -1,4 +1,4 @@
-FROM node:boron-alpine
+FROM node:8-alpine
 MAINTAINER butlerx@notthe.cloud
 WORKDIR /app
 RUN adduser -D -h /home/term -s /bin/sh term && \

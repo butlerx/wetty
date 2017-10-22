@@ -41,17 +41,11 @@ function getCommand(socket, sshuser, sshhost, sshport, sshauth) {
   const match = request.headers.referer.match('.+/ssh/.+$');
   const sshAddress = sshuser ? `${sshuser}@${sshhost}` : sshhost;
   const ssh = match ? `${match[0].split('/ssh/').pop()}@${sshhost}` : sshAddress;
-
-  let cmd;
-  let args;
-  if (process.getuid() === 0 && sshhost === 'localhost') {
-    cmd = '/usr/bin/login';
-    args = ['-h', socket.client.conn.remoteAddress.split(':')[3]];
-  } else {
-    cmd = path.join(__dirname, 'bin/ssh');
-    args = [ssh, '-p', sshport, '-o', `PreferredAuthentications=${sshauth}`];
-  }
-  return [cmd, args, ssh];
+  const args =
+    process.getuid() === 0 && sshhost === 'localhost'
+      ? ['login', '-h', socket.client.conn.remoteAddress.split(':')[3]]
+      : ['./bin/ssh', ssh, '-p', sshport, '-o', `PreferredAuthentications=${sshauth}`];
+  return [args, ssh];
 }
 
 export default function start(port, sshuser, sshhost, sshport, sshauth, sslopts) {
@@ -60,26 +54,21 @@ export default function start(port, sshuser, sshhost, sshport, sshauth, sslopts)
   const io = server(httpserv, { path: '/wetty/socket.io' });
   io.on('connection', socket => {
     console.log(`${new Date()} Connection accepted.`);
-
-    const [cmd, args, ssh] = getCommand(socket, sshuser, sshhost, sshport, sshauth);
-    const term = pty.spawn(cmd, args, {
+    const [args, ssh] = getCommand(socket, sshuser, sshhost, sshport, sshauth);
+    const term = pty.spawn('/usr/bin/env', args, {
       name: 'xterm-256color',
       cols: 80,
       rows: 30,
     });
 
     console.log(`${new Date()} PID=${term.pid} STARTED on behalf of user=${ssh}`);
-    term.on('data', data => {
-      socket.emit('output', data);
-    });
+    term.on('data', data => socket.emit('output', data));
     term.on('exit', code => {
       console.log(`${new Date()} PID=${term.pid} ENDED`);
       socket.emit('logout');
       events.emit('exit', code);
     });
-    socket.on('resize', ({ col, row }) => {
-      term.resize(col, row);
-    });
+    socket.on('resize', ({ col, row }) => term.resize(col, row));
     socket.on('input', input => term.write(input));
     socket.on('disconnect', () => {
       term.end();
