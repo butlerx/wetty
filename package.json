@@ -1,8 +1,46 @@
 {
   "name": "wetty.js",
   "version": "0.5.0",
+  "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
+  "homepage": "https://github.com/butlerx/wetty",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/butlerx/wetty.git"
+  },
+  "author": "Cian Butler <butlerx@notthe.cloud> (https://github.com/butlerx)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/butlerx/wetty/issues"
+  },
+  "main": "index.js",
+  "files": [
+    "bin",
+    "public",
+    "app.js",
+    "cli.js",
+    "wetty.js"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "build": "gulp",
+    "start": "node bin",
+    "commit": "git add public",
+    "fix": "eslint . --fix"
+  },
+  "bin": {
+    "wetty": "./bin/index.js"
+  },
+  "pre-commit": [
+    "fix",
+    "commit"
+  ],
+  "preferGlobal": "true",
+  "@std/esm": {
+    "cjs": "true"
+  },
   "dependencies": {
-    "@std/esm": "^0.2.2",
+    "@std/esm": "^0.12.1",
     "express": "^4.15.3",
     "fs-extra": "^4.0.1",
     "optimist": "^0.6",
@@ -37,44 +75,5 @@
     "gulp-concat": "^2.6.1",
     "gulp-minify": "^1.0.0",
     "gulp-shell": "^0.6.3"
-  },
-  "pre-commit": [
-    "fix",
-    "commit"
-  ],
-  "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/butlerx/wetty.git"
-  },
-  "author": "Cian Butler <butlerx@notthe.cloud> (https://github.com/butlerx)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/butlerx/wetty/issues"
-  },
-  "homepage": "https://github.com/butlerx/wetty",
-  "preferGlobal": "true",
-  "main": "index.js",
-  "bin": {
-    "wetty": "./app.js"
-  },
-  "@std/esm": {
-    "esm": "js",
-    "cjs": "true"
-  },
-  "files": [
-    "bin",
-    "public",
-    "app.js",
-    "cli.js",
-    "wetty.js"
-  ],
-  "scripts": {
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "build": "gulp",
-    "start": "node app.js",
-    "commit": "git add public",
-    "fix": "eslint . --fix"
   }
 }

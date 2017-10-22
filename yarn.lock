@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@std/esm@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@std/esm/-/esm-0.2.2.tgz#8d3fdacae23015eae01db739a9f76d7cd1ab617d"
+"@std/esm@^0.12.1":
+  version "0.12.1"
+  resolved "https://registry.yarnpkg.com/@std/esm/-/esm-0.12.1.tgz#d07b7c5e2701beade1e7db74b95484f5d91c46bf"
 
 abbrev@1:
   version "1.1.0"
