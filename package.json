@@ -1,6 +1,6 @@
 {
   "name": "wetty.js",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
   "homepage": "https://github.com/butlerx/wetty",
   "repository": {
