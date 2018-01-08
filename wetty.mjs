@@ -44,7 +44,7 @@ function getCommand(socket, sshuser, sshhost, sshport, sshauth) {
   const args =
     process.getuid() === 0 && sshhost === 'localhost'
       ? ['login', '-h', socket.client.conn.remoteAddress.split(':')[3]]
-      : ['./bin/ssh', ssh, '-p', sshport, '-o', `PreferredAuthentications=${sshauth}`];
+      : ['bin/ssh', ssh, '-p', sshport, '-o', `PreferredAuthentications=${sshauth}`];
   return [args, ssh];
 }
 

@@ -13,13 +13,6 @@
     "url": "https://github.com/butlerx/wetty/issues"
   },
   "main": "index.js",
-  "files": [
-    "bin",
-    "public",
-    "app.js",
-    "cli.js",
-    "wetty.js"
-  ],
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
