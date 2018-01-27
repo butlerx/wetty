@@ -1,15 +1,11 @@
-FROM node:0.10.38
-MAINTAINER Nathan LeClaire <nathan@docker.com>
-
-ADD . /app
+FROM node:8-onbuild AS build
+COPY package.json /app/package.json
 WORKDIR /app
 RUN npm install
-RUN apt-get update
-RUN apt-get install -y vim
-RUN useradd -d /home/term -m -s /bin/bash term
-RUN echo 'term:term' | chpasswd
 
-EXPOSE 3000
-
-ENTRYPOINT ["node"]
-CMD ["app.js", "-p", "3000"]
+FROM node:8-alpine
+RUN apk add --update openssh-client
+COPY . /app
+COPY --from=build /app/node_modules /app/node_modules
+WORKDIR /app
+CMD node app.js -p 3000
