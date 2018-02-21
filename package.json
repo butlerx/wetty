@@ -15,7 +15,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint --ext .js,.mjs .",
     "build": "webpack",
     "start": "node .",
     "dev":
