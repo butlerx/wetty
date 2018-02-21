@@ -30,6 +30,9 @@
   "bin": {
     "wetty": "./index.js"
   },
+  "engines": {
+    "node": ">=6.9"
+  },
   "nodemonConfig": {
     "ignore": ["dist/*", "src/*", "*.json"]
   },

@@ -1,4 +1,4 @@
-FROM node:alpine as builder
+FROM node:boron-alpine as builder
 WORKDIR /usr/src/app
 COPY . /usr/src/app
 RUN apk add -U build-base python && \
@@ -6,7 +6,7 @@ RUN apk add -U build-base python && \
     yarn build && \
     yarn install --production --ignore-scripts --prefer-offline
 
-FROM node:alpine
+FROM node:boron-alpine
 LABEL maintainer="butlerx@notthe.cloud"
 WORKDIR /app
 ENV NODE_ENV=production
