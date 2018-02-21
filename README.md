@@ -1,5 +1,7 @@
 ## WeTTy = Web + TTy
 
+[ ![Codeship Status for butlerx/wetty](https://app.codeship.com/projects/caf50220-f884-0135-63bd-5231a73eac2d/status?branch=master)](https://app.codeship.com/projects/278281)
+
 Terminal over HTTP and https. WeTTy is an alternative to ajaxterm and anyterm
 but much better than them because WeTTy uses xterm.js which is a full fledged
 implementation of terminal emulation written entirely in JavaScript. WeTTy uses
@@ -91,8 +93,8 @@ SSL
 Put the following configuration in nginx's conf:
 
 ```nginx
-location /wetty {
-  proxy_pass http://127.0.0.1:3000/wetty;
+location ^~ /wetty {
+  proxy_pass http://127.0.0.1:3000;
   proxy_http_version 1.1;
   proxy_set_header Upgrade $http_upgrade;
   proxy_set_header Connection "upgrade";
@@ -104,6 +106,9 @@ location /wetty {
   proxy_set_header X-NginX-Proxy true;
 }
 ```
+
+For a more detailed look see the [nginx.conf](./bin/nginx.template) used for
+testing
 
 #### Apache
 

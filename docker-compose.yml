@@ -4,9 +4,22 @@ services:
     image: butlerx/wetty
     container_name: wetty
     tty: true
+    restart: always
     working_dir: /app
     ports:
       - "3000:3000"
     environment:
       SSHHOST: 'localhost'
       SSHPORT: 22
+  web:
+    image: nginx
+    volumes:
+     - ./bin/nginx.template:/etc/nginx/conf.d/wetty.template
+    ports:
+     - "80:80"
+    environment:
+     - NGINX_DOMAIN=wetty.com
+     - NGINX_PORT=80
+     - WETTY_HOST=wetty
+     - WETTY_PORT=3000
+    command: /bin/bash -c "envsubst '$${NGINX_DOMAIN},$${NGINX_PORT},$${WETTY_HOST},$${WETTY_PORT}' < /etc/nginx/conf.d/wetty.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
