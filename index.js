@@ -1,2 +1,12 @@
-require = require('@std/esm')(module); // eslint-disable-line no-global-assign
-module.exports = require('./wetty.mjs').default;
+/* eslint-disable */
+require = require('@std/esm')(module, {
+  cjs: 'true',
+  esm: 'js',
+});
+const wetty = require('./lib/index.mjs').default;
+module.exports = wetty.wetty;
+
+/**
+ * Check if being run by cli or require
+ */
+if (require.main === module) wetty.init();

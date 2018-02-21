@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Wetty - The WebTTY Terminal Emulator</title>
+    <link rel="stylesheet" href="/wetty/main.css" />
+  </head>
+  <body>
+    <div id="overlay">
+      <div class="error">
+        <div id="msg"></div>
+        <input type="button" onclick="location.reload();" value="reconnect" />
+      </div>
+    </div>
+    <div id="terminal"></div>
+    <script src="/wetty/main.js"></script>
+  </body>
+</html>

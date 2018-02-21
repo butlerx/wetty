@@ -1,0 +1,47 @@
+@import '~xterm/dist/xterm';
+
+$black: #000;
+$grey: rgba(0, 0, 0, 0.75);
+$white: #fff;
+
+html,
+body {
+  background-color: $black;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+
+  #overlay {
+    background-color: $grey;
+    display: none;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    z-index: 100;
+
+    .error {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: center;
+      width: 100%;
+
+      #msg {
+        align-self: center;
+        color: $white;
+      }
+
+      input {
+        align-self: center;
+        margin: 16px;
+      }
+    }
+  }
+
+  #terminal {
+    display: flex;
+    height: 100%;
+    position: relative;
+    width: 100%;
+  }
+}

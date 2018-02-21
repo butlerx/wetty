@@ -1,7 +1,8 @@
 {
   "name": "wetty.js",
-  "version": "0.5.1",
-  "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
+  "version": "1.0.0",
+  "description":
+    "WeTTY = Web + TTY. Terminal access in browser over http/https",
   "homepage": "https://github.com/butlerx/wetty",
   "repository": {
     "type": "git",
@@ -15,58 +16,61 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "build": "gulp",
-    "start": "node bin",
-    "commit": "git add public",
-    "fix": "eslint . --fix"
+    "build": "webpack",
+    "start": "node .",
+    "dev":
+      "NODE_ENV=development concurrently --kill-others --success first \"webpack --watch\" \"nodemon .\"",
+    "prepublishOnly": "yarn build",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,mjs}": ["eslint --fix", "git add"],
+    "*.{json,scss,md}": ["prettier --write", "git add"]
   },
   "bin": {
-    "wetty": "./bin/index.js"
+    "wetty": "./index.js"
   },
-  "pre-commit": [
-    "fix",
-    "commit"
-  ],
+  "nodemonConfig": {
+    "ignore": ["dist/*", "src/*", "*.json"]
+  },
   "preferGlobal": "true",
-  "@std/esm": {
-    "cjs": "true"
-  },
   "dependencies": {
     "@std/esm": "^0.12.1",
+    "compression": "^1.7.1",
     "express": "^4.15.3",
     "fs-extra": "^4.0.1",
+    "helmet": "^3.9.0",
+    "jsdoc-to-markdown": "^4.0.1",
+    "lodash": "^4.17.4",
+    "node-pty": "^0.7.4",
     "optimist": "^0.6",
-    "pre-commit": "^1.2.2",
-    "pty.js": "^0.3.1",
     "serve-favicon": "^2.4.3",
-    "socket.io": "^1.3.7"
+    "socket.io": "^2.0.4",
+    "socket.io-client": "^2.0.4",
+    "winston": "^3.0.0-rc1",
+    "xterm": "^3.0.1"
   },
   "devDependencies": {
-    "babel-cli": "6.24.1",
-    "babel-core": "6.24.1",
-    "babel-eslint": "7.2.3",
-    "babel-plugin-add-module-exports": "0.2.1",
-    "babel-plugin-es6-promise": "1.1.1",
-    "babel-plugin-syntax-async-functions": "6.13.0",
-    "babel-plugin-transform-async-to-generator": "6.24.1",
-    "babel-plugin-transform-object-assign": "6.22.0",
-    "babel-preset-es2015": "6.24.1",
-    "del": "^3.0.0",
-    "es6-promise": "^4.1.1",
-    "eslint": "3.19.0",
-    "eslint-config-airbnb": "^15.1.0",
-    "eslint-config-standard": "10.2.1",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-lodash": "^3.3.2",
+    "babel-preset-env": "^1.6.1",
+    "concurrently": "^3.5.1",
+    "css-loader": "^0.28.8",
+    "eslint": "^4.18.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-jsx-a11y": "^5.1.1",
-    "eslint-plugin-node": "^5.1.1",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-react": "^7.1.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-minify": "^1.0.0",
-    "gulp-shell": "^0.6.3"
+    "eslint-plugin-prettier": "^2.6.0",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.1.1",
+    "node-sass": "^4.7.2",
+    "nodemon": "^1.14.10",
+    "prettier": "^1.10.2",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.19.1",
+    "uglifyjs-webpack-plugin": "^1.1.6",
+    "webpack": "^3.10.0"
   }
 }

@@ -1,4 +1,3 @@
 node_modules/
-public/
 .esm-cache
-*hterm*
+dist

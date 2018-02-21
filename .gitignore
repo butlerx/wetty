@@ -15,4 +15,4 @@ results
 npm-debug.log
 node_modules/*
 .esm-cache
-libapps
+dist
