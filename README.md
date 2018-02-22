@@ -21,6 +21,7 @@ WeTTy can be installed from source or from npm. To install from source run:
 $ git clone https://github.com/butlerx/wetty
 $ cd wetty
 $ yarn
+$ yarn build
 ```
 
 or install it globally with yarn, `yarn -g add wetty.js`, or npm,
