@@ -11,15 +11,19 @@ services:
     environment:
       SSHHOST: 'localhost'
       SSHPORT: 22
+      NODE_ENV: 'development'
+    command: yarn start --sshhost redbrick.dcu.ie
+    volumes:
+      - ./lib:/app/lib
   web:
     image: nginx
     volumes:
-     - ./bin/nginx.template:/etc/nginx/conf.d/wetty.template
+      - ./bin/nginx.template:/etc/nginx/conf.d/wetty.template
     ports:
-     - "80:80"
+      - "80:80"
     environment:
-     - NGINX_DOMAIN=wetty.com
-     - NGINX_PORT=80
-     - WETTY_HOST=wetty
-     - WETTY_PORT=3000
+      - NGINX_DOMAIN=wetty.com
+      - NGINX_PORT=80
+      - WETTY_HOST=wetty
+      - WETTY_PORT=3000
     command: /bin/bash -c "envsubst '$${NGINX_DOMAIN},$${NGINX_PORT},$${WETTY_HOST},$${WETTY_PORT}' < /etc/nginx/conf.d/wetty.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
