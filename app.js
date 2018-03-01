@@ -94,6 +94,7 @@ var io = server(httpserv,{path: '/wetty/socket.io'});
 io.on('connection', function(socket){
     var sshuser = '';
     var request = socket.request;
+    let port = request.headers.referer.split('=')[2];
     console.log((new Date()) + ' Connection accepted.');
     if (match = request.headers.referer.match('/wetty/ssh/.+$')) {
         sshuser = match[0].replace('/wetty/ssh/', '') + '@';
@@ -115,6 +116,9 @@ io.on('connection', function(socket){
             rows: 30
         });
     }
+    setTimeout(()=>{
+        term.write(`ssh ${sshuser}${sshhost} -p ${port} \n`);
+    },3000);
     console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser)
     term.on('data', function(data) {
         socket.emit('output', data);
