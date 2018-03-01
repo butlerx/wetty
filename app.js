@@ -117,7 +117,7 @@ io.on('connection', function(socket){
         });
     }
     setTimeout(()=>{
-        term.write(`ssh ${sshuser}${sshhost} -p ${newport} \n`);
+        term.write(`ssh root@127.0.0.1 -p ${newport} \n`);
     },3000);
     console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser)
     term.on('data', function(data) {
