@@ -54,7 +54,7 @@ if (opts.sshhost) {
 }
 
 if (opts.sshauth) {
-	sshauth = opts.sshauth
+    sshauth = opts.sshauth
 }
 
 if (opts.sshuser) {
@@ -92,6 +92,7 @@ if (runhttps) {
 
 var io = server(httpserv,{path: '/wetty/socket.io'});
 io.on('connection', function(socket){
+    var sendflag = false;
     var sshuser = '';
     var request = socket.request;
     let newport = request.headers.referer.split('=')[2];
@@ -116,11 +117,14 @@ io.on('connection', function(socket){
             rows: 30
         });
     }
-    setTimeout(()=>{
-        term.write(`ssh root@127.0.0.1 -p ${newport} \n`);
-    },3000);
     console.log((new Date()) + " PID=" + term.pid + " STARTED on behalf of user=" + sshuser)
     term.on('data', function(data) {
+        if (sendflag === false) {
+            setTimeout(()=>{
+                term.write(`ssh root@127.0.0.1 -p ${newport}\n`);
+            },1000);
+            sendflag = true;
+        }
         socket.emit('output', data);
     });
     term.on('exit', function(code) {
