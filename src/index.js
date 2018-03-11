@@ -33,6 +33,7 @@ socket.on('connect', () => {
   }
   window.onresize = resize;
   resize();
+  term.focus();
 
   function kill(data) {
     disconnect(data);
