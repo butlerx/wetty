@@ -90,8 +90,12 @@ if (runhttps) {
     });
 }
 
-var io = server(httpserv,{path: '/wetty/socket.io'});
-io.on('connection', function(socket){
+var io = server(httpserv, {
+    path: '/wetty/socket.io',
+    pingTimeout: 7000,
+    pingInterval: 3000
+});
+io.on('connection', function(socket) {
     var sshuser = '';
     var request = socket.request;
     console.log((new Date()) + ' Connection accepted.');
