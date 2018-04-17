@@ -137,6 +137,7 @@ io.on('connection', function(socket){
         term.write(data);
     });
     socket.on('disconnect', function() {
+        term.kill();
         term.end();
     });
 })
