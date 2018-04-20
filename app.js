@@ -102,14 +102,14 @@ io.on('connection', function(socket){
     }
 
     var term;
-    if (process.getuid() == 0) {
+    if (false && process.getuid() == 0) {
         term = pty.spawn('/usr/bin/env', ['login'], {
             name: 'xterm-256color',
             cols: 80,
             rows: 30
         });
     } else {
-        term = pty.spawn('ssh', [sshuser + sshhost, '-p', sshport, '-o', 'PreferredAuthentications=' + sshauth], {
+        term = pty.spawn('ssh', ['-i', opts.sslkey, sshuser + sshhost, '-p', sshport, '-o', 'PreferredAuthentications=' + sshauth], {
             name: 'xterm-256color',
             cols: 80,
             rows: 30
