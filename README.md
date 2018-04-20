@@ -89,7 +89,7 @@ whatever you want!
 Just do:
 
 ```
-    docker run --name term -p 3000 -dt krishnasrinivas/wetty
+    docker run --name term -p 3000:3000 -dt krishnasrinivas/wetty
 ```
 
 Visit the appropriate URL in your browser (`[localhost|$(boot2docker ip)]:PORT`).  
