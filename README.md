@@ -26,6 +26,7 @@ user name), else it will launch `ssh` and connect by default to `localhost`.
 
 *  `yum install sshpass` (red hat flavours eg. CentOs) for auto-login feature
 
+
 Run on HTTP:
 -----------
 
@@ -49,14 +50,6 @@ or
 
 `http://yourserver:3000/ssh/<username>?sshpass=<password>`
 
-
-## Run on HTTPS
-
-You can also pass the SSH user name and password as query parameters and auto-login the user like this (Only while running as a non root account):
-
-  `http://yourserver:3000/wetty/autologin?sshuser=<username>&sshpass=<password>`
-
-This is just an additional feature and the security implications for passing the password in the url will have to be taken care separately.
 
 Run on HTTPS:
 ------------
