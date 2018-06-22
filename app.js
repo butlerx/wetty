@@ -44,7 +44,6 @@ var runhttps = false;
 var sshport = 22;
 var sshhost = 'localhost';
 var sshauth = 'password,keyboard-interactive';
-var askusername = false;
 var globalsshuser = '';
 var globalsshpass = '';
 var serveraliveinterval = 60;
@@ -123,12 +122,6 @@ io.on('connection', function(socket){
         });
     } else if(sshuser && sshpass) {
         term = pty.spawn('/usr/bin/sshpass', ['-p', sshpass, 'ssh', sshuser + "@" + sshhost, '-p', sshport, '-o', 'PreferredAuthentications=' + sshauth, '-o', 'ServerAliveInterval=' + serveraliveinterval], {
-            name: 'xterm-256color',
-            cols: 80,
-            rows: 30
-        });
-    } else if(askusername){
-        term = pty.spawn('/usr/bin/env', ['login'], {
             name: 'xterm-256color',
             cols: 80,
             rows: 30
