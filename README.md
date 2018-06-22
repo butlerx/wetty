@@ -14,27 +14,18 @@ time.
 
 *  `npm install -g wetty`
 
-## Run on HTTP
-
-<<<<<<< HEAD
-```bash
-wetty -p 3000
-```
-=======
-*  `npm config set python python2.7` If you are using python3 as default
-
-*  `npm install`
->>>>>>> Modified ReadMe.md
-
-If you run it as root it will launch `/bin/login` (where you can specify the
-user name), else it will launch `ssh` and connect by default to `localhost`.
 *  `apt-get install sshpass` (debian eg. Ubuntu) for auto-login feature
 
 *  `yum install sshpass` (red hat flavours eg. CentOs) for auto-login feature
 
+## Run on HTTP
 
-Run on HTTP:
------------
+```bash
+wetty -p 3000
+```
+
+If you run it as root it will launch `/bin/login` (where you can specify the
+user name), else it will launch `ssh` and connect by default to `localhost`.
 
 If instead you wish to connect to a remote host you can specify the `--sshhost`
 option, the SSH port using the `--sshport` option and the SSH user using the
