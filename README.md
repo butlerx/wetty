@@ -24,7 +24,7 @@ If you run it as root it will launch `/bin/login` (where you can specify the
 user name), else it will launch `ssh` and connect by default to `localhost`.
 *  `apt-get install sshpass` (debian eg. Ubuntu) for auto-login feature
 
-*  `yum install sshpass` (red hat flavours eg. CentOs) for auto login
+*  `yum install sshpass` (red hat flavours eg. CentOs) for auto-login feature
 
 Run on HTTP:
 -----------
