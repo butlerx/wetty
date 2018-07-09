@@ -3,7 +3,7 @@ import http from 'http';
 import https from 'https';
 import path from 'path';
 import server from 'socket.io';
-import pty from 'pty.js';
+import { spawn } from 'node-pty';
 import EventEmitter from 'events';
 import favicon from 'serve-favicon';
 
@@ -58,13 +58,12 @@ function getCommand(socket, sshuser, sshhost, sshport, sshauth) {
 }
 
 export default function start(port, sshuser, sshhost, sshport, sshauth, sslopts) {
-  const httpserv = createServer(port, sslopts);
   const events = new EventEmitter();
-  const io = server(httpserv, { path: '/wetty/socket.io' });
+  const io = server(createServer(port, sslopts), { path: '/wetty/socket.io' });
   io.on('connection', socket => {
     console.log(`${new Date()} Connection accepted.`);
     const [args, ssh] = getCommand(socket, sshuser, sshhost, sshport, sshauth);
-    const term = pty.spawn('/usr/bin/env', args, {
+    const term = spawn('/usr/bin/env', args, {
       name: 'xterm-256color',
       cols: 80,
       rows: 30,
