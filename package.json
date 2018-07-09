@@ -2,12 +2,12 @@
   "name": "wetty.js",
   "version": "0.5.1",
   "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
-  "homepage": "https://github.com/butlerx/wetty",
+  "homepage": "https://github.com/krishnasrinivas/wetty",
   "repository": {
     "type": "git",
-    "url": "git://github.com/butlerx/wetty.git"
+    "url": "git://github.com/krishnasrinivas/wetty.git"
   },
-  "author": "Cian Butler <butlerx@notthe.cloud> (https://github.com/butlerx)",
+  "author": "Krishna Srinivas <krishna.srinivas@gmail.com> (https://github.com/krishnasrinivas)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/butlerx/wetty/issues"
@@ -68,5 +68,24 @@
     "gulp-concat": "^2.6.1",
     "gulp-minify": "^1.0.0",
     "gulp-shell": "^0.6.3"
-  }
+  },
+  "contributors": [
+    "Krishna Srinivas <krishna.srinivas@gmail.com>",
+    "butlerx <butlerx@notthe.cloud>",
+    "Boyan Rabchev <boyan@rabchev.com>",
+    "Boyan Rabchev <TELERIK\\rabchev@rabchevlnx.telerik.com>",
+    "Luca Milanesio <luca.milanesio@gmail.com>",
+    "Antonio Calatrava <antonio@antoniocalatrava.com>",
+    "Krishna Srinivas <krishna@minio.io>",
+    "Strubbl <github@linux4tw.de>",
+    "Jarrett Gilliam <jarrettgilliam@gmail.com>",
+    "Nathan LeClaire <nathan.leclaire@docker.com>",
+    "nosemeocurrenada <nosemeocurrenada93@gmail.com>",
+    "Andreas Kloeckner <inform@tiker.net>",
+    "Farhan Khan <khanzf@gmail.com>",
+    "Imuli <i@imu.li>",
+    "James Turnbull <james@lovedthanlost.net>",
+    "Kasper Holbek Jensen <kholbekj@gmail.com>",
+    "mirtouf <mirtouf@gmail.com>"
+  ]
 }
