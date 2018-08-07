@@ -3,7 +3,7 @@ var http = require('http');
 var https = require('https');
 var path = require('path');
 var server = require('socket.io');
-var pty = require('pty.js');
+var pty = require('node-pty');
 var fs = require('fs');
 
 var opts = require('optimist')
