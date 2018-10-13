@@ -1,34 +1,91 @@
 {
-    "name": "wetty",
-    "version": "0.2.0",
-    "dependencies": {
-        "express": "3.5.1",
-        "socket.io": "^1.3.7",
-        "pty.js": "^0.3.0",
-        "optimist": "^0.6"
-    },
-    "devDependencies": {
-        "load-grunt-tasks": "^3.0",
-        "grunt": "^0.4",
-        "grunt-shell": "^1.1",
-        "grunt-mkdir": "^0.1",
-        "grunt-git": "^0.3",
-        "grunt-contrib-clean": "^0.6"
-    },
-    "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
-    "main": "app.js",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/krishnasrinivas/wetty.git"
-    },
-    "author": "Krishna Srinivas <krishna.srinivas@gmail.com> (https://github.com/krishnasrinivas)",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/krishnasrinivas/wetty/issues"
-    },
-    "homepage": "https://github.com/krishnasrinivas/wetty",
-    "preferGlobal": "true",
-    "bin": {
-        "wetty": "./bin/wetty.js"
-    }
+  "name": "wetty.js",
+  "version": "0.5.1",
+  "description": "Wetty = Web + tty. Terminal access in browser over http/https ",
+  "homepage": "https://github.com/krishnasrinivas/wetty",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/krishnasrinivas/wetty.git"
+  },
+  "author": "Krishna Srinivas <krishna.srinivas@gmail.com> (https://github.com/krishnasrinivas)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/butlerx/wetty/issues"
+  },
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "build": "gulp",
+    "start": "node bin",
+    "commit": "git add public",
+    "fix": "eslint . --fix"
+  },
+  "bin": {
+    "wetty": "./bin/index.js"
+  },
+  "pre-commit": [
+    "fix",
+    "commit"
+  ],
+  "preferGlobal": "true",
+  "@std/esm": {
+    "cjs": "true"
+  },
+  "dependencies": {
+    "@std/esm": "^0.12.1",
+    "express": "^4.15.3",
+    "fs-extra": "^4.0.1",
+    "optimist": "^0.6",
+    "pre-commit": "^1.2.2",
+    "node-pty": "^0.7.4",
+    "serve-favicon": "^2.4.3",
+    "socket.io": "^1.3.7"
+  },
+  "devDependencies": {
+    "babel-cli": "6.24.1",
+    "babel-core": "6.24.1",
+    "babel-eslint": "7.2.3",
+    "babel-plugin-add-module-exports": "0.2.1",
+    "babel-plugin-es6-promise": "1.1.1",
+    "babel-plugin-syntax-async-functions": "6.13.0",
+    "babel-plugin-transform-async-to-generator": "6.24.1",
+    "babel-plugin-transform-object-assign": "6.22.0",
+    "babel-preset-es2015": "6.24.1",
+    "del": "^3.0.0",
+    "es6-promise": "^4.1.1",
+    "eslint": "3.19.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-standard": "10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-react": "^7.1.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-concat": "^2.6.1",
+    "gulp-minify": "^1.0.0",
+    "gulp-shell": "^0.6.3"
+  },
+  "contributors": [
+    "Krishna Srinivas <krishna.srinivas@gmail.com>",
+    "butlerx <butlerx@notthe.cloud>",
+    "Boyan Rabchev <boyan@rabchev.com>",
+    "Boyan Rabchev <TELERIK\\rabchev@rabchevlnx.telerik.com>",
+    "Luca Milanesio <luca.milanesio@gmail.com>",
+    "Antonio Calatrava <antonio@antoniocalatrava.com>",
+    "Krishna Srinivas <krishna@minio.io>",
+    "Strubbl <github@linux4tw.de>",
+    "Jarrett Gilliam <jarrettgilliam@gmail.com>",
+    "Nathan LeClaire <nathan.leclaire@docker.com>",
+    "nosemeocurrenada <nosemeocurrenada93@gmail.com>",
+    "Andreas Kloeckner <inform@tiker.net>",
+    "Farhan Khan <khanzf@gmail.com>",
+    "Imuli <i@imu.li>",
+    "James Turnbull <james@lovedthanlost.net>",
+    "Kasper Holbek Jensen <kholbekj@gmail.com>",
+    "mirtouf <mirtouf@gmail.com>"
+  ]
 }

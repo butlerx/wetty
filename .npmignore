@@ -15,3 +15,7 @@ results
 npm-debug.log
 node_modules/*
 .esm-cache
+src
+*.yml
+Dockerfile
+*.png
