@@ -12,18 +12,12 @@ time.
 
 ## Install
 
-* `git clone https://github.com/krishnasrinivas/wetty`
-* `cd wetty`
-* `yarn`
-
-or
-
-`yarn add wetty`
+*  `npm install -g wetty`
 
 ## Run on HTTP
 
 ```bash
-node bin/index.js -p 3000
+wetty -p 3000
 ```
 
 If you run it as root it will launch `/bin/login` (where you can specify the
@@ -52,9 +46,7 @@ openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 30000 -no
 
 And then run:
 
-```
-node bin/index.js --sslkey key.pem --sslcert cert.pem -p 3000
-```
+    wetty --sslkey key.pem --sslcert cert.pem -p 3000
 
 Again, if you run it as root it will launch `/bin/login`, else it will launch
 SSH to `localhost` or a specified host as explained above.
