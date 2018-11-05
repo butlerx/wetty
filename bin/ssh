@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-userAtAddress="$1"
+userAtAddress="$1"; shift
 USER=$(echo "$userAtAddress" | cut -d"@" -f1);
 HOST=$(echo "$userAtAddress" | cut -d"@" -f2);
 
@@ -9,7 +9,7 @@ then
   printf "Enter your username: "
   read -r USER
   USER=$(echo "${USER}" | tr -d '[:space:]')
-  ssh "$USER"@"$HOST"
+  ssh "$USER"@"$HOST" ${@}
 else
-  ssh "$userAtAddress"
+  ssh "$userAtAddress" ${@}
 fi
