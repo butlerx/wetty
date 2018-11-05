@@ -50,7 +50,7 @@ if (opts.help) {
 const sshuser = opts.sshuser || process.env.SSHUSER || '';
 const sshhost = opts.sshhost || process.env.SSHHOST || 'localhost';
 const sshauth = opts.sshauth || process.env.SSHAUTH || 'password,keyboard-interactive';
-const sshport = opts.sshport || process.env.SSHPOST || 22;
+const sshport = opts.sshport || process.env.SSHPORT || 22;
 const port = opts.port || process.env.PORT || 3000;
 
 loadSSL(opts)
