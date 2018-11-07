@@ -40,13 +40,14 @@ function getCommand(socket, sshuser, sshhost, sshport, sshauth) {
   const { request } = socket;
   const match = request.headers.referer.match('.+/ssh/.+$');
   const sshAddress = sshuser ? `${sshuser}@${sshhost}` : sshhost;
+  const sshPath = sshuser || match ? 'ssh' : path.join(__dirname, 'bin/ssh');
   const ssh = match ? `${match[0].split('/ssh/').pop()}@${sshhost}` : sshAddress;
 
   return [
     process.getuid() === 0 && sshhost === 'localhost'
       ? ['login', '-h', socket.client.conn.remoteAddress.split(':')[3]]
       : [
-        path.join(__dirname, 'bin/ssh'),
+        sshPath,
         ssh,
         '-p',
         sshport,
