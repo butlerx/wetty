@@ -5,5 +5,5 @@ RUN adduser -D -h /home/term -s /bin/sh term && \
   echo "term:term" | chpasswd
 EXPOSE 3000
 COPY . /app
-RUN apk add --update build-base python openssh && yarn
-CMD yarn start
+RUN apk add --update build-base python openssh-client && yarn
+CMD node bin 
