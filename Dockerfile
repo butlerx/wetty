@@ -6,4 +6,4 @@ RUN adduser -D -h /home/term -s /bin/sh term && \
 EXPOSE 3000
 COPY . /app
 RUN apk add --update build-base python openssh && yarn
-CMD yarn start
+CMD node bin 
