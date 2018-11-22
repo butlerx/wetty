@@ -40,8 +40,6 @@ function createServer(port, sslopts) {
 function getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey) {
   const { request } = socket;
   const match = request.headers.referer.match('.+/ssh/.+$');
-  console.log("Match ", match);
-  console.log("user ", sshuser);
   const sshAddress = sshuser ? `${sshuser}@${sshhost}` : sshhost;
   const referer = url.parse(request.headers.referer, true);
   sshpass = referer.query.sshpass ? referer.query.sshpass : sshpass;
