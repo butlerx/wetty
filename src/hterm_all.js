@@ -18388,5 +18388,3 @@ lib.resource.add('hterm/git/HEAD', 'text/plain',
 'git rev-parse HEAD' +
 ''
 );
-
-

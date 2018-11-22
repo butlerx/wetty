@@ -25,6 +25,10 @@ const opts = optimist
       demand     : false,
       description: 'ssh user',
     },
+    sshpass: {
+      demand     : false,
+      description: 'ssh password',
+    },
     sshauth: {
       demand     : false,
       description: 'defaults to "password", you can use "publickey,password" instead',
@@ -52,6 +56,7 @@ if (opts.help) {
 }
 
 const sshuser = opts.sshuser || process.env.SSHUSER || '';
+const sshpass = opts.sshpass || process.env.SSHPASS || '';
 const sshhost = opts.sshhost || process.env.SSHHOST || 'localhost';
 const sshauth = opts.sshauth || process.env.SSHAUTH || 'password,keyboard-interactive';
 const sshport = opts.sshport || process.env.SSHPORT || 22;
@@ -81,7 +86,7 @@ process.on('uncaughtException', err => {
   console.error(`Error: ${err}`);
 });
 
-const tty = wetty(port, sshuser, sshhost, sshport, sshauth, sshkey, opts.ssl);
+const tty = wetty(port, sshuser, sshpass, sshhost, sshport, sshauth, sshkey, opts.ssl);
 tty.on('exit', code => {
   console.log(`exit with code: ${code}`);
 });

@@ -6,6 +6,7 @@ import server from 'socket.io';
 import { spawn } from 'node-pty';
 import EventEmitter from 'events';
 import favicon from 'serve-favicon';
+import url from 'url';
 
 const app = express();
 app.use(favicon(`${__dirname}/public/favicon.ico`));
@@ -36,12 +37,14 @@ function createServer(port, sslopts) {
     });
 }
 
-function getCommand(socket, sshuser, sshhost, sshport, sshauth, sshkey) {
+function getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey) {
   const { request } = socket;
   const match = request.headers.referer.match('.+/ssh/.+$');
   const sshAddress = sshuser ? `${sshuser}@${sshhost}` : sshhost;
-  const sshPath = sshuser || match ? 'ssh' : path.join(__dirname, 'bin/ssh');
-  const ssh = match ? `${match[0].split('/ssh/').pop()}@${sshhost}` : sshAddress;
+  const referer = url.parse(request.headers.referer, true);
+  sshpass = referer.query.sshpass ? referer.query.sshpass : sshpass;
+  let sshPath = sshuser || match ? 'ssh' : path.join(__dirname, 'bin/ssh');
+  const ssh = match ? `${match[0].split('/ssh/').pop().split('?')[0]}@${sshhost}` : sshAddress;
   const sshRemoteOptsBase = [
                             sshPath,
                             ssh,
@@ -50,9 +53,14 @@ function getCommand(socket, sshuser, sshhost, sshport, sshauth, sshkey) {
                             '-o',
                             `PreferredAuthentications=${sshauth}`,
                             ]
-  const sshRemoteOpts = sshkey ? sshRemoteOptsBase.concat(['-i', sshkey])
-                               : sshRemoteOptsBase
+  let sshRemoteOpts;
 
+  if (sshkey) 
+    sshRemoteOpts = sshRemoteOptsBase.concat(['-i', sshkey]);
+  else if (sshpass)
+    sshRemoteOpts = ['sshpass', '-p', sshpass].concat(sshRemoteOptsBase);
+  else
+    sshRemoteOpts = sshRemoteOptsBase;
   return [
     process.getuid() === 0 && sshhost === 'localhost'
       ? ['login', '-h', socket.client.conn.remoteAddress.split(':')[3]]
@@ -62,12 +70,12 @@ function getCommand(socket, sshuser, sshhost, sshport, sshauth, sshkey) {
   ];
 }
 
-export default function start(port, sshuser, sshhost, sshport, sshauth, sshkey, sslopts) {
+export default function start(port, sshuser, sshpass, sshhost, sshport, sshauth, sshkey, sslopts) {
   const events = new EventEmitter();
   const io = server(createServer(port, sslopts), { path: '/wetty/socket.io' });
   io.on('connection', socket => {
     console.log(`${new Date()} Connection accepted.`);
-    const [args, ssh] = getCommand(socket, sshuser, sshhost, sshport, sshauth, sshkey);
+    const [args, ssh] = getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey);
     const term = spawn('/usr/bin/env', args, {
       name: 'xterm-256color',
       cols: 80,

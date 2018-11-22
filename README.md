@@ -22,6 +22,12 @@ wetty -p 3000
 
 If you run it as root it will launch `/bin/login` (where you can specify the
 user name), else it will launch `ssh` and connect by default to `localhost`.
+*  `apt-get install sshpass` (debian eg. Ubuntu) for auto-login feature
+
+*  `yum install sshpass` (red hat flavours eg. CentOs) for auto-login feature
+
+Run on HTTP:
+-----------
 
 If instead you wish to connect to a remote host you can specify the `--sshhost`
 option, the SSH port using the `--sshport` option and the SSH user using the
@@ -35,7 +41,25 @@ or
 
 `http://yourserver:3000/ssh/<username>`
 
+You can pass an optional password as query parameter to use auto-login feature.
+
+`http://yourserver:3000/wetty/ssh/<username>?sshpass=<password>`
+
+or
+
+`http://yourserver:3000/ssh/<username>?sshpass=<password>`
+
+
 ## Run on HTTPS
+
+You can also pass the SSH user name and password as query parameters and auto-login the user like this (Only while running as a non root account):
+
+  `http://yourserver:3000/wetty/autologin?sshuser=<username>&sshpass=<password>`
+
+This is just an additional feature and the security implications for passing the password in the url will have to be taken care separately.
+
+Run on HTTPS:
+------------
 
 Always use HTTPS. If you don't have SSL certificates from a CA you can create a
 self signed certificate using this command:
@@ -87,6 +111,8 @@ use:
 ```
 http://yourserver.com/wetty
 ```
+
+**Note that if your Nginx is configured for HTTPS you should run wetty without SSL.**
 
 Else if you are running `bin/index.js` as a regular user you can use:
 
