@@ -51,7 +51,7 @@ function getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey)
   if (!sshpass)
     sshPath = sshuser || match ? 'ssh' : path.join(__dirname, 'bin/ssh');
   else
-    sshPath = ['sshpass', '-p', sshpass].join(' ');
+    sshPath = ['sshpass', '-p', sshpass, 'ssh'].join(' ');
   console.log("PATH ", sshPath);
   const ssh = match ? `${match[0].split('/ssh/').pop().split('?')[0]}@${sshhost}` : sshAddress;
   console.log("SSH ", ssh);
