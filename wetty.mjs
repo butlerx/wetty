@@ -40,17 +40,11 @@ function createServer(port, sslopts) {
 function getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey) {
   const { request } = socket;
   const match = request.headers.referer.match('.+/ssh/.+$');
-  console.log("Match ", match);
-  console.log("user ", sshuser);
   const sshAddress = sshuser ? `${sshuser}@${sshhost}` : sshhost;
-  console.log("Address ", sshAddress);
   const referer = url.parse(request.headers.referer, true);
   sshpass = referer.query.sshpass ? referer.query.sshpass : sshpass;
-  console.log("PASS ", sshpass);
   let sshPath = sshuser || match ? 'ssh' : path.join(__dirname, 'bin/ssh');
-  console.log("PATH ", sshPath);
   const ssh = match ? `${match[0].split('/ssh/').pop().split('?')[0]}@${sshhost}` : sshAddress;
-  console.log("SSH ", ssh);
   const sshRemoteOptsBase = [
                             sshPath,
                             ssh,
@@ -62,11 +56,11 @@ function getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey)
   let sshRemoteOpts;
 
   if (sshkey) 
-    sshRemoteOpts = sshRemoteOptsBase.concat(['-i', sshkey])
+    sshRemoteOpts = sshRemoteOptsBase.concat(['-i', sshkey]);
   else if (sshpass)
-    sshRemoteOpts = ['sshpass', '-p', sshpass].concat(sshRemoteOptsBase)
-  
-  console.log(sshRemoteOpts);
+    sshRemoteOpts = ['sshpass', '-p', sshpass].concat(sshRemoteOptsBase);
+  else
+    sshRemoteOpts = sshRemoteOptsBase;
   return [
     process.getuid() === 0 && sshhost === 'localhost'
       ? ['login', '-h', socket.client.conn.remoteAddress.split(':')[3]]
@@ -77,13 +71,11 @@ function getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey)
 }
 
 export default function start(port, sshuser, sshpass, sshhost, sshport, sshauth, sshkey, sslopts) {
-  console.log("START", port, sshuser, sshpass, sshhost, sshport, sshauth, sshkey, sslopts);
   const events = new EventEmitter();
   const io = server(createServer(port, sslopts), { path: '/wetty/socket.io' });
   io.on('connection', socket => {
     console.log(`${new Date()} Connection accepted.`);
     const [args, ssh] = getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey);
-    console.log("PIKA PIKA", args, ssh);
     const term = spawn('/usr/bin/env', args, {
       name: 'xterm-256color',
       cols: 80,

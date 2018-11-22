@@ -1,4 +1,4 @@
-version: "3"
+version: "3.5"
 
 services:
   wetty:
@@ -11,5 +11,16 @@ services:
       - "3000:3000"
     environment:
       PORT: 3000
-      SSHHOST: 'localhost'
+      SSHHOST: 'wetty-ssh'
       SSHPORT: 22
+  wetty-ssh:
+    build:
+      context: .
+      dockerfile: Dockerfile-ssh
+    container_name: 'wetty-ssh'
+
+networks:
+ default:
+  name: wetty
+
+
