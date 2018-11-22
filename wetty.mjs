@@ -47,11 +47,7 @@ function getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey)
   const referer = url.parse(request.headers.referer, true);
   sshpass = referer.query.sshpass ? referer.query.sshpass : sshpass;
   console.log("PASS ", sshpass);
-  let sshPath = ''
-  if (!sshpass)
-    sshPath = sshuser || match ? 'ssh' : path.join(__dirname, 'bin/ssh');
-  else
-    sshPath = ['sshpass', '-p', sshpass, 'ssh'].join(' ');
+  let sshPath = sshuser || match ? 'ssh' : path.join(__dirname, 'bin/ssh');
   console.log("PATH ", sshPath);
   const ssh = match ? `${match[0].split('/ssh/').pop().split('?')[0]}@${sshhost}` : sshAddress;
   console.log("SSH ", ssh);
@@ -63,8 +59,13 @@ function getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey)
                             '-o',
                             `PreferredAuthentications=${sshauth}`,
                             ]
-  const sshRemoteOpts = sshkey ? sshRemoteOptsBase.concat(['-i', sshkey])
-                               : sshRemoteOptsBase
+  let sshRemoteOpts;
+
+  if (sshkey) 
+    sshRemoteOpts = sshRemoteOptsBase.concat(['-i', sshkey])
+  else if (sshpass)
+    sshRemoteOpts = ['sshpass', '-p', sshpass].concat(sshRemoteOptsBase)
+  
   console.log(sshRemoteOpts);
   return [
     process.getuid() === 0 && sshhost === 'localhost'
