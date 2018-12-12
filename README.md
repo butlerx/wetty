@@ -37,7 +37,7 @@ $ node index.js
 ```
 
 Open your browser on `http://yourserver:3000/` and you will prompted to login.
-Or go too `http://yourserver:3000/ssh/<username>` to specify the user before
+Or go to `http://yourserver:3000/ssh/<username>` to specify the user before
 hand.
 
 ### Flags
@@ -62,6 +62,10 @@ connect.
 
 By default WeTTy will try to ssh to port `22`, if your host uses an alternative
 ssh port this can be specified with the flag `--sshport`.
+
+If you'd prefer an HTTP base prefix other than `/wetty`, you can specify that
+with `--base`. Do not set this to `/ssh/${something}`, as this will break
+username matching code.
 
 ### https
 
@@ -88,6 +92,10 @@ As said earlier you can use a proxy to add https to WeTTy.
 
 **Note** that if your proxy is configured for https you should run WeTTy without
 SSL
+
+If your proxy uses a base path other than `/wetty`,
+specify the path with the `--base` flag,
+or the `BASE` environment variable.
 
 #### Nginx
 

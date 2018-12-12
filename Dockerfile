@@ -1,8 +1,8 @@
 FROM node:boron-alpine as builder
+RUN apk add -U build-base python
 WORKDIR /usr/src/app
 COPY . /usr/src/app
-RUN apk add -U build-base python && \
-    yarn && \
+RUN yarn && \
     yarn build && \
     yarn install --production --ignore-scripts --prefer-offline
 
@@ -16,4 +16,4 @@ RUN apk add -U openssh && \
 EXPOSE 3000
 COPY --from=builder /usr/src/app /app
 
-CMD yarn start
+ENTRYPOINT [ "/usr/local/bin/yarn", "start" ]

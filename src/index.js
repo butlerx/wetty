@@ -5,7 +5,9 @@ import * as fit from './fit';
 import './wetty.scss';
 
 Terminal.applyAddon(fit);
-const socket = io(window.location.origin, { path: '/wetty/socket.io' });
+var userRegex = new RegExp("ssh/\[^/]+$");
+var socketPath = window.location.pathname.replace(userRegex, "");
+var socket = io(window.location.origin, { path: socketPath + "socket.io" });
 
 socket.on('connect', () => {
   const term = new Terminal();
