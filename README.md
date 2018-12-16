@@ -41,12 +41,18 @@ or
 
 You can pass an optional password as query parameter to use auto-login feature.
 
+Auto Login:
+------------
+
+You can also pass the ssh password as an optional query parameter to auto-login the user like this (Only while running wetty as a non root account):
+
 `http://yourserver:3000/wetty/ssh/<username>?sshpass=<password>`
 
 or
 
 `http://yourserver:3000/ssh/<username>?sshpass=<password>`
 
+This is just an additional feature and the security implications for passing the password in the url will have to be taken care separately.
 
 Run on HTTPS:
 ------------
