@@ -14,6 +14,10 @@ time.
 
 *  `npm install -g wetty`
 
+*  `apt-get install sshpass` (debian eg. Ubuntu) for auto-login feature
+
+*  `yum install sshpass` (red hat flavours eg. CentOs) for auto-login feature
+
 ## Run on HTTP
 
 ```bash
@@ -22,12 +26,6 @@ wetty -p 3000
 
 If you run it as root it will launch `/bin/login` (where you can specify the
 user name), else it will launch `ssh` and connect by default to `localhost`.
-*  `apt-get install sshpass` (debian eg. Ubuntu) for auto-login feature
-
-*  `yum install sshpass` (red hat flavours eg. CentOs) for auto-login feature
-
-Run on HTTP:
------------
 
 If instead you wish to connect to a remote host you can specify the `--sshhost`
 option, the SSH port using the `--sshport` option and the SSH user using the
@@ -43,18 +41,16 @@ or
 
 You can pass an optional password as query parameter to use auto-login feature.
 
+Auto Login:
+------------
+
+You can also pass the ssh password as an optional query parameter to auto-login the user like this (Only while running wetty as a non root account):
+
 `http://yourserver:3000/wetty/ssh/<username>?sshpass=<password>`
 
 or
 
 `http://yourserver:3000/ssh/<username>?sshpass=<password>`
-
-
-## Run on HTTPS
-
-You can also pass the SSH user name and password as query parameters and auto-login the user like this (Only while running as a non root account):
-
-  `http://yourserver:3000/wetty/autologin?sshuser=<username>&sshpass=<password>`
 
 This is just an additional feature and the security implications for passing the password in the url will have to be taken care separately.
 
