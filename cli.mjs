@@ -6,45 +6,46 @@ import wetty from './wetty';
 const opts = optimist
   .options({
     sslkey: {
-      demand     : false,
+      demand: false,
       description: 'path to SSL key',
     },
     sslcert: {
-      demand     : false,
+      demand: false,
       description: 'path to SSL certificate',
     },
     sshhost: {
-      demand     : false,
+      demand: false,
       description: 'ssh server host',
     },
     sshport: {
-      demand     : false,
+      demand: false,
       description: 'ssh server port',
     },
     sshuser: {
-      demand     : false,
+      demand: false,
       description: 'ssh user',
     },
     sshpass: {
-      demand     : false,
+      demand: false,
       description: 'ssh password',
     },
     sshauth: {
-      demand     : false,
+      demand: false,
       description: 'defaults to "password", you can use "publickey,password" instead',
     },
     sshkey: {
-      demand     : false,
-      description: 'path to an optional client private key (connection will be password-less and insecure!)',
+      demand: false,
+      description:
+        'path to an optional client private key (connection will be password-less and insecure!)',
     },
     port: {
-      demand     : false,
-      alias      : 'p',
+      demand: false,
+      alias: 'p',
       description: 'wetty listen port',
     },
     help: {
-      demand     : false,
-      alias      : 'h',
+      demand: false,
+      alias: 'h',
       description: 'Print help message',
     },
   })
@@ -60,7 +61,7 @@ const sshpass = opts.sshpass || process.env.SSHPASS || '';
 const sshhost = opts.sshhost || process.env.SSHHOST || 'localhost';
 const sshauth = opts.sshauth || process.env.SSHAUTH || 'password,keyboard-interactive';
 const sshport = opts.sshport || process.env.SSHPORT || 22;
-const sshkey  = opts.sshkey  || process.env.SSHKEY  || '';
+const sshkey = opts.sshkey || process.env.SSHKEY || '';
 const port = opts.port || process.env.PORT || 3000;
 
 loadSSL(opts)
@@ -72,13 +73,12 @@ loadSSL(opts)
     process.exit(1);
   });
 
-const sshkeyWarning =
-`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! Password-less auth enabled using private key from \'%s\'.
+const sshkeyWarning = `!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Password-less auth enabled using private key from ${sshkey}.
 ! This is dangerous, anything that reaches the wetty server
 ! will be able to run remote operations without authentication.
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`;
-if(sshkey) {
+if (sshkey) {
   console.warn(sshkeyWarning);
 }
 

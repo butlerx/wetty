@@ -3,29 +3,31 @@ import http from 'http';
 import https from 'https';
 import path from 'path';
 import server from 'socket.io';
-import { spawn } from 'node-pty';
+import pty from 'node-pty';
 import EventEmitter from 'events';
 import favicon from 'serve-favicon';
 import url from 'url';
 
+const dirname = path.resolve();
+
 const app = express();
-app.use(favicon(`${__dirname}/public/favicon.ico`));
+app.use(favicon(`${dirname}/public/favicon.ico`));
 // For using wetty at /wetty on a vhost
 app.get('/wetty/ssh/:user', (req, res) => {
-  res.sendFile(`${__dirname}/public/wetty/index.html`);
+  res.sendFile(`${dirname}/public/wetty/index.html`);
 });
 app.get('/wetty/', (req, res) => {
-  res.sendFile(`${__dirname}/public/wetty/index.html`);
+  res.sendFile(`${dirname}/public/wetty/index.html`);
 });
 // For using wetty on a vhost by itself
 app.get('/ssh/:user', (req, res) => {
-  res.sendFile(`${__dirname}/public/wetty/index.html`);
+  res.sendFile(`${dirname}/public/wetty/index.html`);
 });
 app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/public/wetty/index.html`);
+  res.sendFile(`${dirname}/public/wetty/index.html`);
 });
 // For serving css and javascript
-app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/', express.static(path.join(dirname, 'public')));
 
 function createServer(port, sslopts) {
   return sslopts && sslopts.key && sslopts.cert
@@ -43,29 +45,32 @@ function getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey)
   const sshAddress = sshuser ? `${sshuser}@${sshhost}` : sshhost;
   const referer = url.parse(request.headers.referer, true);
   sshpass = referer.query.sshpass ? referer.query.sshpass : sshpass;
-  let sshPath = sshuser || match ? 'ssh' : path.join(__dirname, 'bin/ssh');
-  const ssh = match ? `${match[0].split('/ssh/').pop().split('?')[0]}@${sshhost}` : sshAddress;
+  const sshPath = sshuser || match ? 'ssh' : path.join(dirname, 'bin/ssh');
+  const ssh = match
+    ? `${
+        match[0]
+          .split('/ssh/')
+          .pop()
+          .split('?')[0]
+      }@${sshhost}`
+    : sshAddress;
   const sshRemoteOptsBase = [
-                            sshPath,
-                            ssh,
-                            '-p',
-                            sshport,
-                            '-o',
-                            `PreferredAuthentications=${sshauth}`,
-                            ]
+    sshPath,
+    ssh,
+    '-p',
+    sshport,
+    '-o',
+    `PreferredAuthentications=${sshauth}`,
+  ];
   let sshRemoteOpts;
 
-  if (sshkey) 
-    sshRemoteOpts = sshRemoteOptsBase.concat(['-i', sshkey]);
-  else if (sshpass)
-    sshRemoteOpts = ['sshpass', '-p', sshpass].concat(sshRemoteOptsBase);
-  else
-    sshRemoteOpts = sshRemoteOptsBase;
+  if (sshkey) sshRemoteOpts = sshRemoteOptsBase.concat(['-i', sshkey]);
+  else if (sshpass) sshRemoteOpts = ['sshpass', '-p', sshpass].concat(sshRemoteOptsBase);
+  else sshRemoteOpts = sshRemoteOptsBase;
   return [
     process.getuid() === 0 && sshhost === 'localhost'
       ? ['login', '-h', socket.client.conn.remoteAddress.split(':')[3]]
-      : sshRemoteOpts
-      ,
+      : sshRemoteOpts,
     ssh,
   ];
 }
@@ -76,7 +81,7 @@ export default function start(port, sshuser, sshpass, sshhost, sshport, sshauth,
   io.on('connection', socket => {
     console.log(`${new Date()} Connection accepted.`);
     const [args, ssh] = getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey);
-    const term = spawn('/usr/bin/env', args, {
+    const term = pty.spawn('/usr/bin/env', args, {
       name: 'xterm-256color',
       cols: 80,
       rows: 30,
