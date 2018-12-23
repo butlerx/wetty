@@ -13,13 +13,13 @@ time.
 ## Install
 
 
-*  `git clone git@github.com:krishnasrinivas/wetty.git` Clone Wetty Repository
+*  `git clone https://github.com/koushikmln/wetty.git`
 
-*  `cd wetty && npm install` Install Dependencies
+*  `cd wetty && npm install`
 
-*  `apt-get install sshpass` (debian eg. Ubuntu) for auto-login feature
+*  `apt-get install sshpass` (debian eg. Ubuntu) only for auto-login feature
 
-*  `yum install sshpass` (red hat flavours eg. CentOs) for auto-login feature
+*  `yum install sshpass` (red hat flavours eg. CentOs) only for auto-login feature
 
 ## Run on HTTP
 
