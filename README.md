@@ -21,6 +21,10 @@ time.
 
 *  `yum install sshpass` (red hat flavours eg. CentOs) only for auto-login feature
 
+*  `apt-get install sshpass` (debian eg. Ubuntu) for auto-login feature
+
+*  `yum install sshpass` (red hat flavours eg. CentOs) for auto-login feature
+
 ## Run on HTTP
 
 ```bash

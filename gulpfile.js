@@ -5,7 +5,7 @@ const babel = require('gulp-babel');
 const shell = require('gulp-shell');
 const del = require('del');
 
-gulp.task('compress', [], () =>
+const compress = () =>
   gulp
     .src(['./src/hterm_all.js', './src/wetty.js'])
     .pipe(concat('wetty.js'))
@@ -20,21 +20,22 @@ gulp.task('compress', [], () =>
         ignoreFiles: ['.combo.js', '*.min.js'],
       }),
     )
-    .pipe(gulp.dest('./public/wetty')),
-);
+    .pipe(gulp.dest('./public/wetty'));
+
+gulp.task('default', gulp.series(compress));
 
 gulp.task(
-  'hterm',
-  shell.task(
-    [
-      'git clone https://chromium.googlesource.com/apps/libapps',
-      'LIBDOT_SEARCH_PATH=$(pwd)/libapps ./libapps/libdot/bin/concat.sh -i ./libapps/hterm/concat/hterm_all.concat -o ./src/hterm_all.js',
-    ],
-    {
-      verbose: true,
-    },
+  'upgrade',
+  gulp.series(
+    shell.task(
+      [
+        'git clone https://chromium.googlesource.com/apps/libapps',
+        'LIBDOT_SEARCH_PATH=$(pwd)/libapps ./libapps/libdot/bin/concat.sh -i ./libapps/hterm/concat/hterm_all.concat -o ./src/hterm_all.js',
+      ],
+      {
+        verbose: true,
+      },
+    ),
+    () => del(['./libapps']),
   ),
 );
-
-gulp.task('default', ['compress']);
-gulp.task('upgrade', ['hterm'], () => del(['./libapps']));
