@@ -12,7 +12,10 @@ time.
 
 ## Install
 
-*  `npm install -g wetty`
+
+*  `git clone git@github.com:krishnasrinivas/wetty.git` Clone Wetty Repository
+
+*  `cd wetty && npm install` Install Dependencies
 
 *  `apt-get install sshpass` (debian eg. Ubuntu) for auto-login feature
 
@@ -21,7 +24,7 @@ time.
 ## Run on HTTP
 
 ```bash
-wetty -p 3000
+npm start
 ```
 
 If you run it as root it will launch `/bin/login` (where you can specify the
