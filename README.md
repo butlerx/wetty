@@ -13,7 +13,7 @@ time.
 ## Install
 
 
-*  `git clone https://github.com/koushikmln/wetty.git`
+*  `git clone https://github.com/krishnasrinivas/wetty.git`
 
 *  `cd wetty && npm install`
 
