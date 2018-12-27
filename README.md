@@ -12,16 +12,20 @@ time.
 
 ## Install
 
-*  `npm install -g wetty`
 
-*  `apt-get install sshpass` (debian eg. Ubuntu) for auto-login feature
+*  `git clone https://github.com/krishnasrinivas/wetty.git`
 
-*  `yum install sshpass` (red hat flavours eg. CentOs) for auto-login feature
+*  `cd wetty && npm install`
+
+*  `apt-get install sshpass` (debian eg. Ubuntu) only for auto-login feature
+
+*  `yum install sshpass` (red hat flavours eg. CentOs) only for auto-login feature
+
 
 ## Run on HTTP
 
 ```bash
-wetty -p 3000
+npm start
 ```
 
 If you run it as root it will launch `/bin/login` (where you can specify the
