@@ -6,51 +6,51 @@ import wetty from './wetty';
 const opts = optimist
   .options({
     sslkey: {
-      demand     : false,
+      demand: false,
       description: 'path to SSL key',
     },
     sslcert: {
-      demand     : false,
+      demand: false,
       description: 'path to SSL certificate',
     },
     sshhost: {
-      demand     : false,
+      demand: false,
       description: 'ssh server host',
     },
     sshport: {
-      demand     : false,
+      demand: false,
       description: 'ssh server port',
     },
     sshuser: {
-      demand     : false,
+      demand: false,
       description: 'ssh user',
     },
     sshpass: {
-      demand     : false,
+      demand: false,
       description: 'ssh password',
     },
     sshauth: {
-      demand     : false,
+      demand: false,
       description: 'defaults to "password", you can use "publickey,password" instead',
     },
     sshkey: {
-      demand     : false,
+      demand: false,
       description:
         'path to an optional client private key (connection will be password-less and insecure!)',
     },
     port: {
-      demand     : false,
-      alias      : 'p',
+      demand: false,
+      alias: 'p',
       description: 'wetty listen port',
     },
     command: {
-      demand     : false,
-      alias      : 'c',
+      demand: false,
+      alias: 'c',
       description: 'command to run in shell, defaults to /bin/login',
     },
     help: {
-      demand     : false,
-      alias      : 'h',
+      demand: false,
+      alias: 'h',
       description: 'Print help message',
     },
   })
