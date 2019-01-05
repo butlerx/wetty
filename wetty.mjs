@@ -32,20 +32,48 @@ app.use('/', express.static(path.join(dirname, 'public')));
 function createServer(port, sslopts) {
   return sslopts && sslopts.key && sslopts.cert
     ? https.createServer(sslopts, app).listen(port, () => {
-      console.log(`https on port ${port}`);
-    })
+        console.log(`https on port ${port}`);
+      })
     : http.createServer(app).listen(port, () => {
-      console.log(`http on port ${port}`);
-    });
+        console.log(`http on port ${port}`);
+      });
+}
+
+const urlArgs = request => url.parse(request.headers.referer, true).query;
+const getRemoteAddress = socket =>
+  socket.client.conn.remoteAddress.split(':')[3] === undefined
+    ? 'localhost'
+    : socket.client.conn.remoteAddress.split(':')[3];
+
+function sshOptions(path, address, port, auth, key, query) {
+  const sshRemoteOptsBase = [
+    path,
+    address,
+    '-t',
+    '-p',
+    port,
+    '-o',
+    `PreferredAuthentications=${auth}`,
+    query.command,
+  ];
+  if (key) {
+    return sshRemoteOptsBase.concat(['-i', key]);
+  } else if (query.sshpass) {
+    return ['sshpass', '-p', query.sshpass].concat(sshRemoteOptsBase);
+  }
+  return sshRemoteOptsBase;
 }
 
 function getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey, command) {
   const { request } = socket;
   const match = request.headers.referer.match('.+/ssh/.+$');
   const sshAddress = sshuser ? `${sshuser}@${sshhost}` : sshhost;
-  const referer = url.parse(request.headers.referer, true);
-  sshpass = referer.query.sshpass ? referer.query.sshpass : sshpass;
-  const sshPath = sshuser || match ? 'ssh' : path.join(dirname, 'bin/ssh');
+  const query = urlArgs(request);
+  query.sshpass = query.sshpass || sshpass;
+  query.command =
+    query.path !== undefined
+      ? `$SHELL -c "cd ${query.path};${command === '' ? '$SHELL' : command}"`
+      : command;
   const ssh = match
     ? `${
         match[0]
@@ -54,25 +82,19 @@ function getCommand(socket, sshuser, sshpass, sshhost, sshport, sshauth, sshkey,
           .split('?')[0]
       }@${sshhost}`
     : sshAddress;
-  const sshRemoteOptsBase = [
-    sshPath,
-    ssh,
-    '-t',
-    '-p',
-    sshport,
-    '-o',
-    `PreferredAuthentications=${sshauth}`,
-    `"${command}"`,
-  ];
-  let sshRemoteOpts;
+  const args = command === '' ? ['login', '-h', getRemoteAddress(socket)] : [command];
 
-  if (sshkey) sshRemoteOpts = sshRemoteOptsBase.concat(['-i', sshkey]);
-  else if (sshpass) sshRemoteOpts = ['sshpass', '-p', sshpass].concat(sshRemoteOptsBase);
-  else sshRemoteOpts = sshRemoteOptsBase;
   return [
     process.getuid() === 0 && sshhost === 'localhost'
-      ? ['login', '-h', socket.client.conn.remoteAddress.split(':')[3]]
-      : sshRemoteOpts,
+      ? args
+      : sshOptions(
+          sshuser || match ? 'ssh' : path.join(dirname, 'bin/ssh'),
+          ssh,
+          sshport,
+          sshauth,
+          sshkey,
+          query,
+        ),
     ssh,
   ];
 }
@@ -102,13 +124,14 @@ export default function start(
       sshkey,
       command,
     );
+    console.debug({ args, ssh });
     const term = pty.spawn('/usr/bin/env', args, {
       name: 'xterm-256color',
       cols: 80,
       rows: 30,
     });
 
-    console.log(`${new Date()} PID=${term.pid} STARTED on behalf of user=${ssh}`);
+    console.log(`${new Date()} PID=${term.pid} STARTED on behalf of remote=${ssh}`);
     term.on('data', data => socket.emit('output', data));
     term.on('exit', code => {
       console.log(`${new Date()} PID=${term.pid} ENDED`);
