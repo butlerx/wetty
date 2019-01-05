@@ -1,8 +1,7 @@
 {
   "name": "wetty.js",
   "version": "1.0.3",
-  "description":
-    "WeTTY = Web + TTY. Terminal access in browser over http/https",
+  "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
   "homepage": "https://github.com/butlerx/wetty",
   "repository": {
     "type": "git",
@@ -18,14 +17,19 @@
     "lint": "eslint --ext .js,.mjs .",
     "build": "webpack",
     "start": "node .",
-    "dev":
-      "NODE_ENV=development concurrently --kill-others --success first \"webpack --watch\" \"nodemon .\"",
+    "dev": "NODE_ENV=development concurrently --kill-others --success first \"webpack --watch\" \"nodemon .\"",
     "prepublishOnly": "yarn build",
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,mjs}": ["eslint --fix", "git add"],
-    "*.{json,scss,md}": ["prettier --write", "git add"]
+    "*.{js,mjs}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{json,scss,md}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "bin": {
     "wetty": "./index.js"
@@ -34,7 +38,11 @@
     "node": ">=6.9"
   },
   "nodemonConfig": {
-    "ignore": ["dist/*", "src/*", "*.json"]
+    "ignore": [
+      "dist/*",
+      "src/*",
+      "*.json"
+    ]
   },
   "preferGlobal": "true",
   "dependencies": {
@@ -76,5 +84,21 @@
     "style-loader": "^0.19.1",
     "uglifyjs-webpack-plugin": "^1.1.6",
     "webpack": "^3.10.0"
-  }
+  },
+  "contributors": [
+    "Krishna Srinivas <krishna.srinivas@gmail.com>",
+    "Boyan Rabchev <boyan@rabchev.com>",
+    "Luca Milanesio <luca.milanesio@gmail.com>",
+    "Antonio Calatrava <antonio@antoniocalatrava.com>",
+    "Strubbl <github@linux4tw.de>",
+    "Jarrett Gilliam <jarrettgilliam@gmail.com>",
+    "Nathan LeClaire <nathan.leclaire@docker.com>",
+    "mirtouf <mirtouf@gmail.com>",
+    "nosemeocurrenada <nosemeocurrenada93@gmail.com>",
+    "Andreas Kloeckner <inform@tiker.net>",
+    "Imuli <i@imu.li>",
+    "James Turnbull <james@lovedthanlost.net>",
+    "Neale Pickett <neale@woozle.org>",
+    "Robert <robert@n5qm.com>"
+  ]
 }
