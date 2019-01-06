@@ -1,0 +1,9 @@
+{
+  "presets": [
+    "@babel/preset-typescript",
+    ["@babel/env"]
+  ],
+  "plugins": [
+    "lodash"
+  ]
+}

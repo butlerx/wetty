@@ -2,42 +2,31 @@
  * Create WeTTY server
  * @module WeTTy
  */
-import EventEmitter from 'events';
-import server from './server.mjs';
-import command from './command.mjs';
-import term from './term.mjs';
-import loadSSL from './ssl.mjs';
+import * as EventEmitter from 'events';
+import server from './server';
+import command from './command';
+import term from './term';
+import loadSSL from './ssl';
+import { SSL, SSH, SSLBuffer } from './interfaces';
 
-class WeTTy extends EventEmitter {
+export default class WeTTy extends EventEmitter {
   /**
    * Starts WeTTy Server
    * @name start
-   * @async
-   * @param {Object} [ssh] SSH settings
-   * @param {string} [ssh.user=''] default user for ssh
-   * @param {string} [ssh.host=localhost] machine to ssh too
-   * @param {string} [ssh.auth=password] authtype to use
-   * @param {number} [ssh.port=22] port to connect to over ssh
-   * @param {number} [basePath=/wetty/] base part of URL
-   * @param {number} [serverPort=3000] Port to run server on
-   * @param {Object} [ssl] SSL settings
-   * @param {?string} [ssl.key] Path to ssl key
-   * @param {?string} [ssl.cert] Path to ssl cert
-   * @return {Promise} Promise resolves once server is running
    */
-  start(
-    { user = '', host = 'localhost', auth = 'password', port = 22 },
-    basePath = '/wetty/',
-    serverPort = 3000,
-    { key, cert }
-  ) {
-    return loadSSL(key, cert).then(ssl => {
-      const io = server(basePath, serverPort, ssl);
+  public start(
+    ssh: SSH = { user: '', host: 'localhost', auth: 'password', port: 22 },
+    basePath: string = '/wetty/',
+    serverPort: number = 3000,
+    ssl?: SSL
+  ): Promise<void> {
+    return loadSSL(ssl).then((sslBuffer: SSLBuffer) => {
+      const io = server(basePath, serverPort, sslBuffer);
       /**
        * Wetty server connected too
        * @fires WeTTy#connnection
        */
-      io.on('connection', socket => {
+      io.on('connection', (socket: SocketIO.Socket) => {
         /**
          * @event wetty#connection
          * @name connection
@@ -49,19 +38,14 @@ class WeTTy extends EventEmitter {
           msg: `Connection accepted.`,
           date: new Date(),
         });
-        const { args, user: sshUser } = command(socket, {
-          user,
-          host,
-          auth,
-          port,
-        });
+        const { args, user: sshUser } = command(socket, ssh);
         this.emit('debug', `sshUser: ${sshUser}, cmd: ${args.join(' ')}`);
         if (sshUser) {
           term.spawn(socket, args);
         } else {
           term
             .login(socket)
-            .then(username => {
+            .then((username: string) => {
               this.emit('debug', `username: ${username.trim()}`);
               args[1] = `${username.trim()}@${args[1]}`;
               this.emit('debug', `cmd : ${args.join(' ')}`);
@@ -78,7 +62,7 @@ class WeTTy extends EventEmitter {
    *
    * @fires module:WeTTy#spawn
    */
-  spawned(pid, address) {
+  public spawned(pid: number, address: string): void {
     /**
      * Terminal process spawned
      * @event WeTTy#spawn
@@ -100,7 +84,7 @@ class WeTTy extends EventEmitter {
    *
    * @fires WeTTy#exit
    */
-  exited(code, pid) {
+  public exited(code: number, pid: number): void {
     /**
      * Terminal process exits
      * @event WeTTy#exit
@@ -117,7 +101,7 @@ class WeTTy extends EventEmitter {
    *
    * @fires WeTTy#disconnet
    */
-  disconnected() {
+  private disconnected(): void {
     /**
      * @event WeTTY#disconnect
      * @name disconnect
@@ -129,7 +113,7 @@ class WeTTy extends EventEmitter {
    * Wetty server started
    * @fires WeTTy#server
    */
-  server(port, connection) {
+  public server(port: number, connection: string): void {
     /**
      * @event WeTTy#server
      * @type {object}
@@ -145,5 +129,3 @@ class WeTTy extends EventEmitter {
     });
   }
 }
-
-export default new WeTTy();

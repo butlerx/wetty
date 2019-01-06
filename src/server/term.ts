@@ -1,6 +1,6 @@
 import { spawn } from 'node-pty';
 import { isUndefined } from 'lodash';
-import events from './emitter.mjs';
+import events from './emitter';
 
 const xterm = {
   name: 'xterm-256color',
@@ -11,15 +11,15 @@ const xterm = {
 };
 
 export default class Term {
-  static spawn(socket, args) {
+  public static spawn(socket: SocketIO.Socket, args: string[]): void {
     const term = spawn('/usr/bin/env', args, xterm);
     const address = args[0] === 'ssh' ? args[1] : 'localhost';
     events.spawned(term.pid, address);
     socket.emit('login');
     term.on('exit', code => {
       events.exited(code, term.pid);
+      socket.emit('logout');
       socket
-        .emit('logout')
         .removeAllListeners('disconnect')
         .removeAllListeners('resize')
         .removeAllListeners('input');
@@ -35,18 +35,15 @@ export default class Term {
         if (!isUndefined(term)) term.write(input);
       })
       .on('disconnect', () => {
-        term.end();
+        const { pid } = term;
+        term.kill();
         term.destroy();
-        events.exited();
+        events.exited(0, pid);
       });
   }
 
-  static login(socket) {
-    const term = spawn(
-      '/usr/bin/env',
-      ['node', '-r', '@std/esm', './lib/buffer.mjs'],
-      xterm
-    );
+  public static login(socket: SocketIO.Socket): Promise<string> {
+    const term = spawn('/usr/bin/env', ['node', './dist/buffer.js'], xterm);
     let buf = '';
     return new Promise((resolve, reject) => {
       term.on('exit', () => {
@@ -56,12 +53,12 @@ export default class Term {
         socket.emit('data', data);
       });
       socket
-        .on('input', input => {
+        .on('input', (input: string) => {
           term.write(input);
           buf = /\177/.exec(input) ? buf.slice(0, -1) : buf + input;
         })
         .on('disconnect', () => {
-          term.end();
+          term.kill();
           term.destroy();
           reject();
         });
