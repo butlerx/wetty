@@ -42,9 +42,6 @@ export default class WeTTy extends EventEmitter {
         /**
          * @event wetty#connection
          * @name connection
-         * @type {object}
-         * @property {string} msg Message for logs
-         * @property {Date} date date and time of connection
          */
         this.emit('connection', {
           msg: `Connection accepted.`,
@@ -80,9 +77,6 @@ export default class WeTTy extends EventEmitter {
      * @event WeTTy#spawn
      * @name spawn
      * @type {object}
-     * @property {string} msg Message containing pid info and status
-     * @property {number} pid Pid of the terminal
-     * @property {string} address address of connecting user
      */
     this.emit('spawn', {
       msg: `PID=${pid} STARTED on behalf of ${address}`,
@@ -101,9 +95,6 @@ export default class WeTTy extends EventEmitter {
      * Terminal process exits
      * @event WeTTy#exit
      * @name exit
-     * @type {object}
-     * @property {number} code the exit code
-     * @property {string} msg Message containing pid info and status
      */
     this.emit('exit', { code, msg: `PID=${pid} ENDED` });
   }
@@ -130,9 +121,6 @@ export default class WeTTy extends EventEmitter {
      * @event WeTTy#server
      * @type {object}
      * @name server
-     * @property {string} msg Message for logging
-     * @property {number} port port sever is on
-     * @property {string} connection connection type for web traffic
      */
     this.emit('server', {
       msg: `${connection} on port ${port}`,

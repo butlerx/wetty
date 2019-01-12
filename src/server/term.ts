@@ -37,7 +37,6 @@ export default class Term {
       .on('disconnect', () => {
         const { pid } = term;
         term.kill();
-        term.destroy();
         events.exited(0, pid);
       });
   }
@@ -59,7 +58,6 @@ export default class Term {
         })
         .on('disconnect', () => {
           term.kill();
-          term.destroy();
           reject();
         });
     });

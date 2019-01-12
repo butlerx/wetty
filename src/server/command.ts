@@ -32,11 +32,13 @@ export default (
   args: localhost(host)
     ? loginOptions(command, remoteAddress)
     : sshOptions(
-        address(referer, user, host),
-        port,
-        auth,
-        command,
-        urlArgs(referer, { pass }),
+        urlArgs(referer, {
+          ssh: address(referer, user, host),
+          port: `${port}`,
+          pass,
+          command,
+          auth,
+        }),
         key
       ),
   user:
@@ -47,19 +49,15 @@ export default (
 });
 
 function sshOptions(
-  sshAddress: string,
-  port: number,
-  auth: string,
-  command: string,
-  { pass, path }: { [s: string]: string },
+  { pass, path, command, ssh, port, auth }: { [s: string]: string },
   key?: string
 ): string[] {
   const sshRemoteOptsBase = [
     'ssh',
-    sshAddress,
+    ssh,
     '-t',
     '-p',
-    `${port}`,
+    port,
     '-o',
     `PreferredAuthentications=${auth}`,
     path !== undefined
