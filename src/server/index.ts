@@ -8,10 +8,13 @@ export interface Options {
   sshport: number;
   sshuser: string;
   sshauth: string;
+  sshkey?: string;
+  sshpass?: string;
   sslkey?: string;
   sslcert?: string;
   base: string;
   port: number;
+  command?: string;
 }
 
 interface CLI extends Options {
@@ -24,8 +27,11 @@ export default class Server {
     sshhost,
     sshauth,
     sshport,
+    sshkey,
+    sshpass,
     base,
     port,
+    command,
     sslkey,
     sslcert,
   }: Options): Promise<void> {
@@ -46,9 +52,12 @@ export default class Server {
         host: sshhost,
         auth: sshauth,
         port: sshport,
+        pass: sshpass,
+        key: sshkey,
       },
       base,
       port,
+      command,
       { key: sslkey, cert: sslcert }
     );
   }

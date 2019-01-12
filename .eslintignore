@@ -1,3 +1,5 @@
 node_modules/
 .esm-cache
 dist
+public/
+*hterm*

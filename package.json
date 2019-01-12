@@ -2,15 +2,15 @@
   "name": "wetty.js",
   "version": "1.0.3",
   "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
-  "homepage": "https://github.com/butlerx/wetty",
+  "homepage": "https://github.com/krishnasrinivas/wetty",
   "repository": {
     "type": "git",
-    "url": "git://github.com/butlerx/wetty.git"
+    "url": "git://github.com/krishnasrinivas/wetty.git"
   },
-  "author": "Cian Butler <butlerx@notthe.cloud> (https://github.com/butlerx)",
+  "author": "Krishna Srinivas <krishna.srinivas@gmail.com> (https://github.com/krishnasrinivas)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/butlerx/wetty/issues"
+    "url": "https://github.com/krishnasrinivas/wetty/issues"
   },
   "main": "index.js",
   "scripts": {
@@ -101,25 +101,30 @@
     "prettier": "^1.15.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
-    "typescript": "^3.1.1",
+    "typescript": "~3.1.1",
     "webpack": "^4.28.3",
     "webpack-cli": "^3.2.0",
     "webpack-node-externals": "^1.7.2"
   },
   "contributors": [
-    "Krishna Srinivas <krishna.srinivas@gmail.com>",
-    "Boyan Rabchev <boyan@rabchev.com>",
-    "Luca Milanesio <luca.milanesio@gmail.com>",
-    "Antonio Calatrava <antonio@antoniocalatrava.com>",
-    "Strubbl <github@linux4tw.de>",
-    "Jarrett Gilliam <jarrettgilliam@gmail.com>",
-    "Nathan LeClaire <nathan.leclaire@docker.com>",
-    "mirtouf <mirtouf@gmail.com>",
-    "nosemeocurrenada <nosemeocurrenada93@gmail.com>",
     "Andreas Kloeckner <inform@tiker.net>",
+    "Antonio Calatrava <antonio@antoniocalatrava.com>",
+    "Boyan Rabchev <TELERIK\\rabchev@rabchevlnx.telerik.com>",
+    "Boyan Rabchev <boyan@rabchev.com>",
+    "Cian Butler <butlerx@notthe.cloud>",
+    "Farhan Khan <khanzf@gmail.com>",
     "Imuli <i@imu.li>",
     "James Turnbull <james@lovedthanlost.net>",
+    "Jarrett Gilliam <jarrettgilliam@gmail.com>",
+    "Kasper Holbek Jensen <kholbekj@gmail.com>",
+    "Krishna Srinivas <krishna@minio.io>",
+    "Luca Milanesio <luca.milanesio@gmail.com>",
+    "Nathan LeClaire <nathan.leclaire@docker.com>",
     "Neale Pickett <neale@woozle.org>",
-    "Robert <robert@n5qm.com>"
+    "Robert <robert@n5qm.com>",
+    "Strubbl <github@linux4tw.de>",
+    "koushikmln <mln02koushik@gmail.com>",
+    "mirtouf <mirtouf@gmail.com>",
+    "nosemeocurrenada <nosemeocurrenada93@gmail.com>"
   ]
 }

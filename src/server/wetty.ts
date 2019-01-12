@@ -4,7 +4,7 @@
  */
 import * as EventEmitter from 'events';
 import server from './server';
-import command from './command';
+import getCommand from './command';
 import term from './term';
 import loadSSL from './ssl';
 import { SSL, SSH, SSLBuffer } from './interfaces';
@@ -18,9 +18,21 @@ export default class WeTTy extends EventEmitter {
     ssh: SSH = { user: '', host: 'localhost', auth: 'password', port: 22 },
     basePath: string = '/wetty/',
     serverPort: number = 3000,
+    command: string = '',
     ssl?: SSL
   ): Promise<void> {
     return loadSSL(ssl).then((sslBuffer: SSLBuffer) => {
+      if (ssh.key) {
+        this.emit(
+          'warn',
+          `!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Password-less auth enabled using private key from ${ssh.key}.
+! This is dangerous, anything that reaches the wetty server
+! will be able to run remote operations without authentication.
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`
+        );
+      }
+
       const io = server(basePath, serverPort, sslBuffer);
       /**
        * Wetty server connected too
@@ -38,7 +50,7 @@ export default class WeTTy extends EventEmitter {
           msg: `Connection accepted.`,
           date: new Date(),
         });
-        const { args, user: sshUser } = command(socket, ssh);
+        const { args, user: sshUser } = getCommand(socket, ssh, command);
         this.emit('debug', `sshUser: ${sshUser}, cmd: ${args.join(' ')}`);
         if (sshUser) {
           term.spawn(socket, args);

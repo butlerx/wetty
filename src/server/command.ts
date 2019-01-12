@@ -1,3 +1,4 @@
+import * as url from 'url';
 import { Socket } from 'socket.io';
 import { SSH } from './interfaces';
 
@@ -5,26 +6,80 @@ const localhost = (host: string): boolean =>
   process.getuid() === 0 &&
   (host === 'localhost' || host === '0.0.0.0' || host === '127.0.0.1');
 
+const urlArgs = (
+  referer: string,
+  def: { [s: string]: string }
+): { [s: string]: string } =>
+  Object.assign(def, url.parse(referer, true).query);
+
+const getRemoteAddress = (remoteAddress: string): string =>
+  remoteAddress.split(':')[3] === undefined
+    ? 'localhost'
+    : remoteAddress.split(':')[3];
+
 export default (
-  { request: { headers }, client: { conn } }: Socket,
-  { user, host, port, auth }: SSH
+  {
+    request: {
+      headers: { referer },
+    },
+    client: {
+      conn: { remoteAddress },
+    },
+  }: Socket,
+  { user, host, port, auth, pass, key }: SSH,
+  command: string
 ): { args: string[]; user: boolean } => ({
   args: localhost(host)
-    ? ['login', '-h', conn.remoteAddress.split(':')[3]]
-    : [
-        'ssh',
-        address(headers.referer, user, host),
-        '-p',
-        `${port}`,
-        '-o',
-        `PreferredAuthentications=${auth}`,
-      ],
+    ? loginOptions(command, remoteAddress)
+    : sshOptions(
+        address(referer, user, host),
+        port,
+        auth,
+        command,
+        urlArgs(referer, { pass }),
+        key
+      ),
   user:
     localhost(host) ||
     user !== '' ||
     user.includes('@') ||
-    address(headers.referer, user, host).includes('@'),
+    address(referer, user, host).includes('@'),
 });
+
+function sshOptions(
+  sshAddress: string,
+  port: number,
+  auth: string,
+  command: string,
+  { pass, path }: { [s: string]: string },
+  key?: string
+): string[] {
+  const sshRemoteOptsBase = [
+    'ssh',
+    sshAddress,
+    '-t',
+    '-p',
+    `${port}`,
+    '-o',
+    `PreferredAuthentications=${auth}`,
+    path !== undefined
+      ? `$SHELL -c "cd ${path};${command === 'login' ? '$SHELL' : command}"`
+      : command,
+  ];
+  if (key) {
+    return sshRemoteOptsBase.concat(['-i', key]);
+  }
+  if (pass) {
+    return ['sshpass', '-p', pass].concat(sshRemoteOptsBase);
+  }
+  return sshRemoteOptsBase;
+}
+
+function loginOptions(command: string, remoteAddress: string): string[] {
+  return command === 'login'
+    ? [command, '-h', getRemoteAddress(remoteAddress)]
+    : [command];
+}
 
 function address(referer: string, user: string, host: string): string {
   const match = referer.match('.+/ssh/([^/]+)$');

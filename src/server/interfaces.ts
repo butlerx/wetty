@@ -3,6 +3,8 @@ export interface SSH {
   host: string;
   auth: string;
   port: number;
+  pass?: string;
+  key?: string;
 }
 
 export interface SSL {
