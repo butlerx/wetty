@@ -10,15 +10,14 @@ import { isUndefined } from 'lodash';
 import * as morgan from 'morgan';
 import logger from './logger';
 import events from './emitter';
-import { SSLBuffer } from './interfaces';
+import { SSLBuffer, Server } from './interfaces';
 
 const distDir = path.join('./', 'dist', 'client');
 
 const trim = (str: string): string => str.replace(/\/*$/, '');
 
 export default function createServer(
-  base: string,
-  port: number,
+  { base, port, host }: Server,
   { key, cert }: SSLBuffer
 ): SocketIO.Server {
   const basePath = trim(base);
@@ -73,10 +72,10 @@ export default function createServer(
 
   return socket(
     !isUndefined(key) && !isUndefined(cert)
-      ? https.createServer({ key, cert }, app).listen(port, () => {
+      ? https.createServer({ key, cert }, app).listen(port, host, () => {
           events.server(port, 'https');
         })
-      : http.createServer(app).listen(port, () => {
+      : http.createServer(app).listen(port, host, () => {
           events.server(port, 'http');
         }),
     { path: `${basePath}/socket.io` }

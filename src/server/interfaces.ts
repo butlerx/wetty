@@ -16,3 +16,9 @@ export interface SSLBuffer {
   key?: Buffer;
   cert?: Buffer;
 }
+
+export interface Server {
+  port: number;
+  host: string;
+  base: string;
+}

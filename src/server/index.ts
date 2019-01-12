@@ -13,6 +13,7 @@ export interface Options {
   sslkey?: string;
   sslcert?: string;
   base: string;
+  host: string;
   port: number;
   command?: string;
 }
@@ -30,6 +31,7 @@ export default class Server {
     sshkey,
     sshpass,
     base,
+    host,
     port,
     command,
     sslkey,
@@ -55,8 +57,7 @@ export default class Server {
         pass: sshpass,
         key: sshkey,
       },
-      base,
-      port,
+      { base, host, port },
       command,
       { key: sslkey, cert: sslcert }
     );
