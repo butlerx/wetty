@@ -1,36 +1,32 @@
 module.exports = {
+  parser: 'eslint-plugin-typescript/parser',
+  plugins: ['typescript', 'prettier'],
   env: {
-    es6 : true,
+    es6: true,
     node: true,
+    browser: true,
   },
-  extends: ['airbnb'],
-  rules  : {
-    'linebreak-style'     : ['error', 'unix'],
-    'arrow-parens'        : ['error', 'as-needed'],
-    'no-param-reassign'   : ['error', { props: false }],
-    'func-style'          : ['error', 'declaration', { allowArrowFunctions: true }],
+  root: true,
+  extends: [
+    'airbnb-base',
+    'plugin:typescript/recommended',
+    'plugin:prettier/recommended',
+  ],
+  rules: {
+    'typescript/indent': 'off',
+    'linebreak-style': ['error', 'unix'],
+    'arrow-parens': ['error', 'as-needed'],
+    'no-param-reassign': ['error', { props: false }],
+    'func-style': ['error', 'declaration', { allowArrowFunctions: true }],
     'no-use-before-define': ['error', { functions: false }],
-    'no-shadow'           : [
-      'error',
-      {
-        builtinGlobals: true,
-        hoist         : 'functions',
-        allow         : ['resolve', 'reject', 'err'],
+    'typescript/no-use-before-define': ['error', { functions: false }],
+  },
+  settings: {
+    'import/resolver': {
+      'typescript-eslint-parser': ['.ts', '.tsx'],
+      node: {
+        extensions: ['.ts', '.js'],
       },
-    ],
-    'no-console': [
-      'error',
-      {
-        allow: ['warn', 'trace', 'log', 'error'],
-      },
-    ],
-    'consistent-return': 0,
-    'key-spacing'      : [
-      'error',
-      {
-        multiLine: { beforeColon: false, afterColon: true },
-        align    : { beforeColon: false, afterColon: true, on: 'colon', mode: 'strict' },
-      },
-    ],
+    },
   },
 };

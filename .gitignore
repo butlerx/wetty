@@ -13,6 +13,7 @@ logs
 results
 
 npm-debug.log
-.idea
-node_modules/*
+node_modules
 .esm-cache
+dist
+.idea

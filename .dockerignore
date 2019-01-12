@@ -1,2 +1,10 @@
 node_modules
 .esm-cache
+dist
+*.yml
+*.md
+*.log
+*.png
+**/*.conf
+**/*.service
+Dockerfile

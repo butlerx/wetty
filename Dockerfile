@@ -1,17 +1,22 @@
-FROM node:8-alpine as builder
+FROM node:boron-alpine as builder
+RUN apk add -U build-base python
 WORKDIR /usr/src/app
-RUN apk add --update build-base python
 COPY . /usr/src/app
-RUN yarn
-FROM node:8-alpine
-MAINTAINER butlerx@notthe.cloud
-WORKDIR /app
-RUN adduser -D -h /home/term -s /bin/sh term && \
-    ( echo "term:term" | chpasswd ) && \
-	apk add openssh-client && \
-	apk add sshpass
-USER term
+RUN yarn && \
+    yarn build && \
+    yarn install --production --ignore-scripts --prefer-offline
+
+FROM node:boron-alpine
+LABEL maintainer="butlerx@notthe.cloud"
+WORKDIR /usr/src/app
+ENV NODE_ENV=production
+RUN apk add -U openssh-client sshpass
 EXPOSE 3000
-COPY --from=builder /usr/src/app /app
+COPY --from=builder /usr/src/app/dist /usr/src/app/dist
+COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules
+COPY package.json /usr/src/app
+COPY index.js /usr/src/app
 RUN mkdir ~/.ssh
-CMD ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts && node bin 
+RUN ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts
+
+ENTRYPOINT [ "node", "." ]

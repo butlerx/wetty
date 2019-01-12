@@ -19,3 +19,10 @@ src
 *.yml
 Dockerfile
 *.png
+.babelrc
+.dockerignore
+.eslint*
+.prettierrc.js
+tsconfig.json
+webpack.config.babel.js
+docs

@@ -1,5 +1,5 @@
+---
 version: "3.5"
-
 services:
   wetty:
     build: .
@@ -10,9 +10,24 @@ services:
     ports:
       - "3000:3000"
     environment:
-      PORT: 3000
       SSHHOST: 'wetty-ssh'
       SSHPORT: 22
+      NODE_ENV: 'development'
+    command: yarn start --sshhost redbrick.dcu.ie
+
+  web:
+    image: nginx
+    volumes:
+      - ./bin/nginx.template:/etc/nginx/conf.d/wetty.template
+    ports:
+      - "80:80"
+    environment:
+      - NGINX_DOMAIN=wetty.com
+      - NGINX_PORT=80
+      - WETTY_HOST=wetty
+      - WETTY_PORT=3000
+    command: /bin/bash -c "envsubst '$${NGINX_DOMAIN},$${NGINX_PORT},$${WETTY_HOST},$${WETTY_PORT}' < /etc/nginx/conf.d/wetty.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+
   wetty-ssh:
     build:
       context: .
@@ -20,7 +35,5 @@ services:
     container_name: 'wetty-ssh'
 
 networks:
- default:
-  name: wetty
-
-
+  default:
+    name: wetty
