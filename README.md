@@ -9,23 +9,29 @@ websockets rather then Ajax and hence better response time.
 
 ![WeTTy](/terminal.png?raw=true)
 
-This fork was originally bug fixes and updates, but has since evolved in to a
-full rewrite to use xterm.js to have better support and make it more
-maintainable.
-
 ## Install
 
-WeTTy can be installed from source or from npm. To install from source run:
+WeTTy can be installed from source or from npm.
+
+To install from source run:
 
 ```bash
-$ git clone https://github.com/butlerx/wetty
+$ git clone https://github.com/krishnasrinivas/wetty.git
 $ cd wetty
 $ yarn
 $ yarn build
 ```
 
-or install it globally with yarn, `yarn -g add wetty.js`, or npm,
-`npm i -g wetty.js`
+To install it globally from npm use yarn or npm:
+
+- yarn, `yarn -g add wetty.js`
+- npm, `npm i -g wetty.js`
+
+For auto-login feature you'll need sshpass installed(NOT required for rest of
+the program".
+
+- `apt-get install sshpass` (debian eg. Ubuntu)
+- `yum install sshpass` (red hat flavours eg. CentOs)
 
 ## Running WeTTy
 
@@ -36,16 +42,27 @@ see how to use WeTTy from node see the [API Doc](./docs)
 $ node index.js
 ```
 
-Open your browser on `http://yourserver:3000/` and you will prompted to login.
-Or go to `http://yourserver:3000/ssh/<username>` to specify the user before
-hand.
+Open your browser on `http://yourserver:3000/wetty` and you will prompted to
+login. Or go to `http://yourserver:3000/wetty/ssh/<username>` to specify the
+user before hand.
+
+If you run it as root it will launch `/bin/login` (where you can specify the
+user name), else it will launch `ssh` and connect by default to `localhost`.
+
+If instead you wish to connect to a remote host you can specify the `--sshhost`
+option, the SSH port using the `--sshport` option and the SSH user using the
+`--sshuser` option.
 
 ### Flags
 
 WeTTy can be run with the `--help` flag to get a full list of flags.
 
-WeTTy runs on port `3000` by default. You can change the default port by tunning
-with the `--port` or `-p` flag.
+#### Server Port
+
+WeTTy runs on port `3000` by default. You can change the default port by
+starting with the `--port` or `-p` flag.
+
+#### SSH Host
 
 If WeTTy is run as root while the host is set as the local machine it will use
 the `login` binary rather than ssh. If no host is specified it will use
@@ -55,55 +72,75 @@ If instead you wish to connect to a remote host you can specify the host with
 the `--sshhost` flag and pass the IP or DNS address of the host you want to
 connect to.
 
+#### Default User
+
 You can specify the default user used to ssh to a host using the `--sshuser`.
 This user can overwritten by going to `http://yourserver:3000/ssh/<username>`.
 If this is left blank a user will be prompted to enter their username when they
 connect.
 
+#### SSH Port
+
 By default WeTTy will try to ssh to port `22`, if your host uses an alternative
 ssh port this can be specified with the flag `--sshport`.
 
+#### WeTTy URL
+
 If you'd prefer an HTTP base prefix other than `/wetty`, you can specify that
-with `--base`. Do not set this to `/ssh/${something}`, as this will break
-username matching code.
+with `--base`.
 
-### https
+**Do not set this to `/ssh/${something}`, as this will break username matching
+code.**
 
-Always use https especially with a terminal to your server. You can add https by
+#### HTTPS
+
+Always use HTTPS especially with a terminal to your server. You can add HTTPS by
 either using WeTTy behind a proxy or directly.
-
-If you don't have SSL certificates from a CA you can create a self signed
-certificate using this command:
-
-```bash
-$ openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 30000 -nodes
-```
 
 To run WeTTy directly with ssl use both the `--sslkey` and `--sslcert` flags and
 pass them the path too your cert and key as follows:
 
 ```bash
-node index.js --sslkey key.pem --sslcert cert.pem -p 3000
+node index.js --sslkey key.pem --sslcert cert.pem
 ```
 
-### Behind a Proxy
+If you don't have SSL certificates from a CA you can create a self signed
+certificate using this command:
+
+```
+openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 30000 -nodes
+```
+
+### Auto Login:
+
+You can also pass the ssh password as an optional query parameter to auto-login
+the user like this (Only while running wetty as a non root account):
+
+`http://yourserver:3000/wetty/ssh/<username>?sshpass=<password>`
+
+This is not a required feature and the security implications for passing the
+password in the url will have to be considered by the user
+
+## Run wetty behind nginx or apache
 
 As said earlier you can use a proxy to add https to WeTTy.
 
 **Note** that if your proxy is configured for https you should run WeTTy without
 SSL
 
-If your proxy uses a base path other than `/wetty`,
-specify the path with the `--base` flag,
-or the `BASE` environment variable.
+If your proxy uses a base path other than `/wetty`, specify the path with the
+`--base` flag, or the `BASE` environment variable.
 
 #### Nginx
+
+For a more detailed look see the [nginx.conf](./bin/nginx.template) used for
+testing
 
 Put the following configuration in nginx's conf:
 
 ```nginx
-location ^~ /wetty {
-  proxy_pass http://127.0.0.1:3000;
+location /wetty {
+  proxy_pass http://127.0.0.1:3000/wetty;
   proxy_http_version 1.1;
   proxy_set_header Upgrade $http_upgrade;
   proxy_set_header Connection "upgrade";
@@ -115,9 +152,6 @@ location ^~ /wetty {
   proxy_set_header X-NginX-Proxy true;
 }
 ```
-
-For a more detailed look see the [nginx.conf](./bin/nginx.template) used for
-testing
 
 #### Apache
 
@@ -155,9 +189,9 @@ The default username is `term` and the password is `term`, if you did not modify
 In the docker version all flags can be accessed as environment variables such as
 `SSHHOST` or `SSHPORT`.
 
-## Run WeTTy as a service daemon
+If you dont want to build the image yourself just remove the line `build; .`
 
-Install WeTTy globally with global option:
+## Run WeTTy as a service daemon
 
 ### init.d
 
