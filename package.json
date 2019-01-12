@@ -1,6 +1,6 @@
 {
   "name": "wetty.js",
-  "version": "1.0.3",
+  "version": "1.1.1",
   "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
   "homepage": "https://github.com/krishnasrinivas/wetty",
   "repository": {
@@ -18,7 +18,7 @@
     "build": "babel-node node_modules/.bin/webpack",
     "start": "node .",
     "dev": "NODE_ENV=development concurrently --kill-others --success first \"babel-node node_modules/.bin/webpack --watch\" \"nodemon .\"",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "NODE_ENV=production yarn build"
   },
   "husky": {
     "hooks": {
