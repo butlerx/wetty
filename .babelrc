@@ -3,7 +3,7 @@
     "@babel/preset-typescript",
     ["@babel/env"]
   ],
-  "compact": true
+  "compact": true,
   "plugins": [
     "lodash"
   ]

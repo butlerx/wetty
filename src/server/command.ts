@@ -33,7 +33,7 @@ export default (
     ? loginOptions(command, remoteAddress)
     : sshOptions(
         urlArgs(referer, {
-          ssh: address(referer, user, host),
+          host: address(referer, user, host),
           port: `${port}`,
           pass,
           command,
@@ -48,29 +48,37 @@ export default (
     address(referer, user, host).includes('@'),
 });
 
+function parseCommand(command: string, path?: string): string {
+  if (command === 'login' && path === undefined) return '';
+  return path !== undefined
+    ? `$SHELL -c "cd ${path};${command === 'login' ? '$SHELL' : command}"`
+    : command;
+}
+
 function sshOptions(
-  { pass, path, command, ssh, port, auth }: { [s: string]: string },
+  { pass, path, command, host, port, auth }: { [s: string]: string },
   key?: string
 ): string[] {
+  const cmd = parseCommand(command, path);
   const sshRemoteOptsBase = [
     'ssh',
-    ssh,
+    host,
     '-t',
     '-p',
     port,
     '-o',
     `PreferredAuthentications=${auth}`,
-    path !== undefined
-      ? `$SHELL -c "cd ${path};${command === 'login' ? '$SHELL' : command}"`
-      : command,
   ];
   if (key) {
-    return sshRemoteOptsBase.concat(['-i', key]);
+    return sshRemoteOptsBase.concat(['-i', key, cmd]);
   }
   if (pass) {
-    return ['sshpass', '-p', pass].concat(sshRemoteOptsBase);
+    return ['sshpass', '-p', pass].concat(sshRemoteOptsBase, [cmd]);
   }
-  return sshRemoteOptsBase;
+  if (cmd === '') {
+    return sshRemoteOptsBase;
+  }
+  return sshRemoteOptsBase.concat([cmd]);
 }
 
 function loginOptions(command: string, remoteAddress: string): string[] {

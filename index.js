@@ -79,7 +79,7 @@ if (require.main === module) {
           alias: 'c',
           description: 'command to run in shell',
           type: 'string',
-          default: process.env.COMMAND || 'command',
+          default: process.env.COMMAND || 'login',
         },
         help: {
           demand: false,
