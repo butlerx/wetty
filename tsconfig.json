@@ -1,22 +1,13 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "outDir": "./dist",
-    "allowJs": true,
-    "esModuleInterop": false,
     "target": "es6",
-    "noImplicitAny": true,
-    "moduleResolution": "node",
+    "module": "commonjs",
+    "lib": ["es2015"],
     "sourceMap": true,
-    "baseUrl": ".",
-    "paths": {
-      "*": [
-        "node_modules/",
-        "src/types/*"
-      ]
-    }
+    "strict": true,
+    "moduleResolution": "node",
+    "typeRoots": ["node_module/@types"],
+    "outDir": "./dist"
   },
-  "include": [
-    "./src/**/*.ts"
-  ]
+  "include": ["./src/**/*.ts"]
 }

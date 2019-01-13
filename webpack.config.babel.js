@@ -35,6 +35,10 @@ export default [
       libraryTarget: 'commonjs2',
       filename: '[name].js',
     },
+    node: {
+      __filename: false,
+      __dirname: false,
+    },
     externals: [nodeExternals()],
     module: {
       rules: [

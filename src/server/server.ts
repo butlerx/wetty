@@ -12,7 +12,7 @@ import logger from './logger';
 import events from './emitter';
 import { SSLBuffer, Server } from './interfaces';
 
-const distDir = path.join('./', 'dist', 'client');
+const distDir = path.join(__dirname, 'client');
 
 const trim = (str: string): string => str.replace(/\/*$/, '');
 
