@@ -42,7 +42,11 @@ export default class Term {
   }
 
   public static login(socket: SocketIO.Socket): Promise<string> {
-    const term = spawn('/usr/bin/env', ['node', './dist/buffer.js'], xterm);
+    const term = spawn(
+      '/usr/bin/env',
+      ['node', `${__dirname}/buffer.js`],
+      xterm
+    );
     let buf = '';
     return new Promise((resolve, reject) => {
       term.on('exit', () => {
