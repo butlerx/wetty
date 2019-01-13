@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 /* eslint-disable typescript/no-var-requires */
 
 const yargs = require('yargs');
