@@ -54,7 +54,7 @@ export default function createServer(
   const app = express();
   app
     .use(morgan('combined', { stream: logger.stream }))
-    .use(helmet())
+    .use(helmet({ frameguard: false }))
     .use(compression())
     .use(favicon(path.join(distDir, 'favicon.ico')))
     .use(`${basePath}/public`, express.static(distDir))
