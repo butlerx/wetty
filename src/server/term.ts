@@ -42,6 +42,17 @@ export default class Term {
   }
 
   public static login(socket: SocketIO.Socket): Promise<string> {
+
+    // Check request-header for username
+    let remoteUser = socket.request.headers['remote-user'];
+    if (remoteUser) {
+      return new Promise((resolve,reject) => {
+        resolve(remoteUser);
+      });
+    }
+
+    // Request carries no username information
+    // Create terminal and ask user for username
     const term = spawn(
       '/usr/bin/env',
       ['node', `${__dirname}/buffer.js`],
