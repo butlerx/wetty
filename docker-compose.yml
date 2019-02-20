@@ -6,7 +6,7 @@ services:
     image: butlerx/wetty
     container_name: wetty
     tty: true
-    working_dir: /app
+    working_dir: /usr/src/app
     ports:
       - "3000:3000"
     environment:
