@@ -21,4 +21,4 @@ wetty.start(/* server settings, see Options */).then(() => {
 
 ## API
 
-For WeTTy options and event details please refer to the [api docs](./api.md)
+For WeTTy options and event details please refer to the [api docs](./API.md)
