@@ -29,7 +29,8 @@ export default function createServer(
   const html = (
     req: express.Request,
     res: express.Response
-  ): express.Response =>
+  ): express.Response => {
+    const resourcePath = /^\/ssh\//.test(req.url) ? '../' : '';
     res.send(`<!doctype html>
 <html lang="en">
   <head>
@@ -37,7 +38,7 @@ export default function createServer(
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>WeTTy - The Web Terminal Emulator</title>
-    <link rel="stylesheet" href="${basePath}/public/index.css" />
+    <link rel="stylesheet" href="${resourcePath}public/index.css" />
   </head>
   <body>
     <div id="overlay">
@@ -47,9 +48,10 @@ export default function createServer(
       </div>
     </div>
     <div id="terminal"></div>
-    <script src="${basePath}/public/index.js"></script>
+    <script src="${resourcePath}public/index.js"></script>
   </body>
 </html>`);
+  }
 
   const app = express();
   app
@@ -59,12 +61,7 @@ export default function createServer(
     .use(favicon(path.join(distDir, 'favicon.ico')))
     .use(`${basePath}/public`, express.static(distDir))
     .use((req, res, next) => {
-      if (
-        req.url.substr(-1) === '/' &&
-        req.url.length > 1 &&
-        !/\?[^]*\//.test(req.url)
-      )
-        res.redirect(301, req.url.slice(0, -1));
+      if (req.url === basePath) res.redirect(301, req.url + '/');
       else next();
     })
     .get(basePath, html)
