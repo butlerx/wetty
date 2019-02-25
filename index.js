@@ -41,6 +41,12 @@ if (require.main === module) {
           type: 'string',
           default: process.env.SSHUSER || '',
         },
+        title: {
+          demand: false,
+          description: 'window title',
+          type: 'string',
+          default: process.env.TITLE || 'WeTTy - The Web Terminal Emulator',
+        },
         sshauth: {
           demand: false,
           description:
