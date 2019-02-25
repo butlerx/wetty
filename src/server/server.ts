@@ -17,13 +17,13 @@ const distDir = path.join(__dirname, 'client');
 const trim = (str: string): string => str.replace(/\/*$/, '');
 
 export default function createServer(
-  { base, port, host }: Server,
+  { base, port, host, title }: Server,
   { key, cert }: SSLBuffer
 ): SocketIO.Server {
   const basePath = trim(base);
   events.emit(
     'debug',
-    `key: ${key}, cert: ${cert}, port: ${port}, base: ${base}`
+    `key: ${key}, cert: ${cert}, port: ${port}, base: ${base}, title: ${title}`
   );
 
   const html = (
@@ -37,7 +37,7 @@ export default function createServer(
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>WeTTy - The Web Terminal Emulator</title>
+    <title>${title}</title>
     <link rel="stylesheet" href="${resourcePath}public/index.css" />
   </head>
   <body>
