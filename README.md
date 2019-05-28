@@ -24,11 +24,11 @@ $ yarn build
 
 To install it globally from npm use yarn or npm:
 
-- yarn, `yarn -g add wetty.js`
+- yarn, `yarn global add wetty.js`
 - npm, `npm i -g wetty.js`
 
-For auto-login feature you'll need sshpass installed(NOT required for rest of
-the program".
+For auto-login feature you'll need sshpass installed (NOT required for rest of
+the program).
 
 - `apt-get install sshpass` (debian eg. Ubuntu)
 - `yum install sshpass` (red hat flavours eg. CentOs)
