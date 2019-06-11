@@ -46,6 +46,25 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
     proxy_set_header X-NginX-Proxy true;
+
+    # Authenticate user via other services (e.g., oauth2 end-points)
+    #
+    # Configuration : 
+    #    - Configure a 'auth_request' directive for this server block
+    #    - Capture the authenticated username using 'auth_request_set'
+    #    - Set the 'remote-user' request header accordingly
+    #
+    # Example (using lasso as authentication middleware):
+    #
+    #    Add to server block:
+    #      auth_request /lasso-validate
+    #      auth_request_set $auth_user $upstream_http_x_lasso_user;
+    #
+    #    Add to /wetty location block
+    #      proxy_set_header remote-user $auth_user;
+    #
+    #    And configure a '/lasso-validate' location. See this blog for further 
+    #    guidance: https://developer.okta.com/blog/2018/08/28/nginx-auth-request
   }
 
   # gzip

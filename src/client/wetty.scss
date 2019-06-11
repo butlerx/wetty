@@ -3,6 +3,7 @@
 $black: #000;
 $grey: rgba(0, 0, 0, 0.75);
 $white: #fff;
+$lgrey: #ccc;
 
 html,
 body {
@@ -43,5 +44,54 @@ body {
     height: 100%;
     position: relative;
     width: 100%;
+  }
+
+  #options {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    z-index: 20;
+    height: 16px;
+    width: 16px;
+
+    a.toggler {
+      display: inline-block;
+      position: absolute;
+      right: 1em;
+      top: 0em;
+      font-size: 16px;
+      color: $lgrey;
+      z-index: 20;
+
+      :hover {
+        color: $white;
+      }
+    }
+
+    .editor {
+      background-color: rgba(0, 0, 0, 0.85);
+      padding: 0.5em;
+      border-radius: 0.3em;
+      border-color: rgba(255, 255, 255, 0.25);
+      display: none;
+      position: relative;
+      height: 100%;
+      width: 100%;
+      top: 1em;
+      right: 2em;
+      color: #eee;
+      font-size: 24px;
+    }
+    .editor.error {
+      color: red;
+    }
+  }
+
+  #options.opened {
+    height: 50%;
+    width: 50%;
+    .editor {
+      display: flex;
+    }
   }
 }

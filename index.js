@@ -41,6 +41,12 @@ if (require.main === module) {
           type: 'string',
           default: process.env.SSHUSER || '',
         },
+        title: {
+          demand: false,
+          description: 'window title',
+          type: 'string',
+          default: process.env.TITLE || 'WeTTy - The Web Terminal Emulator',
+        },
         sshauth: {
           demand: false,
           description:
@@ -87,6 +93,12 @@ if (require.main === module) {
           description: 'command to run in shell',
           type: 'string',
           default: process.env.COMMAND || 'login',
+        },
+        bypasshelmet: {
+          demand: false,
+          description: 'disable helmet from placing security restrictions',
+          type: 'boolean',
+          default: false,
         },
         help: {
           demand: false,

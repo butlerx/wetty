@@ -21,4 +21,5 @@ export interface Server {
   port: number;
   host: string;
   base: string;
+  bypasshelmet: boolean;
 }
