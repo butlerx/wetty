@@ -94,6 +94,12 @@ if (require.main === module) {
           type: 'string',
           default: process.env.COMMAND || 'login',
         },
+        bypasshelmet: {
+          demand: false,
+          description: 'disable helmet from placing security restrictions',
+          type: 'boolean',
+          default: false,
+        },
         help: {
           demand: false,
           alias: 'h',

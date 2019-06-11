@@ -17,7 +17,7 @@ const distDir = path.join(__dirname, 'client');
 const trim = (str: string): string => str.replace(/\/*$/, '');
 
 export default function createServer(
-  { base, port, host, title }: Server,
+  { base, port, host, title, bypasshelmet }: Server,
   { key, cert }: SSLBuffer
 ): SocketIO.Server {
   const basePath = trim(base);
@@ -49,7 +49,7 @@ export default function createServer(
     </div>
     <div id="options">
       <a class="toggler"
-         href="#" 
+         href="#"
          alt="Toggle options"><i class="fas fa-cogs"></i></a>
       <textarea class="editor"></textarea>
     </div>
@@ -61,7 +61,6 @@ export default function createServer(
   const app = express();
   app
     .use(morgan('combined', { stream: logger.stream }))
-    .use(helmet())
     .use(compression())
     .use(favicon(path.join(distDir, 'favicon.ico')))
     .use(`${basePath}/public`, express.static(distDir))
@@ -73,9 +72,16 @@ export default function createServer(
       )
         res.redirect(301, req.url.slice(0, -1));
       else next();
-    })
-    .get(basePath, html)
-    .get(`${basePath}/ssh/:user`, html);
+    });
+
+  // Allow helmet to be bypassed.
+  // Unfortunately, order matters with middleware
+  // which is why this is thrown in the middle
+  if (!bypasshelmet) {
+    app.use(helmet());
+  }
+
+  app.get(basePath, html).get(`${basePath}/ssh/:user`, html);
 
   return socket(
     !isUndefined(key) && !isUndefined(cert)
