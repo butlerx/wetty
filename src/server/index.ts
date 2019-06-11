@@ -39,7 +39,7 @@ export default class Server {
     command,
     sslkey,
     sslcert,
-    disableHelmet,
+    bypasshelmet,
   }: Options): Promise<void> {
     wetty
       .on('exit', ({ code, msg }: { code: number; msg: string }) => {
@@ -62,7 +62,7 @@ export default class Server {
         pass: sshpass,
         key: sshkey,
       },
-      { base, host, port, title, disableHelmet },
+      { base, host, port, title, bypasshelmet },
       command,
       { key: sslkey, cert: sslcert }
     );

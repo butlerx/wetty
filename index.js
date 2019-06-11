@@ -94,7 +94,7 @@ if (require.main === module) {
           type: 'string',
           default: process.env.COMMAND || 'login',
         },
-        'no-helmet': {
+        bypasshelmet: {
           demand: false,
           description: 'disable helmet from placing security restrictions',
           type: 'boolean',
