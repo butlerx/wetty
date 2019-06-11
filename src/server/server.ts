@@ -17,7 +17,7 @@ const distDir = path.join(__dirname, 'client');
 const trim = (str: string): string => str.replace(/\/*$/, '');
 
 export default function createServer(
-  { base, port, host, title }: Server,
+  { base, port, host, title, disableHelmet }: Server,
   { key, cert }: SSLBuffer
 ): SocketIO.Server {
   const basePath = trim(base);
@@ -49,7 +49,7 @@ export default function createServer(
     </div>
     <div id="options">
       <a class="toggler"
-         href="#" 
+         href="#"
          alt="Toggle options"><i class="fas fa-cogs"></i></a>
       <textarea class="editor"></textarea>
     </div>
@@ -61,7 +61,6 @@ export default function createServer(
   const app = express();
   app
     .use(morgan('combined', { stream: logger.stream }))
-    .use(helmet())
     .use(compression())
     .use(favicon(path.join(distDir, 'favicon.ico')))
     .use(`${basePath}/public`, express.static(distDir))
@@ -76,6 +75,10 @@ export default function createServer(
     })
     .get(basePath, html)
     .get(`${basePath}/ssh/:user`, html);
+
+  if (!disableHelmet) {
+    app.use(helmet());
+  }
 
   return socket(
     !isUndefined(key) && !isUndefined(cert)
