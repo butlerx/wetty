@@ -17,7 +17,7 @@ export interface Options {
   port: number;
   title: string;
   command?: string;
-  disableHelmet?: boolean;
+  bypasshelmet?: boolean;
 }
 
 interface CLI extends Options {
