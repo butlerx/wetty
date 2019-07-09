@@ -17,7 +17,7 @@ ENV HELM_VERSION="v2.14.1"
 ENV KUBEDB_VERSION=0.12.0
 ENV NODE_ENV=production
 
-RUN apk add -U openssh-client sshpass curl git nano wget
+RUN apk add -U openssh-client sshpass curl git nano wget openrc
 EXPOSE 3000
 COPY --from=builder /usr/src/app/dist /usr/src/app/dist
 COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules
