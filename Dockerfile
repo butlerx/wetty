@@ -23,8 +23,9 @@ COPY --from=builder /usr/src/app/dist /usr/src/app/dist
 COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules
 COPY package.json /usr/src/app
 COPY index.js /usr/src/app
-RUN mkdir ~/.ssh
-RUN ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts
+RUN mkdir ~/.ssh \
+ && ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts \
+ && adduser bernd -D
 
 ADD https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl /usr/local/bin/kubectl
 RUN chmod +x /usr/local/bin/kubectl \
