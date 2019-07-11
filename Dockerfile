@@ -43,6 +43,6 @@ RUN chmod +x /usr/local/bin/kubectl \
  && mv /usr/local/bin/linux-amd64/helm /usr/local/bin/ && rm /usr/local/bin/linux-amd64 -rf \
  && wget https://github.com/digitalocean/doctl/releases/download/v${DOCTL_VERSION}/doctl-${DOCTL_VERSION}-linux-amd64.tar.gz \
  && tar -xvf doctl-${DOCTL_VERSION}-linux-amd64.tar.gz -C /usr/local/bin \
- && chmod +x /usr/local/bin/doctl \
+ && chmod +x /usr/local/bin/doctl
 
 ENTRYPOINT [ "node", "." ]
