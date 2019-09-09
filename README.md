@@ -1,7 +1,5 @@
 ## WeTTy = Web + TTy
 
-[ ![Codeship Status for butlerx/wetty](https://app.codeship.com/projects/caf50220-f884-0135-63bd-5231a73eac2d/status?branch=master)](https://app.codeship.com/projects/278281)
-
 Terminal over HTTP and https. WeTTy is an alternative to ajaxterm and anyterm
 but much better than them because WeTTy uses xterm.js which is a full fledged
 implementation of terminal emulation written entirely in JavaScript. WeTTy uses
@@ -16,7 +14,7 @@ WeTTy can be installed from source or from npm.
 To install from source run:
 
 ```bash
-$ git clone https://github.com/krishnasrinivas/wetty.git
+$ git clone https://github.com/butlerx/wetty.git
 $ cd wetty
 $ yarn
 $ yarn build

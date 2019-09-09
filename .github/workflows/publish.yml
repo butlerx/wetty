@@ -1,0 +1,28 @@
+---
+on:
+  push:
+    branches:
+      - master
+
+name: Build and Publish
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup env
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn
+        name: Install dependencies
+      - name: ESLint checks
+        uses: gimenete/eslint-action@1.0
+      - run: yarn build
+        name: Compile Typescript
+      - name: Publish
+        uses: mikeal/merge-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.node_github_token }}
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
