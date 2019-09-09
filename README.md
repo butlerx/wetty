@@ -24,8 +24,8 @@ $ yarn build
 
 To install it globally from npm use yarn or npm:
 
-- yarn, `yarn global add wetty.js`
-- npm, `npm i -g wetty.js`
+- yarn, `yarn global add wetty`
+- npm, `npm i -g wetty`
 
 For auto-login feature you'll need sshpass installed (NOT required for rest of
 the program).
@@ -196,16 +196,16 @@ If you dont want to build the image yourself just remove the line `build; .`
 ### init.d
 
 ```bash
-$ sudo yarn global add wetty.js
-$ sudo cp ~/.config/yarn/global/node_modules/wetty.js/bin/wetty.conf /etc/init
+$ sudo yarn global add wetty
+$ sudo cp ~/.config/yarn/global/node_modules/wetty/bin/wetty.conf /etc/init
 $ sudo start wetty
 ```
 
 ### systemd
 
 ```bash
-$ yarn global add wetty.js
-$ cp ~/.config/yarn/global/node_modules/wetty.js/bin/wetty.service  ~/.config/systemd/user/
+$ yarn global add wetty
+$ cp ~/.config/yarn/global/node_modules/wetty/bin/wetty.service  ~/.config/systemd/user/
 $ systemctl --user enable wetty
 $ systemctl --user start wetty
 ```
