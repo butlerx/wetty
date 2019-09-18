@@ -30,7 +30,7 @@ export default function createServer(
     req: express.Request,
     res: express.Response
   ): express.Response => {
-    const resourcePath = /^\/ssh\//.test(req.url) ? '../' : '';
+    const resourcePath = /^\/ssh\//.test(req.url.replace(base, '/')) ? '../' : '';
     res.send(`<!doctype html>
 <html lang="en">
   <head>
