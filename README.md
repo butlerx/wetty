@@ -33,7 +33,7 @@ the program).
 
 ## Running WeTTy
 
-Wettu can either be run as a standalone service or from another node script. To
+Wetty can either be run as a standalone service or from another node script. To
 see how to use WeTTy from node see the [API Doc](./docs)
 
 ```bash
@@ -128,6 +128,10 @@ SSL
 
 If your proxy uses a base path other than `/wetty`, specify the path with the
 `--base` flag, or the `BASE` environment variable.
+
+The following confs assume you want to serve wetty on the url
+`example.com/wetty` and are running wetty with the default base and serving it
+on the same server
 
 #### Nginx
 
