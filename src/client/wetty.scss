@@ -1,4 +1,5 @@
 @import '~xterm/dist/xterm';
+@import '~toastify-js/src/toastify.css';
 
 $black: #000;
 $grey: rgba(0, 0, 0, 0.75);
@@ -93,5 +94,10 @@ body {
     .editor {
       display: flex;
     }
+  }
+
+  .toastify {
+    border-radius: 0;
+    color: $black;
   }
 }
