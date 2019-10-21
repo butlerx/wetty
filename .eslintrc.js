@@ -1,6 +1,6 @@
 module.exports = {
-  parser: 'eslint-plugin-typescript/parser',
-  plugins: ['typescript', 'prettier'],
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint', 'prettier'],
   env: {
     es6: true,
     node: true,
@@ -9,24 +9,23 @@ module.exports = {
   root: true,
   extends: [
     'airbnb-base',
-    'plugin:typescript/recommended',
-    'plugin:prettier/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'prettier',
+    'prettier/@typescript-eslint',
   ],
   rules: {
-    'typescript/indent': 'off',
     'linebreak-style': ['error', 'unix'],
     'arrow-parens': ['error', 'as-needed'],
     'no-param-reassign': ['error', { props: false }],
     'func-style': ['error', 'declaration', { allowArrowFunctions: true }],
     'no-use-before-define': ['error', { functions: false }],
-    'typescript/no-use-before-define': ['error', { functions: false }],
+    '@typescript-eslint/no-use-before-define': ['error', { functions: false }],
   },
   settings: {
     'import/resolver': {
-      'typescript-eslint-parser': ['.ts', '.tsx'],
       node: {
         extensions: ['.ts', '.js'],
       },
     },
-  },
+  }
 };

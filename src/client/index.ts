@@ -16,7 +16,7 @@ socket.on('connect', () => {
   const term = new Terminal();
   term.open(document.getElementById('terminal'));
   const defaultOptions = { fontSize: 14 };
-  let options: any;
+  let options: object;
   try {
     if (localStorage.options === undefined) {
       options = defaultOptions;
@@ -31,9 +31,9 @@ socket.on('connect', () => {
     term.setOption(key, value);
   });
   const code = JSON.stringify(options, null, 2);
-  const editor = document.querySelector('#options .editor');
+  const editor = document.querySelector('#options .editor') || {value: code};
   editor.value = code;
-  editor.addEventListener('keyup', e => {
+  editor.addEventListener('keyup', () => {
     try {
       const updated = JSON.parse(editor.value);
       const updatedCode = JSON.stringify(updated, null, 2);
