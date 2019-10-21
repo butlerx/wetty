@@ -1,24 +1,29 @@
 {
   "name": "wetty",
-  "version": "1.1.9",
+  "version": "1.2.0",
   "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
-  "homepage": "https://github.com/krishnasrinivas/wetty",
+  "homepage": "https://github.com/butlerx/wetty",
   "repository": {
     "type": "git",
-    "url": "git://github.com/krishnasrinivas/wetty.git"
+    "url": "git://github.com/butlerx/wetty.git"
   },
-  "author": "Krishna Srinivas <krishna.srinivas@gmail.com> (https://github.com/krishnasrinivas)",
+  "author": {
+    "name": "Cian Butler",
+    "email": "butlerx@notthe.cloud",
+    "url": "cianbutler.ie"
+  },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/krishnasrinivas/wetty/issues"
+    "url": "https://github.com/butlerx/wetty/issues"
   },
   "main": "index.js",
   "scripts": {
-    "lint": "eslint --ext .ts .",
     "build": "babel-node node_modules/.bin/webpack",
-    "start": "node .",
+    "contributor": "all-contributors",
     "dev": "NODE_ENV=development concurrently --kill-others --success first \"babel-node node_modules/.bin/webpack --watch\" \"nodemon .\"",
-    "prepublishOnly": "NODE_ENV=production yarn build"
+    "lint": "eslint --ext .ts,.js .",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "start": "node ."
   },
   "husky": {
     "hooks": {
@@ -86,6 +91,7 @@
     "@types/yargs": "^13.0.2",
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
+    "all-contributors-cli": "^6.9.3",
     "babel-loader": "^8.0.6",
     "babel-plugin-lodash": "^3.3.4",
     "concurrently": "^4.1.2",
@@ -96,7 +102,8 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.0",
     "file-loader": "^4.2.0",
-    "husky": "^3.0.5",
+    "git-authors-cli": "^1.0.18",
+    "husky": "^3.0.9",
     "lint-staged": "~9.2.5",
     "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.12.0",
@@ -110,25 +117,37 @@
     "webpack-node-externals": "^1.7.2"
   },
   "contributors": [
-    "Andreas Kloeckner <inform@tiker.net>",
-    "Antonio Calatrava <antonio@antoniocalatrava.com>",
-    "Boyan Rabchev <TELERIK\\rabchev@rabchevlnx.telerik.com>",
+    "Krishna Srinivas <krishna.srinivas@gmail.com>",
     "Boyan Rabchev <boyan@rabchev.com>",
-    "Cian Butler <butlerx@notthe.cloud>",
-    "Farhan Khan <khanzf@gmail.com>",
-    "Imuli <i@imu.li>",
-    "James Turnbull <james@lovedthanlost.net>",
-    "Jarrett Gilliam <jarrettgilliam@gmail.com>",
-    "Kasper Holbek Jensen <kholbekj@gmail.com>",
-    "Krishna Srinivas <krishna@minio.io>",
+    "Antonio Calatrava <antonio@antoniocalatrava.com>",
+    "Strubbl <github@linux4tw.de>",
+    "Oleg Kurapov <ok@2sheds.ru>",
+    "Anthony Jund <antonyjund@gmail.com>",
     "Luca Milanesio <luca.milanesio@gmail.com>",
+    "nosemeocurrenada <nosemeocurrenada93@gmail.com>",
+    "Henri <henri.ducrocq@gmail.com>",
+    "Imuli <i@imu.li>",
+    "Koushik M.L.N <mln02koushik@gmail.com>",
+    "cbutler <cbutler@demonware.net>",
+    "mirtouf <mirtouf@gmail.com>",
+    "Denis Kramer <d.kramer@soton.ac.uk>",
+    "Jarrett Gilliam <jarrettgilliam@gmail.com>",
     "Nathan LeClaire <nathan.leclaire@docker.com>",
+    "Andreas Kloeckner <inform@tiker.net>",
+    "Ben Letchford <contact@benl.com.au>",
+    "Bertrand Roussel <broussel@sierrawireless.com>",
+    "Farhan Khan <khanzf@gmail.com>",
+    "Felix Bartels <felix@host-consultants.de>",
+    "Felix Pojtinger <felix@pojtinger.com>",
+    "James Turnbull <james@lovedthanlost.net>",
+    "Josh Samuelson <js@puppetlabs.com>",
+    "Jurre Vriesen <jurrevriesen@gmail.com>",
+    "Kasper Holbek Jensen <kholbekj@gmail.com>",
+    "Krzysztof Suszyński <krzysztof.suszynski@wavesoftware.pl>",
+    "Matthew Piercey <piercey.matthew@gmail.com>",
     "Neale Pickett <neale@woozle.org>",
     "Robert <robert@n5qm.com>",
-    "Strubbl <github@linux4tw.de>",
-    "koushikmln <mln02koushik@gmail.com>",
-    "mirtouf <mirtouf@gmail.com>",
-    "nosemeocurrenada <nosemeocurrenada93@gmail.com>",
-    "Ben Letchford <contact@benl.com.au>"
+    "Tri Nguyen <tri@tridnguyen.com>",
+    "harryleesan <harry.lee.san.temp@gmail.com>"
   ]
 }
