@@ -1,13 +1,16 @@
 ---
 name: Automatic Rebase
-on: issue_comment
+on:
+  issue_comment:
+    types: [created]
 jobs:
   rebase:
     name: Rebase
+    if: contains(github.event.comment.body, '/rebase')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
       - name: Automatic Rebase
-        uses: cirrus-actions/rebase@1.0
+        uses: cirrus-actions/rebase@master
         env:
           GITHUB_TOKEN: ${{ secrets.node_github_token }}
