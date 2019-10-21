@@ -1,6 +1,6 @@
 {
   "name": "wetty",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
   "homepage": "https://github.com/krishnasrinivas/wetty",
   "repository": {
@@ -128,6 +128,7 @@
     "Strubbl <github@linux4tw.de>",
     "koushikmln <mln02koushik@gmail.com>",
     "mirtouf <mirtouf@gmail.com>",
-    "nosemeocurrenada <nosemeocurrenada93@gmail.com>"
+    "nosemeocurrenada <nosemeocurrenada93@gmail.com>",
+    "Ben Letchford <contact@benl.com.au>"
   ]
 }

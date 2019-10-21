@@ -134,6 +134,35 @@ the user like this (Only while running wetty as a non root account):
 This is not a required feature and the security implications for passing the
 password in the url will have to be considered by the user
 
+### File Downloading
+
+Wetty supports file downloads by printing terminal escape sequences between a
+base64 encoded file.
+
+The terminal escape sequences used are `^[[5i` and `^[[4i` (VT100 for "enter
+auto print" and "exit auto print" respectively -
+https://vt100.net/docs/tp83/appendixc.html).
+
+An example of a helper script that prints the terminal escape characters and
+base64s stdin:
+
+```
+$ cat wetty-download.sh
+#!/bin/sh
+echo '^[[5i'$(cat /dev/stdin | base64)'^[[4i'
+```
+
+You are then able to download files via wetty!
+
+```
+$ cat my-pdf-file.pdf | ./wetty-download.sh
+```
+
+Wetty will then issue a popup like the following that links to a local file
+blob:
+
+`Download ready: file-20191015233654.pdf`
+
 ## Run wetty behind nginx or apache
 
 As said earlier you can use a proxy to add https to WeTTy.
