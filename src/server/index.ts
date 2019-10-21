@@ -58,11 +58,10 @@ export default class Server {
         host: sshhost,
         auth: sshauth,
         port: sshport,
-        title,
         pass: sshpass,
         key: sshkey,
       },
-      { base, host, port, title, bypasshelmet },
+      { base, host, port, title, bypasshelmet},
       command,
       { key: sslkey, cert: sslcert }
     );
