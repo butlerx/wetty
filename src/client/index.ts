@@ -12,10 +12,33 @@ const socket = io(window.location.origin, {
   path: `${trim(socketBase)}/socket.io`,
 });
 
+//NOTE text selection on double click or select
+const copyToClipboard = (text: string) => {
+  if (window.clipboardData && window.clipboardData.setData) {
+    return clipboardData.setData("Text", text);
+  } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+    let textarea = document.createElement("textarea");
+    textarea.textContent = text;
+    textarea.style.position = "fixed";
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      return document.execCommand("copy");
+    } catch (ex) {
+      console.warn("Copy to clipboard failed.", ex);
+      return false;
+    } finally {
+      document.body.removeChild(textarea);
+    }
+  }
+}
+
 socket.on('connect', () => {
   const term = new Terminal();
   term.open(document.getElementById('terminal'));
-  const defaultOptions = { fontSize: 14 };
+  const defaultOptions = {
+    fontSize: 14
+  };
   let options: any;
   try {
     if (localStorage.options === undefined) {
@@ -70,9 +93,18 @@ socket.on('connect', () => {
     return true;
   });
 
+  //NOTE copytoclipboard
+  document.addEventListener('mouseup', () => {
+    if (term.hasSelection()) 
+      copyToClipboard(term.getSelection())
+  }, false);
+
   function resize(): void {
     fit(term);
-    socket.emit('resize', { cols: term.cols, rows: term.rows });
+    socket.emit('resize', {
+      cols: term.cols,
+      rows: term.rows
+    });
   }
   window.onresize = resize;
   resize();
@@ -109,7 +141,9 @@ function disconnect(reason: string): void {
   window.removeEventListener('beforeunload', handler, false);
 }
 
-function handler(e: { returnValue: string }): string {
+function handler(e: {
+  returnValue: string
+}): string {
   e.returnValue = 'Are you sure?';
   return e.returnValue;
 }
