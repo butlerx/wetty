@@ -68,12 +68,17 @@ function sshOptions(
     port,
     '-o',
     `PreferredAuthentications=${auth}`,
-  ];
+    ];
+  console.log(`Authentication Type: ${auth}`)  
   if (key) {
     return sshRemoteOptsBase.concat(['-i', key, cmd]);
   }
   if (pass) {
     return ['sshpass', '-p', pass].concat(sshRemoteOptsBase, [cmd]);
+  }
+  if (auth === 'none') {
+    sshRemoteOptsBase.splice(sshRemoteOptsBase.indexOf('-o'), 2);
+    return sshRemoteOptsBase.concat([cmd]);
   }
   if (cmd === '') {
     return sshRemoteOptsBase;
