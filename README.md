@@ -9,6 +9,17 @@ websockets rather then Ajax and hence better response time.
 
 ## Install
 
+### Requiments
+
+To instal WeTTy you'll need to have the following installed:
+
+- Node.JS 10+
+- make
+- python
+- build-essential
+
+### From source
+
 WeTTy can be installed from source or from npm.
 
 To install from source run:
@@ -20,10 +31,14 @@ $ yarn
 $ yarn build
 ```
 
+### From NPM
+
 To install it globally from npm use yarn or npm:
 
 - yarn, `yarn global add wetty`
 - npm, `npm i -g wetty`
+
+### Autologin
 
 For auto-login feature you'll need sshpass installed (NOT required for rest of
 the program).

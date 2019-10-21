@@ -1,6 +1,6 @@
 {
   "name": "wetty",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
   "homepage": "https://github.com/krishnasrinivas/wetty",
   "repository": {
@@ -55,7 +55,7 @@
     "helmet": "^3.20.1",
     "lodash": "^4.17.15",
     "morgan": "^1.9.1",
-    "node-pty": "^0.8.1",
+    "node-pty": "0.9.0-beta28",
     "serve-favicon": "^2.5.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
