@@ -1,5 +1,7 @@
 import * as url from 'url';
 import { Socket } from 'socket.io';
+
+import logger from './logger';
 import { SSH } from './interfaces';
 
 const localhost = (host: string): boolean =>
@@ -69,7 +71,7 @@ function sshOptions(
     '-o',
     `PreferredAuthentications=${auth}`,
     ];
-  console.log(`Authentication Type: ${auth}`)  
+  logger.info(`Authentication Type: ${auth}`);
   if (key) {
     return sshRemoteOptsBase.concat(['-i', key, cmd]);
   }
