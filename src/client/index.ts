@@ -4,6 +4,8 @@ import * as io from 'socket.io-client';
 import { fit } from 'xterm/lib/addons/fit/fit';
 import * as fileType from 'file-type';
 import Toastify from 'toastify-js';
+
+import copyToClipboard from "./copyToClipboard";
 import './wetty.scss';
 import './favicon.ico';
 
@@ -16,27 +18,6 @@ const socket = io(window.location.origin, {
 
 const FILE_BEGIN = '\u001b[5i';
 const FILE_END = '\u001b[4i';
-
-//NOTE text selection on double click or select
-const copyToClipboard = (text: string) => {
-  if (window.clipboardData && window.clipboardData.setData) {
-    return clipboardData.setData("Text", text);
-  } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
-    let textarea = document.createElement("textarea");
-    textarea.textContent = text;
-    textarea.style.position = "fixed";
-    document.body.appendChild(textarea);
-    textarea.select();
-    try {
-      return document.execCommand("copy");
-    } catch (ex) {
-      console.warn("Copy to clipboard failed.", ex);
-      return false;
-    } finally {
-      document.body.removeChild(textarea);
-    }
-  }
-}
 
 socket.on('connect', () => {
   const term = new Terminal();
@@ -100,9 +81,9 @@ socket.on('connect', () => {
     return true;
   });
 
-  //NOTE copytoclipboard
+  // NOTE copytoclipboard
   document.addEventListener('mouseup', () => {
-    if (term.hasSelection()) 
+    if (term.hasSelection())
       copyToClipboard(term.getSelection())
   }, false);
 
