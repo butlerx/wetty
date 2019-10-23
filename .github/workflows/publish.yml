@@ -18,7 +18,7 @@ jobs:
       - run: yarn
         name: Install dependencies
       - name: ESLint checks
-        uses: gimenete/eslint-action@1.0
+        run: yarn lint
       - run: yarn build
         name: Compile Typescript
       - name: Publish

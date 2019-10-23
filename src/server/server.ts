@@ -67,7 +67,7 @@ export default function createServer(
     .use(favicon(path.join(distDir, 'favicon.ico')))
     .use(`${basePath}/public`, express.static(distDir))
     .use((req, res, next) => {
-      if (req.url === basePath) res.redirect(301, req.url + '/');
+      if (req.url === basePath) res.redirect(301, `${req.url  }/`);
       else next();
     });
 

@@ -1,6 +1,6 @@
 {
   "name": "wetty",
-  "version": "1.1.5",
+  "version": "1.1.8",
   "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
   "homepage": "https://github.com/krishnasrinivas/wetty",
   "repository": {
@@ -14,7 +14,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "lint": "eslint --ext .js,.ts .",
+    "lint": "eslint --ext .ts .",
     "build": "babel-node node_modules/.bin/webpack",
     "start": "node .",
     "dev": "NODE_ENV=development concurrently --kill-others --success first \"babel-node node_modules/.bin/webpack --watch\" \"nodemon .\"",
@@ -51,15 +51,17 @@
   "dependencies": {
     "compression": "^1.7.4",
     "express": "^4.17.1",
+    "file-type": "^12.3.0",
     "fs-extra": "^8.1.0",
     "helmet": "^3.20.1",
     "lodash": "^4.17.15",
     "morgan": "^1.9.1",
-    "node-pty": "^0.8.1",
+    "node-pty": "0.9.0-beta28",
     "serve-favicon": "^2.5.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
     "source-map-loader": "^0.2.4",
+    "toastify-js": "^1.6.1",
     "winston": "^3.2.1",
     "xterm": "^3.14.5",
     "yargs": "^14.0.0"
@@ -82,16 +84,17 @@
     "@types/socket.io-client": "^1.4.32",
     "@types/webpack-env": "^1.14.0",
     "@types/yargs": "^13.0.2",
+    "@typescript-eslint/eslint-plugin": "^2.5.0",
+    "@typescript-eslint/parser": "^2.5.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-lodash": "^3.3.4",
     "concurrently": "^4.1.2",
     "css-loader": "^3.2.0",
-    "eslint": "^6.3.0",
-    "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-config-prettier": "^6.2.0",
+    "eslint": "6.1.0",
+    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-config-prettier": "^6.4.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.0",
-    "eslint-plugin-typescript": "^1.0.0-rc.1",
     "file-loader": "^4.2.0",
     "husky": "^3.0.5",
     "lint-staged": "~9.2.5",
@@ -125,6 +128,7 @@
     "Strubbl <github@linux4tw.de>",
     "koushikmln <mln02koushik@gmail.com>",
     "mirtouf <mirtouf@gmail.com>",
-    "nosemeocurrenada <nosemeocurrenada93@gmail.com>"
+    "nosemeocurrenada <nosemeocurrenada93@gmail.com>",
+    "Ben Letchford <contact@benl.com.au>"
   ]
 }

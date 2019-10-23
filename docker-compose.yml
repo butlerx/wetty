@@ -32,6 +32,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-ssh
+    image: butlerx/wetty:ssh
     container_name: 'wetty-ssh'
 
 networks:

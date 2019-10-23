@@ -16,8 +16,14 @@ export default class WeTTy extends EventEmitter {
    */
   public start(
     ssh: SSH = { user: '', host: 'localhost', auth: 'password', port: 22 },
-    serverConf: Server = { base: '/wetty/', port: 3000, host: '0.0.0.0' },
-    command: string = '',
+    serverConf: Server = {
+      base: '/wetty/',
+      port: 3000,
+      host: '0.0.0.0',
+      title: 'WeTTy',
+      bypasshelmet: false,
+    },
+    command = '',
     ssl?: SSL
   ): Promise<void> {
     return loadSSL(ssl).then((sslBuffer: SSLBuffer) => {

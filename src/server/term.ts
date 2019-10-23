@@ -44,9 +44,9 @@ export default class Term {
   public static login(socket: SocketIO.Socket): Promise<string> {
 
     // Check request-header for username
-    let remoteUser = socket.request.headers['remote-user'];
+    const remoteUser = socket.request.headers['remote-user'];
     if (remoteUser) {
-      return new Promise((resolve,reject) => {
+      return new Promise(resolve => {
         resolve(remoteUser);
       });
     }

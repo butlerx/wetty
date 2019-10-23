@@ -20,6 +20,7 @@ export interface SSLBuffer {
 export interface Server {
   port: number;
   host: string;
+  title: string;
   base: string;
   bypasshelmet: boolean;
 }
