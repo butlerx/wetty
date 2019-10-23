@@ -4,6 +4,8 @@ import * as io from 'socket.io-client';
 import { fit } from 'xterm/lib/addons/fit/fit';
 import * as fileType from 'file-type';
 import Toastify from 'toastify-js';
+
+import copyToClipboard from "./copyToClipboard";
 import './wetty.scss';
 import './favicon.ico';
 
@@ -21,8 +23,11 @@ socket.on('connect', () => {
   const term = new Terminal();
   let fileBuffer = [];
   term.open(document.getElementById('terminal'));
-  const defaultOptions = { fontSize: 14 };
+  const defaultOptions = {
+    fontSize: 14
+  };
   let options: object;
+
   try {
     if (localStorage.options === undefined) {
       options = defaultOptions;
@@ -76,9 +81,18 @@ socket.on('connect', () => {
     return true;
   });
 
+  // NOTE copytoclipboard
+  document.addEventListener('mouseup', () => {
+    if (term.hasSelection())
+      copyToClipboard(term.getSelection())
+  }, false);
+
   function resize(): void {
     fit(term);
-    socket.emit('resize', { cols: term.cols, rows: term.rows });
+    socket.emit('resize', {
+      cols: term.cols,
+      rows: term.rows
+    });
   }
   window.onresize = resize;
   resize();
@@ -185,7 +199,9 @@ function disconnect(reason: string): void {
   window.removeEventListener('beforeunload', handler, false);
 }
 
-function handler(e: { returnValue: string }): string {
+function handler(e: {
+  returnValue: string
+}): string {
   e.returnValue = 'Are you sure?';
   return e.returnValue;
 }
