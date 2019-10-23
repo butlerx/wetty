@@ -20,7 +20,6 @@ module.exports = {
     'func-style': ['error', 'declaration', { allowArrowFunctions: true }],
     'no-use-before-define': ['error', { functions: false }],
     '@typescript-eslint/no-use-before-define': ['error', { functions: false }],
-    'consistent-return': 1
   },
   settings: {
     'import/resolver': {

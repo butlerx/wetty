@@ -1,7 +1,8 @@
 // NOTE text selection on double click or select
-const copyToClipboard = (text: string) : any => {
+const copyToClipboard = (text: string) : boolean => {
     if (window.clipboardData && window.clipboardData.setData) {
-        return window.clipboardData.setData("Text", text);
+        window.clipboardData.setData("Text", text);
+        return true;
     } if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
         const textarea = document.createElement("textarea");
         textarea.textContent = text;
@@ -9,7 +10,8 @@ const copyToClipboard = (text: string) : any => {
         document.body.appendChild(textarea);
         textarea.select();
         try {
-            return document.execCommand("copy");
+            document.execCommand("copy");
+            return true;
         } catch (ex) {
             console.warn("Copy to clipboard failed.", ex);
             return false;
@@ -17,6 +19,8 @@ const copyToClipboard = (text: string) : any => {
             document.body.removeChild(textarea);
         }
     }
+    console.warn("Copy to clipboard failed.");
+    return false;
 }
 
 export default copyToClipboard;
