@@ -1,21 +1,22 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+
 import path from 'path';
 import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import nodeExternals from 'webpack-node-externals';
 
-const template = override =>
-  ({
-    mode: process.env.NODE_ENV || 'development',
-      resolve: {
-        modules: [path.resolve(__dirname, 'src'), 'node_modules'],
-        extensions: ['.ts', '.json', '.js', '.node'],
-      },
+const template = override => ({
+  mode: process.env.NODE_ENV || 'development',
+  resolve: {
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+    extensions: ['.ts', '.json', '.js', '.node'],
+  },
 
-      stats: {
-        colors: true,
-      },
-    ...override
-  });
+  stats: {
+    colors: true,
+  },
+  ...override,
+});
 
 const entry = (folder, file) =>
   path.join(__dirname, 'src', folder, `${file}.ts`);
