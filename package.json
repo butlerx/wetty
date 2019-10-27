@@ -1,6 +1,6 @@
 {
   "name": "wetty",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
   "homepage": "https://github.com/butlerx/wetty",
   "repository": {
@@ -54,6 +54,8 @@
   },
   "preferGlobal": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.25",
+    "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "compression": "^1.7.4",
     "express": "^4.17.1",
     "file-type": "^12.3.0",

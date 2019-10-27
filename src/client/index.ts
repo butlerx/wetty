@@ -1,6 +1,8 @@
 import { Terminal } from 'xterm';
 import { isNull } from 'lodash';
 
+import { library, dom } from "@fortawesome/fontawesome-svg-core";
+import { faCogs } from "@fortawesome/free-solid-svg-icons/faCogs";
 import { socket } from './socket';
 import { overlay, terminal } from './elements';
 import { fileBuffer, onCompleteFile, FILE_BEGIN, FILE_END } from './download';
@@ -12,6 +14,10 @@ import loadOptions from './options';
 import { copySelected, copyShortcut } from './copyToClipboard';
 import './wetty.scss';
 import './favicon.ico';
+
+// Setup for fontawesome
+library.add(faCogs);
+dom.watch();
 
 socket.on('connect', () => {
   const term = new Terminal();
