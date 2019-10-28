@@ -30,10 +30,10 @@ RUN mkdir ~/.ssh \
 
 ADD https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl /usr/local/bin/kubectl
 RUN chmod +x /usr/local/bin/kubectl \
- && wget https://github.com/heptio/velero/releases/download/v${VELERO_VERSION}velero-v${VELERO_VERSION}-linux-amd64.tar.gz \
+ && wget https://github.com/vmware-tanzu/velero/releases/download/v${VELERO_VERSION}/velero-v${VELERO_VERSION}-linux-amd64.tar.gz \
  && tar -xvf velero-v${VELERO_VERSION}-linux-amd64.tar.gz -C /usr/local/bin \
  && chmod +x /usr/local/bin/velero-v${VELERO_VERSION}-linux-amd64/velero \
- && mv /usr/local/bin/velero-v${VELERO_VERSION}-linux-amd64/velero /usr/local/bin/ && rm /usr/local/bin/velero-${VELERO_VERSION}-linux-amd64 -rf \
+ && mv /usr/local/bin/velero-v${VELERO_VERSION}-linux-amd64/velero /usr/local/bin/ && rm /usr/local/bin/velero-v${VELERO_VERSION}-linux-amd64 -rf \
  && wget -O kubedb https://github.com/kubedb/cli/releases/download/${KUBEDB_VERSION}/kubedb-linux-amd64 \
  && chmod +x kubedb \
  && mv kubedb /usr/local/bin/ \
