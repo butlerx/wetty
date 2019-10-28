@@ -1,6 +1,20 @@
 # Docs
 
-## Getting started
+![WeTTy](./terminal.png?raw=true)
+
+- [Running as daemon](./service.md)
+- [SSL Support](./ssl.md)
+  - [Using NGINX](./nginx.md)
+  - [Using Apache](./apache.md)
+- [Automatic Login](./auto-login.md)
+- [Downloading Files](./downloading-files.md)
+- [Development Docs](./development.md)
+
+## API
+
+For WeTTy options and event details please refer to the [api docs](./API.md)
+
+### Getting started
 
 WeTTy is event driven. To Spawn a new server call `wetty.start()` with no
 arguments.
@@ -18,7 +32,3 @@ wetty.start(/* server settings, see Options */).then(() => {
   /* code you want to execute */
 });
 ```
-
-## API
-
-For WeTTy options and event details please refer to the [api docs](./API.md)

@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-/* eslint-disable typescript/no-var-requires */
+/* eslint-disable @typescript-eslint/no-var-requires */
 
 const yargs = require('yargs');
 const wetty = require('./dist').default;
