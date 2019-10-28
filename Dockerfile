@@ -11,12 +11,12 @@ FROM node:boron-alpine
 LABEL maintainer "Bernd Klaus <me@berndklaus.at>"
 WORKDIR /usr/src/app
 
-ENV KUBE_VERSION="v1.15.0"
-ENV VELERO_VERSION="1.0.0"
-ENV HELM_VERSION="2.14.1"
-ENV KUBEDB_VERSION="0.12.0"
+ENV KUBE_VERSION="v1.15.5"
+ENV VELERO_VERSION="1.1.0"
+ENV HELM_VERSION="2.15.1"
+ENV KUBEDB_VERSION="v0.13.0-rc.0"
 ENV NODE_ENV=production
-ENV DOCTL_VERSION="1.20.1"
+ENV DOCTL_VERSION="1.33.0"
 
 RUN apk add -U openssh-client sshpass curl git nano wget openrc
 EXPOSE 3000
@@ -30,7 +30,7 @@ RUN mkdir ~/.ssh \
 
 ADD https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl /usr/local/bin/kubectl
 RUN chmod +x /usr/local/bin/kubectl \
- && wget https://github.com/heptio/velero/releases/download/v1.0.0/velero-v${VELERO_VERSION}-linux-amd64.tar.gz \
+ && wget https://github.com/heptio/velero/releases/download/v${VELERO_VERSION}velero-v${VELERO_VERSION}-linux-amd64.tar.gz \
  && tar -xvf velero-v${VELERO_VERSION}-linux-amd64.tar.gz -C /usr/local/bin \
  && chmod +x /usr/local/bin/velero-v${VELERO_VERSION}-linux-amd64/velero \
  && mv /usr/local/bin/velero-v${VELERO_VERSION}-linux-amd64/velero /usr/local/bin/ && rm /usr/local/bin/velero-${VELERO_VERSION}-linux-amd64 -rf \
