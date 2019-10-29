@@ -14,7 +14,7 @@ WORKDIR /usr/src/app
 ENV KUBE_VERSION="v1.15.5"
 ENV VELERO_VERSION="1.1.0"
 ENV HELM_VERSION="2.15.1"
-ENV KUBEDB_VERSION="v0.13.0-rc.0"
+#ENV KUBEDB_VERSION="v0.13.0-rc.0"
 ENV NODE_ENV=production
 ENV DOCTL_VERSION="1.33.0"
 
@@ -34,14 +34,14 @@ RUN chmod +x /usr/local/bin/kubectl \
  && tar -xvf velero-v${VELERO_VERSION}-linux-amd64.tar.gz -C /usr/local/bin \
  && chmod +x /usr/local/bin/velero-v${VELERO_VERSION}-linux-amd64/velero \
  && mv /usr/local/bin/velero-v${VELERO_VERSION}-linux-amd64/velero /usr/local/bin/ && rm /usr/local/bin/velero-v${VELERO_VERSION}-linux-amd64 -rf \
- && wget -O kubedb https://github.com/kubedb/cli/releases/download/${KUBEDB_VERSION}/kubedb-linux-amd64 \
- && chmod +x kubedb \
- && mv kubedb /usr/local/bin/ \
+ #&& wget -O kubedb https://github.com/kubedb/cli/releases/download/${KUBEDB_VERSION}/kubedb-linux-amd64 \
+ #&& chmod +x kubedb \
+ #&& mv kubedb /usr/local/bin/ \
  && wget https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
  && tar -xvf helm-v${HELM_VERSION}-linux-amd64.tar.gz -C /usr/local/bin \
  && chmod +x /usr/local/bin/linux-amd64/helm \
  && mv /usr/local/bin/linux-amd64/helm /usr/local/bin/ && rm /usr/local/bin/linux-amd64 -rf \
- && wget https://github.com/digitalocean/doctl/releases/download/v${DOCTL_VERSION}/doctl-${DOCTL_VERSION}-linux-amd64.tar.gz
+ && wget https://github.com/digitalocean/doctl/releases/download/v${DOCTL_VERSION}/doctl-${DOCTL_VERSION}-linux-amd64.tar.gz \
  && tar -xvf doctl-${DOCTL_VERSION}-linux-amd64.tar.gz -C /usr/local/bin \
  && chmod +x /usr/local/bin/doctl
 
