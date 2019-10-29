@@ -26,7 +26,7 @@ COPY package.json /usr/src/app
 COPY index.js /usr/src/app
 RUN mkdir ~/.ssh \
  && ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts \
- && adduser bernd -D
+ && adduser bernd -D --home /home/bernd
 
 ADD https://storage.googleapis.com/kubernetes-release/release/${KUBE_VERSION}/bin/linux/amd64/kubectl /usr/local/bin/kubectl
 RUN chmod +x /usr/local/bin/kubectl \
@@ -40,6 +40,9 @@ RUN chmod +x /usr/local/bin/kubectl \
  && wget https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz \
  && tar -xvf helm-v${HELM_VERSION}-linux-amd64.tar.gz -C /usr/local/bin \
  && chmod +x /usr/local/bin/linux-amd64/helm \
- && mv /usr/local/bin/linux-amd64/helm /usr/local/bin/ && rm /usr/local/bin/linux-amd64 -rf 
+ && mv /usr/local/bin/linux-amd64/helm /usr/local/bin/ && rm /usr/local/bin/linux-amd64 -rf \
+ && wget https://github.com/digitalocean/doctl/releases/download/v${DOCTL_VERSION}/doctl-${DOCTL_VERSION}-linux-amd64.tar.gz
+ && tar -xvf doctl-${DOCTL_VERSION}-linux-amd64.tar.gz -C /usr/local/bin \
+ && chmod +x /usr/local/bin/doctl
 
 ENTRYPOINT [ "node", "." ]
