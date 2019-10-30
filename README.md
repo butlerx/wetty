@@ -1,6 +1,7 @@
 # WeTTY = Web + TTY.
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->[![All Contributors](https://img.shields.io/badge/all_contributors-33-orange.svg?style=flat-square)](#contributors-)<!-- ALL-CONTRIBUTORS-BADGE:END -->
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-33-orange.svg?style=flat-square)](#contributors-)]<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ![Version](https://img.shields.io/badge/version-1.1.7-blue.svg?cacheSeconds=2592000)
 ![Node Version](https://img.shields.io/badge/node-%3E%3D6.9-blue.svg)
@@ -9,6 +10,8 @@
 [![Twitter: cianbutlerx](https://img.shields.io/twitter/follow/cianbutlerx.svg?style=social)](https://twitter.com/cianbutlerx)
 
 > Terminal access in browser over http/https
+
+![Terminal](https://github.com/butlerx/wetty/raw/master/docs/terminal.png)
 
 Terminal over HTTP and https. WeTTy is an alternative to ajaxterm and anyterm
 but much better than them because WeTTy uses xterm.js which is a full fledged
