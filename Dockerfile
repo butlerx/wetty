@@ -11,7 +11,7 @@ FROM node:boron-alpine
 LABEL maintainer "Bernd Klaus <me@berndklaus.at>"
 WORKDIR /usr/src/app
 
-ENV KUBE_VERSION="v1.15.5"
+ENV KUBE_VERSION="v1.16.2"
 ENV VELERO_VERSION="1.1.0"
 ENV HELM_VERSION="2.15.1"
 #ENV KUBEDB_VERSION="v0.13.0-rc.0"
