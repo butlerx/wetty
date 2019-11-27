@@ -3,9 +3,11 @@ import { isNull } from 'lodash';
 
 import { dom, library } from "@fortawesome/fontawesome-svg-core";
 import { faCogs } from "@fortawesome/free-solid-svg-icons/faCogs";
+import Toastify from 'toastify-js';
+import * as fileType from 'file-type';
 import { socket } from './socket';
 import { overlay, terminal } from './elements';
-import { FILE_BEGIN, FILE_END, fileBuffer, onCompleteFile } from './download';
+import { FileDownloader } from './download';
 import verifyPrompt from './verify';
 import disconnect from './disconnect';
 import mobileKeyboard from './mobile';
@@ -76,6 +78,52 @@ socket.on('connect', () => {
   term.focus();
   mobileKeyboard();
 
+  const fileDownloader = new FileDownloader(function (
+    bufferCharacters: string
+  ) {
+    let fileCharacters = bufferCharacters;
+    // Try to decode it as base64, if it fails we assume it's not base64
+    try {
+      fileCharacters = window.atob(fileCharacters);
+    } catch (err) {
+      // Assuming it's not base64...
+    }
+
+    const bytes = new Uint8Array(fileCharacters.length);
+    for (let i = 0; i < fileCharacters.length; i += 1) {
+      bytes[i] = fileCharacters.charCodeAt(i);
+    }
+
+    let mimeType = 'application/octet-stream';
+    let fileExt = '';
+    const typeData = fileType(bytes);
+    if (typeData) {
+      mimeType = typeData.mime;
+      fileExt = typeData.ext;
+    }
+    const fileName = `file-${new Date()
+      .toISOString()
+      .split('.')[0]
+      .replace(/-/g, '')
+      .replace('T', '')
+      .replace(/:/g, '')}${fileExt ? `.${fileExt}` : ''}`;
+
+    const blob = new Blob([new Uint8Array(bytes.buffer)], {
+      type: mimeType,
+    });
+    const blobUrl = URL.createObjectURL(blob);
+
+    Toastify({
+      text: `Download ready: <a href="${blobUrl}" target="_blank" download="${fileName}">${fileName}</a>`,
+      duration: 10000,
+      newWindow: true,
+      gravity: 'bottom',
+      position: 'right',
+      backgroundColor: '#fff',
+      stopOnFocus: true,
+    }).showToast();
+  });
+
   term.on('data', data => {
     socket.emit('input', data);
   });
@@ -84,30 +132,9 @@ socket.on('connect', () => {
   });
   socket
     .on('data', (data: string) => {
-      const indexOfFileBegin = data.indexOf(FILE_BEGIN);
-      const indexOfFileEnd = data.indexOf(FILE_END);
-
-      // If we've got the entire file in one chunk
-      if (indexOfFileBegin !== -1 && indexOfFileEnd !== -1) {
-        fileBuffer.push(data);
-        onCompleteFile();
-      }
-      // If we've found a beginning marker
-      else if (indexOfFileBegin !== -1) {
-        fileBuffer.push(data);
-      }
-      // If we've found an ending marker
-      else if (indexOfFileEnd !== -1) {
-        fileBuffer.push(data);
-        onCompleteFile();
-      }
-      // If we've found the continuation of a file
-      else if (fileBuffer.length > 0) {
-        fileBuffer.push(data);
-      }
-      // Just treat it as normal data
-      else {
-        term.write(data);
+      const remainingData = fileDownloader.buffer(data);
+      if (remainingData) {
+        term.write(remainingData);
       }
     })
     .on('login', () => {
