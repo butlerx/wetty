@@ -1,0 +1,20 @@
+---
+on: [push, pull_request]
+
+name: Run tests
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup env
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn
+        name: Install dependencies
+      - run: yarn build
+        name: Compile Typescript
+      - run: yarn test
+        name: Run tests
