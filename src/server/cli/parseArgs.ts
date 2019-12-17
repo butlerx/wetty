@@ -1,6 +1,6 @@
 import { isUndefined } from 'lodash';
+import { SSH, SSL, Server } from '../interfaces';
 import { Options } from './options';
-import { SSL, SSH, Server } from '../interfaces';
 
 export function unWrapArgs(
   args: Options

@@ -1,5 +1,5 @@
-import { spawn } from 'node-pty';
 import { isUndefined } from 'lodash';
+import { spawn } from 'node-pty';
 import { logger } from '../../utils';
 import { xterm } from './xterm';
 

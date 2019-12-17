@@ -17,13 +17,11 @@ export function copySelected(text: string): boolean {
       document.execCommand('copy');
       return true;
     } catch (ex) {
-      console.warn('Copy to clipboard failed.', ex);
       return false;
     } finally {
       document.body.removeChild(textarea);
     }
   }
-  console.warn('Copy to clipboard failed.');
   return false;
 }
 

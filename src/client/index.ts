@@ -1,11 +1,11 @@
 import { Terminal } from 'xterm';
 import { isNull } from 'lodash';
 
-import { library, dom } from "@fortawesome/fontawesome-svg-core";
+import { dom, library } from "@fortawesome/fontawesome-svg-core";
 import { faCogs } from "@fortawesome/free-solid-svg-icons/faCogs";
 import { socket } from './socket';
 import { overlay, terminal } from './elements';
-import { fileBuffer, onCompleteFile, FILE_BEGIN, FILE_END } from './download';
+import { FILE_BEGIN, FILE_END, fileBuffer, onCompleteFile } from './download';
 import verifyPrompt from './verify';
 import disconnect from './disconnect';
 import mobileKeyboard from './mobile';

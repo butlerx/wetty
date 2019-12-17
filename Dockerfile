@@ -10,13 +10,13 @@ FROM node:carbon-alpine
 LABEL maintainer="butlerx@notthe.cloud"
 WORKDIR /usr/src/app
 ENV NODE_ENV=production
-RUN apk add -U openssh-client sshpass
 EXPOSE 3000
 COPY --from=builder /usr/src/app/dist /usr/src/app/dist
 COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules
 COPY package.json /usr/src/app
 COPY index.js /usr/src/app
-RUN mkdir ~/.ssh
-RUN ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts
+RUN apk add -U openssh-client sshpass && \
+    mkdir ~/.ssh && \
+    ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts
 
 ENTRYPOINT [ "node", "." ]

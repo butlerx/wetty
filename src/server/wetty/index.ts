@@ -4,9 +4,9 @@
  */
 import server from '../socketServer';
 import getCommand from '../command';
-import { spawn, login } from './term';
-import { logger, loadSSL } from '../utils';
-import { SSL, SSH, SSLBuffer, Server } from '../interfaces';
+import { login, spawn } from './term';
+import { loadSSL, logger } from '../utils';
+import { SSH, SSL, SSLBuffer, Server } from '../interfaces';
 
 /**
  * Starts WeTTy Server

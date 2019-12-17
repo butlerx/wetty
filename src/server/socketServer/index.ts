@@ -1,3 +1,4 @@
+import { isUndefined } from 'lodash';
 import * as compression from 'compression';
 import * as express from 'express';
 import * as favicon from 'serve-favicon';
@@ -6,11 +7,10 @@ import * as http from 'http';
 import * as https from 'https';
 import * as path from 'path';
 import * as socket from 'socket.io';
-import { isUndefined } from 'lodash';
-import * as morgan from 'morgan';
-import logger from '../utils/logger';
+import * as expressWinston from 'express-winston';
 import { SSLBuffer, Server } from '../interfaces';
 import html from './html';
+import logger from '../utils/logger';
 
 const distDir = path.join(__dirname, 'client');
 
@@ -32,12 +32,16 @@ export default function createServer(
 
   const app = express();
   app
-    .use(morgan('combined', { stream: logger.stream }))
+    .use(expressWinston.logger(logger))
     .use(compression())
     .use(favicon(path.join(distDir, 'favicon.ico')))
     .use(`${basePath}/public`, express.static(distDir))
     .use((req, res, next) => {
-      if (req.url === basePath) res.redirect(301, `${req.url}/`);
+      if (req.path.substr(-1) === '/' && req.path.length > 1)
+        res.redirect(
+          301,
+          req.path.slice(0, -1) + req.url.slice(req.path.length)
+        );
       else next();
     });
 

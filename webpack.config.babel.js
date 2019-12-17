@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import path from 'path';
-import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import nodeExternals from 'webpack-node-externals';
+import path from 'path';
+import webpack from 'webpack';
 
 const template = override => ({
   mode: process.env.NODE_ENV || 'development',

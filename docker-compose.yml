@@ -17,6 +17,7 @@ services:
 
   web:
     image: nginx
+    container_name: wetty-nginx
     volumes:
       - ./bin/nginx.template:/etc/nginx/conf.d/wetty.template
     ports:
@@ -35,7 +36,7 @@ services:
   wetty-ssh:
     build:
       context: .
-      dockerfile: Dockerfile-ssh
+      dockerfile: ssh.Dockerfile
     image: butlerx/wetty:ssh
     container_name: 'wetty-ssh'
 

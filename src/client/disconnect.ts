@@ -1,4 +1,4 @@
-import { isUndefined, isNull } from 'lodash';
+import { isNull, isUndefined } from 'lodash';
 import verifyPrompt from './verify';
 import { overlay } from './elements';
 

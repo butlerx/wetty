@@ -17,10 +17,4 @@ const logger = createLogger({
   ],
 });
 
-logger.stream = {
-  write(message: string): void {
-    logger.info(message);
-  },
-};
-
 export default logger;
