@@ -8,7 +8,6 @@ export default (base: string, title: string) => (
     ? '../'
     : base;
 
-  console.log(req.url, base, resourcePath);
   res.send(`<!doctype html>
 <html lang="en">
   <head>
