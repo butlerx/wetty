@@ -21,6 +21,14 @@ module.exports = {
     'no-use-before-define': ['error', { functions: false }],
     '@typescript-eslint/no-use-before-define': ['error', { functions: false }],
     'import/prefer-default-export': 'off',
+    'import/extensions': [
+      'error',
+      'always',
+      {
+        js: 'ignorePackages',
+        ts: 'never',
+      },
+    ],
   },
   settings: {
     'import/resolver': {
