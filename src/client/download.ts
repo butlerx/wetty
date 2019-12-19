@@ -87,11 +87,7 @@ export class FileDownloader {
     ) {
       return data;
     }
-    let newData = '';
-    for (let i = 0; i < data.length; i += 1) {
-      newData += this.bufferCharacter(data[i]);
-    }
-    return newData;
+    return data.split('').map(this.bufferCharacter.bind(this)).join('')
   }
 
   onCompleteFile(bufferCharacters: string) {

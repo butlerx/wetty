@@ -1,5 +1,5 @@
 ---
-on: [push, pull_request]
+on: [pull_request]
 
 name: Run tests
 jobs:
@@ -14,6 +14,8 @@ jobs:
           node-version: 12
       - run: yarn
         name: Install dependencies
+      - name: ESLint checks
+        run: yarn lint
       - run: yarn build
         name: Compile Typescript
       - run: yarn test
