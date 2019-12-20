@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { expect } from 'chai';
 import 'mocha';
 import * as sinon from 'sinon';
