@@ -21,6 +21,8 @@ jobs:
         run: yarn lint
       - run: yarn build
         name: Compile Typescript
+      - run: yarn test
+        name: Run tests
       - name: Publish
         uses: mikeal/merge-release@master
         env:

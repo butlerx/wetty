@@ -21,6 +21,11 @@ module.exports = {
     'no-use-before-define': ['error', { functions: false }],
     '@typescript-eslint/no-use-before-define': ['error', { functions: false }],
     'import/prefer-default-export': 'off',
+    'lines-between-class-members': [
+      'error',
+      'always',
+      { exceptAfterSingleLine: true },
+    ],
     'import/extensions': [
       'error',
       'always',

@@ -2,8 +2,14 @@ const DEFAULT_FILE_BEGIN = '\u001b[5i';
 const DEFAULT_FILE_END = '\u001b[4i';
 
 export class FileDownloader {
+  fileBuffer: string[];
+  fileBegin: string;
+  fileEnd: string;
+  partialFileBegin: string;
+  onCompleteFileCallback: Function;
+
   constructor(
-    onCompleteFileCallback: (file: string) => any,
+    onCompleteFileCallback: (file: string) => void,
     fileBegin: string = DEFAULT_FILE_BEGIN,
     fileEnd: string = DEFAULT_FILE_END
   ) {
@@ -87,10 +93,13 @@ export class FileDownloader {
     ) {
       return data;
     }
-    return data.split('').map(this.bufferCharacter.bind(this)).join('')
+    return data
+      .split('')
+      .map(this.bufferCharacter.bind(this))
+      .join('');
   }
 
-  onCompleteFile(bufferCharacters: string) {
+  onCompleteFile(bufferCharacters: string): void {
     this.onCompleteFileCallback(bufferCharacters);
   }
 }

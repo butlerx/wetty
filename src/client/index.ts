@@ -1,8 +1,8 @@
 import { Terminal } from 'xterm';
 import { isNull } from 'lodash';
 
-import { dom, library } from "@fortawesome/fontawesome-svg-core";
-import { faCogs } from "@fortawesome/free-solid-svg-icons/faCogs";
+import { dom, library } from '@fortawesome/fontawesome-svg-core';
+import { faCogs } from '@fortawesome/free-solid-svg-icons/faCogs';
 import Toastify from 'toastify-js';
 import * as fileType from 'file-type';
 import { socket } from './socket';
@@ -78,9 +78,7 @@ socket.on('connect', () => {
   term.focus();
   mobileKeyboard();
 
-  const fileDownloader = new FileDownloader(function (
-    bufferCharacters: string
-  ) {
+  const fileDownloader = new FileDownloader((bufferCharacters: string) => {
     let fileCharacters = bufferCharacters;
     // Try to decode it as base64, if it fails we assume it's not base64
     try {
