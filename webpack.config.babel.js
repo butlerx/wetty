@@ -94,7 +94,7 @@ export default [
                   },
                 ],
               ],
-              plugins: ['lodash'],
+              plugins: ['lodash', '@babel/plugin-proposal-class-properties'],
             },
           },
         },

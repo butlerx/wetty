@@ -1,10 +1,5 @@
 {
-  "presets": [
-    "@babel/preset-typescript",
-    ["@babel/env"]
-  ],
+  "presets": ["@babel/preset-typescript", ["@babel/env"]],
   "compact": true,
-  "plugins": [
-    "lodash"
-  ]
+  "plugins": ["lodash", "@babel/plugin-proposal-class-properties"]
 }
