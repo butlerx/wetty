@@ -69,6 +69,10 @@ export default function createServer(
             connection: 'http',
           });
         }),
-    { path: `${basePath}/socket.io` }
+    {
+      path: `${basePath}/socket.io`,
+      pingInterval: 3000,
+      pingTimeout: 7000
+    }
   );
 }
