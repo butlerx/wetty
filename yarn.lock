@@ -5833,10 +5833,10 @@ node-modules-regexp@^1.0.0:
   resolved "https://registry.yarnpkg.com/node-modules-regexp/-/node-modules-regexp-1.0.0.tgz#8d9dbe28964a4ac5712e9131642107c71e90ec40"
   integrity sha1-jZ2+KJZKSsVxLpExZCEHxx6Q7EA=
 
-node-pty@0.9.0-beta28:
-  version "0.9.0-beta28"
-  resolved "https://registry.yarnpkg.com/node-pty/-/node-pty-0.9.0-beta28.tgz#f086cea157b4640bace2ea787136fde73a26b273"
-  integrity sha512-qpLJE52oLRIOEvIeVmPzymn+zqUnYhPmlNjSRW60PwEZvhcdmazdP0IJcQfEK6ivwml14TzQLObMjEj8FFO7xg==
+node-pty@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/node-pty/-/node-pty-0.9.0.tgz#8f9bcc0d1c5b970a3184ffd533d862c7eb6590a6"
+  integrity sha512-MBnCQl83FTYOu7B4xWw10AW77AAh7ThCE1VXEv+JeWj8mSpGo+0bwgsV+b23ljBFwEM9OmsOv3kM27iUPPm84g==
   dependencies:
     nan "^2.14.0"
 
