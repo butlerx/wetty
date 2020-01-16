@@ -41,6 +41,12 @@ if (require.main === module) {
           type: 'string',
           default: process.env.SSHUSER || '',
         },
+        sshaskuser: {
+          demand: false,
+          description: 'ask ssh user from the standard input',
+          type: 'boolean',
+          default: process.env.SSHASKUSER || false
+        },
         title: {
           demand: false,
           description: 'window title',
@@ -66,6 +72,12 @@ if (require.main === module) {
             'path to an optional client private key (connection will be password-less and insecure!)',
           type: 'string',
           default: process.env.SSHKEY || undefined,
+        },
+        forcessh: {
+          demand: false,
+          description: 'Connecting through ssh even if running as root',
+          type: 'boolean',
+          default: process.env.FORCESSH || false
         },
         base: {
           demand: false,

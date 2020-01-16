@@ -1,7 +1,9 @@
 # WeTTY = Web + TTY.
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-![All Contributors](https://img.shields.io/badge/all_contributors-33-orange.svg?style=flat-square) <!-- ALL-CONTRIBUTORS-BADGE:END -->
+
+![All Contributors](https://img.shields.io/badge/all_contributors-33-orange.svg?style=flat-square)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 ![Version](https://img.shields.io/badge/version-1.1.7-blue.svg?cacheSeconds=2592000)
 ![Node Version](https://img.shields.io/badge/node-%3E%3D6.9-blue.svg)
 [![Documentation](https://img.shields.io/badge/documentation-yes-brightgreen.svg)](https://github.com/butlerx/wetty/tree/master/docs)
@@ -31,7 +33,7 @@ yarn global add wetty
 ## Usage
 
 ```sh
-wetty [-h] [--port PORT] [--base BASE] [--sshhost SSH_HOST] [--sshport SSH_PORT] [--sshuser SSH_USER] [--host HOST] [--command COMMAND] [--bypasshelmet] [--title TITLE] [--sslkey SSL_KEY_PATH] [--sslcert SSL_CERT_PATH]
+wetty [-h] [--port PORT] [--base BASE] [--sshhost SSH_HOST] [--sshport SSH_PORT] [--sshuser SSH_USER] [--sshaskuser] [--host HOST] [--command COMMAND] [--forcessh] [--bypasshelmet] [--title TITLE] [--sslkey SSL_KEY_PATH] [--sslcert SSL_CERT_PATH]
 ```
 
 Open your browser on `http://yourserver:3000/wetty` and you will prompted to
@@ -39,11 +41,14 @@ login. Or go to `http://yourserver:3000/wetty/ssh/<username>` to specify the
 user before hand.
 
 If you run it as root it will launch `/bin/login` (where you can specify the
-user name), else it will launch `ssh` and connect by default to `localhost`.
+user name), else it will launch `ssh` and connect by default to `localhost`. The
+SSH connection can be forced using the `--forcessh` option.
 
 If instead you wish to connect to a remote host you can specify the `--sshhost`
 option, the SSH port using the `--sshport` option and the SSH user using the
-`--sshuser` option.
+`--sshuser` option. Alternatively you can ask the user from the stard input of
+the terminal later (and ignoring `--sshuser`) if using the `--sshaskuser`
+option.
 
 Check out the
 [Flags docs](https://github.com/butlerx/wetty/blob/master/docs/flags.md) for a

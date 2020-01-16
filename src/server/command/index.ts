@@ -24,14 +24,16 @@ export default (
       conn: { remoteAddress },
     },
   }: Socket,
-  { user, host, port, auth, pass, key }: SSH,
-  command: string
+  { user, askuser, host, port, auth, pass, key }: SSH,
+  command: string,
+  forcessh: boolean
 ): { args: string[]; user: boolean } => ({
-  args: localhost(host)
+  args: !forcessh && localhost(host)
     ? loginOptions(command, remoteAddress)
     : sshOptions(
         urlArgs(referer, {
-          host: address(referer, user, host),
+          sshcommand: askuser ? './bin/ssh-with-user' : 'ssh',
+          host: askuser ? host : address(referer, user, host),
           port: `${port}`,
           pass: pass || '',
           command,

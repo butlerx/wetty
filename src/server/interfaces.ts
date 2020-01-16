@@ -1,5 +1,6 @@
 export interface SSH {
   user: string;
+  askuser: boolean;
   host: string;
   auth: string;
   port: number;

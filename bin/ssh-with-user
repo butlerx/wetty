@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+while [ -z "${username}" ]; do
+    echo -n "localhost login: "
+    read username
+done
+ssh -l "${username}" $@

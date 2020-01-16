@@ -13,7 +13,7 @@ import { SSH, SSL, SSLBuffer, Server } from '../interfaces';
  * @name startWeTTy
  */
 export default function startWeTTy(
-  ssh: SSH = { user: '', host: 'localhost', auth: 'password', port: 22 },
+  ssh: SSH = { user: '', askuser: false, host: 'localhost', auth: 'password', port: 22 },
   serverConf: Server = {
     base: '/wetty/',
     port: 3000,
@@ -22,6 +22,7 @@ export default function startWeTTy(
     bypasshelmet: false,
   },
   command = '',
+  forcessh = false,
   ssl?: SSL
 ): Promise<void> {
   return loadSSL(ssl).then((sslBuffer: SSLBuffer) => {
@@ -44,7 +45,7 @@ export default function startWeTTy(
        * @name connection
        */
       logger.info('Connection accepted.');
-      const { args, user: sshUser } = getCommand(socket, ssh, command);
+      const { args, user: sshUser } = getCommand(socket, ssh, command, forcessh);
       logger.debug('Command Generated', {
         user: sshUser,
         cmd: args.join(' '),
