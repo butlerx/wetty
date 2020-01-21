@@ -13,7 +13,7 @@ import { SSH, SSL, SSLBuffer, Server } from '../interfaces';
  * @name startWeTTy
  */
 export default function startWeTTy(
-  ssh: SSH = { user: '', askuser: false, host: 'localhost', auth: 'password', port: 22 },
+  ssh: SSH = { user: '', host: 'localhost', auth: 'password', port: 22 },
   serverConf: Server = {
     base: '/wetty/',
     port: 3000,

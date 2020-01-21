@@ -24,7 +24,7 @@ export default (
       conn: { remoteAddress },
     },
   }: Socket,
-  { user, askuser, host, port, auth, pass, key }: SSH,
+  { user, host, port, auth, pass, key }: SSH,
   command: string,
   forcessh: boolean
 ): { args: string[]; user: boolean } => ({
@@ -32,8 +32,7 @@ export default (
     ? loginOptions(command, remoteAddress)
     : sshOptions(
         urlArgs(referer, {
-          sshcommand: askuser ? './bin/ssh-with-user' : 'ssh',
-          host: askuser ? host : address(referer, user, host),
+          host: address(referer, user, host),
           port: `${port}`,
           pass: pass || '',
           command,
@@ -42,7 +41,7 @@ export default (
         key
       ),
   user:
-    localhost(host) ||
+    (!forcessh && localhost(host)) ||
     user !== '' ||
     user.includes('@') ||
     address(referer, user, host).includes('@'),

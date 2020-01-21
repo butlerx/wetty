@@ -3,13 +3,12 @@ import parseCommand from './parse';
 import logger from '../utils/logger';
 
 export default function sshOptions(
-  { sshcommand, pass, path, command, host, port, auth }: { [s: string]: string },
+  { pass, path, command, host, port, auth }: { [s: string]: string },
   key?: string
 ): string[] {
   const cmd = parseCommand(command, path);
-  logger.info(`ssh command: ${sshcommand}`);
   const sshRemoteOptsBase = [
-    sshcommand,
+    'ssh',
     host,
     '-t',
     '-p',
@@ -31,6 +30,7 @@ export default function sshOptions(
   if (auth === 'none') {
     sshRemoteOptsBase.splice(sshRemoteOptsBase.indexOf('-o'), 2);
   }
+
   if (cmd === '') {
     return sshRemoteOptsBase;
   }

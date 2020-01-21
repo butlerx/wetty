@@ -41,12 +41,6 @@ if (require.main === module) {
           type: 'string',
           default: process.env.SSHUSER || '',
         },
-        sshaskuser: {
-          demand: false,
-          description: 'ask ssh user from the standard input',
-          type: 'boolean',
-          default: process.env.SSHASKUSER || false
-        },
         title: {
           demand: false,
           description: 'window title',

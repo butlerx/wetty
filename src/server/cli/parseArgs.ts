@@ -8,7 +8,6 @@ export function unWrapArgs(
   return {
     ssh: {
       user: args.sshuser,
-      askuser: args.sshaskuser,
       host: args.sshhost,
       auth: args.sshauth,
       port: args.sshport,

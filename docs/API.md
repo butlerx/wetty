@@ -21,7 +21,6 @@ Starts WeTTy Server
 | :------------------------ | --------- | ------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | [ssh]                     | `Object`  |               | SSH settings                                                                                                           |
 | [ssh.user]                | `string`  | `"''"`        | default user for ssh                                                                                                   |
-| [ssh.askuser]             | `boolean` | `false`       | ask ssh user from the standard input                                                                                   |
 | [ssh.host]                | `string`  | `"localhost"` | machine to ssh too                                                                                                     |
 | [ssh.auth]                | `string`  | `"password"`  | authtype to use                                                                                                        |
 | [ssh.port]                | `number`  | `22`          | port to connect to over ssh                                                                                            |
