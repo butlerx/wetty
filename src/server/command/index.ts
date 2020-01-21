@@ -25,9 +25,10 @@ export default (
     },
   }: Socket,
   { user, host, port, auth, pass, key }: SSH,
-  command: string
+  command: string,
+  forcessh: boolean
 ): { args: string[]; user: boolean } => ({
-  args: localhost(host)
+  args: !forcessh && localhost(host)
     ? loginOptions(command, remoteAddress)
     : sshOptions(
         urlArgs(referer, {
@@ -40,7 +41,7 @@ export default (
         key
       ),
   user:
-    localhost(host) ||
+    (!forcessh && localhost(host)) ||
     user !== '' ||
     user.includes('@') ||
     address(referer, user, host).includes('@'),

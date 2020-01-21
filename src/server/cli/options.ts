@@ -12,6 +12,7 @@ export interface Options {
   port: number;
   title: string;
   command?: string;
+  forcessh?: boolean;
   bypasshelmet?: boolean;
 }
 

@@ -4,7 +4,7 @@ import { Options } from './options';
 
 export function unWrapArgs(
   args: Options
-): { ssh: SSH; server: Server; command?: string; ssl?: SSL } {
+): { ssh: SSH; server: Server; command?: string; forcessh?: boolean; ssl?: SSL } {
   return {
     ssh: {
       user: args.sshuser,
@@ -22,6 +22,7 @@ export function unWrapArgs(
       bypasshelmet: args.bypasshelmet || false,
     },
     command: args.command,
+    forcessh: args.forcessh,
     ssl:
       isUndefined(args.sslkey) || isUndefined(args.sslcert)
         ? undefined

@@ -22,6 +22,7 @@ export default function startWeTTy(
     bypasshelmet: false,
   },
   command = '',
+  forcessh = false,
   ssl?: SSL
 ): Promise<void> {
   return loadSSL(ssl).then((sslBuffer: SSLBuffer) => {
@@ -44,7 +45,7 @@ export default function startWeTTy(
        * @name connection
        */
       logger.info('Connection accepted.');
-      const { args, user: sshUser } = getCommand(socket, ssh, command);
+      const { args, user: sshUser } = getCommand(socket, ssh, command, forcessh);
       logger.debug('Command Generated', {
         user: sshUser,
         cmd: args.join(' '),

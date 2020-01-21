@@ -33,6 +33,7 @@ Starts WeTTy Server
 | [serverConf.title]        | `string`  | `'WeTTy'`     | Title of the server                                                                                                    |
 | [serverConf.bypasshelmet] | `boolean` | `false`       | if helmet should be disabled on the sever                                                                              |
 | [command]                 | `string`  | `"''"`        | The command to execute. If running as root and no host specified this will be login if a host is specified will be ssh |
+| [forcessh]                | `boolean` | `false`       | Connecting through ssh even if running as root                                                                         |
 | [ssl]                     | `Object`  |               | SSL settings                                                                                                           |
 | [ssl.key]                 | `string`  |               | Path to ssl key                                                                                                        |
 | [ssl.cert]                | `string`  |               | Path to ssl cert                                                                                                       |

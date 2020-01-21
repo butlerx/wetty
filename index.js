@@ -67,6 +67,12 @@ if (require.main === module) {
           type: 'string',
           default: process.env.SSHKEY || undefined,
         },
+        forcessh: {
+          demand: false,
+          description: 'Connecting through ssh even if running as root',
+          type: 'boolean',
+          default: process.env.FORCESSH || false
+        },
         base: {
           demand: false,
           alias: 'b',

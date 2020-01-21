@@ -15,6 +15,10 @@ export default function sshOptions(
     port,
     '-o',
     `PreferredAuthentications=${auth}`,
+    '-o',
+    'UserKnownHostsFile=/dev/null',
+    '-o', 
+    'StrictHostKeyChecking=no',
   ];
   logger.info(`Authentication Type: ${auth}`);
   if (!isUndefined(key)) {
@@ -26,6 +30,7 @@ export default function sshOptions(
   if (auth === 'none') {
     sshRemoteOptsBase.splice(sshRemoteOptsBase.indexOf('-o'), 2);
   }
+
   if (cmd === '') {
     return sshRemoteOptsBase;
   }
