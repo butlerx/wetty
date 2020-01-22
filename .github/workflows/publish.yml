@@ -27,4 +27,4 @@ jobs:
         uses: mikeal/merge-release@master
         env:
           GITHUB_TOKEN: ${{ secrets.node_github_token }}
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+          NPM_AUTH_TOKEN: ${{ secrets.npm_token }}
