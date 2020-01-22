@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: Setup env
         uses: actions/setup-node@v1
         with:
@@ -23,8 +23,32 @@ jobs:
         name: Compile Typescript
       - run: yarn test
         name: Run tests
-      - name: Publish
-        uses: mikeal/merge-release@master
+
+  publish-npm:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - run: yarn
+      - run: yarn publish --non-interactive
         env:
-          GITHUB_TOKEN: ${{ secrets.node_github_token }}
-          NPM_AUTH_TOKEN: ${{ secrets.npm_token }}
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+
+  publish-gpr:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://npm.pkg.github.com/
+          scope: '@butlerx'
+      - run: yarn
+      - run: yarn publish --non-interactive
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
