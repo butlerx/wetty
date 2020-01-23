@@ -99,6 +99,12 @@ socket.on('connect', () => {
       mimeType = typeData.mime;
       fileExt = typeData.ext;
     }
+    // Check if the buffer is ASCII
+    // Ref: https://stackoverflow.com/a/14313213
+    else if (/^[\x00-\x7F]*$/.test(fileCharacters)) { // eslint-disable-line no-control-regex
+      mimeType = 'text/plain';
+      fileExt = 'txt';
+    }
     const fileName = `file-${new Date()
       .toISOString()
       .split('.')[0]
