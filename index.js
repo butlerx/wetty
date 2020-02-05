@@ -4,7 +4,7 @@
 const yargs = require('yargs');
 const wetty = require('./dist').default;
 
-module.exports = wetty.wetty;
+module.exports = wetty;
 
 /**
  * Check if being run by cli or require
