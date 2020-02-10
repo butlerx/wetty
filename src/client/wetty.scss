@@ -101,3 +101,7 @@ body {
     color: $black;
   }
 }
+
+.xterm .xterm-viewport {
+  overflow-y: hidden;
+}
