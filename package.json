@@ -23,7 +23,7 @@
     "dev": "NODE_ENV=development concurrently --kill-others --success first \"babel-node node_modules/.bin/webpack --watch\" \"nodemon .\"",
     "lint": "eslint --ext .ts,.js .",
     "prepublishOnly": "NODE_ENV=production yarn build",
-    "start": "node .",
+    "start": "NODE_ENV=production node .",
     "test": "mocha -r babel-register-ts src/**/*.spec.ts"
   },
   "husky": {
