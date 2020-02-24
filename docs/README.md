@@ -3,7 +3,7 @@
 ![WeTTy](./terminal.png?raw=true)
 
 - [Running as daemon](./service.md)
-- [SSL Support](./ssl.md)
+- [HTTPS Support](./https.md)
   - [Using NGINX](./nginx.md)
   - [Using Apache](./apache.md)
 - [Automatic Login](./auto-login.md)
