@@ -101,7 +101,7 @@ socket.on('connect', () => {
     }
     // Check if the buffer is ASCII
     // Ref: https://stackoverflow.com/a/14313213
-    else if (/^[\x00-\x7F]*$/.test(fileCharacters)) { // eslint-disable-line no-control-regex
+    else if (/^[\x00-\xFF]*$/.test(fileCharacters)) { // eslint-disable-line no-control-regex
       mimeType = 'text/plain';
       fileExt = 'txt';
     }
