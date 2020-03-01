@@ -59,7 +59,7 @@ full list of flags
 Check out the [docs](https://github.com/butlerx/wetty/tree/master/docs)
 
 - [Running as daemon](https://github.com/butlerx/wetty/blob/master/docs/service.md)
-- [SSL Support](https://github.com/butlerx/wetty/blob/master/docs/ssl.md)
+- [HTTPS Support](https://github.com/butlerx/wetty/blob/master/docs/https.md)
   - [Using NGINX](https://github.com/butlerx/wetty/blob/master/docs/nginx.md)
   - [Using Apache](https://github.com/butlerx/wetty/blob/master/docs/apache.md)
 - [Automatic Login](https://github.com/butlerx/wetty/blob/master/docs/auto-login.md)
