@@ -1,10 +1,10 @@
 ### Introduction
 
-This is an A to Z guide that will help you get `wetty` up and running on Debian Stable. It covers the key configuration areas using copy and paste commands to help you install this application and get it securely up and running. It should also provide enough information to allow you to understand extend that configuration for your personal requirements.
+This is an A to Z guide that will help you get `wetty` up and running on Debian Stable. It covers the key configuration areas by using copy and paste commands to help you install this application and get it securely up and running. It should also provide enough information to allow you to understand and extend that configuration for your personal requirements.
 
 ### Required dependencies
 
-You will need the package `build-essential` to be installed. We need this specifically for `node-gyp` to build packages when using `npm` or `yarn`.
+You will need the package `build-essential` to be installed. We need this specifically for `node-gyp` to build packages when using `npm` or `yarn` to install packages.
 
 As the `root` user run these commands:
 
@@ -27,7 +27,7 @@ Status: install ok installed
 
 ### Create a local user account
 
-For this guide, unless specifically stated, you should not use a `root` account to install and run `wetty`. Please use an existing local account or create one. 
+For this guide, unless specifically stated, you should not use a `root` account to install and run `wetty`. Please use an existing local account or create one now. 
 
 **Note:** Whichever user runs `wetty` should be the same user you wish to authenticate with via `ssh` to keep this simple.
 
@@ -124,7 +124,7 @@ Copy the key to our `~/.ssh/authorized_keys` file, using this command:
 cat ~/.ssh/wetty.pub >> ~/.ssh/authorized_keys
 ~~~
 
-Now give these  file the correct permissions, using these commands:
+Now give these file and folders the correct permissions, using these commands:
 
 ~~~bash
 chmod 700 ~/.ssh
@@ -142,9 +142,9 @@ sed -r '/^ssh-ed25519(.*)wetty-keyfile$/d' -i ~/.ssh/authorized_keys
 
 **Note:** we are using `-g` for `npm` or `global` for `yarn` along with `--prefix ~/` so that the application symbolic link is installed to our `~/bin` directory and available in our local user's `PATH`.
 
-As your local use run these commands to install `wetty` and `forever`. We will need `forever` later to run wetty in in the background.
+As your local user run these commands to install `wetty` and `forever`. We will need `forever` later to run wetty in the background.
 
-First, we need to make sure the local user `~/bin` folder exists and is in the `PATH` for the following commands to work.
+First, we need to make sure the local user's `~/bin` folder exists and is in the `PATH` for the following commands to work.
 
 ~~~bash
 mkdir -p ~/bin && source ~/.profile
@@ -173,7 +173,7 @@ wetty -h
 
 ### Accessing the web interface.
 
-This needs to be clarified here because it is not easy to do in the next steps if `wetty` is running in the terminal.
+This needs to be done here because it is not easy to do in the next steps if `wetty` is running in the terminal.
 
 This command will generate the correct URL you need to visit after using the start up commands in the following section.
 
@@ -247,7 +247,7 @@ Now you can use `forever` to run it in the background instead of directly in you
 forever start ~/bin/wetty $(eval echo $(cat ~/.config/wetty/config))
 ~~~
 
-To stop `wetty` from running you can use this command
+To stop `wetty` from running you can use this command:
 
 ~~~bash
 forever stop ~/bin/wetty
@@ -410,7 +410,7 @@ Please modify these specific environment settings:
 **Why?** This change is so that our application does not attempt to load as the web root of `/` for nginx.
 
 ~~~bash
---base /wetty
+--base /wetty/
 ~~~
 
 Now you can use this nginx configuration file.
