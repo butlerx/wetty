@@ -10,7 +10,7 @@ After=network.target
 
 [Service]
 
-WorkingDirectory=$HOME/.config/yarn/global/node_modules/wetty.js/
+WorkingDirectory=$HOME/.config/yarn/global/node_modules/wetty/
 ExecStart=/usr/bin/node app.js -p 3000 --host 127.0.0.1
 
 [Install]
