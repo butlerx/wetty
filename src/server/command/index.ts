@@ -24,7 +24,7 @@ export default (
       conn: { remoteAddress },
     },
   }: Socket,
-  { user, host, port, auth, pass, key }: SSH,
+  { user, host, port, auth, pass, key, knownhosts }: SSH,
   command: string,
   forcessh: boolean
 ): { args: string[]; user: boolean } => ({
@@ -37,6 +37,7 @@ export default (
           pass: pass || '',
           command,
           auth,
+          knownhosts,
         }),
         key
       ),

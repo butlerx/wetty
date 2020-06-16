@@ -3,10 +3,15 @@ import parseCommand from './parse';
 import logger from '../utils/logger';
 
 export default function sshOptions(
-  { pass, path, command, host, port, auth }: { [s: string]: string },
+  { pass, path, command, host, port, auth, knownhosts }: { [s: string]: string },
   key?: string
 ): string[] {
   const cmd = parseCommand(command, path);
+  if (knownhosts !== '/dev/null') {
+    var hostChecking = 'yes';
+  } else {
+    var hostChecking = 'no';
+  }
   const sshRemoteOptsBase = [
     'ssh',
     host,
@@ -16,9 +21,9 @@ export default function sshOptions(
     '-o',
     `PreferredAuthentications=${auth}`,
     '-o',
-    'UserKnownHostsFile=/dev/null',
+    `UserKnownHostsFile=${knownhosts}`,
     '-o', 
-    'StrictHostKeyChecking=no',
+    `StrictHostKeyChecking=${hostChecking}`,
   ];
   logger.info(`Authentication Type: ${auth}`);
   if (!isUndefined(key)) {

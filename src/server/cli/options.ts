@@ -5,6 +5,7 @@ export interface Options {
   sshauth: string;
   sshkey?: string;
   sshpass?: string;
+  knownhosts: string;
   sslkey?: string;
   sslcert?: string;
   base: string;
