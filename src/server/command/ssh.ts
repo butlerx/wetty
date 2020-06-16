@@ -6,7 +6,7 @@ export default function sshOptions(
   { pass, path, command, host, port, auth, knownhosts }: { [s: string]: string },
   key?: string
 ): string[] {
-  var hostChecking;
+  let hostChecking;
   const cmd = parseCommand(command, path);
   if (knownhosts !== '/dev/null') {
     hostChecking = 'yes';
