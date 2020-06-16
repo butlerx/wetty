@@ -6,13 +6,8 @@ export default function sshOptions(
   { pass, path, command, host, port, auth, knownhosts }: { [s: string]: string },
   key?: string
 ): string[] {
-  let hostChecking;
   const cmd = parseCommand(command, path);
-  if (knownhosts !== '/dev/null') {
-    hostChecking = 'yes';
-  } else {
-    hostChecking = 'no';
-  }
+  const hostChecking = (knownhosts !== '/dev/null') ? 'yes' : 'no'
   const sshRemoteOptsBase = [
     'ssh',
     host,
