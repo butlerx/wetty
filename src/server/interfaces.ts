@@ -3,6 +3,7 @@ export interface SSH {
   host: string;
   auth: string;
   port: number;
+  knownhosts: string;
   pass?: string;
   key?: string;
 }

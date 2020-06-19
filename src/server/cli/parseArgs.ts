@@ -13,6 +13,7 @@ export function unWrapArgs(
       port: args.sshport,
       pass: args.sshpass,
       key: args.sshkey,
+      knownhosts: args.knownhosts,
     },
     server: {
       base: args.base,

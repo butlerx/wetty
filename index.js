@@ -73,6 +73,12 @@ if (require.main === module) {
           type: 'boolean',
           default: process.env.FORCESSH || false
         },
+        knownhosts: {
+          demand: false,
+          description: 'path to known hosts file',
+          type: 'string',
+          default: process.env.KNOWNHOSTS || '/dev/null',
+        },
         base: {
           demand: false,
           alias: 'b',
