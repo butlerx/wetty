@@ -31,14 +31,15 @@ export default (
   args: !forcessh && localhost(host)
     ? loginOptions(command, remoteAddress)
     : sshOptions(
-        urlArgs(referer, {
-          host: address(referer, user, host),
-          port: `${port}`,
-          pass: pass || '',
-          command,
-          auth,
-          knownhosts,
-        }),
+        { ...urlArgs(referer, {
+            port: `${port}`,
+            pass: pass || '',
+            command,
+            auth,
+            knownhosts,
+          }),
+          host: address(referer, user, host)
+        },
         key
       ),
   user:
