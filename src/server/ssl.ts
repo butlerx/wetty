@@ -1,7 +1,7 @@
 import { readFile } from 'fs-extra';
 import { resolve } from 'path';
 import { isUndefined } from 'lodash';
-import { SSL, SSLBuffer } from '../interfaces';
+import { SSL, SSLBuffer } from '../shared/interfaces';
 
 export async function loadSSL(ssl?: SSL): Promise<SSLBuffer> {
   if (isUndefined(ssl) || isUndefined(ssl.key) || isUndefined(ssl.cert))

@@ -1,8 +1,9 @@
 {
   "name": "wetty",
-  "version": "1.4.1",
+  "version": "2.0.0",
   "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
   "homepage": "https://github.com/butlerx/wetty",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git://github.com/butlerx/wetty.git"
@@ -16,9 +17,13 @@
   "bugs": {
     "url": "https://github.com/butlerx/wetty/issues"
   },
-  "main": "index.js",
+  "main": "./lib/cjs/server.js",
+  "module": "./lib/esm/server.js",
+  "files": [
+    "lib/"
+  ],
   "scripts": {
-    "build": "babel-node node_modules/.bin/webpack",
+    "build": "tsc -p tsconfig/esm.json && tsc -p tsconfig/cjs.json",
     "contributor": "all-contributors",
     "dev": "NODE_ENV=development concurrently --kill-others --success first \"babel-node node_modules/.bin/webpack --watch\" \"nodemon .\"",
     "lint": "eslint --ext .ts,.js .",
@@ -40,9 +45,6 @@
       "prettier --write",
       "git add"
     ]
-  },
-  "bin": {
-    "wetty": "./index.js"
   },
   "engines": {
     "node": ">=10.22"
@@ -86,7 +88,7 @@
     "@types/compression": "^1.0.1",
     "@types/express": "^4.17.1",
     "@types/fs-extra": "^8.0.0",
-    "@types/helmet": "^0.0.44",
+    "@types/helmet": "^0.0.47",
     "@types/jsdom": "^12.2.4",
     "@types/lodash": "^4.14.138",
     "@types/mocha": "^5.2.7",
@@ -97,38 +99,28 @@
     "@types/socket.io": "^2.1.2",
     "@types/socket.io-client": "^1.4.32",
     "@types/webpack-env": "^1.14.0",
-    "@types/yargs": "^13.0.2",
+    "@types/winston": "^2.4.4",
+    "@types/yargs": "^15.0.5",
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
-    "all-contributors-cli": "^6.9.3",
-    "babel-loader": "^8.0.6",
-    "babel-plugin-lodash": "^3.3.4",
-    "babel-register-ts": "^7.0.0",
+    "all-contributors-cli": "^6.17.0",
     "chai": "^4.2.0",
-    "concurrently": "^4.1.2",
-    "css-loader": "^3.2.0",
-    "eslint": "6.1.0",
-    "eslint-config-airbnb-base": "14.0.0",
-    "eslint-config-prettier": "^6.4.0",
+    "concurrently": "^5.2.0",
+    "eslint": "^7.6.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "file-loader": "^4.2.0",
-    "git-authors-cli": "^1.0.18",
-    "husky": "^3.0.9",
+    "git-authors-cli": "^1.0.27",
+    "husky": "^4.2.5",
     "jsdom": "^15.2.1",
-    "lint-staged": "~9.2.5",
-    "mini-css-extract-plugin": "^0.8.0",
+    "lint-staged": "^10.2.11",
     "mocha": "^6.2.2",
-    "node-sass": "^4.12.0",
-    "nodemon": "^1.19.2",
-    "prettier": "^1.18.2",
-    "sass-loader": "^8.0.0",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.0.5",
     "sinon": "^7.5.0",
-    "style-loader": "^1.0.0",
-    "typescript": "~3.6.2",
-    "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.7",
-    "webpack-node-externals": "^1.7.2"
+    "typescript": "^3.9.7"
   },
   "contributors": [
     "Krishna Srinivas <krishna.srinivas@gmail.com>",

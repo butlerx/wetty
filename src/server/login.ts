@@ -1,5 +1,5 @@
 import { spawn } from 'node-pty';
-import { xterm } from './xterm';
+import { xterm } from './shared/xterm';
 
 export function login(socket: SocketIO.Socket): Promise<string> {
   // Check request-header for username

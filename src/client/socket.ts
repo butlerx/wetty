@@ -1,4 +1,4 @@
-import * as io from 'socket.io-client';
+import io from 'socket.io-client';
 
 const userRegex = new RegExp('ssh/[^/]+$');
 export const trim = (str: string): string => str.replace(/\/*$/, '');

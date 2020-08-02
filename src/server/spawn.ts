@@ -1,13 +1,10 @@
 import { isUndefined } from 'lodash';
-import { spawn } from 'node-pty';
-import { logger } from '../../utils';
-import { xterm } from './xterm';
+import { spawn as spawnTerm } from 'node-pty';
+import { logger } from '../shared/logger';
+import { xterm } from './shared/xterm';
 
-export default function spawnTerm(
-  socket: SocketIO.Socket,
-  args: string[]
-): void {
-  const term = spawn('/usr/bin/env', args, xterm);
+export function spawn(socket: SocketIO.Socket, args: string[]): void {
+  const term = spawnTerm('/usr/bin/env', args, xterm);
   const { pid } = term;
   const address = args[0] === 'ssh' ? args[1] : 'localhost';
   logger.info('Process Started on behalf of user', {

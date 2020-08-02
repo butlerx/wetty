@@ -1,8 +1,8 @@
 import { isUndefined } from 'lodash';
-import parseCommand from './parse';
-import logger from '../utils/logger';
+import { parseCommand } from './ssh/parse';
+import { logger } from '../../shared/logger';
 
-export default function sshOptions(
+export function sshOptions(
   {
     pass,
     path,
@@ -40,8 +40,5 @@ export default function sshOptions(
     sshRemoteOptsBase.splice(sshRemoteOptsBase.indexOf('-o'), 2);
   }
 
-  if (cmd === '') {
-    return sshRemoteOptsBase;
-  }
-  return sshRemoteOptsBase.concat([cmd]);
+  return cmd === '' ? sshRemoteOptsBase : sshRemoteOptsBase.concat([cmd]);
 }

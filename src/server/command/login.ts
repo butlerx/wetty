@@ -5,10 +5,7 @@ const getRemoteAddress = (remoteAddress: string): string =>
     ? 'localhost'
     : remoteAddress.split(':')[3];
 
-export default function loginOptions(
-  command: string,
-  remoteAddress: string
-): string[] {
+export function loginOptions(command: string, remoteAddress: string): string[] {
   return command === 'login'
     ? [command, '-h', getRemoteAddress(remoteAddress)]
     : [command];

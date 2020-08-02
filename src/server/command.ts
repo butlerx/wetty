@@ -1,9 +1,9 @@
 import * as url from 'url';
 import { Socket } from 'socket.io';
-import { SSH } from '../interfaces';
-import address from './address';
-import loginOptions from './login';
-import sshOptions from './ssh';
+import { SSH } from '../shared/interfaces';
+import { address } from './command/address';
+import { loginOptions } from './command/login';
+import { sshOptions } from './command/ssh';
 
 const localhost = (host: string): boolean =>
   process.getuid() === 0 &&
@@ -15,7 +15,7 @@ const urlArgs = (
 ): { [s: string]: string } =>
   Object.assign(def, url.parse(referer, true).query);
 
-export default (
+export const getCommand = (
   {
     request: {
       headers: { referer },
@@ -24,24 +24,26 @@ export default (
       conn: { remoteAddress },
     },
   }: Socket,
-  { user, host, port, auth, pass, key, knownhosts }: SSH,
+  { user, host, port, auth, pass, key, knownHosts }: SSH,
   command: string,
   forcessh: boolean
 ): { args: string[]; user: boolean } => ({
-  args: !forcessh && localhost(host)
-    ? loginOptions(command, remoteAddress)
-    : sshOptions(
-        { ...urlArgs(referer, {
-            port: `${port}`,
-            pass: pass || '',
-            command,
-            auth,
-            knownhosts,
-          }),
-          host: address(referer, user, host)
-        },
-        key
-      ),
+  args:
+    !forcessh && localhost(host)
+      ? loginOptions(command, remoteAddress)
+      : sshOptions(
+          {
+            ...urlArgs(referer, {
+              port: `${port}`,
+              pass: pass || '',
+              command,
+              auth,
+              knownHosts,
+            }),
+            host: address(referer, user, host),
+          },
+          key
+        ),
   user:
     (!forcessh && localhost(host)) ||
     user !== '' ||
