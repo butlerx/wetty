@@ -1,6 +1,6 @@
 import { isNull } from 'lodash';
 
-export default function mobileKeyboard(): void {
+export function mobileKeyboard(): void {
   const [screen] = document.getElementsByClassName('xterm-screen');
   if (isNull(screen)) return;
   screen.setAttribute('contenteditable', 'true');

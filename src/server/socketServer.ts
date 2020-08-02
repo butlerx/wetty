@@ -8,16 +8,16 @@ import * as https from 'https';
 import * as path from 'path';
 import * as socket from 'socket.io';
 import * as expressWinston from 'express-winston';
-import { SSLBuffer, Server } from '../interfaces';
-import html from './html';
-import logger from '../utils/logger';
+import { SSLBuffer, Server } from '../shared/interfaces';
+import html from './socketServer/html';
+import { logger } from '../shared/logger';
 
 const distDir = path.join(__dirname, 'client');
 
 const trim = (str: string): string => str.replace(/\/*$/, '');
 
-export default function createServer(
-  { base, port, host, title, bypasshelmet }: Server,
+export function server(
+  { base, port, host, title, bypassHelmet }: Server,
   { key, cert }: SSLBuffer
 ): SocketIO.Server {
   const basePath = trim(base);
@@ -48,7 +48,7 @@ export default function createServer(
   // Allow helmet to be bypassed.
   // Unfortunately, order matters with middleware
   // which is why this is thrown in the middle
-  if (!bypasshelmet) {
+  if (!bypassHelmet) {
     app.use(helmet());
   }
 
@@ -72,7 +72,7 @@ export default function createServer(
     {
       path: `${basePath}/socket.io`,
       pingInterval: 3000,
-      pingTimeout: 7000
+      pingTimeout: 7000,
     }
   );
 }

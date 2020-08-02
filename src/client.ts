@@ -6,16 +6,16 @@ import { faCogs } from '@fortawesome/free-solid-svg-icons/faCogs';
 import Toastify from 'toastify-js';
 import * as fileType from 'file-type';
 
-import { socket } from './socket';
-import { overlay, terminal } from './elements';
-import { FileDownloader } from './download';
-import verifyPrompt from './verify';
-import disconnect from './disconnect';
-import mobileKeyboard from './mobile';
-import loadOptions from './options';
-import { copySelected, copyShortcut } from './copyToClipboard';
-import './wetty.scss';
-import './favicon.ico';
+import { FileDownloader } from './client/download';
+import { copySelected, copyShortcut } from './client/copyToClipboard';
+import { disconnect } from './client/disconnect';
+import { loadOptions } from './client/options';
+import { mobileKeyboard } from './client/mobile';
+import { overlay, terminal } from './shared/elements';
+import { socket } from './client/socket';
+import { verifyPrompt } from './shared/verify';
+import './client/wetty.scss';
+import './client/favicon.ico';
 
 // Setup for fontawesome
 library.add(faCogs);

@@ -3,7 +3,7 @@ export interface SSH {
   host: string;
   auth: string;
   port: number;
-  knownhosts: string;
+  knownHosts: string;
   pass?: string;
   key?: string;
 }
@@ -23,5 +23,5 @@ export interface Server {
   host: string;
   title: string;
   base: string;
-  bypasshelmet: boolean;
+  bypassHelmet: boolean;
 }

@@ -1,8 +1,8 @@
 import { isNull, isUndefined } from 'lodash';
-import verifyPrompt from './verify';
-import { overlay } from './elements';
+import { verifyPrompt } from '../shared/verify';
+import { overlay } from '../shared/elements';
 
-export default function disconnect(reason: string): void {
+export function disconnect(reason: string): void {
   if (isNull(overlay)) return;
   overlay.style.display = 'block';
   const msg = document.getElementById('msg');

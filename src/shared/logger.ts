@@ -11,7 +11,7 @@ const dev = combine(
 
 const prod = combine(label({ label: 'Wetty' }), timestamp(), json());
 
-const logger = createLogger({
+export const logger = createLogger({
   format: process.env.NODE_ENV === 'development' ? dev : prod,
   transports: [
     new transports.Console({
@@ -20,5 +20,3 @@ const logger = createLogger({
     }),
   ],
 });
-
-export default logger;

@@ -1,0 +1,7 @@
+{
+  "extends": "./esm.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "outDir": "../lib/cjs"
+  }
+}
