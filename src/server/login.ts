@@ -1,5 +1,5 @@
-import { spawn } from 'node-pty';
-import { xterm } from './shared/xterm';
+import pty from 'node-pty';
+import { xterm } from './shared/xterm.js';
 
 export function login(socket: SocketIO.Socket): Promise<string> {
   // Check request-header for username
@@ -12,13 +12,17 @@ export function login(socket: SocketIO.Socket): Promise<string> {
 
   // Request carries no username information
   // Create terminal and ask user for username
-  const term = spawn('/usr/bin/env', ['node', `${__dirname}/buffer.js`], xterm);
+  const term = pty.spawn(
+    '/usr/bin/env',
+    ['node', `${__dirname}/buffer.js`],
+    xterm,
+  );
   let buf = '';
   return new Promise((resolve, reject) => {
     term.on('exit', () => {
       resolve(buf);
     });
-    term.on('data', data => {
+    term.on('data', (data: string) => {
       socket.emit('data', data);
     });
     socket

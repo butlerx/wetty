@@ -1,10 +1,13 @@
 {
   "singleQuote": true,
-  "trailingComma": "es5",
+  "trailingComma": "all",
   "proseWrap": "always",
   "overrides": [
     {
-      "files": ["*.js", "*.ts"],
+      "files": [
+        "*.js",
+        "*.ts"
+      ],
       "options": {
         "printWidth": 80
       }

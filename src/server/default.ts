@@ -1,6 +1,6 @@
-import { SSH,  Server } from '../shared/interfaces';
+import type { SSH, Server } from '../shared/interfaces';
 
-export const sshDefault:SSH = {
+export const sshDefault: SSH = {
   user: process.env.SSHUSER || '',
   host: process.env.SSHHOST || 'localhost',
   auth: process.env.SSHAUTH || 'password',
@@ -8,7 +8,7 @@ export const sshDefault:SSH = {
   key: process.env.SSHKEY || undefined,
   port: parseInt(process.env.SSHPORT || '22', 10),
   knownHosts: process.env.KNOWNHOSTS || '/dev/null',
-}
+};
 
 export const serverDefault: Server = {
   base: process.env.BASE || '/wetty/',
@@ -19,4 +19,4 @@ export const serverDefault: Server = {
 };
 
 export const forceSSHDefault = process.env.FORCESSH === 'true' || false;
-export const defaultCommand = process.env.COMMAND || 'login'
+export const defaultCommand = process.env.COMMAND || 'login';

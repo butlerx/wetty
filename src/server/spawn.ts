@@ -1,10 +1,10 @@
-import { isUndefined } from 'lodash';
-import { spawn as spawnTerm } from 'node-pty';
-import { logger } from '../shared/logger';
-import { xterm } from './shared/xterm';
+import isUndefined from 'lodash/isUndefined.js';
+import pty from 'node-pty';
+import { logger } from '../shared/logger.js';
+import { xterm } from './shared/xterm.js';
 
 export function spawn(socket: SocketIO.Socket, args: string[]): void {
-  const term = spawnTerm('/usr/bin/env', args, xterm);
+  const term = pty.spawn('/usr/bin/env', args, xterm);
   const { pid } = term;
   const address = args[0] === 'ssh' ? args[1] : 'localhost';
   logger.info('Process Started on behalf of user', {
@@ -12,7 +12,7 @@ export function spawn(socket: SocketIO.Socket, args: string[]): void {
     address,
   });
   socket.emit('login');
-  term.on('exit', code => {
+  term.on('exit', (code: number) => {
     logger.info('Process exited', { code, pid });
     socket.emit('logout');
     socket
@@ -20,7 +20,7 @@ export function spawn(socket: SocketIO.Socket, args: string[]): void {
       .removeAllListeners('resize')
       .removeAllListeners('input');
   });
-  term.on('data', data => {
+  term.on('data', (data: string) => {
     socket.emit('data', data);
   });
   socket

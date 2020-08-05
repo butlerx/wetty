@@ -1,5 +1,6 @@
 node_modules/
 .esm-cache
-dist
+lib
 public/
 *hterm*
+web_modules

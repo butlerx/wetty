@@ -1,4 +1,4 @@
-import { isNull } from 'lodash';
+import { isNull } from '../../web_modules/lodash.js';
 
 export function mobileKeyboard(): void {
   const [screen] = document.getElementsByClassName('xterm-screen');

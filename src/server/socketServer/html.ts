@@ -1,21 +1,17 @@
-import * as express from 'express';
+import express from 'express';
 
-export default (base: string, title: string) => (
-  req: express.Request,
-  res: express.Response
-): void => {
-  const resourcePath = /^\/ssh\//.test(req.url.replace(base, '/'))
-    ? '../'
-    : base;
-
-  res.send(`<!doctype html>
+const render = (
+  title: string,
+  css: string,
+  js: string,
+): string => `<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
+    <meta charset="utf8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>${title}</title>
-    <link rel="stylesheet" href="${resourcePath}public/index.css" />
+    <link rel="stylesheet" href="${css}" />
   </head>
   <body>
     <div id="overlay">
@@ -27,11 +23,19 @@ export default (base: string, title: string) => (
     <div id="options">
       <a class="toggler"
          href="#"
-         alt="Toggle options"><i class="fas fa-cogs"></i></a>
+         alt="Toggle options"
+       ><i class="fas fa-cogs" /></a>
       <textarea class="editor"></textarea>
     </div>
     <div id="terminal"></div>
-    <script src="${resourcePath}public/index.js"></script>
+    <script type="module" src="${js}" />
   </body>
-</html>`);
-};
+</html>`;
+
+export const html = (base: string, title: string) => (
+  _req: express.Request,
+  res: express.Response,
+) =>
+  res.send(
+    render(title, `${base}/assets/styles.css`, `${base}/client/index.js`),
+  );

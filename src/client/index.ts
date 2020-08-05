@@ -1,21 +1,22 @@
-import { Terminal } from 'xterm';
-import { isNull } from 'lodash';
-import { FitAddon } from 'xterm-addon-fit';
-import { dom, library } from '@fortawesome/fontawesome-svg-core';
-import { faCogs } from '@fortawesome/free-solid-svg-icons/faCogs';
-import Toastify from 'toastify-js';
-import * as fileType from 'file-type';
+import { Terminal } from '../web_modules/xterm.js';
+import { isNull } from '../web_modules/lodash.js';
+import { FitAddon } from '../web_modules/xterm-addon-fit.js';
+import {
+  dom,
+  library,
+} from '../web_modules/@fortawesome/fontawesome-svg-core.js';
+import { faCogs } from '../web_modules/@fortawesome/free-solid-svg-icons.js';
+import Toastify from '../web_modules/toastify-js.js';
+import fileType from '../web_modules/file-type.js';
 
-import { FileDownloader } from './client/download';
-import { copySelected, copyShortcut } from './client/copyToClipboard';
-import { disconnect } from './client/disconnect';
-import { loadOptions } from './client/options';
-import { mobileKeyboard } from './client/mobile';
-import { overlay, terminal } from './shared/elements';
-import { socket } from './client/socket';
-import { verifyPrompt } from './shared/verify';
-import './client/wetty.scss';
-import './client/favicon.ico';
+import { FileDownloader } from './client/download.js';
+import { copySelected, copyShortcut } from './client/copyToClipboard.js';
+import { disconnect } from './client/disconnect.js';
+import { loadOptions } from './client/options.js';
+import { mobileKeyboard } from './client/mobile.js';
+import { overlay, terminal } from './shared/elements.js';
+import { socket } from './client/socket.js';
+import { verifyPrompt } from './shared/verify.js';
 
 // Setup for fontawesome
 library.add(faCogs);
@@ -76,7 +77,7 @@ socket.on('connect', () => {
     () => {
       if (term.hasSelection()) copySelected(term.getSelection());
     },
-    false
+    false,
   );
 
   window.onresize = resize;
@@ -135,10 +136,10 @@ socket.on('connect', () => {
     }).showToast();
   });
 
-  term.onData(data => {
+  term.onData((data: string) => {
     socket.emit('input', data);
   });
-  term.onResize(size => {
+  term.onResize((size: string) => {
     socket.emit('resize', size);
   });
   socket

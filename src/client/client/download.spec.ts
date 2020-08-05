@@ -4,10 +4,7 @@ import { expect } from 'chai';
 import 'mocha';
 import * as sinon from 'sinon';
 
-import { JSDOM } from 'jsdom';
 import { FileDownloader } from './download';
-
-const { window } = new JSDOM(`...`);
 
 describe('FileDownloader', () => {
   const FILE_BEGIN = 'BEGIN';
@@ -25,7 +22,7 @@ describe('FileDownloader', () => {
   it('should return data before file markers', () => {
     const onCompleteFileStub = sinon.stub(fileDownloader, 'onCompleteFile');
     expect(
-      fileDownloader.buffer(`DATA AT THE LEFT${FILE_BEGIN}FILE${FILE_END}`)
+      fileDownloader.buffer(`DATA AT THE LEFT${FILE_BEGIN}FILE${FILE_END}`),
     ).to.equal('DATA AT THE LEFT');
     expect(onCompleteFileStub.calledOnce).to.be.true;
     expect(onCompleteFileStub.getCall(0).args[0]).to.equal('FILE');
@@ -34,7 +31,7 @@ describe('FileDownloader', () => {
   it('should return data after file markers', () => {
     const onCompleteFileStub = sinon.stub(fileDownloader, 'onCompleteFile');
     expect(
-      fileDownloader.buffer(`${FILE_BEGIN}FILE${FILE_END}DATA AT THE RIGHT`)
+      fileDownloader.buffer(`${FILE_BEGIN}FILE${FILE_END}DATA AT THE RIGHT`),
     ).to.equal('DATA AT THE RIGHT');
     expect(onCompleteFileStub.calledOnce).to.be.true;
     expect(onCompleteFileStub.getCall(0).args[0]).to.equal('FILE');
@@ -44,17 +41,17 @@ describe('FileDownloader', () => {
     const onCompleteFileStub = sinon.stub(fileDownloader, 'onCompleteFile');
     expect(
       fileDownloader.buffer(
-        `DATA AT THE LEFT${FILE_BEGIN}FILE${FILE_END}DATA AT THE RIGHT`
-      )
+        `DATA AT THE LEFT${FILE_BEGIN}FILE${FILE_END}DATA AT THE RIGHT`,
+      ),
     ).to.equal('DATA AT THE LEFTDATA AT THE RIGHT');
     expect(onCompleteFileStub.calledOnce).to.be.true;
     expect(onCompleteFileStub.getCall(0).args[0]).to.equal('FILE');
   });
 
   it('should return data before a beginning marker found', () => {
-    const onCompleteFileStub = sinon.stub(fileDownloader, 'onCompleteFile');
+    sinon.stub(fileDownloader, 'onCompleteFile');
     expect(fileDownloader.buffer(`DATA AT THE LEFT${FILE_BEGIN}FILE`)).to.equal(
-      'DATA AT THE LEFT'
+      'DATA AT THE LEFT',
     );
   });
 
@@ -62,7 +59,7 @@ describe('FileDownloader', () => {
     const onCompleteFileStub = sinon.stub(fileDownloader, 'onCompleteFile');
     expect(fileDownloader.buffer(`${FILE_BEGIN}FI`)).to.equal('');
     expect(fileDownloader.buffer(`LE${FILE_END}DATA AT THE RIGHT`)).to.equal(
-      'DATA AT THE RIGHT'
+      'DATA AT THE RIGHT',
     );
     expect(onCompleteFileStub.calledOnce).to.be.true;
     expect(onCompleteFileStub.getCall(0).args[0]).to.equal('FILE');
@@ -96,13 +93,13 @@ describe('FileDownloader', () => {
     const onCompleteFileStub = sinon.stub(fileDownloader, 'onCompleteFile');
 
     expect(fileDownloader.buffer('DATA AT THE LEFT' + 'B')).to.equal(
-      'DATA AT THE LEFT'
+      'DATA AT THE LEFT',
     );
     expect(fileDownloader.buffer('E')).to.equal('');
     expect(fileDownloader.buffer('G')).to.equal('');
     expect(fileDownloader.buffer('I')).to.equal('');
     expect(fileDownloader.buffer('NFILE' + 'ENDDATA AT THE RIGHT')).to.equal(
-      'DATA AT THE RIGHT'
+      'DATA AT THE RIGHT',
     );
     expect(onCompleteFileStub.calledOnce).to.be.true;
     expect(onCompleteFileStub.getCall(0).args[0]).to.equal('FILE');
@@ -113,14 +110,14 @@ describe('FileDownloader', () => {
     const onCompleteFileStub = sinon.stub(fileDownloader, 'onCompleteFile');
 
     expect(fileDownloader.buffer('DATA AT THE LEFT' + 'B')).to.equal(
-      'DATA AT THE LEFT'
+      'DATA AT THE LEFT',
     );
     expect(fileDownloader.buffer('E')).to.equal('');
     expect(fileDownloader.buffer('G')).to.equal('');
     // This isn't part of the file_begin marker and should trigger the partial
     // file begin marker to be returned with the normal data
     expect(fileDownloader.buffer('ZDATA AT THE RIGHT')).to.equal(
-      'BEGZDATA AT THE RIGHT'
+      'BEGZDATA AT THE RIGHT',
     );
     expect(onCompleteFileStub.called).to.be.false;
   });
@@ -143,14 +140,14 @@ describe('FileDownloader', () => {
     const onCompleteFileStub = sinon.stub(fileDownloader, 'onCompleteFile');
 
     expect(fileDownloader.buffer('DATA AT THE LEFT' + 'BE')).to.equal(
-      'DATA AT THE LEFT'
+      'DATA AT THE LEFT',
     );
     expect(fileDownloader.buffer('G')).to.equal('');
     expect(fileDownloader.buffer('I')).to.equal('');
     expect(fileDownloader.buffer('NFILEE')).to.equal('');
     expect(fileDownloader.buffer('N')).to.equal('');
     expect(fileDownloader.buffer('DDATA AT THE RIGHT')).to.equal(
-      'DATA AT THE RIGHT'
+      'DATA AT THE RIGHT',
     );
     expect(onCompleteFileStub.calledOnce).to.be.true;
     expect(onCompleteFileStub.getCall(0).args[0]).to.equal('FILE');
@@ -162,8 +159,13 @@ describe('FileDownloader', () => {
 
     expect(
       fileDownloader.buffer(
-        'DATA AT THE LEFT' + 'BEGIN' + 'FILE1' + 'END' + 'SECOND DATA' + 'BEGIN'
-      )
+        'DATA AT THE LEFT' +
+          'BEGIN' +
+          'FILE1' +
+          'END' +
+          'SECOND DATA' +
+          'BEGIN',
+      ),
     ).to.equal('DATA AT THE LEFT' + 'SECOND DATA');
     expect(onCompleteFileStub.calledOnce).to.be.true;
     expect(onCompleteFileStub.getCall(0).args[0]).to.equal('FILE1');
@@ -180,11 +182,11 @@ describe('FileDownloader', () => {
     const onCompleteFileStub = sinon.stub(fileDownloader, 'onCompleteFile');
 
     expect(
-      fileDownloader.buffer('DATA AT THE LEFT' + 'BEGIN' + 'FILE1' + 'EN')
+      fileDownloader.buffer('DATA AT THE LEFT' + 'BEGIN' + 'FILE1' + 'EN'),
     ).to.equal('DATA AT THE LEFT');
     expect(onCompleteFileStub.calledOnce).to.be.false;
     expect(
-      fileDownloader.buffer('D' + 'SECOND DATA' + 'BEGIN' + 'FILE2' + 'EN')
+      fileDownloader.buffer('D' + 'SECOND DATA' + 'BEGIN' + 'FILE2' + 'EN'),
     ).to.equal('SECOND DATA');
     expect(onCompleteFileStub.calledOnce).to.be.true;
     expect(onCompleteFileStub.getCall(0).args[0]).to.equal('FILE1');
