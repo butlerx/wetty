@@ -1,9 +1,9 @@
-import * as url from 'url';
+import url from 'url';
 import { Socket } from 'socket.io';
-import { SSH } from '../shared/interfaces';
-import { address } from './command/address';
-import { loginOptions } from './command/login';
-import { sshOptions } from './command/ssh';
+import { SSH } from '../shared/interfaces.js';
+import { address } from './command/address.js';
+import { loginOptions } from './command/login.js';
+import { sshOptions } from './command/ssh.js';
 
 const localhost = (host: string): boolean =>
   process.getuid() === 0 &&
@@ -11,7 +11,7 @@ const localhost = (host: string): boolean =>
 
 const urlArgs = (
   referer: string,
-  def: { [s: string]: string }
+  def: { [s: string]: string },
 ): { [s: string]: string } =>
   Object.assign(def, url.parse(referer, true).query);
 
@@ -26,7 +26,7 @@ export const getCommand = (
   }: Socket,
   { user, host, port, auth, pass, key, knownHosts }: SSH,
   command: string,
-  forcessh: boolean
+  forcessh: boolean,
 ): { args: string[]; user: boolean } => ({
   args:
     !forcessh && localhost(host)
@@ -42,7 +42,7 @@ export const getCommand = (
             }),
             host: address(referer, user, host),
           },
-          key
+          key,
         ),
   user:
     (!forcessh && localhost(host)) ||

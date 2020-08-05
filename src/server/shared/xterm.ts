@@ -1,5 +1,5 @@
-import { IPtyForkOptions } from 'node-pty';
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined.js';
+import type { IPtyForkOptions } from 'node-pty';
 
 export const xterm: IPtyForkOptions = {
   name: 'xterm-256color',
@@ -10,6 +10,6 @@ export const xterm: IPtyForkOptions = {
     {},
     ...Object.keys(process.env)
       .filter((key: string) => !isUndefined(process.env[key]))
-      .map((key: string) => ({ [key]: process.env[key] }))
+      .map((key: string) => ({ [key]: process.env[key] })),
   ),
 };

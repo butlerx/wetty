@@ -1,6 +1,5 @@
-import { isUndefined } from 'lodash';
-import { parseCommand } from './ssh/parse';
-import { logger } from '../../shared/logger';
+import isUndefined from 'lodash/isUndefined.js';
+import { logger } from '../../shared/logger.js';
 
 export function sshOptions(
   {
@@ -12,7 +11,7 @@ export function sshOptions(
     auth,
     knownhosts,
   }: { [s: string]: string },
-  key?: string
+  key?: string,
 ): string[] {
   const cmd = parseCommand(command, path);
   const hostChecking = knownhosts !== '/dev/null' ? 'yes' : 'no';
@@ -41,4 +40,11 @@ export function sshOptions(
   }
 
   return cmd === '' ? sshRemoteOptsBase : sshRemoteOptsBase.concat([cmd]);
+}
+
+function parseCommand(command: string, path?: string): string {
+  if (command === 'login' && isUndefined(path)) return '';
+  return !isUndefined(path)
+    ? `$SHELL -c "cd ${path};${command === 'login' ? '$SHELL' : command}"`
+    : command;
 }

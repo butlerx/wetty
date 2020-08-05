@@ -1,4 +1,4 @@
-import { isUndefined } from 'lodash';
+import isUndefined from 'lodash/isUndefined.js';
 
 const getRemoteAddress = (remoteAddress: string): string =>
   isUndefined(remoteAddress.split(':')[3])

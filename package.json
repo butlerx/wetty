@@ -3,7 +3,23 @@
   "version": "2.0.0",
   "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
   "homepage": "https://github.com/butlerx/wetty",
+  "license": "MIT",
   "type": "module",
+  "main": "./lib/main.js",
+  "module": "./lib/server.js",
+  "files": [
+    "lib/"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "contributor": "all-contributors",
+    "dev": "NODE_ENV=development concurrently --kill-others --success first \"tsc -p tsconfig.json \" \"nodemon .\"",
+    "lint": "eslint --ext .ts,.js .",
+    "prepublishOnly": "NODE_ENV=production yarn build",
+    "start": "NODE_ENV=production node .",
+    "test": "mocha -r babel-register-ts src/**/*.spec.ts",
+    "postinstall": "snowpack install"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/butlerx/wetty.git"
@@ -13,23 +29,8 @@
     "email": "butlerx@notthe.cloud",
     "url": "cianbutler.ie"
   },
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/butlerx/wetty/issues"
-  },
-  "main": "./lib/cjs/server.js",
-  "module": "./lib/esm/server.js",
-  "files": [
-    "lib/"
-  ],
-  "scripts": {
-    "build": "tsc -p tsconfig/esm.json && tsc -p tsconfig/cjs.json",
-    "contributor": "all-contributors",
-    "dev": "NODE_ENV=development concurrently --kill-others --success first \"babel-node node_modules/.bin/webpack --watch\" \"nodemon .\"",
-    "lint": "eslint --ext .ts,.js .",
-    "prepublishOnly": "NODE_ENV=production yarn build",
-    "start": "NODE_ENV=production node .",
-    "test": "mocha -r babel-register-ts src/**/*.spec.ts"
   },
   "husky": {
     "hooks": {
@@ -38,12 +39,10 @@
   },
   "lint-staged": {
     "*.{js,ts}": [
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ],
     "*.{json,scss,md}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "engines": {
@@ -55,7 +54,21 @@
       "*.json"
     ]
   },
-  "preferGlobal": true,
+  "snowpack": {
+    "install": [
+      "@fortawesome/fontawesome-svg-core",
+      "@fortawesome/free-solid-svg-icons",
+      "file-type",
+      "lodash",
+      "socket.io-client",
+      "toastify-js",
+      "xterm",
+      "xterm-addon-fit"
+    ],
+    "exclude": [
+      "**"
+    ]
+  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
@@ -65,12 +78,12 @@
     "file-type": "^12.3.0",
     "fs-extra": "^8.1.0",
     "helmet": "^3.20.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "node-pty": "^0.9.0",
+    "node-sass-middleware": "^0.11.0",
     "serve-favicon": "^2.5.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
-    "source-map-loader": "^0.2.4",
     "toastify-js": "^1.6.1",
     "winston": "^3.2.1",
     "xterm": "^4.8.1",
@@ -78,12 +91,6 @@
     "yargs": "^14.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.5",
-    "@babel/node": "^7.5.5",
-    "@babel/plugin-proposal-class-properties": "^7.7.4",
-    "@babel/preset-env": "^7.5.5",
-    "@babel/preset-typescript": "^7.3.3",
-    "@babel/register": "^7.5.5",
     "@types/chai": "^4.2.5",
     "@types/compression": "^1.0.1",
     "@types/express": "^4.17.1",
@@ -94,6 +101,7 @@
     "@types/mocha": "^5.2.7",
     "@types/morgan": "^1.7.37",
     "@types/node": "^12.7.3",
+    "@types/node-sass-middleware": "^0.0.31",
     "@types/serve-favicon": "^2.2.31",
     "@types/sinon": "^7.5.1",
     "@types/socket.io": "^2.1.2",
@@ -111,7 +119,6 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.1.4",
-    "file-loader": "^4.2.0",
     "git-authors-cli": "^1.0.27",
     "husky": "^4.2.5",
     "jsdom": "^15.2.1",
@@ -120,6 +127,7 @@
     "nodemon": "^2.0.4",
     "prettier": "^2.0.5",
     "sinon": "^7.5.0",
+    "snowpack": "^2.7.5",
     "typescript": "^3.9.7"
   },
   "contributors": [
