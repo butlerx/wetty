@@ -1,0 +1,25 @@
+@use 'xterm/css/xterm.css';
+@use 'toastify-js/src/toastify.css';
+@use './variables';
+@use './overlay';
+@use './options';
+@use './terminal';
+
+html,
+body {
+  background-color: variables.$black;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+
+  .toastify {
+    border-radius: 0;
+    color: variables.$black;
+  }
+}
+
+.xterm {
+  .xterm-viewport {
+    overflow-y: hidden;
+  }
+}

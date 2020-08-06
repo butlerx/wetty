@@ -1,0 +1,28 @@
+@use './variables';
+
+#overlay {
+  background-color: variables.$grey;
+  display: none;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: 100;
+
+  .error {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+
+    #msg {
+      align-self: center;
+      color: variables.$white;
+    }
+
+    input {
+      align-self: center;
+      margin: 16px;
+    }
+  }
+}
