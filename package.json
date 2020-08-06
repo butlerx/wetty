@@ -8,17 +8,19 @@
   "main": "./lib/main.js",
   "module": "./lib/server.js",
   "files": [
-    "lib/"
+    "lib/",
+    "assets/css"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "snowpack build && tsc -p tsconfig.json",
     "contributor": "all-contributors",
-    "dev": "NODE_ENV=development concurrently --kill-others --success first \"tsc -p tsconfig.json \" \"nodemon .\"",
+    "dev": "NODE_ENV=development yarn build && concurrently --kill-others --success first \"tsc -p tsconfig.json \" \"snowpack dev\" \"nodemon .\"",
     "lint": "eslint --ext .ts,.js .",
     "prepublishOnly": "NODE_ENV=production yarn build",
     "start": "NODE_ENV=production node .",
     "test": "mocha -r babel-register-ts src/**/*.spec.ts",
-    "postinstall": "snowpack install"
+    "postinstall": "snowpack install",
+    "clean": "rm -rf assets/css build lib web_modules node_modules"
   },
   "repository": {
     "type": "git",
@@ -50,6 +52,7 @@
   },
   "nodemonConfig": {
     "ignore": [
+      "*.scss",
       "src/*",
       "*.json"
     ]
@@ -67,6 +70,15 @@
     ],
     "exclude": [
       "**"
+    ],
+    "plugins": [
+      [
+        "@snowpack/plugin-run-script",
+        {
+          "cmd": "sass assets/scss:assets/css --load-path=node_modules -s compressed --no-source-map",
+          "watch": "$1 --watch"
+        }
+      ]
     ]
   },
   "dependencies": {
@@ -81,6 +93,7 @@
     "lodash": "^4.17.19",
     "node-pty": "^0.9.0",
     "node-sass-middleware": "^0.11.0",
+    "sass": "^1.26.10",
     "serve-favicon": "^2.5.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
