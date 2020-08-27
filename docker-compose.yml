@@ -3,7 +3,7 @@ version: '3.5'
 services:
   wetty:
     build: .
-    image: butlerx/wetty
+    image: wettyoss/wetty
     container_name: wetty
     tty: true
     working_dir: /usr/src/app
@@ -13,7 +13,6 @@ services:
       SSHHOST: 'wetty-ssh'
       SSHPORT: 22
       NODE_ENV: 'development'
-    command: yarn start --sshhost redbrick.dcu.ie
 
   web:
     image: nginx
@@ -37,7 +36,7 @@ services:
     build:
       context: .
       dockerfile: ssh.Dockerfile
-    image: butlerx/wetty:ssh
+    image: wettyoss/wetty:ssh
     container_name: 'wetty-ssh'
 
 networks:

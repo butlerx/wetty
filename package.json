@@ -45,7 +45,7 @@
     "wetty": "./index.js"
   },
   "engines": {
-    "node": ">=6.9"
+    "node": ">=10.22"
   },
   "nodemonConfig": {
     "ignore": [
