@@ -15,7 +15,7 @@
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": "./lib",
+    "outDir": "./build",
     "removeComments": true,
     "skipLibCheck": true,
     "sourceMap": true,

@@ -1,5 +1,59 @@
+import Toastify from 'toastify-js';
+import fileType from 'file-type';
+
 const DEFAULT_FILE_BEGIN = '\u001b[5i';
 const DEFAULT_FILE_END = '\u001b[4i';
+
+function onCompleteFile(bufferCharacters: string): void {
+  let fileCharacters = bufferCharacters;
+  // Try to decode it as base64, if it fails we assume it's not base64
+  try {
+    fileCharacters = window.atob(fileCharacters);
+  } catch (err) {
+    // Assuming it's not base64...
+  }
+
+  const bytes = new Uint8Array(fileCharacters.length);
+  for (let i = 0; i < fileCharacters.length; i += 1) {
+    bytes[i] = fileCharacters.charCodeAt(i);
+  }
+
+  let mimeType = 'application/octet-stream';
+  let fileExt = '';
+  const typeData = fileType(bytes);
+  if (typeData) {
+    mimeType = typeData.mime;
+    fileExt = typeData.ext;
+  }
+  // Check if the buffer is ASCII
+  // Ref: https://stackoverflow.com/a/14313213
+  // eslint-disable-next-line no-control-regex
+  else if (/^[\x00-\xFF]*$/.test(fileCharacters)) {
+    mimeType = 'text/plain';
+    fileExt = 'txt';
+  }
+  const fileName = `file-${new Date()
+    .toISOString()
+    .split('.')[0]
+    .replace(/-/g, '')
+    .replace('T', '')
+    .replace(/:/g, '')}${fileExt ? `.${fileExt}` : ''}`;
+
+  const blob = new Blob([new Uint8Array(bytes.buffer)], {
+    type: mimeType,
+  });
+  const blobUrl = URL.createObjectURL(blob);
+
+  Toastify({
+    text: `Download ready: <a href="${blobUrl}" target="_blank" download="${fileName}">${fileName}</a>`,
+    duration: 10000,
+    newWindow: true,
+    gravity: 'bottom',
+    position: 'right',
+    backgroundColor: '#fff',
+    stopOnFocus: true,
+  }).showToast();
+}
 
 export class FileDownloader {
   fileBuffer: string[];
@@ -9,15 +63,15 @@ export class FileDownloader {
   onCompleteFileCallback: Function;
 
   constructor(
-    onCompleteFileCallback: (file: string) => void,
+    onCompleteFileCallback: Function = onCompleteFile,
     fileBegin: string = DEFAULT_FILE_BEGIN,
-    fileEnd: string = DEFAULT_FILE_END
+    fileEnd: string = DEFAULT_FILE_END,
   ) {
     this.fileBuffer = [];
-    this.onCompleteFileCallback = onCompleteFileCallback;
     this.fileBegin = fileBegin;
     this.fileEnd = fileEnd;
     this.partialFileBegin = '';
+    this.onCompleteFileCallback = onCompleteFileCallback;
   }
 
   bufferCharacter(character: string): string {
@@ -69,13 +123,13 @@ export class FileDownloader {
       this.fileBuffer.length >= this.fileBegin.length + this.fileEnd.length &&
       this.fileBuffer.slice(-this.fileEnd.length).join('') === this.fileEnd
     ) {
-      this.onCompleteFile(
+      this.onCompleteFileCallback(
         this.fileBuffer
           .slice(
             this.fileBegin.length,
-            this.fileBuffer.length - this.fileEnd.length
+            this.fileBuffer.length - this.fileEnd.length,
           )
-          .join('')
+          .join(''),
       );
       this.fileBuffer = [];
     }
@@ -93,13 +147,6 @@ export class FileDownloader {
     ) {
       return data;
     }
-    return data
-      .split('')
-      .map(this.bufferCharacter.bind(this))
-      .join('');
-  }
-
-  onCompleteFile(bufferCharacters: string): void {
-    this.onCompleteFileCallback(bufferCharacters);
+    return data.split('').map(this.bufferCharacter.bind(this)).join('');
   }
 }

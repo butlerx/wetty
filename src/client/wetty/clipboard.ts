@@ -1,7 +1,12 @@
-// NOTE text selection on double click or select
-export function copySelected(text: string): boolean {
-  if (window.clipboardData?.setData) {
-    window.clipboardData.setData('Text', text);
+/**
+ Copy text selection to clipboard on double click or select
+ @param event - the event this function is bound to eg mouseup
+ @param text - the selected text to copy
+ @returns boolean to indicate success or failure
+ */
+export function copySelected(event: Event, text: string): boolean {
+  if (event.clipboardData?.setData) {
+    event.clipboardData.setData('Text', text);
     return true;
   }
   if (

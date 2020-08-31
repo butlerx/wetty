@@ -1,5 +1,7 @@
 import winston from 'winston';
 
+import { isDev } from './env.js';
+
 const { combine, timestamp, label, simple, json, colorize } = winston.format;
 
 const dev = combine(
@@ -12,10 +14,10 @@ const dev = combine(
 const prod = combine(label({ label: 'Wetty' }), timestamp(), json());
 
 export const logger = winston.createLogger({
-  format: process.env.NODE_ENV === 'development' ? dev : prod,
+  format: isDev ? dev : prod,
   transports: [
     new winston.transports.Console({
-      level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
+      level: isDev ? 'debug' : 'info',
       handleExceptions: true,
     }),
   ],

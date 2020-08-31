@@ -1,11 +1,11 @@
-import { isNull, isUndefined } from '../../web_modules/lodash.js';
+import _ from 'lodash';
 import { verifyPrompt } from '../shared/verify.js';
 import { overlay } from '../shared/elements.js';
 
 export function disconnect(reason: string): void {
-  if (isNull(overlay)) return;
+  if (_.isNull(overlay)) return;
   overlay.style.display = 'block';
   const msg = document.getElementById('msg');
-  if (!isUndefined(reason) && !isNull(msg)) msg.innerHTML = reason;
+  if (!_.isUndefined(reason) && !_.isNull(msg)) msg.innerHTML = reason;
   window.removeEventListener('beforeunload', verifyPrompt, false);
 }

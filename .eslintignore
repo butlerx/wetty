@@ -3,4 +3,4 @@ node_modules/
 lib
 public/
 *hterm*
-web_modules
+build

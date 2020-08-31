@@ -1,8 +1,8 @@
-import { isNull } from '../../web_modules/lodash.js';
+import _ from 'lodash';
 
 export function mobileKeyboard(): void {
   const [screen] = document.getElementsByClassName('xterm-screen');
-  if (isNull(screen)) return;
+  if (_.isNull(screen)) return;
   screen.setAttribute('contenteditable', 'true');
   screen.setAttribute('spellcheck', 'false');
   screen.setAttribute('autocorrect', 'false');

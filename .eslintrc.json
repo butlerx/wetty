@@ -1,6 +1,9 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettier"],
+  "plugins": [
+    "@typescript-eslint",
+    "prettier"
+  ],
   "env": {
     "es6": true,
     "node": true,
@@ -14,8 +17,14 @@
     "prettier/@typescript-eslint"
   ],
   "rules": {
-    "linebreak-style": ["error", "unix"],
-    "arrow-parens": ["error", "as-needed"],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "arrow-parens": [
+      "error",
+      "as-needed"
+    ],
     "no-param-reassign": [
       "error",
       {
@@ -61,7 +70,10 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [".ts", ".js"]
+        "extensions": [
+          ".ts",
+          ".js"
+        ]
       }
     }
   }
