@@ -5,7 +5,6 @@ import helmet from 'helmet';
 import http from 'http';
 import https from 'https';
 import isUndefined from 'lodash/isUndefined.js';
-import sassMiddleware from 'node-sass-middleware';
 import socket from 'socket.io';
 import winston from 'express-winston';
 import { join, resolve } from 'path';
@@ -15,6 +14,8 @@ import { html } from './socketServer/html.js';
 import { logger } from '../shared/logger.js';
 
 const trim = (str: string): string => str.replace(/\/*$/, '');
+const serveStatic = (path: string) =>
+  express.static(resolve(process.cwd(), 'build', path));
 
 export function server(
   { base, port, host, title, bypassHelmet }: Server,
@@ -32,28 +33,12 @@ export function server(
 
   const app = express();
   app
-    .use(
-      `${basePath}/web_modules`,
-      express.static(resolve(process.cwd(), 'web_modules')),
-    )
-    .use(
-      sassMiddleware({
-        src: resolve(process.cwd(), 'lib', 'client'),
-        dest: resolve(process.cwd(), 'assets'),
-        outputStyle: 'compressed',
-        log(severity: string, key: string, value: string) {
-          logger.log(severity, 'node-sass-middleware   %s : %s', key, value);
-        },
-      }),
-    )
-    .use(`${basePath}/assets`, express.static(resolve(process.cwd(), 'assets')))
-    .use(
-      `${basePath}/client`,
-      express.static(resolve(process.cwd(), 'lib', 'client')),
-    )
+    .use(`${basePath}/web_modules`, serveStatic('web_modules'))
+    .use(`${basePath}/assets`, serveStatic('assets'))
+    .use(`${basePath}/client`, serveStatic('client'))
     .use(winston.logger(logger))
     .use(compression())
-    .use(favicon(join('assets', 'favicon.ico')));
+    .use(favicon(join('build', 'assets', 'favicon.ico')));
   /* .use((req, res, next) => {
       if (req.path.substr(-1) === '/' && req.path.length > 1)
         res.redirect(

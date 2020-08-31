@@ -1,4 +1,4 @@
-FROM node:dubnium-alpine as builder
+FROM node:current-alpine as builder
 RUN apk add -U build-base python
 WORKDIR /usr/src/app
 COPY . /usr/src/app
@@ -6,7 +6,7 @@ RUN yarn && \
     yarn build && \
     yarn install --production --ignore-scripts --prefer-offline
 
-FROM node:dubnium-alpine
+FROM node:current-alpine
 LABEL maintainer="butlerx@notthe.cloud"
 WORKDIR /usr/src/app
 ENV NODE_ENV=production

@@ -1,9 +1,13 @@
-import express from 'express';
+import type express from 'express';
+import { isDev } from '../../shared/env.js';
+
+const jsFiles = isDev ? ['dev', 'wetty'] : ['wetty'];
+const cssFiles = ['styles', 'options', 'overlay', 'terminal'];
 
 const render = (
   title: string,
-  css: string,
-  js: string,
+  css: string[],
+  js: string[],
 ): string => `<!doctype html>
 <html lang="en">
   <head>
@@ -11,7 +15,7 @@ const render = (
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>${title}</title>
-    <link rel="stylesheet" href="${css}" />
+    ${css.map(file => `<link rel="stylesheet" href="${file}" />`).join('\n')}
   </head>
   <body>
     <div id="overlay">
@@ -24,11 +28,13 @@ const render = (
       <a class="toggler"
          href="#"
          alt="Toggle options"
-       ><i class="fas fa-cogs" /></a>
+       ><i class="fas fa-cogs"></i></a>
       <textarea class="editor"></textarea>
     </div>
     <div id="terminal"></div>
-    <script type="module" src="${js}" />
+    ${js
+      .map(file => `<script type="module" src="${file}"></script>`)
+      .join('\n')}
   </body>
 </html>`;
 
@@ -37,5 +43,9 @@ export const html = (base: string, title: string) => (
   res: express.Response,
 ) =>
   res.send(
-    render(title, `${base}/assets/styles.css`, `${base}/client/index.js`),
+    render(
+      title,
+      cssFiles.map(css => `${base}/assets/css/${css}.css`),
+      jsFiles.map(js => `${base}/client/${js}.js`),
+    ),
   );

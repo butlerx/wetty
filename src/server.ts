@@ -19,6 +19,7 @@ import {
 /**
  * Starts WeTTy Server
  * @name startServer
+ * @returns Promise that resolves SocketIO server
  */
 export async function startServer(
   ssh: SSH = sshDefault,

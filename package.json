@@ -5,22 +5,20 @@
   "homepage": "https://github.com/butlerx/wetty",
   "license": "MIT",
   "type": "module",
-  "main": "./lib/main.js",
-  "module": "./lib/server.js",
+  "main": "./build/main.js",
+  "module": "./build/server.js",
   "files": [
-    "lib/",
-    "assets/css"
+    "build/"
   ],
   "scripts": {
-    "build": "snowpack build && tsc -p tsconfig.json",
-    "contributor": "all-contributors",
-    "dev": "NODE_ENV=development yarn build && concurrently --kill-others --success first \"tsc -p tsconfig.json \" \"snowpack dev\" \"nodemon .\"",
-    "lint": "eslint --ext .ts,.js .",
-    "prepublishOnly": "NODE_ENV=production yarn build",
+    "build": "snowpack build",
+    "dev": "snowpack dev",
+    "prepublishOnly": "snowpack  build",
     "start": "NODE_ENV=production node .",
+    "lint": "eslint --ext .ts,.js .",
+    "contributor": "all-contributors",
     "test": "mocha -r babel-register-ts src/**/*.spec.ts",
-    "postinstall": "snowpack install",
-    "clean": "rm -rf assets/css build lib web_modules node_modules"
+    "clean": "bash build.sh --clean"
   },
   "repository": {
     "type": "git",
@@ -75,7 +73,7 @@
       [
         "@snowpack/plugin-run-script",
         {
-          "cmd": "sass assets/scss:assets/css --load-path=node_modules -s compressed --no-source-map",
+          "cmd": "bash build.sh",
           "watch": "$1 --watch"
         }
       ]
