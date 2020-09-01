@@ -2,19 +2,18 @@
  * Create WeTTY server
  * @module WeTTy
  */
-import type { SSH, SSL, SSLBuffer, Server } from './shared/interfaces';
-import { getCommand } from './server/command.js';
-import { loadSSL } from './server/ssl.js';
-import { logger } from './shared/logger.js';
-import { login } from './server/login.js';
-import { server } from './server/socketServer.js';
-import { spawn } from './server/spawn.js';
+import type { SSH, SSL, Server } from './shared/interfaces';
+import { getCommand } from './server/command';
+import { logger } from './shared/logger';
+import { login } from './server/login';
+import { server } from './server/socketServer';
+import { spawn } from './server/spawn';
 import {
   sshDefault,
   serverDefault,
   forceSSHDefault,
   defaultCommand,
-} from './server/default.js';
+} from './shared/defaults';
 
 /**
  * Starts WeTTy Server
@@ -36,8 +35,7 @@ export async function startServer(
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`);
   }
 
-  const sslBuffer: SSLBuffer = await loadSSL(ssl);
-  const io = server(serverConf, sslBuffer);
+  const io = await server(serverConf, ssl);
   /**
    * Wetty server connected too
    * @fires WeTTy#connnection

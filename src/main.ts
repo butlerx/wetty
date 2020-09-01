@@ -3,15 +3,15 @@
  * @module WeTTy
  */
 import yargs from 'yargs';
-import isUndefined from 'lodash/isUndefined.js';
-import { logger } from './shared/logger.js';
+import isUndefined from 'lodash/isUndefined';
+import { logger } from './shared/logger';
 import {
   sshDefault,
   serverDefault,
   forceSSHDefault,
   defaultCommand,
-} from './server/default.js';
-import { startServer } from './server.js';
+} from './shared/defaults';
+import { startServer } from './server';
 
 const opts = yargs
   .option('ssl-key', {

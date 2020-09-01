@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { verifyPrompt } from '../shared/verify.js';
-import { overlay } from '../shared/elements.js';
+import { verifyPrompt } from '../shared/verify';
+import { overlay } from '../shared/elements';
 
 export function disconnect(reason: string): void {
   if (_.isNull(overlay)) return;
