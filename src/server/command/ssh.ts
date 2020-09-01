@@ -1,5 +1,5 @@
 import isUndefined from 'lodash/isUndefined.js';
-import { logger } from '../../shared/logger';
+import { logger } from '../../shared/logger.js';
 
 export function sshOptions(
   {

@@ -1,0 +1,27 @@
+{
+  ssh: {
+    // user:  'username', // default user to use when ssh-ing
+    host: 'localhost', // Server to ssh to
+    auth: 'password', // shh authentication, method. Defaults to "password", you can use "publickey,password" instead'
+    // pass: "password", // Password to use when sshing
+    // key: "", // path to an optional client private key, connection will be password-less and insecure!
+    port: 22, // Port to ssh to
+    knownHosts: '/dev/null', // ssh knownHosts file to use
+  },
+  server:  {
+    base: '/wetty/', // URL base to serve resources from
+    port: 3000, // Port to listen on
+    host: '0.0.0.0', // address to listen on
+    title: 'WeTTy - The Web Terminal Emulator', // Page title
+    bypassHelmet: false, // Disable Helmet security checks
+  },
+
+  forceSSH: false, // Force sshing to local machine over login if running as root
+  command: 'login', // Command to run on server. Login will use ssh if connecting to different server
+  /*
+  ssl:{
+    key: 'ssl.key',
+    cert: 'ssl.cert',
+  }
+  */
+}

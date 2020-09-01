@@ -3,13 +3,13 @@ import compression from 'compression';
 import helmet from 'helmet';
 import winston from 'express-winston';
 
-import type { SSL, SSLBuffer, Server } from '../shared/interfaces';
-import { favicon, redirect } from './socketServer/middleware';
-import { html } from './socketServer/html';
-import { listen } from './socketServer/socket';
-import { logger } from '../shared/logger';
-import { serveStatic, trim } from './socketServer/assets';
-import { loadSSL } from './socketServer/ssl';
+import type { SSL, SSLBuffer, Server } from '../shared/interfaces.js';
+import { favicon, redirect } from './socketServer/middleware.js';
+import { html } from './socketServer/html.js';
+import { listen } from './socketServer/socket.js';
+import { logger } from '../shared/logger.js';
+import { serveStatic, trim } from './socketServer/assets.js';
+import { loadSSL } from './socketServer/ssl.js';
 
 export async function server(
   { base, port, host, title, bypassHelmet }: Server,

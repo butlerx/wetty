@@ -1,5 +1,6 @@
-import Toastify from 'toastify-js';
-import fileType from 'file-type';
+// @ts-ignore
+import Toastify from '/../web_modules/toastify-js.js';
+import fileType from '/../web_modules/file-type.js';
 
 const DEFAULT_FILE_BEGIN = '\u001b[5i';
 const DEFAULT_FILE_END = '\u001b[4i';

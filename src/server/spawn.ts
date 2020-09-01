@@ -1,7 +1,7 @@
 import isUndefined from 'lodash/isUndefined.js';
 import pty from 'node-pty';
-import { logger } from '../shared/logger';
-import { xterm } from './shared/xterm';
+import { logger } from '../shared/logger.js';
+import { xterm } from './shared/xterm.js';
 
 export function spawn(socket: SocketIO.Socket, args: string[]): void {
   const term = pty.spawn('/usr/bin/env', args, xterm);

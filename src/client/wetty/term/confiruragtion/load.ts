@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from '/../../../web_modules/lodash.js';
 
 export function loadOptions(): object {
   const defaultOptions = { fontSize: 14 };

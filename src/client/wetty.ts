@@ -1,14 +1,17 @@
-import _ from 'lodash';
-import { dom, library } from '@fortawesome/fontawesome-svg-core';
-import { faCogs } from '@fortawesome/free-solid-svg-icons';
+import _ from '/../web_modules/lodash.js';
+import {
+  dom,
+  library,
+} from '/../web_modules/@fortawesome/fontawesome-svg-core.js';
+import { faCogs } from '/../web_modules/@fortawesome/free-solid-svg-icons.js';
 
-import { FileDownloader } from './wetty/download';
-import { disconnect } from './wetty/disconnect';
-import { mobileKeyboard } from './wetty/mobile';
-import { overlay } from './shared/elements';
-import { socket } from './wetty/socket';
-import { verifyPrompt } from './shared/verify';
-import { terminal } from './wetty/term';
+import { FileDownloader } from './wetty/download.js';
+import { disconnect } from './wetty/disconnect.js';
+import { mobileKeyboard } from './wetty/mobile.js';
+import { overlay } from './shared/elements.js';
+import { socket } from './wetty/socket.js';
+import { verifyPrompt } from './shared/verify.js';
+import { terminal } from './wetty/term.js';
 
 // Setup for fontawesome
 library.add(faCogs);
