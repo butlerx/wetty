@@ -25,3 +25,11 @@ export interface Server {
   base: string;
   bypassHelmet: boolean;
 }
+
+export interface Config {
+  ssh: SSH;
+  server: Server;
+  forceSSH: boolean;
+  command: string;
+  ssl?: SSL;
+}

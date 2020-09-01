@@ -1,4 +1,4 @@
-import type { SSH, Server } from '../shared/interfaces';
+import type { SSH, Server } from "./interfaces";
 
 export const sshDefault: SSH = {
   user: process.env.SSHUSER || '',

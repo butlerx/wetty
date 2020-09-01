@@ -4,8 +4,8 @@ import http from 'http';
 import https from 'https';
 import isUndefined from 'lodash/isUndefined.js';
 
-import { logger } from '../../shared/logger';
-import type { SSLBuffer } from '../../shared/interfaces';
+import { logger } from '../../shared/logger.js';
+import type { SSLBuffer } from '../../shared/interfaces.js';
 
 export const listen = (
   app: express.Express,

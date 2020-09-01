@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from '/../web_modules/lodash.js';
 import { verifyPrompt } from '../shared/verify';
 import { overlay } from '../shared/elements';
 

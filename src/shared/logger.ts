@@ -1,6 +1,6 @@
 import winston from 'winston';
 
-import { isDev } from './env';
+import { isDev } from './env.js';
 
 const { combine, timestamp, label, simple, json, colorize } = winston.format;
 

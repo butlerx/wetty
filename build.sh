@@ -21,7 +21,7 @@ show_usage() {
 
 clean() {
   : 'Clean repo and delete all built files'
-  rm -rf build
+  rm -rf build yarn-error.log
 }
 
 build-css() {
@@ -39,6 +39,7 @@ build-js() {
 
 build-assets() {
   : 'Move assets not handled by sass and typescript to build dir'
+  mkdir -p build/assets
   cp src/assets/*.ico build/assets
 }
 
@@ -50,7 +51,8 @@ watch() {
     --kill-others \
     --success first \
     "build-js --watch" \
-    "build-css --watch" "nodemon ."
+    "build-css --watch" \
+    "nodemon ."
 }
 
 build() {

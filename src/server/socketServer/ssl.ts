@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import isUndefined from 'lodash/isUndefined.js';
-import type { SSL, SSLBuffer } from '../shared/interfaces';
+import type { SSL, SSLBuffer } from '../../shared/interfaces';
 
 export async function loadSSL(ssl?: SSL): Promise<SSLBuffer> {
   if (isUndefined(ssl) || isUndefined(ssl.key) || isUndefined(ssl.cert))

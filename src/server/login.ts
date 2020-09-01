@@ -1,5 +1,5 @@
 import pty from 'node-pty';
-import { xterm } from './shared/xterm';
+import { xterm } from './shared/xterm.js';
 
 export function login(socket: SocketIO.Socket): Promise<string> {
   // Check request-header for username

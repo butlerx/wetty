@@ -2,18 +2,18 @@
  * Create WeTTY server
  * @module WeTTy
  */
-import type { SSH, SSL, Server } from './shared/interfaces';
-import { getCommand } from './server/command';
-import { logger } from './shared/logger';
-import { login } from './server/login';
-import { server } from './server/socketServer';
-import { spawn } from './server/spawn';
+import type { SSH, SSL, Server } from './shared/interfaces.js';
+import { getCommand } from './server/command.js';
+import { logger } from './shared/logger.js';
+import { login } from './server/login.js';
+import { server } from './server/socketServer.js';
+import { spawn } from './server/spawn.js';
 import {
   sshDefault,
   serverDefault,
   forceSSHDefault,
   defaultCommand,
-} from './shared/defaults';
+} from './shared/defaults.js';
 
 /**
  * Starts WeTTy Server
