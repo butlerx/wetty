@@ -1,5 +1,5 @@
 import type express from 'express';
-import { isDev } from '../../shared/env.js';
+import { isDev } from '../../shared/env';
 
 const jsFiles = isDev ? ['dev', 'wetty'] : ['wetty'];
 const cssFiles = ['styles', 'options', 'overlay', 'terminal'];

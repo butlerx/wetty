@@ -1,20 +1,11 @@
 import _ from 'lodash';
-import type { Terminal } from 'xterm';
 
-import { editor } from '../shared/elements.js';
+import type { Term } from '../shared/type';
+import { copySelected, copyShortcut } from './confiruragtion/clipboard';
+import { editor } from '../../shared/elements';
+import { loadOptions } from './confiruragtion/load';
 
-function loadOptions(): object {
-  const defaultOptions = { fontSize: 14 };
-  try {
-    return _.isUndefined(localStorage.options)
-      ? defaultOptions
-      : JSON.parse(localStorage.options);
-  } catch {
-    return defaultOptions;
-  }
-}
-
-export function configureTerm(term: Terminal, resize: Function): void {
+export function configureTerm(term: Term): void {
   const options = loadOptions();
   Object.entries(options).forEach(([key, value]) => {
     term.setOption(key, value);
@@ -33,7 +24,7 @@ export function configureTerm(term: Terminal, resize: Function): void {
           const value = updated[key];
           term.setOption(key, value);
         });
-        resize();
+        term.resizeTerm();
       } catch {
         // skip
         editor.classList.add('error');
@@ -48,4 +39,14 @@ export function configureTerm(term: Terminal, resize: Function): void {
       });
     }
   }
+
+  term.attachCustomKeyEventHandler(copyShortcut);
+
+  document.addEventListener(
+    'mouseup',
+    () => {
+      if (term.hasSelection()) copySelected(term.getSelection());
+    },
+    false,
+  );
 }
