@@ -1,9 +1,13 @@
 import pty from 'node-pty';
-import { dirname, resolve } from 'path';
+import { dirname, resolve as resolvePath } from 'path';
 import { fileURLToPath } from 'url';
 import { xterm } from './shared/xterm.js';
 
-const __dirname = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const executable = resolvePath(
+  dirname(fileURLToPath(import.meta.url)),
+  '..',
+  'buffer.js',
+);
 
 export function login(socket: SocketIO.Socket): Promise<string> {
   // Check request-header for username
@@ -16,11 +20,7 @@ export function login(socket: SocketIO.Socket): Promise<string> {
 
   // Request carries no username information
   // Create terminal and ask user for username
-  const term = pty.spawn(
-    '/usr/bin/env',
-    ['node', `${__dirname}/buffer.js`],
-    xterm,
-  );
+  const term = pty.spawn('/usr/bin/env', ['node', executable], xterm);
   let buf = '';
   return new Promise((resolve, reject) => {
     term.on('exit', () => {

@@ -1,4 +1,5 @@
 export interface SSH {
+  [s: string]: string | number | boolean | undefined;
   user: string;
   host: string;
   auth: string;
@@ -19,6 +20,7 @@ export interface SSLBuffer {
 }
 
 export interface Server {
+  [s: string]: string | number | boolean;
   port: number;
   host: string;
   title: string;
