@@ -1,6 +1,0 @@
-node_modules/
-.esm-cache
-lib
-public/
-*hterm*
-build

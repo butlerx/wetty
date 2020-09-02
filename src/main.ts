@@ -93,7 +93,6 @@ if (!opts.help) {
   (async () => {
     const config = await loadConfigFile(opts.conf);
     const conf = mergeCliConf(opts, config);
-    console.log(conf);
     startServer(
       conf.ssh,
       conf.server,

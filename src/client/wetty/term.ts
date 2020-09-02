@@ -1,7 +1,7 @@
-import _ from '/../web_modules/lodash.js';
 import type { Socket } from 'socket.io-client';
-import { FitAddon } from '/../web_modules/xterm-addon-fit.js';
-import { Terminal } from '/../web_modules/xterm.js';
+import _ from 'lodash';
+import { FitAddon } from 'xterm-addon-fit';
+import { Terminal } from 'xterm';
 
 import type { Term } from './shared/type';
 import { configureTerm } from './term/confiruragtion.js';

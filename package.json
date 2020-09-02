@@ -12,13 +12,13 @@
   ],
   "scripts": {
     "build": "snowpack build",
-    "dev": "snowpack dev",
+    "dev": "NODE_ENV=development concurrently --kill-others --success first \"snowpack dev\" \"nodemon .\"",
     "prepublishOnly": "snowpack  build",
+    "lint": "eslint src/**/*.ts",
     "start": "NODE_ENV=production node .",
-    "lint": "eslint --ext .ts,.js .",
     "contributor": "all-contributors",
     "test": "mocha -r babel-register-ts src/**/*.spec.ts",
-    "clean": "bash build.sh --clean"
+    "clean": "rm -rf build yarn-error.log"
   },
   "repository": {
     "type": "git",
@@ -56,24 +56,37 @@
     ]
   },
   "snowpack": {
-    "install": [
-      "@fortawesome/fontawesome-svg-core",
-      "@fortawesome/free-solid-svg-icons",
-      "file-type",
-      "lodash",
-      "socket.io-client",
-      "toastify-js",
-      "xterm",
-      "xterm-addon-fit"
-    ],
+    "installOptions": {
+      "sourceMap": true,
+      "installTypes": true
+    },
+    "mount": {
+      "src/client": "/client",
+      "src/assets": "/assets"
+    },
     "exclude": [
-      "**"
+      "src/server/**/*.ts",
+      "src/*.ts"
     ],
     "plugins": [
       [
         "@snowpack/plugin-run-script",
         {
-          "cmd": "bash build.sh",
+          "cmd": "tsc -p tsconfig.browser.json --noEmit",
+          "watch": "$1 --watch"
+        }
+      ],
+      [
+        "@snowpack/plugin-run-script",
+        {
+          "cmd": "sass src/assets/scss:build/assets/css --load-path=node_modules -s compressed --no-source-map",
+          "watch": "$1 --watch"
+        }
+      ],
+      [
+        "@snowpack/plugin-run-script",
+        {
+          "cmd": "tsc -p tsconfig.node.json",
           "watch": "$1 --watch"
         }
       ]
@@ -88,6 +101,7 @@
     "file-type": "^12.3.0",
     "fs-extra": "^8.1.0",
     "helmet": "^3.20.1",
+    "json5": "^2.1.3",
     "lodash": "^4.17.19",
     "node-pty": "^0.9.0",
     "node-sass-middleware": "^0.11.0",

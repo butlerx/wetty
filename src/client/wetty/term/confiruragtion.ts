@@ -1,4 +1,5 @@
-import _ from '/../../web_modules/lodash.js';
+import _ from 'lodash';
+import JSON5 from 'json5';
 
 import type { Term } from '../shared/type';
 import { copySelected, copyShortcut } from './confiruragtion/clipboard';
@@ -15,7 +16,7 @@ export function configureTerm(term: Term): void {
     editor.value = config;
     editor.addEventListener('keyup', () => {
       try {
-        const updated = JSON.parse(editor.value);
+        const updated = JSON5.parse(editor.value);
         const updatedConf = JSON.stringify(updated, null, 2);
         editor.value = updatedConf;
         editor.classList.remove('error');
