@@ -8,19 +8,17 @@
   width: 16px;
   z-index: 20;
 
-  a {
-    .toggler {
-      color: variables.$lgrey;
-      display: inline-block;
-      font-size: 16px;
-      position: absolute;
-      right: 1em;
-      top: 0;
-      z-index: 20;
+  .toggler {
+    color: variables.$lgrey;
+    display: inline-block;
+    font-size: 16px;
+    position: absolute;
+    right: 1em;
+    top: 0;
+    z-index: 20;
 
-      :hover {
-        color: variables.$white;
-      }
+    :hover {
+      color: variables.$white;
     }
   }
 
@@ -38,18 +36,17 @@
     top: 1em;
     width: 100%;
   }
+}
+
+#options.opened {
+  height: 50%;
+  width: 50%;
 
   .editor {
-    .error {
-      color: red;
-    }
+    display: flex;
   }
 
-  .opened {
-    height: 50%;
-    width: 50%;
-    .editor {
-      display: flex;
-    }
+  .error {
+    color: red;
   }
 }

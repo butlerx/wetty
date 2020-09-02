@@ -2,19 +2,11 @@ import isUndefined from 'lodash/isUndefined.js';
 import { logger } from '../../shared/logger.js';
 
 export function sshOptions(
-  {
-    pass,
-    path,
-    command,
-    host,
-    port,
-    auth,
-    knownhosts,
-  }: { [s: string]: string },
+  { pass, path, command, host, port, auth, knownHosts }: Record<string, string>,
   key?: string,
 ): string[] {
   const cmd = parseCommand(command, path);
-  const hostChecking = knownhosts !== '/dev/null' ? 'yes' : 'no';
+  const hostChecking = knownHosts !== '/dev/null' ? 'yes' : 'no';
   const sshRemoteOptsBase = [
     'ssh',
     host,
@@ -24,7 +16,7 @@ export function sshOptions(
     '-o',
     `PreferredAuthentications=${auth}`,
     '-o',
-    `UserKnownHostsFile=${knownhosts}`,
+    `UserKnownHostsFile=${knownHosts}`,
     '-o',
     `StrictHostKeyChecking=${hostChecking}`,
   ];

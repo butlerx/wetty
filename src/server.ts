@@ -64,7 +64,7 @@ export async function startServer(
         });
         spawn(socket, args);
       } catch (error) {
-        logger.info('Disconnect signal sent');
+        logger.info('Disconnect signal sent', { err: error });
       }
     }
   });
