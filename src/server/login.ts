@@ -1,5 +1,9 @@
 import pty from 'node-pty';
+import { dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
 import { xterm } from './shared/xterm.js';
+
+const __dirname = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
 export function login(socket: SocketIO.Socket): Promise<string> {
   // Check request-header for username
