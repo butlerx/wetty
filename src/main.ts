@@ -78,8 +78,9 @@ const opts = yargs
     description: 'command to run in shell',
     type: 'string',
   })
-  .option('bypass-helmet', {
-    description: 'disable helmet from placing security restrictions',
+  .option('allow-iframe', {
+    description:
+      'Allow wetty to be embedded in an iframe, defaults to allowing same origin',
     type: 'boolean',
   })
   .option('help', {
@@ -90,20 +91,15 @@ const opts = yargs
   .boolean('allow_discovery').argv;
 
 if (!opts.help) {
-  (async () => {
-    const config = await loadConfigFile(opts.conf);
-    const conf = mergeCliConf(opts, config);
-    startServer(
-      conf.ssh,
-      conf.server,
-      conf.command,
-      conf.forceSSH,
-      conf.ssl,
-    ).catch(err => {
+  loadConfigFile(opts.conf)
+    .then(config => mergeCliConf(opts, config))
+    .then(conf =>
+      startServer(conf.ssh, conf.server, conf.command, conf.forceSSH, conf.ssl),
+    )
+    .catch((err: Error) => {
       logger.error(err);
       process.exitCode = 1;
     });
-  })();
 } else {
   yargs.showHelp();
   process.exitCode = 0;

@@ -25,7 +25,7 @@ export interface Server {
   host: string;
   title: string;
   base: string;
-  bypassHelmet: boolean;
+  allowIframe: boolean;
 }
 
 export interface Config {
