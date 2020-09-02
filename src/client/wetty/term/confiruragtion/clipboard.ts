@@ -4,8 +4,8 @@
  @returns boolean to indicate success or failure
  */
 export function copySelected(text: string): boolean {
-  if (window.clipboardData && window.clipboardData.setData) {
-    window.clipboardData.setData('Text', text);
+  if ((window as any).clipboardData && (window as any).clipboardData.setData) {
+    (window as any).clipboardData.setData('Text', text);
     return true;
   }
   if (

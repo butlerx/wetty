@@ -1,6 +1,6 @@
 import url from 'url';
-import { Socket } from 'socket.io';
-import { SSH } from '../shared/interfaces.js';
+import type { Socket } from 'socket.io';
+import type { SSH } from '../shared/interfaces';
 import { address } from './command/address.js';
 import { loginOptions } from './command/login.js';
 import { sshOptions } from './command/ssh.js';

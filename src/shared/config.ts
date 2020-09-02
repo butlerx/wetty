@@ -2,6 +2,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import JSON5 from 'json5';
 import isUndefined from 'lodash/isUndefined.js';
+import type { Arguments } from 'yargs';
 
 import type { Config, SSH, Server, SSL } from './interfaces';
 import {
@@ -11,7 +12,15 @@ import {
   defaultCommand,
 } from './defaults.js';
 
-type confValue = boolean | string | number | undefined | SSH | Server | SSL;
+type confValue =
+  | boolean
+  | string
+  | number
+  | undefined
+  | unknown
+  | SSH
+  | Server
+  | SSL;
 /**
  * Cast given value to boolean
  *
@@ -92,10 +101,7 @@ const objectAssign = (
  * @returns merged configuration
  *
  */
-export function mergeCliConf(
-  opts: Record<string, confValue>,
-  config: Config,
-): Config {
+export function mergeCliConf(opts: Arguments, config: Config): Config {
   const ssl = {
     key: opts['ssl-key'],
     cert: opts['ssl-cert'],
@@ -116,7 +122,7 @@ export function mergeCliConf(
       host: opts.host,
       port: opts.port,
       title: opts.title,
-      bypassHelmet: opts['bypass-helmet'],
+      allowIframe: opts['allow-iframe'],
     }) as Server,
     command: isUndefined(opts.command) ? config.command : `${opts.command}`,
     forceSSH: isUndefined(opts['force-ssh'])
