@@ -4,55 +4,17 @@
     "target": "es2019",
     "moduleResolution": "node",
     "declaration": true,
-    "declarationMap": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "incremental": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "outDir": "./build",
     "removeComments": true,
     "skipLibCheck": true,
-    "sourceMap": true,
-    "strict": true,
-    "baseUrl": ".",
-    "paths": {
-      "/*/web_modules/lodash.js": [
-        "node_modules/@types/lodash/index.d.ts"
-      ],
-      "/*/web_modules/xterm.js": [
-        "node_modules/xterm/typings/xterm.d.ts",
-        "node_modules/xterm"
-      ],
-      "/*/web_modules/xterm-addon-fit.js": [
-        "node_modules/xterm-addon-fit"
-      ],
-      "/*/web_modules/toastify-js.js": [
-        "node_modules/toastify-js"
-      ],
-      "/*/web_modules/file-type.js": [
-        "node_modules/file-type"
-      ],
-      "/*/web_modules/socket.io-client.js": [
-        "node_modules/@types/socket.io-client/index.d.ts"
-      ],
-      "/*/web_modules/@fortawesome/fontawesome-svg-core.js": [
-        "node_modules/@fortawesome/fontawesome-svg-core"
-      ],
-      "/*/web_modules/@fortawesome/free-solid-svg-icons.js": [
-        "node_modules/@fortawesome/free-solid-svg-icons"
-      ]
-    }
-  },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules/*"
-  ]
+    "strict": true
+  }
 }
