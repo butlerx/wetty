@@ -3,7 +3,7 @@ import path from 'path';
 import JSON5 from 'json5';
 import isUndefined from 'lodash/isUndefined.js';
 
-import type { Config, SSH, Server } from './interfaces';
+import type { Config, SSH, Server, SSL } from './interfaces';
 import {
   sshDefault,
   serverDefault,
@@ -11,13 +11,14 @@ import {
   defaultCommand,
 } from './defaults.js';
 
+type confValue = boolean | string | number | undefined | SSH | Server | SSL;
 /**
  * Cast given value to boolean
  *
  * @param value - variable to cast
  * @returns variable cast to boolean
  */
-function ensureBoolean(value: any): boolean {
+function ensureBoolean(value: confValue): boolean {
   switch (value) {
     case true:
     case 'true':
@@ -73,15 +74,15 @@ export async function loadConfigFile(filepath?: string): Promise<Config> {
  *
  */
 const objectAssign = (
-  target: Record<string, any>,
-  source: Record<string, any>,
-): Record<string, any> =>
+  target: SSH | Server,
+  source: Record<string, confValue>,
+): SSH | Server =>
   Object.fromEntries(
     Object.entries(source).map(([key, value]) => [
       key,
       isUndefined(source[key]) ? target[key] : value,
     ]),
-  );
+  ) as SSH | Server;
 
 /**
  * Merge cli arguemens with config object
@@ -92,14 +93,14 @@ const objectAssign = (
  *
  */
 export function mergeCliConf(
-  opts: Record<string, any>,
+  opts: Record<string, confValue>,
   config: Config,
 ): Config {
   const ssl = {
     key: opts['ssl-key'],
     cert: opts['ssl-cert'],
     ...config.ssl,
-  };
+  } as SSL;
   return {
     ssh: objectAssign(config.ssh, {
       user: opts['ssh-user'],
@@ -117,10 +118,10 @@ export function mergeCliConf(
       title: opts.title,
       bypassHelmet: opts['bypass-helmet'],
     }) as Server,
-    command: isUndefined(opts.command) ? config.command : opts.command,
+    command: isUndefined(opts.command) ? config.command : `${opts.command}`,
     forceSSH: isUndefined(opts['force-ssh'])
       ? config.forceSSH
-      : opts['force-ssh'],
+      : ensureBoolean(opts['force-ssh']),
     ssl: isUndefined(ssl.key) || isUndefined(ssl.cert) ? undefined : ssl,
   };
 }
