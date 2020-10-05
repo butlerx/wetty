@@ -1,5 +1,9 @@
 ---
-on: [pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 name: Run tests
 jobs:
