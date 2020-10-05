@@ -32,7 +32,7 @@ export async function server(
     .use(`${basePath}/client`, serveStatic('client'))
     .use(winston.logger(logger))
     .use(compression())
-    .use(favicon)
+    .use(favicon(basePath))
     .use(redirect)
     .use(policies(allowIframe))
     .get(basePath, client)
