@@ -1,6 +1,6 @@
 // NOTE text selection on double click or select
 export function copySelected(text: string): boolean {
-  if (window.clipboardData && window.clipboardData.setData) {
+  if (window.clipboardData?.setData) {
     window.clipboardData.setData('Text', text);
     return true;
   }
