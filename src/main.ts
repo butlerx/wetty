@@ -4,7 +4,7 @@
  */
 import yargs from 'yargs';
 import { logger } from './shared/logger.js';
-import { startServer } from './server.js';
+import { start } from './server.js';
 import { loadConfigFile, mergeCliConf } from './shared/config.js';
 
 const opts = yargs
@@ -94,7 +94,7 @@ if (!opts.help) {
   loadConfigFile(opts.conf)
     .then(config => mergeCliConf(opts, config))
     .then(conf =>
-      startServer(conf.ssh, conf.server, conf.command, conf.forceSSH, conf.ssl),
+      start(conf.ssh, conf.server, conf.command, conf.forceSSH, conf.ssl),
     )
     .catch((err: Error) => {
       logger.error(err);

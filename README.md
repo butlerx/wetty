@@ -35,7 +35,30 @@ yarn global add wetty
 ## Usage
 
 ```sh
-wetty [-h] [--port PORT] [--base BASE] [--sshhost SSH_HOST] [--sshport SSH_PORT] [--sshuser SSH_USER] [--host HOST] [--command COMMAND] [--forcessh] [--bypasshelmet] [--title TITLE] [--sslkey SSL_KEY_PATH] [--sslcert SSL_CERT_PATH]
+$ wetty --help
+Options:
+  --help, -h       Print help message                                  [boolean]
+  --version        Show version number                                 [boolean]
+  --conf           config file to load config from                      [string]
+  --ssl-key        path to SSL key                                      [string]
+  --ssl-cert       path to SSL certificate                              [string]
+  --ssh-host       ssh server host                                      [string]
+  --ssh-port       ssh server port                                      [number]
+  --ssh-user       ssh user                                             [string]
+  --title          window title                                         [string]
+  --ssh-auth       defaults to "password", you can use "publickey,password"
+                   instead                                              [string]
+  --ssh-pass       ssh password                                         [string]
+  --ssh-key        path to an optional client private key (connection will be
+                   password-less and insecure!)                         [string]
+  --force-ssh      Connecting through ssh even if running as root      [boolean]
+  --known-hosts    path to known hosts file                             [string]
+  --base, -b       base path to wetty                                   [string]
+  --port, -p       wetty listen port                                    [number]
+  --host           wetty listen host                                    [string]
+  --command, -c    command to run in shell                              [string]
+  --bypass-helmet  disable helmet from placing security restrictions   [boolean]
+
 ```
 
 Open your browser on `http://yourserver:3000/wetty` and you will prompted to
@@ -44,11 +67,11 @@ user before hand.
 
 If you run it as root it will launch `/bin/login` (where you can specify the
 user name), else it will launch `ssh` and connect by default to `localhost`. The
-SSH connection can be forced using the `--forcessh` option.
+SSH connection can be forced using the `--force-ssh` option.
 
-If instead you wish to connect to a remote host you can specify the `--sshhost`
-option, the SSH port using the `--sshport` option and the SSH user using the
-`--sshuser` option.
+If instead you wish to connect to a remote host you can specify the `--ssh-host`
+option, the SSH port using the `--ssh-port` option and the SSH user using the
+`--ssh-user` option.
 
 Check out the
 [Flags docs](https://github.com/butlerx/wetty/blob/master/docs/flags.md) for a

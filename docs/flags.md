@@ -14,12 +14,12 @@ the `login` binary rather than ssh. If no host is specified it will use
 `localhost` as the ssh host.
 
 If instead you wish to connect to a remote host you can specify the host with
-the `--sshhost` flag and pass the IP or DNS address of the host you want to
+the `--ssh-host` flag and pass the IP or DNS address of the host you want to
 connect to.
 
 ## Default User
 
-You can specify the default user used to ssh to a host using the `--sshuser`.
+You can specify the default user used to ssh to a host using the `--ssh-user`.
 This user can overwritten by going to
 `http://yourserver:3000/wetty/ssh/<username>`. If this is left blank a user will
 be prompted to enter their username when they connect.
@@ -27,7 +27,7 @@ be prompted to enter their username when they connect.
 ## SSH Port
 
 By default WeTTy will try to ssh to port `22`, if your host uses an alternative
-ssh port this can be specified with the flag `--sshport`.
+ssh port this can be specified with the flag `--ssh-port`.
 
 ## WeTTy URL
 

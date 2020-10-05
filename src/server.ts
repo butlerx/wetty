@@ -2,6 +2,7 @@
  * Create WeTTY server
  * @module WeTTy
  */
+import type SocketIO from 'socket.io';
 import type { SSH, SSL, Server } from './shared/interfaces.js';
 import { getCommand } from './server/command.js';
 import { logger } from './shared/logger.js';
@@ -20,7 +21,7 @@ import {
  * @name startServer
  * @returns Promise that resolves SocketIO server
  */
-export async function startServer(
+export async function start(
   ssh: SSH = sshDefault,
   serverConf: Server = serverDefault,
   command: string = defaultCommand,
