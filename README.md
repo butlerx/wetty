@@ -21,7 +21,7 @@ websockets rather then Ajax and hence better response time.
 
 ## Prerequisites
 
-- node >=6.9
+- node >=14
 - make
 - python
 - build-essential
