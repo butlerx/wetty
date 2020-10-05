@@ -7,13 +7,12 @@ The terminal escape sequences used are `^[[5i` and `^[[4i` (VT100 for "enter
 auto print" and "exit auto print" respectively -
 https://vt100.net/docs/tp83/appendixc.html).
 
-An example of a helper script that prints the terminal escape characters and
-base64s stdin:
+To take advantage add the following bash function to your `.bashrc`
 
 ```bash
-$ cat wetty-download.sh
-#!/bin/sh
-echo '^[[5i'$(cat /dev/stdin | base64)'^[[4i'
+funtion wetty-download() {
+  echo "\033[5i"$(cat /dev/stdin | base64 -w 0)"\033[4i"
+}
 ```
 
 You are then able to download files via WeTTy!
