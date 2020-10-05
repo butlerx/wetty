@@ -1,0 +1,16 @@
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "proseWrap": "always",
+  "overrides": [
+    {
+      "files": [
+        "*.js",
+        "*.ts"
+      ],
+      "options": {
+        "printWidth": 80
+      }
+    }
+  ]
+}

@@ -1,13 +1,20 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "lib": ["es2015"],
-    "sourceMap": true,
-    "strict": true,
+    "module": "esnext",
+    "target": "es2019",
     "moduleResolution": "node",
-    "typeRoots": ["node_module/@types"],
-    "outDir": "./dist"
-  },
-  "include": ["./src/**/*.ts"]
+    "declaration": true,
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "removeComments": true,
+    "skipLibCheck": true,
+    "strict": true
+  }
 }

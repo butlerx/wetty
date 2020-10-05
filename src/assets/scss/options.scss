@@ -1,0 +1,52 @@
+@use './variables';
+
+#options {
+  height: 16px;
+  position: absolute;
+  right: 1em;
+  top: 1em;
+  width: 16px;
+  z-index: 20;
+
+  .toggler {
+    color: variables.$lgrey;
+    display: inline-block;
+    font-size: 16px;
+    position: absolute;
+    right: 1em;
+    top: 0;
+    z-index: 20;
+
+    :hover {
+      color: variables.$white;
+    }
+  }
+
+  .editor {
+    background-color: rgba(0, 0, 0, 0.85);
+    border-color: rgba(255, 255, 255, 0.25);
+    border-radius: 0.3em;
+    color: #eee;
+    display: none;
+    font-size: 24px;
+    height: 100%;
+    padding: 0.5em;
+    position: relative;
+    right: 2em;
+    top: 1em;
+    width: 100%;
+  }
+}
+
+#options.opened {
+  height: 50%;
+  width: 50%;
+
+  .editor {
+    display: flex;
+  }
+
+  .error {
+    color: red;
+  }
+}

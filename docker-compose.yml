@@ -2,9 +2,10 @@
 version: '3.5'
 services:
   wetty:
-    build: .
     image: wettyoss/wetty
-    container_name: wetty
+    build:
+      context: .
+      dockerfile: containers/wetty/Dockerfile
     tty: true
     working_dir: /usr/src/app
     ports:
@@ -16,9 +17,8 @@ services:
 
   web:
     image: nginx
-    container_name: wetty-nginx
     volumes:
-      - ./bin/nginx.template:/etc/nginx/conf.d/wetty.template
+      - ./conf/nginx.template:/etc/nginx/conf.d/wetty.template
     ports:
       - '80:80'
     environment:
@@ -35,9 +35,8 @@ services:
   wetty-ssh:
     build:
       context: .
-      dockerfile: ssh.Dockerfile
+      dockerfile: containers/ssh/Dockerfile
     image: wettyoss/wetty:ssh
-    container_name: 'wetty-ssh'
 
 networks:
   default:

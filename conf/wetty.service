@@ -1,0 +1,17 @@
+# systemd unit file
+#
+# place in /etc/systemd/system
+# systemctl enable wetty.service
+# systemctl start wetty.service
+
+[Unit]
+Description=Wetty Web Terminal
+After=network.target
+
+[Service]
+
+WorkingDirectory=$HOME/.config/yarn/global/node_modules/wetty/
+ExecStart=/usr/bin/node . -p 3000 --host 127.0.0.1
+
+[Install]
+WantedBy=multi-user.target

@@ -19,7 +19,7 @@ Put the following configuration in your nginx conf:
 
 ```nginx
 location ^~ /wetty {
-  proxy_pass http://127.0.0.1:3000/WeTTy;
+  proxy_pass http://127.0.0.1:3000/wetty;
   proxy_http_version 1.1;
   proxy_set_header Upgrade $http_upgrade;
   proxy_set_header Connection "upgrade";
