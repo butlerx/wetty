@@ -1,3 +1,4 @@
+import type SocketIO from 'socket.io';
 import isUndefined from 'lodash/isUndefined.js';
 import pty from 'node-pty';
 import { logger } from '../shared/logger.js';

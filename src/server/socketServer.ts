@@ -1,3 +1,4 @@
+import type SocketIO from 'socket.io';
 import express from 'express';
 import compression from 'compression';
 import winston from 'express-winston';

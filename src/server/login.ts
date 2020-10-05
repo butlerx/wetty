@@ -1,3 +1,4 @@
+import type SocketIO from 'socket.io';
 import pty from 'node-pty';
 import { dirname, resolve as resolvePath } from 'path';
 import { fileURLToPath } from 'url';
