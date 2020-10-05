@@ -1,4 +1,4 @@
-import type express from 'express';
+import type { Request, Response, RequestHandler } from 'express';
 import { isDev } from '../../shared/env.js';
 
 const jsFiles = isDev ? ['dev', 'wetty'] : ['wetty'];
@@ -6,6 +6,7 @@ const cssFiles = ['styles', 'options', 'overlay', 'terminal'];
 
 const render = (
   title: string,
+  favicon: string,
   css: string[],
   js: string[],
 ): string => `<!doctype html>
@@ -14,6 +15,7 @@ const render = (
     <meta charset="utf8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel="icon" type="image/x-icon" href="${favicon}">
     <title>${title}</title>
     ${css.map(file => `<link rel="stylesheet" href="${file}" />`).join('\n')}
   </head>
@@ -38,14 +40,16 @@ const render = (
   </body>
 </html>`;
 
-export const html = (base: string, title: string) => (
-  _req: express.Request,
-  res: express.Response,
-) =>
+export const html = (base: string, title: string): RequestHandler => (
+  _req: Request,
+  res: Response,
+): void => {
   res.send(
     render(
       title,
+      `${base}/favicon.ico`,
       cssFiles.map(css => `${base}/assets/css/${css}.css`),
       jsFiles.map(js => `${base}/client/${js}.js`),
     ),
   );
+};
