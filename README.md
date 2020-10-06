@@ -2,7 +2,7 @@
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-33-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-34-orange.svg?style=flat-square)](#contributors-)
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
@@ -158,10 +158,11 @@ Thanks goes to these wonderful people
     <td align="center"><a href="https://mastodon.technology/@farhan"><img src="https://avatars1.githubusercontent.com/u/10103765?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Farhan Khan</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=khanzf" title="Code">💻</a></td>
     <td align="center"><a href="https://www.jurrevriesen.nl"><img src="https://avatars1.githubusercontent.com/u/7419259?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jurre Vriesen</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=jurruh" title="Code">💻</a></td>
     <td align="center"><a href="https://www.kartar.net/"><img src="https://avatars3.githubusercontent.com/u/4365?v=4?s=100" width="100px;" alt=""/><br /><sub><b>James Turnbull</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=jamtur01" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/deanshub"><img src="https://avatars2.githubusercontent.com/u/2688676?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dean Shub</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=deanshub" title="Code">💻</a></td>
   </tr>
 </table>
 
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
