@@ -14,6 +14,8 @@
 
 > Terminal access in browser over http/https
 
+![Terminal](https://github.com/butlerx/wetty/raw/master/docs/terminal.png)
+
 Terminal over HTTP and https. WeTTy is an alternative to ajaxterm and anyterm
 but much better than them because WeTTy uses xterm.js which is a full fledged
 implementation of terminal emulation written entirely in JavaScript. WeTTy uses
