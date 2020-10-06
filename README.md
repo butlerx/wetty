@@ -60,7 +60,6 @@ Options:
   --host           wetty listen host                                    [string]
   --command, -c    command to run in shell                              [string]
   --bypass-helmet  disable helmet from placing security restrictions   [boolean]
-
 ```
 
 Open your browser on `http://yourserver:3000/wetty` and you will prompted to

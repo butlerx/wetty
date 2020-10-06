@@ -2,6 +2,7 @@
 
 ![WeTTy](./terminal.png?raw=true)
 
+- [AtoZ](./atoz.md)
 - [Running as daemon](./service.md)
 - [HTTPS Support](./https.md)
   - [Using NGINX](./nginx.md)

@@ -9,9 +9,13 @@ Description=Wetty Web Terminal
 After=network.target
 
 [Service]
-
+Type=simple
 WorkingDirectory=$HOME/.config/yarn/global/node_modules/wetty/
 ExecStart=/usr/bin/node . -p 3000 --host 127.0.0.1
+TimeoutStopSec=20
+KillMode=mixed
+Restart=always
+RestartSec=2
 
 [Install]
 WantedBy=multi-user.target
