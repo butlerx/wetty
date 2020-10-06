@@ -362,6 +362,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "DefunctLizard",
+      "name": "Grant Handy",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/45475651?v=4",
+      "profile": "https://grantshandy.xyz/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
