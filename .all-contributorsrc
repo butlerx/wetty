@@ -344,6 +344,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "userdocs",
+      "name": "userdocs",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/16525024?v=4",
+      "profile": "https://github.com/userdocs",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
