@@ -2,7 +2,7 @@
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-35-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-36-orange.svg?style=flat-square)](#contributors-)
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
@@ -160,6 +160,9 @@ Thanks goes to these wonderful people
     <td align="center"><a href="https://www.kartar.net/"><img src="https://avatars3.githubusercontent.com/u/4365?v=4?s=100" width="100px;" alt=""/><br /><sub><b>James Turnbull</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=jamtur01" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/deanshub"><img src="https://avatars2.githubusercontent.com/u/2688676?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dean Shub</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=deanshub" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/lozbrown"><img src="https://avatars3.githubusercontent.com/u/9961593?v=4?s=100" width="100px;" alt=""/><br /><sub><b>lozbrown </b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=lozbrown" title="Code">💻</a> <a href="#example-lozbrown" title="Examples">💡</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/sergeir82"><img src="https://avatars0.githubusercontent.com/u/5081149?v=4?s=100" width="100px;" alt=""/><br /><sub><b>sergeir82</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=sergeir82" title="Code">💻</a></td>
   </tr>
 </table>
 
