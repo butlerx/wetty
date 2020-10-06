@@ -2,7 +2,7 @@
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-36-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-37-orange.svg?style=flat-square)](#contributors-)
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
@@ -163,6 +163,7 @@ Thanks goes to these wonderful people
   </tr>
   <tr>
     <td align="center"><a href="https://github.com/sergeir82"><img src="https://avatars0.githubusercontent.com/u/5081149?v=4?s=100" width="100px;" alt=""/><br /><sub><b>sergeir82</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=sergeir82" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/kmlucy"><img src="https://avatars1.githubusercontent.com/u/13952475?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kyle Lucy</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=kmlucy" title="Code">💻</a></td>
   </tr>
 </table>
 
