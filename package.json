@@ -158,7 +158,7 @@
     "sinon": "^7.5.0",
     "snowpack": "^2.10.1",
     "ts-node": "^9.0.0",
-    "typescript": "^4.0.2"
+    "typescript": "^4.0.3"
   },
   "contributors": [
     "Krishna Srinivas <krishna.srinivas@gmail.com>",

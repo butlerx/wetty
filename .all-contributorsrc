@@ -307,6 +307,70 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "deanshub",
+      "name": "Dean Shub",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/2688676?v=4",
+      "profile": "https://github.com/deanshub",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "lozbrown",
+      "name": "lozbrown ",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/9961593?v=4",
+      "profile": "https://github.com/lozbrown",
+      "contributions": [
+        "code",
+        "example"
+      ]
+    },
+    {
+      "login": "sergeir82",
+      "name": "sergeir82",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5081149?v=4",
+      "profile": "https://github.com/sergeir82",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "kmlucy",
+      "name": "Kyle Lucy",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/13952475?v=4",
+      "profile": "https://github.com/kmlucy",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "userdocs",
+      "name": "userdocs",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/16525024?v=4",
+      "profile": "https://github.com/userdocs",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "janoskk",
+      "name": "Janos Kasza",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1554533?v=4",
+      "profile": "https://logmein.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "DefunctLizard",
+      "name": "Grant Handy",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/45475651?v=4",
+      "profile": "https://grantshandy.xyz/",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7

@@ -2,7 +2,7 @@
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-33-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-40-orange.svg?style=flat-square)](#contributors-)
 
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
@@ -13,6 +13,8 @@
 [![Twitter: cianbutlerx](https://img.shields.io/twitter/follow/cianbutlerx.svg?style=social)](https://twitter.com/cianbutlerx)
 
 > Terminal access in browser over http/https
+
+![WeTTy](./docs/terminal.png?raw=true)
 
 Terminal over HTTP and https. WeTTy is an alternative to ajaxterm and anyterm
 but much better than them because WeTTy uses xterm.js which is a full fledged
@@ -158,10 +160,19 @@ Thanks goes to these wonderful people
     <td align="center"><a href="https://mastodon.technology/@farhan"><img src="https://avatars1.githubusercontent.com/u/10103765?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Farhan Khan</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=khanzf" title="Code">💻</a></td>
     <td align="center"><a href="https://www.jurrevriesen.nl"><img src="https://avatars1.githubusercontent.com/u/7419259?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jurre Vriesen</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=jurruh" title="Code">💻</a></td>
     <td align="center"><a href="https://www.kartar.net/"><img src="https://avatars3.githubusercontent.com/u/4365?v=4?s=100" width="100px;" alt=""/><br /><sub><b>James Turnbull</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=jamtur01" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/deanshub"><img src="https://avatars2.githubusercontent.com/u/2688676?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Dean Shub</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=deanshub" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/lozbrown"><img src="https://avatars3.githubusercontent.com/u/9961593?v=4?s=100" width="100px;" alt=""/><br /><sub><b>lozbrown </b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=lozbrown" title="Code">💻</a> <a href="#example-lozbrown" title="Examples">💡</a></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/sergeir82"><img src="https://avatars0.githubusercontent.com/u/5081149?v=4?s=100" width="100px;" alt=""/><br /><sub><b>sergeir82</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=sergeir82" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/kmlucy"><img src="https://avatars1.githubusercontent.com/u/13952475?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kyle Lucy</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=kmlucy" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/userdocs"><img src="https://avatars1.githubusercontent.com/u/16525024?v=4?s=100" width="100px;" alt=""/><br /><sub><b>userdocs</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=userdocs" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://logmein.com/"><img src="https://avatars3.githubusercontent.com/u/1554533?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Janos Kasza</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=janoskk" title="Code">💻</a></td>
+    <td align="center"><a href="https://grantshandy.xyz/"><img src="https://avatars3.githubusercontent.com/u/45475651?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Grant Handy</b></sub></a><br /><a href="https://github.com/butlerx/WeTTy/commits?author=DefunctLizard" title="Documentation">📖</a></td>
   </tr>
 </table>
 
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
