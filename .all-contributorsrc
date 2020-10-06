@@ -353,6 +353,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "janoskk",
+      "name": "Janos Kasza",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1554533?v=4",
+      "profile": "https://logmein.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
