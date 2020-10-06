@@ -316,6 +316,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "lozbrown",
+      "name": "lozbrown ",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/9961593?v=4",
+      "profile": "https://github.com/lozbrown",
+      "contributions": [
+        "code",
+        "example"
+      ]
     }
   ],
   "contributorsPerLine": 7
