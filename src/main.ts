@@ -1,6 +1,10 @@
+#!/usr/bin/env node
+
 /**
  * Create WeTTY server
  * @module WeTTy
+ *
+ * This is the cli Interface for wetty.
  */
 import yargs from 'yargs';
 import { logger } from './shared/logger.js';
