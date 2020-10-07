@@ -1,12 +1,15 @@
 {
   "name": "wetty",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
   "homepage": "https://github.com/butlerx/wetty",
   "license": "MIT",
   "type": "module",
+  "bin": {
+    "wetty": "./build/main.js"
+  },
   "main": "./build/main.js",
-  "module": "./build/server.js",
+  "exports": "./build/server.js",
   "files": [
     "build/"
   ],
