@@ -3,7 +3,7 @@ import etag from 'etag';
 import fresh from 'fresh';
 import parseUrl from 'parseurl';
 import fs from 'fs';
-import { join, resolve } from 'path';
+import { assetsPath } from './shared/path.js';
 
 const ONE_YEAR_MS = 60 * 60 * 24 * 365 * 1000; // 1 year
 
@@ -43,7 +43,7 @@ export function redirect(
  * @returns middleware
  */
 export function favicon(basePath: string): RequestHandler {
-  const path = resolve(join('build', 'assets', 'favicon.ico'));
+  const path = assetsPath('assets', 'favicon.ico');
   return (req: Request, res: Response, next: NextFunction): void => {
     if (getPathName(req) !== `${basePath}/favicon.ico`) {
       next();
