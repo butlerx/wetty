@@ -7,7 +7,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ![Version](https://img.shields.io/badge/version-1.1.7-blue.svg?cacheSeconds=2592000)
-![Node Version](https://img.shields.io/badge/node-%3E%3D6.9-blue.svg)
+![Node Version](https://img.shields.io/badge/node-%3E%3D14.0-blue.svg)
 [![Documentation](https://img.shields.io/badge/documentation-yes-brightgreen.svg)](https://github.com/butlerx/wetty/tree/master/docs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/butlerx/wetty/blob/master/LICENSE)
 [![Twitter: cianbutlerx](https://img.shields.io/twitter/follow/cianbutlerx.svg?style=social)](https://twitter.com/cianbutlerx)
