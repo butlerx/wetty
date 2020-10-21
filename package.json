@@ -21,7 +21,8 @@
     "start": "NODE_ENV=production node .",
     "contributor": "all-contributors",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register src/**/*.spec.ts",
-    "clean": "rm -rf build yarn-error.log"
+    "clean": "rm -rf build yarn-error.log",
+    "docker-entrypoint": "ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts; yarn start"
   },
   "repository": {
     "type": "git",
