@@ -1,8 +1,8 @@
 # Introduction
 
-This is an A to Z guide that will help you get WeTTY up and running on Debian based system. It covers the key configuration areas by using copy and paste commands. This will help you install this application and get it securely up and running with minimal system interference and reversible changes. It should also provide enough information to allow you to understand and extend that configuration for your personal requirements.
+This is an A to Z guide that will help you get WeTTY up and running on a Debian based system. It covers the key configuration areas by using copy and paste commands. This will help you install this application and get it securely up and running with minimal system interference and reversible changes. It should also provide enough information to allow you to understand and extend that configuration for your personal requirements.
 
-Please note that some of these configurations are optional, such as self signed SSL and public key authentication. The purpose of the guide is to show you how to correctly understand, configure, install and use these options should you wish to use them but they are not required to use WeTTY in general.
+**Note:** Some of these configurations are optional, such as self signed SSL and public key authentication. The purpose of the guide is to show you how to correctly understand, configure, install and use these options should you wish to use them but they are not required to use WeTTY in general.
 
 ## Required dependencies
 
@@ -76,7 +76,7 @@ Your result should look something like this.
 v14.14.0
 ```
 
-**Note:** There is consideration with the `nvm` method. `node` is only in the local user's path through sourcing of the `~/.nvm/nvm.sh` which is done when the shell sources the user's `.bashrc` file upon login. So for some applications who are not aware of this local shell environment `node` will not be usable unless we provide a full path and `nvm` commands will also be unavailable. The way we over come this issue for the needs of this guide is by using this command substitution to provide the full path, where applicable:
+**Note:** There is an important consideration with the `nvm` method. `node` is only in the local user's path through sourcing of the `~/.nvm/nvm.sh` which is done when the user logs in and the shell sources the user's `.bashrc` file. So for some applications who are not aware of this local shell environment `node` will not be usable unless we provide a full path and `nvm` commands will also be unavailable. The way we over come this issue for the needs of this guide is by using this command substitution to provide the full path, where applicable:
 
 ```bash
 $(source ~/.nvm/nvm.sh && nvm which 14)
@@ -96,7 +96,7 @@ mkdir -p ~/.ssl
 
 Generate the self signed `openssl` certificates we will use to encrypt our web traffic when using WeTTY using this command:
 
-**Note:** we are using`ecdsa` using the `secp384r1` curve. Tested to be compatible with Chrome and Firefox browsers.
+**Note:** we are using `ecdsa` using the `secp384r1` curve. Tested to be compatible with Chrome and Firefox browsers.
 
 ```bash
 openssl req -x509 -nodes -days 1095 -newkey ec:<(openssl ecparam -name secp384r1) -subj "/C=GB/ST=None/L=None/O=None/OU=None/CN=None" -out ~/.ssl/wetty.crt -keyout ~/.ssl/wetty.key
@@ -152,11 +152,11 @@ sed -r '/^ssh-ed25519(.*)wetty-keyfile$/d' -i ~/.ssh/authorized_keys
 
 ## Install WeTTY
 
-**Note:** we are using `-g` for `npm` or `global` for `yarn` along with `--prefix ~/` so that the application symbolic link is installed to our `~/bin` directory and available in our local user's `PATH`.
+**Note:** we are using `-g` for `npm` or `global` for `yarn` along with `--prefix ~/` so that the application's symbolic link is installed to our `~/bin` directory and available in our local user's `PATH`.
 
 As your local user run these commands:
 
-To make sure the local user's `~/bin` folder exists and is in the `PATH` please run the following command.
+To make sure the local user's `~/bin` directory exists and is in the `PATH` please run the following command.
 
 ```bash
 mkdir -p ~/bin && source ~/.profile
@@ -198,7 +198,7 @@ Now we have all the ground work done we can focus on our WeTTY server configurat
 
 For example, the below command would provide a `https` instance with automatic `ssh` authorisation using our `wetty` private key on port `3000` accessible at `https://IP:3000` .
 
-**Important note:** This command will run in your current terminal session and not in the background.
+**Important note:** This command will run in your current terminal session and not in the background. The key combination of  `CTRL` + `c` will exit the application.
 
 ```bash
 wetty --host 0.0.0.0 -port 3000 --title wetty -base / --ssh-key ~/.ssh/wetty --ssh-host localhost --ssh-user $(whoami) --ssh-port 22 --ssh-auth publickey --ssl-key ~/.ssl/wetty.key --ssl-cert ~/.ssl/wetty.crt
@@ -224,7 +224,7 @@ Let's break it down so that we can understand what's being done and why.
 
 ### SSH settings explained
 
-These settings are all specific to `ssh` and will enable you to automatically log into you ssh session for the selected user.
+These settings are all specific to `ssh` and will enable you to automatically log into you `ssh` session for the selected user.
 
 ```bash
 --ssh-key ~/.ssh/wetty --ssh-host localhost --ssh-user $(whoami) --ssh-port 22 --ssh-auth publickey
@@ -268,7 +268,7 @@ Use `nano` to open a file for editing.
 nano ~/.config/wetty/config.json
 ```
 
-Here is the template `config.json` you need to use. Ple
+Here is the template `config.json` you need to use.
 
 **Note:** All option that you do not want to use can be commented out using `//`. For example `// title: 'Terminal', // Page title` will comment out this line and it will be ignored.
 
