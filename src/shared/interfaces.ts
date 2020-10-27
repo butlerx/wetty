@@ -7,6 +7,7 @@ export interface SSH {
   knownHosts: string;
   pass?: string;
   key?: string;
+  config?: string;
 }
 
 export interface SSL {

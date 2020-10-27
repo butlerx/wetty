@@ -2,7 +2,7 @@ import isUndefined from 'lodash/isUndefined.js';
 import { logger } from '../../shared/logger.js';
 
 export function sshOptions(
-  { pass, path, command, host, port, auth, knownHosts }: Record<string, string>,
+  { pass, path, command, host, port, auth, knownHosts, config }: Record<string, string>,
   key?: string,
 ): string[] {
   const cmd = parseCommand(command, path);
@@ -11,6 +11,8 @@ export function sshOptions(
     'ssh',
     host,
     '-t',
+    config !== '' ? '-F' : '',
+    config,
     '-p',
     port,
     '-o',

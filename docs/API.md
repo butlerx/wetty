@@ -26,6 +26,7 @@ Starts WeTTy Server
 | [ssh.port]                | `number`  | `22`          | port to connect to over ssh                                                                                            |
 | [ssh.pass]                | `string`  |               | Optional param of a password to use for ssh                                                                            |
 | [ssh.key]                 | `string`  |               | path to an optional client private key (connection will be password-less and insecure!)                                |
+| [ssh.config]              | `string`  |               | Specifies an alternative ssh configuration file. For further details see "-F" option in ssh(1)                         |
 | [serverConf]              | `Object`  |               | Server settings                                                                                                        |
 | [serverConf.base]         | `Object`  | `'/wetty/'`   | Server settings                                                                                                        |
 | [serverConf.port]         | `number`  | `3000`        | Port to run server on                                                                                                  |
