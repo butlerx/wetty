@@ -55,6 +55,10 @@ const opts = yargs
       'path to an optional client private key (connection will be password-less and insecure!)',
     type: 'string',
   })
+  .option('ssh-config', {
+    description: 'Specifies an alternative ssh configuration file. For further details see "-F" option in ssh(1)',
+    type: 'string',
+  })
   .option('force-ssh', {
     description: 'Connecting through ssh even if running as root',
     type: 'boolean',

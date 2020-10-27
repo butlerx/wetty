@@ -347,6 +347,12 @@ username.
 have to use the key file and you can instead require a password but setting this
 to `--ssh-auth password`. You can specify both `--ssh-auth publickey,password`
 
+`--ssh-config configfile` - alternative ssh configuration file. From ssh(1):
+
+> If a configuration file is given on the command line, the system-wide
+> configuration file (/etc/ssh/ssh_config) will be ignored. The default for the
+> per-user configuration file is ~/.ssh/config.
+
 #### SSL settings explained
 
 These settings are specific to `openssl` to make `wetty` load https webserver so
@@ -505,21 +511,26 @@ echo https://$(curl -s4 icanhazip.com)/wetty
 `wetty -h` configuration options for reference.
 
 ```bash
-  --help, -h      Print help message                                   [boolean]
-  --version       Show version number                                  [boolean]
-  --sslkey        path to SSL key                                       [string]
-  --sslcert       path to SSL certificate                               [string]
-  --sshhost       ssh server host                [string] [default: "localhost"]
-  --sshport       ssh server port                         [number] [default: 22]
-  --sshuser       ssh user                                [string] [default: ""]
-  --title         window title [string] [default: "WeTTy - The Web Terminal Emulator"]
-  --sshauth       defaults to "password", you can use "publickey,password" instead[string] [default: "password"]
-  --sshpass       ssh password                                          [string]
-  --sshkey        path to an optional client private key (connection will be password-less and insecure!) [string]
-  --forcessh      Connecting through ssh even if running as root [boolean] [default: false]
-  --base, -b      base path to wetty               [string] [default: "/wetty/"]
-  --port, -p      wetty listen port                     [number] [default: 3000]
-  --host          wetty listen host                [string] [default: "0.0.0.0"]
-  --command, -c   command to run in shell            [string] [default: "login"]
-  --bypasshelmet  disable helmet from placing security restrictions [boolean] [default: false]
+  --help, -h      Print help message                                                          [boolean]
+  --version       Show version number                                                         [boolean]
+  --conf          config file to load config from                                             [string]
+  --ssl-key       path to SSL key                                                             [string]
+  --ssl-cert      path to SSL certificate                                                     [string]
+  --ssh-host      ssh server host                                                             [string]   [default: "localhost"]
+  --ssh-port      ssh server port                                                             [number]   [default: 22]
+  --ssh-user      ssh user                                                                    [string]   [default: ""]
+  --title         window title                                                                [string]   [default: "WeTTy - The Web Terminal Emulator"]
+  --ssh-auth      defaults to "password", you can use "publickey,password" instead            [string]   [default: "password"]
+  --ssh-pass      ssh password                                                                [string]
+  --ssh-key       path to an optional client private key (connection will be
+                  password-less and insecure!)                                                [string]
+  --ssh-config    Specifies an alternative ssh configuration file. For further
+                  details see "-F" option in ssh(1)                                           [string]   [default: ""]
+  --force-ssh     Connecting through ssh even if running as root                              [boolean]  [default: false]
+  --known-hosts   path to known hosts file                                                    [string]
+  --base, -b      base path to wetty                                                          [string]   [default: "/wetty/"]
+  --port, -p      wetty listen port                                                           [number]   [default: 3000]
+  --host          wetty listen host                                                           [string]   [default: "0.0.0.0"]
+  --command, -c   command to run in shell                                                     [string]   [default: "login"]
+  --allow-iframe  Allow wetty to be embedded in an iframe, defaults to allowing same origin   [boolean]  [default: false]
 ```
