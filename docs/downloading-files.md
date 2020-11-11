@@ -10,7 +10,7 @@ https://vt100.net/docs/tp83/appendixc.html).
 To take advantage add the following bash function to your `.bashrc`
 
 ```bash
-funtion wetty-download() {
+function wetty-download() {
   echo "\033[5i"$(cat /dev/stdin | base64 -w 0)"\033[4i"
 }
 ```
