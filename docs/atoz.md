@@ -83,7 +83,7 @@ user's path through sourcing of the `~/.nvm/nvm.sh` via the users `.bashrc`
 file. Unless this is done `node` will not be usable unless directly linked to
 and `nvm` commands will be unavailable.
 
-The way we over come this issue for the needs of this guide is by using this
+The way we overcome this issue for the needs of this guide is by using this
 command where applicable:
 
 ```bash
@@ -105,7 +105,7 @@ Make the required directory using this command:
 mkdir -p ~/.ssl
 ```
 
-Generate the self signed `openssl` certificates we will use to encrypt our web
+Generate the self-signed `openssl` certificates we will use to encrypt our web
 traffic when using `wetty` using this command:
 
 **Note:** we are using`ecdsa` using the `secp521r1` curve.
@@ -261,7 +261,7 @@ Create a directory to store our configuration data using this command:
 mkdir -p ~/.config/wetty
 ```
 
-Now populate our `config` file with some settings. This examples is the same
+Now populate our `config` file with some settings. This example is the same
 command as above.
 
 ```bash
