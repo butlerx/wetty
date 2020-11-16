@@ -279,29 +279,28 @@ Here is the template `config.json` you need to use.
 **Note:** To be [validated json](https://codebeautify.org/jsonvalidator) the below json example should have the `// ...` comments removed. With all comments removed the example is valid json. They are in the example to help explain the options and won't stop wetty from loading if you leave them in place. Lines you do not need can be commented out but should be removed if you want the json to pass validation.
 
 ```
-{
   "ssh": {
-		"user": "username", // default user to use when ssh-ing
-		"host": "localhost", // Server to ssh to
-		"auth": "publickey,password", // shh authentication, method. Defaults to "password", you can use "publickey,password" instead'
-		"pass": "password", // Password to use when ssh-ing
-		"key": "/home/username/.ssh/wetty", // path to an optional client private key, connection will be password-less and insecure!
-		"port": 22, // Port to ssh to
-		"knownHosts": "/dev/null" // ssh knownHosts file to use
-	},
-	"server": {
-		"base": "/wetty/", // URL base to serve resources from
-		"port": 3000, // Port to listen on
-		"host": "0.0.0.0", // listen on all interfaces or can be 127.0.0.1 with nginx
-		"title": "WeTTy - The Web Terminal Emulator", // Page title
-		"bypassHelmet": false // Disable Helmet security checks
-	},
-	"forceSSH": false, // Force sshing to local machine over login if running as root
-	"command": "login", // Command to run on server. Login will use ssh if connecting to different server
-	"ssl": {
-		"key": "/home/username/.ssl/wetty.key",
-		"cert": "/home/username/.ssl/wetty.crt"
-	}
+        "user": "username", // default user to use when ssh-ing
+        "host": "localhost", // Server to ssh to
+        "auth": "publickey,password", // shh authentication, method. Defaults to "password", you can use "publickey,password" instead'
+        "pass": "password", // Password to use when ssh-ing
+        "key": "/home/username/.ssh/wetty", // path to an optional client private key, connection will be password-less and insecure!
+        "port": 22, // Port to ssh to
+        "knownHosts": "/dev/null" // ssh knownHosts file to use
+    },
+    "server": {
+        "base": "/wetty/", // URL base to serve resources from
+        "port": 3000, // Port to listen on
+        "host": "0.0.0.0", // listen on all interfaces or can be 127.0.0.1 with nginx
+        "title": "WeTTy - The Web Terminal Emulator", // Page title
+        "bypassHelmet": false // Disable Helmet security checks
+    },
+    "forceSSH": false, // Force sshing to local machine over login if running as root
+    "command": "login", // Command to run on server. Login will use ssh if connecting to different server
+    "ssl": {
+        "key": "/home/username/.ssl/wetty.key",
+        "cert": "/home/username/.ssl/wetty.crt"
+    }
 }
 ```
 
