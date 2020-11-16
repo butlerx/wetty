@@ -24,7 +24,7 @@ export const getCommand = (
       conn: { remoteAddress },
     },
   }: Socket,
-  { user, host, port, auth, pass, key, knownHosts }: SSH,
+  { user, host, port, auth, pass, key, knownHosts, config }: SSH,
   command: string,
   forcessh: boolean,
 ): { args: string[]; user: boolean } => ({
@@ -39,6 +39,7 @@ export const getCommand = (
               command,
               auth,
               knownHosts,
+              config: config || '',
             }),
             host: address(referer, user, host),
           },

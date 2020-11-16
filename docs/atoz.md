@@ -240,6 +240,12 @@ These settings are all specific to `ssh` and will enable you to automatically lo
 
 `--ssh-auth publickey` defines the accepted authentication types. You do not have to use the key file and you can instead require a password but setting this to `--sshauth password`. You can specify both `--sshauth publickey,password`
 
+`--ssh-config configfile` - (not used for this guide) alternative ssh configuration file. From ssh(1):
+
+> If a configuration file is given on the command line, the system-wide
+> configuration file (/etc/ssh/ssh_config) will be ignored. The default for the
+> per-user configuration file is ~/.ssh/config.
+
 ### SSL settings explained
 
 These settings are specific to `openssl` to make WeTTY load https webserver so that all data is transmitted over a secure connection.
@@ -521,22 +527,23 @@ If you chose to not use a password to login in you should protect your instance 
   --conf          config file to load config from                       [string]
   --ssl-key       path to SSL key                                       [string]
   --ssl-cert      path to SSL certificate                               [string]
-  --ssh-host      ssh server host                                       [string]
-  --ssh-port      ssh server port                                       [number]
-  --ssh-user      ssh user                                              [string]
-  --title         window title                                          [string]
+  --ssh-host      ssh server host                                       [string]   [default: "localhost"]
+  --ssh-port      ssh server port                                       [number]   [default: 22]
+  --ssh-user      ssh user                                              [string]   [default: ""]
+  --title         window title                                          [string]   [default: "WeTTy - The Web Terminal Emulator"]
   --ssh-auth      defaults to "password", you can use "publickey,password"
-                  instead                                               [string]
+                  instead                                               [string]   [default: "password"]
   --ssh-pass      ssh password                                          [string]
   --ssh-key       path to an optional client private key (connection will be
                   password-less and insecure!)                          [string]
-  --force-ssh     Connecting through ssh even if running as root       [boolean]
+  --ssh-config    Specifies an alternative ssh configuration file. For further
+                  details see "-F" option in ssh(1)                     [string]   [default: ""]
+  --force-ssh     Connecting through ssh even if running as root        [boolean]  [default: false]
   --known-hosts   path to known hosts file                              [string]
-  --base, -b      base path to wetty                                    [string]
-  --port, -p      wetty listen port                                     [number]
-  --host          wetty listen host                                     [string]
-  --command, -c   command to run in shell                               [string]
+  --base, -b      base path to wetty                                    [string]   [default: "/wetty/"]
+  --port, -p      wetty listen port                                     [number]   [default: 3000]
+  --host          wetty listen host                                     [string]   [default: "0.0.0.0"]
+  --command, -c   command to run in shell                               [string]   [default: "login"]
   --allow-iframe  Allow wetty to be embedded in an iframe, defaults to allowing
-                  same origin                                          [boolean]
-
+                  same origin                                           [boolean]  [default: false]
 ```

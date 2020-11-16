@@ -39,27 +39,30 @@ yarn global add wetty
 ```sh
 $ wetty --help
 Options:
-  --help, -h       Print help message                                  [boolean]
-  --version        Show version number                                 [boolean]
-  --conf           config file to load config from                      [string]
-  --ssl-key        path to SSL key                                      [string]
-  --ssl-cert       path to SSL certificate                              [string]
-  --ssh-host       ssh server host                                      [string]
-  --ssh-port       ssh server port                                      [number]
-  --ssh-user       ssh user                                             [string]
-  --title          window title                                         [string]
-  --ssh-auth       defaults to "password", you can use "publickey,password"
-                   instead                                              [string]
-  --ssh-pass       ssh password                                         [string]
-  --ssh-key        path to an optional client private key (connection will be
-                   password-less and insecure!)                         [string]
-  --force-ssh      Connecting through ssh even if running as root      [boolean]
-  --known-hosts    path to known hosts file                             [string]
-  --base, -b       base path to wetty                                   [string]
-  --port, -p       wetty listen port                                    [number]
-  --host           wetty listen host                                    [string]
-  --command, -c    command to run in shell                              [string]
-  --bypass-helmet  disable helmet from placing security restrictions   [boolean]
+  --help, -h      Print help message                                   [boolean]
+  --version       Show version number                                  [boolean]
+  --conf          config file to load config from                       [string]
+  --ssl-key       path to SSL key                                       [string]
+  --ssl-cert      path to SSL certificate                               [string]
+  --ssh-host      ssh server host                                       [string]
+  --ssh-port      ssh server port                                       [number]
+  --ssh-user      ssh user                                              [string]
+  --title         window title                                          [string]
+  --ssh-auth      defaults to "password", you can use "publickey,password"
+                  instead                                               [string]
+  --ssh-pass      ssh password                                          [string]
+  --ssh-key       path to an optional client private key (connection will be
+                  password-less and insecure!)                          [string]
+  --ssh-config    Specifies an alternative ssh configuration file. For further
+                  details see "-F" option in ssh(1)                     [string]
+  --force-ssh     Connecting through ssh even if running as root       [boolean]
+  --known-hosts   path to known hosts file                              [string]
+  --base, -b      base path to wetty                                    [string]
+  --port, -p      wetty listen port                                     [number]
+  --host          wetty listen host                                     [string]
+  --command, -c   command to run in shell                               [string]
+  --allow-iframe  Allow wetty to be embedded in an iframe, defaults to allowing
+                  same origin                                          [boolean]
 ```
 
 Open your browser on `http://yourserver:3000/wetty` and you will prompted to
