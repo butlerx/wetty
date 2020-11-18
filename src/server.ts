@@ -47,7 +47,7 @@ export async function start(
      * @name connection
      */
     logger.info('Connection accepted.');
-    const { args, user: sshUser } = getCommand(socket, ssh, command, forcessh);
+    const [args, sshUser] = getCommand(socket, ssh, command, forcessh);
     logger.debug('Command Generated', {
       user: sshUser,
       cmd: args.join(' '),
