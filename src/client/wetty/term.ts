@@ -1,5 +1,6 @@
 import type { Socket } from 'socket.io-client';
 import _ from 'lodash';
+import { WebLinksAddon } from 'xterm-addon-web-links';
 import { FitAddon } from 'xterm-addon-fit';
 import { Terminal } from 'xterm';
 
@@ -10,6 +11,8 @@ import { terminal as termElement } from '../shared/elements.js';
 export function terminal(socket: typeof Socket): Term | undefined {
   const term = new Terminal() as Term;
   if (_.isNull(termElement)) return;
+  const webLinksAddon = new WebLinksAddon();
+  term.loadAddon(webLinksAddon);
   const fitAddon = new FitAddon();
   term.loadAddon(fitAddon);
   term.open(termElement);
