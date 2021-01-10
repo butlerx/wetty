@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+  wetty:
+    image: wettyoss/wetty
+    command:
+      - --base=/
+      - --ssh-host=ssh.example.com
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wetty.rule=Host(`wetty.example.com`)"
+
+  reverse-proxy:
+    image: traefik
+    command: --providers.docker
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
