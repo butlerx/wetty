@@ -16,10 +16,10 @@ export default function startWeTTy(
   ssh: SSH = { user: '', host: 'localhost', auth: 'password', port: 22 },
   serverConf: Server = {
     base: '/wetty/',
-    port: 3000,
+    port: 3001,
     host: '0.0.0.0',
     title: 'WeTTy',
-    bypasshelmet: false,
+    bypasshelmet: true,
   },
   command = '',
   forcessh = false,
@@ -45,7 +45,12 @@ export default function startWeTTy(
        * @name connection
        */
       logger.info('Connection accepted.');
-      const { args, user: sshUser } = getCommand(socket, ssh, command, forcessh);
+      const { args, user: sshUser } = getCommand(
+        socket,
+        ssh,
+        command,
+        forcessh
+      );
       logger.debug('Command Generated', {
         user: sshUser,
         cmd: args.join(' '),
