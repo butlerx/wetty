@@ -1,0 +1,35 @@
+version: '2'
+
+# Sample docker compose file to demonstrate the usage of wetty behind a reverse
+# proxy, optionally with Let's Encrypt based SSL certificate
+#
+# For SSL support, uncomment the commented lines. Consult traefik documentation
+# for features like automatic forward from HTTP to HTTPS etc.
+
+services:
+  wetty:
+    image: wettyoss/wetty
+    command:
+      - --base=/
+      - --ssh-host=ssh.example.com
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.wetty.rule=Host(`wetty.example.com`)"
+      # - "traefik.http.routers.wetty.tls.certResolver=default"
+      # - "traefik.http.routers.wetty.tls=true"
+
+  reverse-proxy:
+    image: traefik
+    command:
+      - --providers.docker
+      - --entryPoints.web.address=:80
+      # - --entryPoints.websecure.address=:443
+      # - --certificatesResolvers.default.acme.email=your-email@example.com
+      # - --certificatesResolvers.default.acme.storage=acme.json
+      # - --certificatesResolvers.default.acme.httpChallenge.entryPoint=web
+    ports:
+      - "80:80"
+      # - "443:443"
+
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

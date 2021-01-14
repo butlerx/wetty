@@ -67,7 +67,7 @@ Options:
 
 Open your browser on `http://yourserver:3000/wetty` and you will prompted to
 login. Or go to `http://yourserver:3000/wetty/ssh/<username>` to specify the
-user before hand.
+user beforehand.
 
 If you run it as root it will launch `/bin/login` (where you can specify the
 user name), else it will launch `ssh` and connect by default to `localhost`. The
@@ -80,6 +80,24 @@ option, the SSH port using the `--ssh-port` option and the SSH user using the
 Check out the
 [Flags docs](https://github.com/butlerx/wetty/blob/master/docs/flags.md) for a
 full list of flags
+
+### Docker container
+
+To use wetty as a docker container, a docker image is available on
+[docker hub](https://hub.docker.com/r/wettyoss/wetty). To run this image, use
+
+```sh
+docker run --rm -p 3000:3000 wettyoss/wetty --ssh-host=<YOUR-IP>
+```
+
+and you will be able to open a ssh session to the host given by `YOUR-IP` under
+the URL [http://localhost:3000/wetty](http://localhost:3000/wetty).
+
+It is recommended to drive wetty behind a reverse proxy to have HTTPS security
+and possibly Let’s Encrypt support. Popular containers to achieve this are
+[nginx-proxy](https://github.com/nginx-proxy/nginx-proxy) and
+[traefik](https://traefik.io/traefik/). For traefik there is an example
+docker-compose file in the containers directory.
 
 ## FAQ
 
