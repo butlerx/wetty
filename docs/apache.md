@@ -153,7 +153,7 @@ You probably don't want local users to impersonate each other, for that you need
 3. Validate your wetty version does not allow access to `/wetty/ssh/`
    else again you will be able to impersonnate anyone: provided by
    either:
-   1. a recent wetty commit disabling it in case of `remote-user`
+   1. wetty version 2.0.3 and beyond implements this by disabling this feature in case of `remote-user`
    presence
    2. apache2 conf as provided in previous section (containing the
       `<Location /wetty/ssh/>`)
