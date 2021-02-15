@@ -552,6 +552,8 @@ With `yarn`:
 yarn global upgrade wetty --prefix ~/
 ~~~
 
+Now restart your `wetty` service.
+
 ## Updating nvm
 
 The proper way to update NVM is to use git. The `.nvm` directory is a git repo.
