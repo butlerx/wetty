@@ -543,3 +543,24 @@ If you chose to not use a password to login in you should protect your instance 
   --allow-iframe  Allow wetty to be embedded in an iframe, defaults to allowing
                   same origin                                           [boolean]  [default: false]
 ```
+
+## Updating Wetty
+
+With `yarn`:
+
+~~~bash
+yarn global upgrade wetty --prefix ~/
+~~~
+
+## Updating nvm
+
+The proper way to update NVM is to use git. The `.nvm` directory is a git repo.
+
+These commands will update NVM to the latest version of the script and load it to your shell.
+
+~~~bash
+cd ~/.nvm
+git fetch --tags
+git checkout $(git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1))
+source ~/.nvm/nvm.sh
+~~~
