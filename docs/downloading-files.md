@@ -11,7 +11,7 @@ To take advantage add the following bash function to your `.bashrc`
 
 ```bash
 function wetty-download() {
-  echo "\033[5i"$(cat /dev/stdin | base64 -w 0)"\033[4i"
+  printf "\033[5i"$(cat /dev/stdin | base64 -w 0)"\033[4i"
 }
 ```
 
