@@ -18,7 +18,7 @@ export function sshOptions(
   const hostChecking = knownHosts !== '/dev/null' ? 'yes' : 'no';
   logger.info(`Authentication Type: ${auth}`);
   let sshRemoteOptsBase = ['ssh', host, '-t'];
-  if (config !== '') {
+  if (!isUndefined(config) && config !== '') {
     sshRemoteOptsBase = sshRemoteOptsBase.concat(['-F', config]);
   }
   sshRemoteOptsBase = sshRemoteOptsBase.concat([
