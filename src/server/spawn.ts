@@ -5,7 +5,9 @@ import { logger } from '../shared/logger.js';
 import { xterm } from './shared/xterm.js';
 
 export function spawn(socket: SocketIO.Socket, args: string[]): void {
-  const term = pty.spawn('/usr/bin/env', args, xterm);
+  const cmd = ['-S', ...args];
+  logger.debug('Spawning PTTY', { cmd });
+  const term = pty.spawn('/usr/bin/env', cmd, xterm);
   const { pid } = term;
   const address = args[0] === 'ssh' ? args[1] : 'localhost';
   logger.info('Process Started on behalf of user', {

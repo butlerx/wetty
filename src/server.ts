@@ -61,7 +61,7 @@ export async function start(
         args[1] = `${username.trim()}@${args[1]}`;
         logger.debug('Spawning term', {
           username: username.trim(),
-          cmd: args.join(' ').trim(),
+          cmd: args.join(' '),
         });
         spawn(socket, args);
       } catch (error) {
