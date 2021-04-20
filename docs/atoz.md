@@ -12,11 +12,11 @@ This is an A to Z guide that will help you get WeTTY up and running on a Debian 
 
 `build-essential` - We need this specifically for `node-gyp` to build packages when using `npm` or `yarn` to install packages.
 
-As the `root` user run these commands:
+As the `root` or `sudo` user run these commands:
 
 ```bash
-apt update
-apt install -y build-essential python
+sudo apt update
+sudo apt install -y build-essential curl python
 ```
 
 If you have no root access and just want to check the dependencies are installed you can use these commands:
@@ -55,7 +55,7 @@ To install and manage `node` as a local user we are going to use [Node Version M
 This command will download and install `nvm` and reload our shell.
 
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh) && source ~/.profile
+curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | sudo bash && source ~/.profile
 ```
 
 This command will install the latest version of the v14 branch, which is the minimum required version for WeTTY.
@@ -73,7 +73,7 @@ node -v
 Your result should look something like this.
 
 ```bash
-v14.14.0
+v14.16.1
 ```
 
 **Note:** There is an important consideration with the `nvm` method. `node` is only in the local user's path through sourcing of the `~/.nvm/nvm.sh` which is done when the user logs in and the shell sources the user's `.bashrc` file. So for some applications who are not aware of this local shell environment `node` will not be usable unless we provide a full path and `nvm` commands will also be unavailable. The way we over come this issue for the needs of this guide is by using this command substitution to provide the full path, where applicable:
@@ -201,7 +201,7 @@ For example, the below command would provide a `https` instance with automatic `
 **Important note:** This command will run in your current terminal session and not in the background. The key combination of  `CTRL` + `c` will exit the application.
 
 ```bash
-wetty --host 0.0.0.0 -port 3000 --title wetty -base / --ssh-key ~/.ssh/wetty --ssh-host localhost --ssh-user $(whoami) --ssh-port 22 --ssh-auth publickey --ssl-key ~/.ssl/wetty.key --ssl-cert ~/.ssl/wetty.crt
+wetty --host 0.0.0.0 --port 3000 --title wetty --base / --ssh-key ~/.ssh/wetty --ssh-host localhost --ssh-user $(whoami) --ssh-port 22 --ssh-auth publickey --ssl-key ~/.ssl/wetty.key --ssl-cert ~/.ssl/wetty.crt
 ```
 
 Since you may not need all these settings we will look through what each one does below so that you can decide how to best configure your instance.
@@ -211,12 +211,12 @@ Since you may not need all these settings we will look through what each one doe
 Let's break it down so that we can understand what's being done and why.
 
 ```bash
---host 0.0.0.0 -p 3000 --title wetty --base /
+--host 0.0.0.0 --port 3000 --title wetty --base /
 ```
 
 `--host 0.0.0.0` - defines the interface we want to bind to. Using `0.0.0.0` means that we bind to all available interfaces so using this setting just works. When we use nginx we can change this to `--host 127.0.0.1` in order to prevent generic port access to the application and force traffic through our nginx reverse proxy URL.
 
-`-p 3000` - defines the local listening port. You will use this port to connect via the remotely accessible web server or when configuring a reverse proxy through nginx.
+`--port 3000` - defines the local listening port. You will use this port to connect via the remotely accessible web server or when configuring a reverse proxy through nginx.
 
 `--title wetty` - an optional setting to set the window title for this `wetty` session.
 
@@ -552,6 +552,12 @@ With `yarn`:
 yarn global upgrade wetty --prefix ~/
 ~~~
 
+To update or downgrade to a specific version you use this command:
+
+~~~bash
+yarn global add wetty@2.0.2 --prefix ~/
+~~~
+
 Now restart your `wetty` service.
 
 ## Updating nvm
@@ -566,3 +572,11 @@ git fetch --tags
 git checkout $(git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1))
 source ~/.nvm/nvm.sh
 ~~~
+
+## Updating node
+
+You can use the same command you used to install it with `nvm`
+
+```
+nvm install 14
+```
