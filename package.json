@@ -142,7 +142,7 @@
     "@types/socket.io-client": "^1.4.33",
     "@types/winston": "^2.4.4",
     "@types/yargs": "^15.0.5",
-    "@typescript-eslint/eslint-plugin": "^2.5.0",
+    "@typescript-eslint/eslint-plugin": "^4.26",
     "@typescript-eslint/parser": "^4.3.0",
     "all-contributors-cli": "^6.17.2",
     "chai": "^4.2.0",
