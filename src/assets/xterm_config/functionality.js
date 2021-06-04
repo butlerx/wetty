@@ -2,6 +2,8 @@ function optionGenericGet() { return this.el.querySelector("input").value; }
 function optionGenericSet(value) { this.el.querySelector("input").value = value; }
 function optionEnumGet() { return this.el.querySelector("select").value; }
 function optionEnumSet(value) { this.el.querySelector("select").value = value; }
+function optionBoolGet() { return this.el.querySelector("input").value === "true"; }
+function optionBoolSet(value) { this.el.querySelector("input").value = value ? "true" : "false"; }
 
 const allOptions = [];
 function inflateOptions(optionsSchema) {
@@ -23,6 +25,8 @@ function inflateOptions(optionsSchema) {
 		switch (option.type) {
 			case "boolean":
 				el = booleanOption.cloneNode(true);
+				option.get = optionBoolGet.bind(option);
+				option.set = optionBoolSet.bind(option);
 				break;
 
 			case "enum":
@@ -90,19 +94,21 @@ window.loadOptions = function(config) {
 
 if (window.top === window) alert("Error: Page is top level. This page is supposed to be accessed from inside Wetty.");
 
-document.querySelector("#save_button").addEventListener("click", () => {
+function saveConfig() {
 	const newConfig = {};
 	allOptions.forEach(option => {
 		let newValue = option.get();
-		if (option.nullable === true && option.type === "text" && newValue === "") newValue = null;
-		else if (option.nullable === true && option.type === "number" && newValue < 0) newValue = null;
+		if (option.nullable === true && option.type === "text" && newValue === "") newValue = undefined;
+		else if (option.nullable === true && option.type === "number" && newValue < 0) newValue = undefined;
 		if (option.json === true && option.type === "text") newValue = JSON.parse(newValue);
 		setItem(newConfig, option.path, newValue);
 	});
-	console.log(newConfig);
 	window.wetty_save_config(newConfig);
-	window.wetty_close_config();
-});
-document.querySelector("#cancel_button").addEventListener("click", () => {
-	window.wetty_close_config();
+};
+
+window.addEventListener("load", () => {
+	const els = document.querySelectorAll("input, select");
+	for (let i = 0; i < els.length; i++) {
+		els[i].addEventListener("input", saveConfig);
+	}
 });

@@ -2,15 +2,16 @@ import _ from 'lodash';
 
 import type { Term } from '../shared/type';
 import { copySelected, copyShortcut } from './confiruragtion/clipboard';
-import { onInput } from './confiruragtion/editor';
+import { onInput, setOptions } from './confiruragtion/editor';
 import { editor } from '../../shared/elements';
 import { loadOptions } from './confiruragtion/load';
 
 export function configureTerm(term: Term): void {
-  const options = loadOptions();
-  Object.entries(options).forEach(([key, value]) => {
-    term.setOption(key, value);
-  });
+  let options = loadOptions();
+  //Convert old options to new options
+  if (!("xterm" in options)) options = { xterm: options };
+  try { setOptions(term, options); } catch {}
+
   const toggle = document.querySelector('#options .toggler');
   const optionsElem = document.getElementById('options');
   if (editor == null || toggle == null || optionsElem == null) throw new Error("Couldn't initialize configuration menu");
