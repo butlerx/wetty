@@ -1,11 +1,8 @@
-import JSON5 from 'json5';
-
 import type { Term } from '../../shared/type';
-import { editor } from '../../../shared/elements';
+// import { editor } from '../../../shared/elements';
 
-export const onInput = (term: Term) => (): void => {
+export const onInput = (term: Term, updated: any) => {
   try {
-    const updated = JSON5.parse(editor.value);
     const updatedConf = JSON.stringify(updated, null, 2);
     if (localStorage.options === updatedConf) return;
     Object.keys(updated).forEach(key => {
@@ -13,11 +10,11 @@ export const onInput = (term: Term) => (): void => {
       term.setOption(key, value);
     });
     term.resizeTerm();
-    editor.value = updatedConf;
-    editor.classList.remove('error');
+    // editor.classList.remove('error');
     localStorage.options = updatedConf;
-  } catch {
+  } catch (e) {
+    console.error(e);
     // skip
-    editor.classList.add('error');
+    // editor.classList.add('error');
   }
 };

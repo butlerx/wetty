@@ -4,11 +4,8 @@ body {
 	display: flex;
 	flex-flow: column nowrap;
 	font-family: monospace;
-	font-size: 1.2rem;
+	font-size: 1rem;
 	color: white;
-}
-body>* {
-	margin-bottom: 1em;
 }
 .templ { display: none; }
 h2 { text-align: center; text-decoration: underline; }
@@ -33,7 +30,7 @@ header button {
 	align-items: center;
 }
 .boolean_option input, .number_option input, .color_option input, .text_option input, .enum_option select {
-	margin: 0.5em;
+	margin: 0 0.5em;
 	font-size: 1em;
 	background-color: hsl(0,0%,20%);
 	color: white;

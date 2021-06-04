@@ -99,7 +99,8 @@ document.querySelector("#save_button").addEventListener("click", () => {
 		if (option.json === true && option.type === "text") newValue = JSON.parse(newValue);
 		setItem(newConfig, option.path, newValue);
 	});
-	window.wetty_apply_config(newConfig);
+	console.log(newConfig);
+	window.wetty_save_config(newConfig);
 	window.wetty_close_config();
 });
 document.querySelector("#cancel_button").addEventListener("click", () => {
