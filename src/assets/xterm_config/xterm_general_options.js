@@ -1,4 +1,4 @@
-window.inflate_options([
+window.inflateOptions([
 	{
 		type: "text",
 		name: "Font Family",

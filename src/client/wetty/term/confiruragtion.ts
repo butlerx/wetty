@@ -35,3 +35,7 @@ export function configureTerm(term: Term): void {
     false,
   );
 }
+
+export function shouldFitTerm(): boolean {
+	return (loadOptions() as any).wetty_fit_terminal ?? true;	
+}

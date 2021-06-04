@@ -1,4 +1,4 @@
-window.inflate_options([
+window.inflateOptions([
 	{
 		type: "boolean",
 		name: "Allow Proposed XTerm APIs",

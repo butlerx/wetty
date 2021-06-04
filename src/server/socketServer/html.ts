@@ -9,6 +9,7 @@ const render = (
   favicon: string,
   css: string[],
   js: string[],
+  configUrl: string,
 ): string => `<!doctype html>
 <html lang="en">
   <head>
@@ -31,7 +32,7 @@ const render = (
          href="#"
          alt="Toggle options"
        ><i class="fas fa-cogs"></i></a>
-      <textarea class="editor"></textarea>
+      <iframe class="editor" src="${configUrl}"></iframe>
     </div>
     <div id="terminal"></div>
     ${js
@@ -50,6 +51,7 @@ export const html = (base: string, title: string): RequestHandler => (
       `${base}/favicon.ico`,
       cssFiles.map(css => `${base}/assets/css/${css}.css`),
       jsFiles.map(js => `${base}/client/${js}.js`),
+	  `${base}/assets/xterm_config/index.html`,
     ),
   );
 };

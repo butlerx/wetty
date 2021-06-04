@@ -1,4 +1,5 @@
 html { background-color: black; }
+html, body { overflow: hidden auto; }
 body {
 	display: flex;
 	flex-flow: column nowrap;

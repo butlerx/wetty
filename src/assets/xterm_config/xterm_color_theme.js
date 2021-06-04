@@ -11,7 +11,7 @@ const selectionColorOpacityOption = {
 	path: ["wetty_void"],
 };
 
-window.inflate_options([
+window.inflateOptions([
 	{
 		type: "color",
 		name: "Foreground Color",

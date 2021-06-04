@@ -76,7 +76,7 @@ function setItem(json, path, item) {
 	}
 }
 
-window.load_options = function(config) {
+window.loadOptions = function(config) {
 	allOptions.forEach(option => {
 		let value = getItem(config, option.path);
 		if (option.nullable === true && option.type === "text" && value == null) value = null;
@@ -88,7 +88,7 @@ window.load_options = function(config) {
 	});
 }
 
-if (window.top !== window) alert("Error: Page is top level. This page is supposed to be accessed from inside Wetty.");
+if (window.top === window) alert("Error: Page is top level. This page is supposed to be accessed from inside Wetty.");
 
 document.querySelector("#save_button").addEventListener("click", () => {
 	const newConfig = {};
