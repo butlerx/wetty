@@ -4,7 +4,13 @@ function optionEnumGet() { return this.el.querySelector("select").value; }
 function optionEnumSet(value) { this.el.querySelector("select").value = value; }
 function optionBoolGet() { return this.el.querySelector("input").checked; }
 function optionBoolSet(value) { this.el.querySelector("input").checked = value; }
-function optionNumberGet() { return (this.float === true ? parseFloat : parseInt)(this.el.querySelector("input").value); }
+function optionNumberGet() {
+	let value = (this.float === true ? parseFloat : parseInt)(this.el.querySelector("input").value);
+	if (Number.isNaN(value) || typeof value !== "number") value = 0;
+	if (typeof this.min === "number") value = Math.max(value, this.min);
+	if (typeof this.max === "number") value = Math.min(value, this.max);
+	return value;
+}
 function optionNumberSet(value) { this.el.querySelector("input").value = value; }
 
 const allOptions = [];
