@@ -9,6 +9,9 @@ const selectionColorOpacityOption = {
 	name: "Selection Color Opacity",
 	description: "Opacity of the selection highlight. A value between 1 (fully opaque) and 0 (fully transparent).",
 	path: ["wetty_void"],
+	float: true,
+	min: 0,
+	max: 1,
 };
 
 window.inflateOptions([
@@ -131,7 +134,7 @@ window.inflateOptions([
 ]);
 
 selectionColorOption.get = function() {
-	return this.el.querySelector("input").value + (selectionColorOpacityOption.el.querySelector("input").value * 255).toString(16);
+	return this.el.querySelector("input").value + Math.round(selectionColorOpacityOption.el.querySelector("input").value * 255).toString(16);
 };
 selectionColorOption.set = function(value) {
 	this.el.querySelector("input").value = value.substring(0, 7);

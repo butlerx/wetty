@@ -48,6 +48,7 @@ window.inflateOptions([
 		name: "Line Height",
 		description: "Line height, multiplied by the font size to get the height of terminal rows.",
 		path: ["xterm", "lineHeight"],
+		float: true,
 	},
 	{
 		type: "enum",
@@ -73,6 +74,7 @@ window.inflateOptions([
 		name: "Forced Contrast Ratio",
 		description: "Miminum contrast ratio for terminal text. This will alter the foreground color dynamically to ensure the ratio is met. Goes from 1 (do nothing) to 21 (strict black and white).",
 		path: ["xterm", "minimumContrastRatio"],
+		float: true,
 	},
 	{
 		type: "enum",

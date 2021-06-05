@@ -37,7 +37,6 @@ window.loadOptions({
 		windowOptions: {},
 		windowsMode: false,
 		wordSeparator: ' ()[]{}\',"`',
-		altClickMovesCursor: true,
 		convertEol: false,
 		termName: 'xterm',
 		cancelEvents: false,

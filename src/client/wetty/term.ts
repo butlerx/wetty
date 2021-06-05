@@ -17,11 +17,13 @@ export function terminal(socket: typeof Socket): Term | undefined {
   term.loadAddon(fitAddon);
   term.open(termElement);
   term.resizeTerm = () => {
+    term.refresh(0, term.rows - 1);
     if (shouldFitTerm()) fitAddon.fit();
     socket.emit('resize', { cols: term.cols, rows: term.rows });
   };
   configureTerm(term);
   window.onresize = term.resizeTerm;
+  (window as any).wetty_term = term;
 
   return term;
 }

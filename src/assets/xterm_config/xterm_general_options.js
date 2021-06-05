@@ -10,6 +10,7 @@ window.inflateOptions([
 		name: "Font Size",
 		description: "The font size in CSS pixels for terminal text.",
 		path: ["xterm", "fontSize"],
+		min: 4,
 	},
 	{
 		type: "enum",
@@ -75,6 +76,7 @@ window.inflateOptions([
 		name: "Scroll Sensitivity",
 		description: "The scroll speed multiplier for regular scrolling.",
 		path: ["xterm", "scrollSensitivity"],
+		float: true,
 	},
 	{
 		type: "enum",
@@ -88,6 +90,7 @@ window.inflateOptions([
 		name: "Fast Scroll Multiplier",
 		description: "The scroll speed multiplier used for fast scrolling.",
 		path: ["xterm", "fastScrollSensitivity"],
+		float: true,
 	},
 	{
 		type: "number",

@@ -2,8 +2,10 @@ function optionGenericGet() { return this.el.querySelector("input").value; }
 function optionGenericSet(value) { this.el.querySelector("input").value = value; }
 function optionEnumGet() { return this.el.querySelector("select").value; }
 function optionEnumSet(value) { this.el.querySelector("select").value = value; }
-function optionBoolGet() { return this.el.querySelector("input").value === "true"; }
-function optionBoolSet(value) { this.el.querySelector("input").value = value ? "true" : "false"; }
+function optionBoolGet() { return this.el.querySelector("input").checked; }
+function optionBoolSet(value) { this.el.querySelector("input").checked = value; }
+function optionNumberGet() { return (this.float === true ? parseFloat : parseInt)(this.el.querySelector("input").value); }
+function optionNumberSet(value) { this.el.querySelector("input").value = value; }
 
 const allOptions = [];
 function inflateOptions(optionsSchema) {
@@ -47,6 +49,11 @@ function inflateOptions(optionsSchema) {
 
 			case "number":
 				el = numberOption.cloneNode(true);
+				if (option.float === true) el.querySelector("input").setAttribute("step", "0.001");
+				option.get = optionNumberGet.bind(option);
+				option.set = optionNumberSet.bind(option);
+				if (typeof option.min === "number") el.querySelector("input").setAttribute("min", option.min.toString());
+				if (typeof option.max === "number") el.querySelector("input").setAttribute("max", option.max.toString());
 				break;
 
 			case "color":
@@ -98,17 +105,16 @@ function saveConfig() {
 	const newConfig = {};
 	allOptions.forEach(option => {
 		let newValue = option.get();
-		if (option.nullable === true && option.type === "text" && newValue === "") newValue = undefined;
-		else if (option.nullable === true && option.type === "number" && newValue < 0) newValue = undefined;
+		if (option.nullable === true && ((option.type === "text" && newValue === "") || ( option.type === "number" && newValue < 0))) return;
 		if (option.json === true && option.type === "text") newValue = JSON.parse(newValue);
 		setItem(newConfig, option.path, newValue);
 	});
 	window.wetty_save_config(newConfig);
 };
 
-window.addEventListener("load", () => {
+window.addEventListener("input", () => {
 	const els = document.querySelectorAll("input, select");
-	for (let i = 0; i < els.length; i++) {
+	for (let i = 0; i < els.length; i += 1) {
 		els[i].addEventListener("input", saveConfig);
 	}
 });
