@@ -39,8 +39,8 @@
 }
 
 #options.opened {
-  height: 50%;
-  width: 50%;
+  height: max(min(300px, 75vh), 50vh);
+  width: max(min(500px, 75vw), 50vw);
 
   .editor {
     display: flex;
