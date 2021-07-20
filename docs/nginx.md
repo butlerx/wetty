@@ -12,7 +12,7 @@ The following confs assume you want to serve WeTTy on the url
 `example.com/wetty` and are running WeTTy with the default base and serving it
 on the same server
 
-For a more detailed look see the [nginx.conf](../bin/nginx.template) used for
+For a more detailed look see the [nginx.conf](../conf/nginx.template) used for
 testing
 
 Put the following configuration in your nginx conf:
