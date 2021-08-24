@@ -1,6 +1,6 @@
 {
   "name": "wetty",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
   "homepage": "https://github.com/butlerx/wetty",
   "license": "MIT",
@@ -111,7 +111,7 @@
     "helmet": "^4.1.0",
     "json5": "^2.1.3",
     "lodash": "^4.17.20",
-    "node-pty": "^0.9.0",
+    "node-pty": "^0.10.0",
     "parseurl": "^1.3.3",
     "sass": "^1.26.10",
     "socket.io": "^2.3.0",
