@@ -1,6 +1,6 @@
 {
   "name": "wetty",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
   "homepage": "https://github.com/butlerx/wetty",
   "license": "MIT",
@@ -17,7 +17,7 @@
     "build": "snowpack build",
     "dev": "NODE_ENV=development concurrently --kill-others --success first \"snowpack dev\" \"nodemon .\"",
     "prepublishOnly": "snowpack  build",
-    "lint": "eslint src/**/*.ts",
+    "lint": "eslint src",
     "start": "NODE_ENV=production node .",
     "contributor": "all-contributors",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register src/**/*.spec.ts",

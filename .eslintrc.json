@@ -1,6 +1,6 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettier", "mocha"],
+  "plugins": ["@typescript-eslint", "prettier"],
   "env": {
     "es6": true,
     "node": true,
@@ -67,5 +67,17 @@
         "extensions": [".ts", ".js"]
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.spec.ts"],
+      "extends": ["plugin:mocha/recommended"],
+      "plugins": ["mocha"],
+      "rules": {
+        "import/no-extraneous-dependencies": ["off"],
+        "mocha/no-mocha-arrows": ["off"],
+        "no-unused-expressions": ["off"]
+      }
+    }
+  ]
 }

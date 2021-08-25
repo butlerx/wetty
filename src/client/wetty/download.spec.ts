@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { expect } from 'chai';
 import 'mocha';
 import * as sinon from 'sinon';
@@ -7,15 +5,17 @@ import * as sinon from 'sinon';
 import { JSDOM } from 'jsdom';
 import { FileDownloader } from './download';
 
+const noop = (): void => {}; // eslint-disable-line @typescript-eslint/no-empty-function
+
 describe('FileDownloader', () => {
   const FILE_BEGIN = 'BEGIN';
   const FILE_END = 'END';
-  let fileDownloader: any;
+  let fileDownloader: FileDownloader;
 
   beforeEach(() => {
     const { window } = new JSDOM(`...`);
     global.document = window.document;
-    fileDownloader = new FileDownloader(() => {}, FILE_BEGIN, FILE_END);
+    fileDownloader = new FileDownloader(noop, FILE_BEGIN, FILE_END);
   });
 
   afterEach(() => {
@@ -81,7 +81,7 @@ describe('FileDownloader', () => {
   });
 
   it('should buffer across incomplete file begin marker sequence on two calls', () => {
-    fileDownloader = new FileDownloader(() => {}, 'BEGIN', 'END');
+    fileDownloader = new FileDownloader(noop, 'BEGIN', 'END');
     const onCompleteFileCallbackStub = sinon.stub(
       fileDownloader,
       'onCompleteFileCallback',
@@ -94,7 +94,7 @@ describe('FileDownloader', () => {
   });
 
   it('should buffer across incomplete file begin marker sequence on n calls', () => {
-    fileDownloader = new FileDownloader(() => {}, 'BEGIN', 'END');
+    fileDownloader = new FileDownloader(noop, 'BEGIN', 'END');
     const onCompleteFileCallbackStub = sinon.stub(
       fileDownloader,
       'onCompleteFileCallback',
@@ -104,25 +104,25 @@ describe('FileDownloader', () => {
     expect(fileDownloader.buffer('E')).to.equal('');
     expect(fileDownloader.buffer('G')).to.equal('');
     expect(fileDownloader.buffer('I')).to.equal('');
-    expect(fileDownloader.buffer('NFILE' + 'END')).to.equal('');
+    expect(fileDownloader.buffer('NFILEEND')).to.equal('');
     expect(onCompleteFileCallbackStub.calledOnce).to.be.true;
     expect(onCompleteFileCallbackStub.getCall(0).args[0]).to.equal('FILE');
   });
 
   it('should buffer across incomplete file begin marker sequence with data on the left and right on multiple calls', () => {
-    fileDownloader = new FileDownloader(() => {}, 'BEGIN', 'END');
+    fileDownloader = new FileDownloader(noop, 'BEGIN', 'END');
     const onCompleteFileCallbackStub = sinon.stub(
       fileDownloader,
       'onCompleteFileCallback',
     );
 
-    expect(fileDownloader.buffer('DATA AT THE LEFT' + 'B')).to.equal(
+    expect(fileDownloader.buffer('DATA AT THE LEFTB')).to.equal(
       'DATA AT THE LEFT',
     );
     expect(fileDownloader.buffer('E')).to.equal('');
     expect(fileDownloader.buffer('G')).to.equal('');
     expect(fileDownloader.buffer('I')).to.equal('');
-    expect(fileDownloader.buffer('NFILE' + 'ENDDATA AT THE RIGHT')).to.equal(
+    expect(fileDownloader.buffer('NFILEENDDATA AT THE RIGHT')).to.equal(
       'DATA AT THE RIGHT',
     );
     expect(onCompleteFileCallbackStub.calledOnce).to.be.true;
@@ -130,13 +130,13 @@ describe('FileDownloader', () => {
   });
 
   it('should buffer across incomplete file begin marker sequence then handle false positive', () => {
-    fileDownloader = new FileDownloader(() => {}, 'BEGIN', 'END');
+    fileDownloader = new FileDownloader(noop, 'BEGIN', 'END');
     const onCompleteFileCallbackStub = sinon.stub(
       fileDownloader,
       'onCompleteFileCallback',
     );
 
-    expect(fileDownloader.buffer('DATA AT THE LEFT' + 'B')).to.equal(
+    expect(fileDownloader.buffer('DATA AT THE LEFTB')).to.equal(
       'DATA AT THE LEFT',
     );
     expect(fileDownloader.buffer('E')).to.equal('');
@@ -150,7 +150,7 @@ describe('FileDownloader', () => {
   });
 
   it('should buffer across incomplete file end marker sequence on two calls', () => {
-    fileDownloader = new FileDownloader(() => {}, 'BEGIN', 'END');
+    fileDownloader = new FileDownloader(noop, 'BEGIN', 'END');
     const mockFilePart1 = 'DATA AT THE LEFTBEGINFILEE';
     const mockFilePart2 = 'NDDATA AT THE RIGHT';
 
@@ -166,13 +166,13 @@ describe('FileDownloader', () => {
   });
 
   it('should buffer across incomplete file end and file begin marker sequence with data on the left and right on multiple calls', () => {
-    fileDownloader = new FileDownloader(() => {}, 'BEGIN', 'END');
+    fileDownloader = new FileDownloader(noop, 'BEGIN', 'END');
     const onCompleteFileCallbackStub = sinon.stub(
       fileDownloader,
       'onCompleteFileCallback',
     );
 
-    expect(fileDownloader.buffer('DATA AT THE LEFT' + 'BE')).to.equal(
+    expect(fileDownloader.buffer('DATA AT THE LEFTBE')).to.equal(
       'DATA AT THE LEFT',
     );
     expect(fileDownloader.buffer('G')).to.equal('');
@@ -187,7 +187,7 @@ describe('FileDownloader', () => {
   });
 
   it('should be able to handle multiple files', () => {
-    fileDownloader = new FileDownloader(() => {}, 'BEGIN', 'END');
+    fileDownloader = new FileDownloader(noop, 'BEGIN', 'END');
     const onCompleteFileCallbackStub = sinon.stub(
       fileDownloader,
       'onCompleteFileCallback',
@@ -202,7 +202,7 @@ describe('FileDownloader', () => {
           'SECOND DATA' +
           'BEGIN',
       ),
-    ).to.equal('DATA AT THE LEFT' + 'SECOND DATA');
+    ).to.equal('DATA AT THE LEFTSECOND DATA');
     expect(onCompleteFileCallbackStub.calledOnce).to.be.true;
     expect(onCompleteFileCallbackStub.getCall(0).args[0]).to.equal('FILE1');
 
@@ -214,19 +214,19 @@ describe('FileDownloader', () => {
   });
 
   it('should be able to handle multiple files with an ending marker', () => {
-    fileDownloader = new FileDownloader(() => {}, 'BEGIN', 'END');
+    fileDownloader = new FileDownloader(noop, 'BEGIN', 'END');
     const onCompleteFileCallbackStub = sinon.stub(
       fileDownloader,
       'onCompleteFileCallback',
     );
 
-    expect(
-      fileDownloader.buffer('DATA AT THE LEFT' + 'BEGIN' + 'FILE1' + 'EN'),
-    ).to.equal('DATA AT THE LEFT');
+    expect(fileDownloader.buffer('DATA AT THE LEFTBEGINFILE1EN')).to.equal(
+      'DATA AT THE LEFT',
+    );
     expect(onCompleteFileCallbackStub.calledOnce).to.be.false;
-    expect(
-      fileDownloader.buffer('D' + 'SECOND DATA' + 'BEGIN' + 'FILE2' + 'EN'),
-    ).to.equal('SECOND DATA');
+    expect(fileDownloader.buffer('DSECOND DATABEGINFILE2EN')).to.equal(
+      'SECOND DATA',
+    );
     expect(onCompleteFileCallbackStub.calledOnce).to.be.true;
     expect(onCompleteFileCallbackStub.getCall(0).args[0]).to.equal('FILE1');
     expect(fileDownloader.buffer('D')).to.equal('');
