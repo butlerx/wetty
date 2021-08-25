@@ -30,7 +30,7 @@ window.inflateOptions([
 		type: "boolean",
 		name: "Fit Terminal",
 		description: "Automatically fits the terminal to the page, overriding terminal columns and rows.",
-		path: ["wetty_fit_terminal"],
+		path: ["wettyFitTerminal"],
 	},
 	{
 		type: "number",

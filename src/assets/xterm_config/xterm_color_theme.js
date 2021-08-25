@@ -8,7 +8,7 @@ const selectionColorOpacityOption = {
 	type: "number",
 	name: "Selection Color Opacity",
 	description: "Opacity of the selection highlight. A value between 1 (fully opaque) and 0 (fully transparent).",
-	path: ["wetty_void"],
+	path: ["wettyVoid"],
 	float: true,
 	min: 0,
 	max: 1,

@@ -8,9 +8,9 @@ import { loadOptions } from './confiruragtion/load';
 
 export function configureTerm(term: Term): void {
   let options = loadOptions();
-  //Convert old options to new options
+  // Convert old options to new options
   if (!("xterm" in options)) options = { xterm: options };
-  try { setOptions(term, options); } catch {}
+  try { setOptions(term, options); } catch { /* Do nothing */ };
 
   const toggle = document.querySelector('#options .toggler');
   const optionsElem = document.getElementById('options');
@@ -42,5 +42,5 @@ export function configureTerm(term: Term): void {
 }
 
 export function shouldFitTerm(): boolean {
-	return (loadOptions() as any).wetty_fit_terminal ?? true;	
+	return (loadOptions() as any).wettyFitTerminal ?? true;	
 }
