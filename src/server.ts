@@ -15,6 +15,7 @@ import {
   forceSSHDefault,
   defaultCommand,
 } from './shared/defaults.js';
+import { escapeShell } from './server/shared/shell.js';
 
 /**
  * Starts WeTTy Server
@@ -58,7 +59,7 @@ export async function start(
     } else {
       try {
         const username = await login(socket);
-        args[1] = `${username.trim()}@${args[1]}`;
+        args[1] = `${escapeShell(username.trim())}@${args[1]}`;
         logger.debug('Spawning term', {
           username: username.trim(),
           cmd: args.join(' '),
