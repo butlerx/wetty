@@ -12,9 +12,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@master
       - name: Create Release
-        id: create_release
-        uses: elgohr/Github-Release-Action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: fregante/release-with-changelog@v3
         with:
-          release: Release ${{ github.ref }}
+          token: ${{ secrets.NODE_GITHUB_TOKEN }}
+          title: "Release {tag}"
+          exclude: true
+          commit-template: '- {title} ← {hash}'
+          template: |
+            ### Changelog
+
+            {commits}
+
+            {range}
