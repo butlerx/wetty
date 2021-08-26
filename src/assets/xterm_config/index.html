@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Wetty XTerm Configuration</title>
+		<link rel="stylesheet" href="./style.css" />
+	</head>
+	<body>
+		<header>
+			<h1>Configure</h1>
+		</header>
+		
+		<div class="templ" id="boolean_option">
+			<div class="boolean_option unbounded">
+				<p>
+					<b class="title"></b><br>
+					<span class="desc"></span>
+				</p>
+				<input type="checkbox" />
+			</div>
+		</div>
+		<div class="templ" id="enum_option">
+			<div class="enum_option unbounded">
+				<p>
+					<b class="title"></b><br>
+					<span class="desc"></span>
+				</p>
+				<select></select>
+			</div>
+		</div>
+		<div class="templ" id="text_option">
+			<div class="text_option unbounded">
+				<p>
+					<b class="title"></b><br>
+					<span class="desc"></span>
+				</p>
+				<input type="text" />
+			</div>
+			<div class="error_reporting"></div>
+		</div>
+		<div class="templ" id="number_option">
+			<div class="number_option unbounded">
+				<p>
+					<b class="title"></b><br>
+					<span class="desc"></span>
+				</p>
+				<input type="number" size="10" />
+			</div>
+			<div class="error_reporting"></div>
+		</div>
+		<div class="templ" id="color_option">
+			<div class="color_option unbounded">
+				<p>
+					<b class="title"></b><br>
+					<span class="desc"></span>
+				</p>
+				<input type="color" />
+			</div>
+		</div>
+
+		<script src="./functionality.js"></script>
+
+		<h2>General Options</h2>
+		<script src="./xterm_general_options.js"></script>
+		<h2>Color Theme</h2>
+		<script src="./xterm_color_theme.js"></script>
+		<h2>Advanced XTerm Options</h2>
+		<script src="./xterm_advanced_options.js"></script>
+
+		<script src="./xterm_defaults.js"></script>
+	</body>
+</html>

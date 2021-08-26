@@ -1,23 +1,26 @@
-import JSON5 from 'json5';
-
 import type { Term } from '../../shared/type';
 import { editor } from '../../../shared/elements';
 
-export const onInput = (term: Term) => (): void => {
+export const onInput = (term: Term, updated: any) => {
   try {
-    const updated = JSON5.parse(editor.value);
     const updatedConf = JSON.stringify(updated, null, 2);
     if (localStorage.options === updatedConf) return;
-    Object.keys(updated).forEach(key => {
-      const value = updated[key];
-      term.setOption(key, value);
-    });
+	setOptions(term, updated);
+    if (!updated.wettyFitTerminal && updated.xterm.cols != null && updated.xterm.rows != null) term.resize(updated.xterm.cols, updated.xterm.rows);
     term.resizeTerm();
-    editor.value = updatedConf;
     editor.classList.remove('error');
     localStorage.options = updatedConf;
-  } catch {
-    // skip
+  } catch (e) {
+    console.error("Configuration Error");
+    console.error(e);
     editor.classList.add('error');
   }
 };
+
+export function setOptions(term: Term, options: any) {
+  Object.keys(options.xterm).forEach(key => {
+    if (key === "cols" || key === "rows") return;
+    const value = options.xterm[key];
+    term.setOption(key, value);
+  });
+}
