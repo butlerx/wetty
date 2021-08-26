@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export function loadOptions(): any {
+export function loadOptions(): object {
   const defaultOptions = { xterm: { fontSize: 14 } };
   try {
     return _.isUndefined(localStorage.options)
