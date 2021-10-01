@@ -8,8 +8,8 @@
 
 ![Version](https://img.shields.io/badge/version-1.1.7-blue.svg?cacheSeconds=2592000)
 ![Node Version](https://img.shields.io/badge/node-%3E%3D14.0-blue.svg)
-[![Documentation](https://img.shields.io/badge/documentation-yes-brightgreen.svg)](https://github.com/butlerx/wetty/tree/master/docs)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/butlerx/wetty/blob/master/LICENSE)
+[![Documentation](https://img.shields.io/badge/documentation-yes-brightgreen.svg)](https://github.com/butlerx/wetty/tree/main/docs)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/butlerx/wetty/blob/main/LICENSE)
 [![Twitter: cianbutlerx](https://img.shields.io/twitter/follow/cianbutlerx.svg?style=social)](https://twitter.com/cianbutlerx)
 
 > Terminal access in browser over http/https
@@ -78,7 +78,7 @@ option, the SSH port using the `--ssh-port` option and the SSH user using the
 `--ssh-user` option.
 
 Check out the
-[Flags docs](https://github.com/butlerx/wetty/blob/master/docs/flags.md) for a
+[Flags docs](https://github.com/butlerx/wetty/blob/main/docs/flags.md) for a
 full list of flags
 
 ### Docker container
@@ -101,14 +101,14 @@ docker-compose file in the containers directory.
 
 ## FAQ
 
-Check out the [docs](https://github.com/butlerx/wetty/tree/master/docs)
+Check out the [docs](https://github.com/butlerx/wetty/tree/main/docs)
 
-- [Running as daemon](https://github.com/butlerx/wetty/blob/master/docs/service.md)
-- [HTTPS Support](https://github.com/butlerx/wetty/blob/master/docs/https.md)
-  - [Using NGINX](https://github.com/butlerx/wetty/blob/master/docs/nginx.md)
-  - [Using Apache](https://github.com/butlerx/wetty/blob/master/docs/apache.md)
-- [Automatic Login](https://github.com/butlerx/wetty/blob/master/docs/auto-login.md)
-- [Downloading Files](https://github.com/butlerx/wetty/blob/master/docs/downloading-files.md)
+- [Running as daemon](https://github.com/butlerx/wetty/blob/main/docs/service.md)
+- [HTTPS Support](https://github.com/butlerx/wetty/blob/main/docs/https.md)
+  - [Using NGINX](https://github.com/butlerx/wetty/blob/main/docs/nginx.md)
+  - [Using Apache](https://github.com/butlerx/wetty/blob/main/docs/apache.md)
+- [Automatic Login](https://github.com/butlerx/wetty/blob/main/docs/auto-login.md)
+- [Downloading Files](https://github.com/butlerx/wetty/blob/main/docs/downloading-files.md)
 
 ### What browsers are supported?
 
@@ -128,7 +128,7 @@ Contributions, issues and feature requests are welcome!<br />Feel free to check
 [issues page](https://github.com/butlerx/wetty/issues).
 
 Please read the
-[development docs](https://github.com/butlerx/wetty/blob/master/docs/development.md)
+[development docs](https://github.com/butlerx/wetty/blob/main/docs/development.md)
 for installing from source and running is dev node
 
 Thanks goes to these wonderful people
@@ -209,6 +209,6 @@ Give a ⭐️ if this project helped you!
 
 Copyright © 2019
 [Cian Butler <butlerx@notthe.cloud>](https://github.com/butlerx).<br /> This
-project is [MIT](https://github.com/butlerx/wetty/blob/master/LICENSE) licensed.
+project is [MIT](https://github.com/butlerx/wetty/blob/main/LICENSE) licensed.
 
 ---
