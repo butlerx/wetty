@@ -101,8 +101,8 @@ const opts = yargs
 
 if (!opts.help) {
   loadConfigFile(opts.conf)
-    .then((config) => mergeCliConf(opts, config))
-    .then((conf) =>
+    .then(config => mergeCliConf(opts, config))
+    .then(conf =>
       start(conf.ssh, conf.server, conf.command, conf.forceSSH, conf.ssl),
     )
     .catch((err: Error) => {
