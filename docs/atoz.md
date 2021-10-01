@@ -55,7 +55,7 @@ To install and manage `node` as a local user we are going to use [Node Version M
 This command will download and install `nvm` and reload our shell.
 
 ```bash
-curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | sudo bash && source ~/.profile
+curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash && source ~/.profile
 ```
 
 This command will install the latest version of the v14 branch, which is the minimum required version for WeTTY.
@@ -190,7 +190,7 @@ This command will generate the correct URL you need to visit after using the sta
 echo https://$(curl -s4 icanhazip.com):3000
 ```
 
-*Please make make a note of this URL now.*
+_Please make make a note of this URL now._
 
 ## Running WeTTY
 
@@ -278,7 +278,7 @@ Here is the template `config.json` you need to use.
 
 **Note:** To be [validated json](https://codebeautify.org/jsonvalidator) the below json example should have the `// ...` comments removed. With all comments removed the example is valid json. They are in the example to help explain the options and won't stop wetty from loading if you leave them in place. Lines you do not need can be commented out but should be removed if you want the json to pass validation.
 
-```
+```json
   "ssh": {
         "user": "username", // default user to use when ssh-ing
         "host": "localhost", // Server to ssh to
@@ -380,7 +380,7 @@ Press `ctrl` + `x` and then press `y` to save then press `enter` to confirm and 
 
 ### Optional - Systemd service with config file
 
-Here is the example using our pseudo configuration file. All modifications to the start up of `wetty` will be done by editing the `~/.config/Wetty/config` file and then reloading the ` wetty.service`. 
+Here is the example using our pseudo configuration file. All modifications to the start up of `wetty` will be done by editing the `~/.config/Wetty/config` file and then reloading the `wetty.service`.
 
 Use `nano` to open the file for editing.
 
@@ -391,7 +391,6 @@ nano ~/.config/systemd/user/wetty.service
 The copy and paste this code.
 
 **Note:** This `ExecStart` assumes the location of your `config.json` to be `~/.config/wetty/config.json`. Please make sure you use the correct location for this file.
-
 
 ```bash
 [Unit]
@@ -548,15 +547,15 @@ If you chose to not use a password to login in you should protect your instance 
 
 With `yarn`:
 
-~~~bash
+```bash
 yarn global upgrade wetty --prefix ~/
-~~~
+```
 
 To update or downgrade to a specific version you use this command:
 
-~~~bash
+```bash
 yarn global add wetty@2.0.2 --prefix ~/
-~~~
+```
 
 Now restart your `wetty` service.
 
@@ -566,17 +565,17 @@ The proper way to update NVM is to use git. The `.nvm` directory is a git repo.
 
 These commands will update NVM to the latest version of the script and load it to your shell.
 
-~~~bash
+```bash
 cd ~/.nvm
 git fetch --tags
 git checkout $(git describe --abbrev=0 --tags --match "v[0-9]*" $(git rev-list --tags --max-count=1))
 source ~/.nvm/nvm.sh
-~~~
+```
 
 ## Updating node
 
 You can use the same command you used to install it with `nvm`
 
-```
+```bash
 nvm install 14
 ```
