@@ -30,7 +30,7 @@ export function spawn(socket: SocketIO.Socket, args: string[]): void {
     .on('resize', ({ cols, rows }) => {
       term.resize(cols, rows);
     })
-    .on('input', input => {
+    .on('input', (input) => {
       if (!isUndefined(term)) term.write(input);
     })
     .on('disconnect', () => {

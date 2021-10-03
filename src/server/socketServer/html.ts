@@ -18,7 +18,7 @@ const render = (
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <link rel="icon" type="image/x-icon" href="${favicon}">
     <title>${title}</title>
-    ${css.map(file => `<link rel="stylesheet" href="${file}" />`).join('\n')}
+    ${css.map((file) => `<link rel="stylesheet" href="${file}" />`).join('\n')}
   </head>
   <body>
     <div id="overlay">
@@ -36,7 +36,7 @@ const render = (
     </div>
     <div id="terminal"></div>
     ${js
-      .map(file => `<script type="module" src="${file}"></script>`)
+      .map((file) => `<script type="module" src="${file}"></script>`)
       .join('\n')}
   </body>
 </html>`;
@@ -49,9 +49,9 @@ export const html = (base: string, title: string): RequestHandler => (
     render(
       title,
       `${base}/favicon.ico`,
-      cssFiles.map(css => `${base}/assets/css/${css}.css`),
-      jsFiles.map(js => `${base}/client/${js}.js`),
-	  `${base}/assets/xterm_config/index.html`,
+      cssFiles.map((css) => `${base}/assets/css/${css}.css`),
+      jsFiles.map((js) => `${base}/client/${js}.js`),
+      `${base}/assets/xterm_config/index.html`,
     ),
   );
 };
