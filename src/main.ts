@@ -56,7 +56,8 @@ const opts = yargs
     type: 'string',
   })
   .option('ssh-config', {
-    description: 'Specifies an alternative ssh configuration file. For further details see "-F" option in ssh(1)',
+    description:
+      'Specifies an alternative ssh configuration file. For further details see "-F" option in ssh(1)',
     type: 'string',
   })
   .option('force-ssh', {
@@ -100,8 +101,8 @@ const opts = yargs
 
 if (!opts.help) {
   loadConfigFile(opts.conf)
-    .then(config => mergeCliConf(opts, config))
-    .then(conf =>
+    .then((config) => mergeCliConf(opts, config))
+    .then((conf) =>
       start(conf.ssh, conf.server, conf.command, conf.forceSSH, conf.ssl),
     )
     .catch((err: Error) => {
