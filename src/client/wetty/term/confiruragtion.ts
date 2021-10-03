@@ -1,6 +1,4 @@
-import _ from 'lodash';
-
-import type { Term } from '../shared/type';
+import type { Term } from '../term';
 import { copySelected, copyShortcut } from './confiruragtion/clipboard';
 import { onInput, setOptions } from './confiruragtion/editor';
 import { editor } from '../../shared/elements';
@@ -37,7 +35,7 @@ export function configureTerm(term: Term): void {
     editorOnLoad();
   editor.addEventListener('load', editorOnLoad);
 
-  toggle.addEventListener('click', (e) => {
+  toggle.addEventListener('click', e => {
     (editor.contentWindow as any).loadOptions(loadOptions());
     optionsElem.classList.toggle('opened');
     e.preventDefault();

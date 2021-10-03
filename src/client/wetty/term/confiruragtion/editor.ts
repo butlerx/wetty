@@ -1,4 +1,4 @@
-import type { Term } from '../../shared/type';
+import type { Term } from '../../term';
 import { editor } from '../../../shared/elements';
 
 export const onInput = (term: Term, updated: any) => {
@@ -23,7 +23,7 @@ export const onInput = (term: Term, updated: any) => {
 };
 
 export function setOptions(term: Term, options: any) {
-  Object.keys(options.xterm).forEach((key) => {
+  Object.keys(options.xterm).forEach(key => {
     if (key === 'cols' || key === 'rows') return;
     const value = options.xterm[key];
     term.setOption(key, value);
