@@ -37,9 +37,8 @@ function inflateOptions(optionsSchema) {
   const numberOption = document.querySelector('#number_option.templ');
   const colorOption = document.querySelector('#color_option.templ');
 
-  function copyOver(element) {
-    while (element.children.length > 0)
-      document.body.append(element.children[0]);
+  function copyOver({ children }) {
+    while (children.length > 0) document.body.append(children[0]);
   }
 
   optionsSchema.forEach(option => {
@@ -113,7 +112,7 @@ function setItem(json, path, item) {
   }
 }
 
-window.loadOptions = function (config) {
+window.loadOptions = config => {
   allOptions.forEach(option => {
     let value = getItem(config, option.path);
     if (option.nullable === true && option.type === 'text' && value == null)
