@@ -77,9 +77,8 @@ If instead you wish to connect to a remote host you can specify the `--ssh-host`
 option, the SSH port using the `--ssh-port` option and the SSH user using the
 `--ssh-user` option.
 
-Check out the
-[Flags docs](https://github.com/butlerx/wetty/blob/main/docs/flags.md) for a
-full list of flags
+Check out the [Flags docs](https://butlerx.github.io/wetty/flags) for a full
+list of flags
 
 ### Docker container
 
@@ -103,12 +102,12 @@ docker-compose file in the containers directory.
 
 Check out the [docs](https://github.com/butlerx/wetty/tree/main/docs)
 
-- [Running as daemon](https://github.com/butlerx/wetty/blob/main/docs/service.md)
-- [HTTPS Support](https://github.com/butlerx/wetty/blob/main/docs/https.md)
-  - [Using NGINX](https://github.com/butlerx/wetty/blob/main/docs/nginx.md)
-  - [Using Apache](https://github.com/butlerx/wetty/blob/main/docs/apache.md)
-- [Automatic Login](https://github.com/butlerx/wetty/blob/main/docs/auto-login.md)
-- [Downloading Files](https://github.com/butlerx/wetty/blob/main/docs/downloading-files.md)
+- [Running as daemon](https://butlerx.github.io/wetty/service)
+- [HTTPS Support](https://butlerx.github.io/wetty/https)
+  - [Using NGINX](https://butlerx.github.io/wetty/nginx)
+  - [Using Apache](https://butlerx.github.io/wetty/apache)
+- [Automatic Login](https://butlerx.github.io/wetty/auto-login)
+- [Downloading Files](https://butlerx.github.io/wetty/downloading-files)
 
 ### What browsers are supported?
 
@@ -127,8 +126,7 @@ WeTTy supports all browsers that
 Contributions, issues and feature requests are welcome!<br />Feel free to check
 [issues page](https://github.com/butlerx/wetty/issues).
 
-Please read the
-[development docs](https://github.com/butlerx/wetty/blob/main/docs/development.md)
+Please read the [development docs](https://butlerx.github.io/wetty/development)
 for installing from source and running is dev node
 
 Thanks goes to these wonderful people
