@@ -29,38 +29,35 @@ RewriteRule /wetty/socket.io/(.*) ws://localhost:3000/wetty/socket.io/$1 [P,L]
 
 ## SAML2 integration to auth users
 
-This conf is using apache2 (as for nginx, SAML2 integration is not
-available on the community version, only pro).
+This conf is using apache2 (as for nginx, SAML2 integration is not available on
+the community version, only pro).
 
 Main idea is to propagate the SAML2 validated user identity into the
-`remote-user` HTTP header. You need to have the user id returned
-within the SAML2 NameID matching the username defined on the platform
-wetty is running.
+`remote-user` HTTP header. You need to have the user id returned within the
+SAML2 NameID matching the username defined on the platform wetty is running.
 
-E.g: You can ask the Idp to return a sAMAccountName within the
-SAML2Response NameID, and provision beforehand those allowed users on
-the OS wetty is running on.
+E.g: You can ask the Idp to return a sAMAccountName within the SAML2Response
+NameID, and provision beforehand those allowed users on the OS wetty is running
+on.
 
 ### SAML2 Metadata generation
 
-SAML2 metadata needs to be generated for this new service on the
-server and exchanged with the Idp. We will use the script provided at
+SAML2 metadata needs to be generated for this new service on the server and
+exchanged with the Idp. We will use the script provided at
 https://raw.githubusercontent.com/bitsensor/saml-proxy/master/mellon_create_metadata.sh
 
 ```
 $ mellon_create_metadata.sh urn:https://foo.bar.tlz https://foo.bar.tld/mellon
 ```
 
-Then we move the generated files over
-`/etc/apache2/saml2/foo.{xml,key,cert}`.
+Then we move the generated files over `/etc/apache2/saml2/foo.{xml,key,cert}`.
 
-You need to put here additionaly the metadata from your SAML2
-provider, named here `idp.xml` and exchange you foo.xml with it.
-
+You need to put here additionaly the metadata from your SAML2 provider, named
+here `idp.xml` and exchange you foo.xml with it.
 
 ### Apache2 conf
 
-``` apache
+```apache
 <VirtualHost *:443>
         ServerName foo.bar.tld
         ServerAdmin admin@bar.tld
@@ -108,14 +105,12 @@ provider, named here `idp.xml` and exchange you foo.xml with it.
 
 ### Auto login
 
-If you want to have a seamless login by trusting your IdP for
-authentication, you can create password-less users on the wetty
-platform and have them trust an SSH key used by the NodeJS, owned by
-the dedicated wetty OS user.
+If you want to have a seamless login by trusting your IdP for authentication,
+you can create password-less users on the wetty platform and have them trust an
+SSH key used by the NodeJS, owned by the dedicated wetty OS user.
 
-Wetty instanciation with proper parameters, especially the SSH private
-key is done via the following systemd service
-`/etc/systemd/system/wetty.service`:
+Wetty instanciation with proper parameters, especially the SSH private key is
+done via the following systemd service `/etc/systemd/system/wetty.service`:
 
 ```
 [Unit]
@@ -136,24 +131,21 @@ RestartSec=2
 WantedBy=multi-user.target
 ```
 
-For your new users to be automically trusting this SSH key when
-provisionning, you may add the pubkey to
-`/etc/skel/.ssh/authorized_keys`.
-
+For your new users to be automically trusting this SSH key when provisionning,
+you may add the pubkey to `/etc/skel/.ssh/authorized_keys`.
 
 ### Security precautions
 
-You probably don't want local users to impersonate each other, for that you need to make sure that:
+You probably don't want local users to impersonate each other, for that you need
+to make sure that:
 
 1. NodeJS is listenning only to localhost: provided by `wetty.service`
-2. **Only** the apache2 process can join the wetty port. Else local users
-   will be able to connect and forge a `remote-user` header: provided
-   by `iptables -A OUTPUT -o lo -p tcp --dport 3000 -m owner \!
-   --uid-owner www-data -j DROP`
-3. Validate your wetty version does not allow access to `/wetty/ssh/`
-   else again you will be able to impersonnate anyone: provided by
-   either:
-   1. wetty version 2.0.3 and beyond implements this by disabling this feature in case of `remote-user`
-   presence
+2. **Only** the apache2 process can join the wetty port. Else local users will
+   be able to connect and forge a `remote-user` header: provided by
+   `iptables -A OUTPUT -o lo -p tcp --dport 3000 -m owner \! --uid-owner www-data -j DROP`
+3. Validate your wetty version does not allow access to `/wetty/ssh/` else again
+   you will be able to impersonnate anyone: provided by either:
+   1. wetty version 2.0.3 and beyond implements this by disabling this feature
+      in case of `remote-user` presence
    2. apache2 conf as provided in previous section (containing the
       `<Location /wetty/ssh/>`)

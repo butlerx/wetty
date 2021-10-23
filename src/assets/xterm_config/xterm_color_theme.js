@@ -148,9 +148,5 @@ selectionColorOption.set = function (value) {
   selectionColorOpacityOption.el.querySelector('input').value =
     Math.round((parseInt(value.substring(7), 16) / 255) * 100) / 100;
 };
-selectionColorOpacityOption.get = function () {
-  return 0;
-};
-selectionColorOpacityOption.set = function () {
-  return 0;
-};
+selectionColorOpacityOption.get = () => 0;
+selectionColorOpacityOption.set = () => 0;

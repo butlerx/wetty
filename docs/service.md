@@ -28,5 +28,5 @@ like this:
 exec sudo -u root wetty -p 80 >> /var/log/wetty.log 2>&1
 ```
 
-Systemd requires an absolute path for a unit's WorkingDirectory, consquently `$HOME` 
-will need updating to an absolute path in the `wetty.service` file. 
+Systemd requires an absolute path for a unit's WorkingDirectory, consquently
+`$HOME` will need updating to an absolute path in the `wetty.service` file.
