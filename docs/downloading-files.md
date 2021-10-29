@@ -1,6 +1,6 @@
 # File Downloading
 
-WeTTy supports file downloads by printing terminal escape sequences between a
+WeTTY supports file downloads by printing terminal escape sequences between a
 base64 encoded file.
 
 The terminal escape sequences used are `^[[5i` and `^[[4i` (VT100 for "enter
@@ -15,11 +15,11 @@ function wetty-download() {
 }
 ```
 
-You are then able to download files via WeTTy!
+You are then able to download files via WeTTY!
 
 ```bash
 $ cat my-pdf-file.pdf | ./wetty-download.sh
 ```
 
-WeTTy will then issue a popup like the following that links to a local file
+WeTTY will then issue a popup like the following that links to a local file
 blob: `Download ready: file-20191015233654.pdf`

@@ -353,7 +353,7 @@ Here is the template `config.json` you need to use.
 **Note:** To be [validated json](https://codebeautify.org/jsonvalidator) the
 below json example should have the `// ...` comments removed. With all comments
 removed the example is valid json. They are in the example to help explain the
-options and won't stop wetty from loading if you leave them in place. Lines you
+options and won't stop WeTTY from loading if you leave them in place. Lines you
 do not need can be commented out but should be removed if you want the json to
 pass validation.
 
@@ -371,7 +371,7 @@ pass validation.
         "base": "/wetty/", // URL base to serve resources from
         "port": 3000, // Port to listen on
         "host": "0.0.0.0", // listen on all interfaces or can be 127.0.0.1 with nginx
-        "title": "WeTTy - The Web Terminal Emulator", // Page title
+        "title": "WeTTY - The Web Terminal Emulator", // Page title
         "bypassHelmet": false // Disable Helmet security checks
     },
     "forceSSH": false, // Force sshing to local machine over login if running as root
@@ -446,7 +446,7 @@ remove or modify the `ExecStart` command based on your needs.
 
 ```bash
 [Unit]
-Description=wetty
+Description=WeTTY
 After=network-online.target
 
 [Service]
@@ -484,7 +484,7 @@ this file.
 
 ```bash
 [Unit]
-Description=wetty
+Description=WeTTY
 After=network-online.target
 
 [Service]
@@ -628,7 +628,7 @@ behind either:
   --ssh-host      ssh server host                                       [string]   [default: "localhost"]
   --ssh-port      ssh server port                                       [number]   [default: 22]
   --ssh-user      ssh user                                              [string]   [default: ""]
-  --title         window title                                          [string]   [default: "WeTTy - The Web Terminal Emulator"]
+  --title         window title                                          [string]   [default: "WeTTY - The Web Terminal Emulator"]
   --ssh-auth      defaults to "password", you can use "publickey,password"
                   instead                                               [string]   [default: "password"]
   --ssh-pass      ssh password                                          [string]
@@ -646,7 +646,7 @@ behind either:
                   same origin                                           [boolean]  [default: false]
 ```
 
-## Updating Wetty
+## Updating WeTTY
 
 With `yarn`:
 
