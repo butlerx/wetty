@@ -16,7 +16,7 @@ For auto-login feature you'll need sshpass installed
 ## Usage
 
 You can also pass the ssh password as an optional query parameter to auto-login
-the user like this (Only while running WeTTy as a non root account or when
+the user like this (Only while running WeTTY as a non root account or when
 specifying the ssh host):
 
 `http://yourserver:3000/wetty/ssh/<username>?pass=<password>`

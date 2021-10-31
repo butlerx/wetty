@@ -1,15 +1,15 @@
-## Run WeTTy behind nginx
+## Run WeTTY behind nginx
 
-As said earlier you can use Nginx to add https to WeTTy.
+As said earlier you can use Nginx to add https to WeTTY.
 
-**Note** that if your proxy is configured for https you should run WeTTy without
+**Note** that if your proxy is configured for https you should run WeTTY without
 SSL
 
-If you configure nginx to use a base path other than `/WeTTy`, then specify that
+If you configure nginx to use a base path other than `/wetty`, then specify that
 path with the `--base` flag, or the `BASE` environment variable.
 
-The following confs assume you want to serve WeTTy on the url
-`example.com/wetty` and are running WeTTy with the default base and serving it
+The following confs assume you want to serve WeTTY on the url
+`example.com/wetty` and are running WeTTY with the default base and serving it
 on the same server
 
 For a more detailed look see the

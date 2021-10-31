@@ -1,6 +1,6 @@
 # Docs
 
-![WeTTy](./terminal.png?raw=true)
+![WeTTY](./terminal.png?raw=true)
 
 - [AtoZ](./atoz.md)
 - [Running as daemon](./service.md)
@@ -13,11 +13,11 @@
 
 ## API
 
-For WeTTy options and event details please refer to the [api docs](./API.md)
+For WeTTY options and event details please refer to the [api docs](./API.md)
 
 ### Getting started
 
-WeTTy is event driven. To Spawn a new server call `wetty.start()` with no
+WeTTY is event driven. To Spawn a new server call `wetty.start()` with no
 arguments.
 
 ```javascript

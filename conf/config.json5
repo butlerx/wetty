@@ -13,7 +13,7 @@
     base:         '/wetty/',                           // URL base to serve resources from
     port:         3000,                                // Port to listen on
     host:         '0.0.0.0',                           // address to listen on
-    title:        'WeTTy - The Web Terminal Emulator', // Page title
+    title:        'WeTTY - The Web Terminal Emulator', // Page title
     bypassHelmet: false,                               // Disable Helmet security checks
   },
 

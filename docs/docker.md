@@ -1,6 +1,6 @@
 # Dockerized Version
 
-WeTTy can be run from a container to ssh to a remote host or the host system.
+WeTTY can be run from a container to ssh to a remote host or the host system.
 This is handy for quick deployments. Just modify `docker-compose.yml` for your
 host and run:
 
@@ -8,7 +8,7 @@ host and run:
 $ docker-compose up -d
 ```
 
-This will start 2 containers, one will be WeTTy container running ssh client the
+This will start 2 containers, one will be WeTTY container running ssh client the
 other will be a container running ssh server.
 
 Visit the appropriate URL in your browser
@@ -22,6 +22,6 @@ In the docker version all flags can be accessed as environment variables such as
 
 If you dont want to build the image yourself just remove the line `build; .`
 
-If you wish to use the WeTTy container in prod just modify the WeTTy container
+If you wish to use the WeTTY container in prod just modify the WeTTY container
 to have `SSHHOST` point to the server you want to ssh to and remove the ssh
 server container.

@@ -89,7 +89,7 @@ const opts = yargs
   })
   .option('allow-iframe', {
     description:
-      'Allow wetty to be embedded in an iframe, defaults to allowing same origin',
+      'Allow WeTTY to be embedded in an iframe, defaults to allowing same origin',
     type: 'boolean',
   })
   .option('help', {

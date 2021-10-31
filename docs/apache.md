@@ -1,15 +1,15 @@
-## Run wetty behind nginx or apache
+## Run WeTTY behind nginx or apache
 
-As said earlier you can use a proxy to add https to WeTTy.
+As said earlier you can use a proxy to add https to WeTTY.
 
-**Note** that if your proxy is configured for https you should run WeTTy without
+**Note** that if your proxy is configured for https you should run WeTTY without
 SSL
 
 If your proxy uses a base path other than `/wetty`, specify the path with the
 `--base` flag, or the `BASE` environment variable.
 
-The following confs assume you want to serve wetty on the url
-`example.com/wetty` and are running wetty with the default base and serving it
+The following confs assume you want to serve WeTTY on the url
+`example.com/wetty` and are running WeTTY with the default base and serving it
 on the same server
 
 Put the following configuration in apache's conf:
@@ -34,10 +34,10 @@ the community version, only pro).
 
 Main idea is to propagate the SAML2 validated user identity into the
 `remote-user` HTTP header. You need to have the user id returned within the
-SAML2 NameID matching the username defined on the platform wetty is running.
+SAML2 NameID matching the username defined on the platform WeTTY is running.
 
 E.g: You can ask the Idp to return a sAMAccountName within the SAML2Response
-NameID, and provision beforehand those allowed users on the OS wetty is running
+NameID, and provision beforehand those allowed users on the OS WeTTY is running
 on.
 
 ### SAML2 Metadata generation
@@ -84,7 +84,7 @@ here `idp.xml` and exchange you foo.xml with it.
                 MellonSPCertFile /etc/apache2/saml2/foo.cert
                 MellonIdPMetadataFile /etc/apache2/saml2/idp.xml
 
-                # the identity propagated to wetty (as HTTP header 'remote-user: xxxxx')
+                # the identity propagated to WeTTY (as HTTP header 'remote-user: xxxxx')
                 # is retrieved from SAMLResponse NameID attribute
                 RequestHeader set remote-user %{MELLON_NAMEID}e
         </Location>
@@ -106,15 +106,15 @@ here `idp.xml` and exchange you foo.xml with it.
 ### Auto login
 
 If you want to have a seamless login by trusting your IdP for authentication,
-you can create password-less users on the wetty platform and have them trust an
-SSH key used by the NodeJS, owned by the dedicated wetty OS user.
+you can create password-less users on the WeTTY platform and have them trust an
+SSH key used by the NodeJS, owned by the dedicated WeTTY OS user.
 
-Wetty instanciation with proper parameters, especially the SSH private key is
+WeTTY instanciation with proper parameters, especially the SSH private key is
 done via the following systemd service `/etc/systemd/system/wetty.service`:
 
 ```
 [Unit]
-Description=Wetty Web Terminal
+Description=WeTTY Web Terminal
 After=network.target
 
 [Service]
@@ -140,12 +140,12 @@ You probably don't want local users to impersonate each other, for that you need
 to make sure that:
 
 1. NodeJS is listenning only to localhost: provided by `wetty.service`
-2. **Only** the apache2 process can join the wetty port. Else local users will
+2. **Only** the apache2 process can join the WeTTY port. Else local users will
    be able to connect and forge a `remote-user` header: provided by
    `iptables -A OUTPUT -o lo -p tcp --dport 3000 -m owner \! --uid-owner www-data -j DROP`
-3. Validate your wetty version does not allow access to `/wetty/ssh/` else again
+3. Validate your WeTTY version does not allow access to `/wetty/ssh/` else again
    you will be able to impersonnate anyone: provided by either:
-   1. wetty version 2.0.3 and beyond implements this by disabling this feature
+   1. WeTTY version 2.0.3 and beyond implements this by disabling this feature
       in case of `remote-user` presence
    2. apache2 conf as provided in previous section (containing the
       `<Location /wetty/ssh/>`)

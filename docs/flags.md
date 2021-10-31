@@ -1,15 +1,15 @@
 # Flags
 
-WeTTy can be run with the `--help` flag to get a full list of flags.
+WeTTY can be run with the `--help` flag to get a full list of flags.
 
 ## Server Port
 
-WeTTy runs on port `3000` by default. You can change the default port by
+WeTTY runs on port `3000` by default. You can change the default port by
 starting with the `--port` or `-p` flag.
 
 ## SSH Host
 
-If WeTTy is run as root while the host is set as the local machine it will use
+If WeTTY is run as root while the host is set as the local machine it will use
 the `login` binary rather than ssh. If no host is specified it will use
 `localhost` as the ssh host.
 
@@ -26,10 +26,10 @@ be prompted to enter their username when they connect.
 
 ## SSH Port
 
-By default WeTTy will try to ssh to port `22`, if your host uses an alternative
+By default WeTTY will try to ssh to port `22`, if your host uses an alternative
 ssh port this can be specified with the flag `--ssh-port`.
 
-## WeTTy URL
+## WeTTY URL
 
 If you'd prefer an HTTP base prefix other than `/wetty`, you can specify that
 with `--base`.
