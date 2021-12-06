@@ -23,6 +23,8 @@ jobs:
           images: |
             wettyoss/wetty
             ghcr.io/butlerx/wetty
+          flavor: |
+            latest=true
           tags: |
             type=schedule
             type=ref,event=branch
