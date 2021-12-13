@@ -1,6 +1,6 @@
 {
   "name": "wetty",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
   "homepage": "https://github.com/butlerx/wetty",
   "license": "MIT",
@@ -60,6 +60,9 @@
     ]
   },
   "snowpack": {
+    "buildOptions": {
+      "metaUrlPath": "web_modules"
+    },
     "packageOptions": {
       "sourceMap": true,
       "installTypes": true

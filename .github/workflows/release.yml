@@ -12,10 +12,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@master
       - name: Create Release
-      - uses: fregante/release-with-changelog@v3
+        uses: fregante/release-with-changelog@v3
         with:
           token: ${{ secrets.NODE_GITHUB_TOKEN }}
-          title: "Release {tag}"
+          title: 'Release {tag}'
           exclude: true
           commit-template: '- {title} ← {hash}'
           template: |
