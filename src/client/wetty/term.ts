@@ -28,6 +28,7 @@ export class Term extends Terminal {
 export function terminal(socket: typeof Socket): Term | undefined {
   const term = new Term(socket) as Term;
   if (_.isNull(termElement)) return undefined;
+  termElement.innerHTML = '';
   term.open(termElement);
   configureTerm(term);
   window.onresize = term.resizeTerm;
