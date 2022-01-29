@@ -54,20 +54,18 @@ export async function start(
       cmd: args.join(' '),
     });
 
-    if (sshUser) {
-      spawn(socket, args);
-    } else {
-      try {
+    try {
+      if (!sshUser) {
         const username = await login(socket);
         args[1] = `${escapeShell(username.trim())}@${args[1]}`;
         logger.debug('Spawning term', {
           username: username.trim(),
           cmd: args.join(' '),
         });
-        spawn(socket, args);
-      } catch (error) {
-        logger.info('Disconnect signal sent', { err: error });
       }
+      await spawn(socket, args);
+    } catch (error) {
+      logger.info('Disconnect signal sent', { err: error });
     }
   });
   return io;

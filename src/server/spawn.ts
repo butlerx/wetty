@@ -3,9 +3,14 @@ import isUndefined from 'lodash/isUndefined.js';
 import pty from 'node-pty';
 import { logger } from '../shared/logger.js';
 import { xterm } from './shared/xterm.js';
+import { envVersion } from './spawn/env.js';
 
-export function spawn(socket: SocketIO.Socket, args: string[]): void {
-  const cmd = ['-S', ...args];
+export async function spawn(
+  socket: SocketIO.Socket,
+  args: string[],
+): Promise<void> {
+  const version = await envVersion();
+  const cmd = version >= 9 ? ['-S', ...args] : args;
   logger.debug('Spawning PTTY', { cmd });
   const term = pty.spawn('/usr/bin/env', cmd, xterm);
   const { pid } = term;
