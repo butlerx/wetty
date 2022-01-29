@@ -6,6 +6,7 @@ services:
     build:
       context: .
       dockerfile: containers/wetty/Dockerfile
+    entrypoint: yarn docker-compose-entrypoint
     tty: true
     working_dir: /usr/src/app
     ports:

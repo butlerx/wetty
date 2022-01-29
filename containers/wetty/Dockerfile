@@ -17,4 +17,4 @@ COPY package.json /usr/src/app
 RUN apk add -U coreutils openssh-client sshpass && \
     mkdir ~/.ssh
 
-ENTRYPOINT [ "yarn" , "docker-entrypoint"]
+ENTRYPOINT ["yarn", "start"]
