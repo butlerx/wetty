@@ -11,12 +11,13 @@
   "main": "./build/main.js",
   "exports": "./build/server.js",
   "files": [
-    "build/"
+    "build/",
+    "conf/"
   ],
   "scripts": {
     "build": "snowpack build",
     "dev": "NODE_ENV=development concurrently --kill-others --success first \"snowpack dev\" \"nodemon .\"",
-    "prepublishOnly": "snowpack  build",
+    "prepublishOnly": "snowpack build",
     "lint": "eslint src",
     "start": "NODE_ENV=production node .",
     "contributor": "all-contributors",
