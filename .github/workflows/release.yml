@@ -5,16 +5,16 @@ on:
     tags:
       - 'v*'
 jobs:
-  build:
+  Release:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
       - name: Create Release
         uses: fregante/release-with-changelog@v3
         with:
-          token: ${{ secrets.NODE_GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           title: 'Release {tag}'
           exclude: true
           commit-template: '- {title} ← {hash}'
