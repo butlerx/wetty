@@ -22,29 +22,39 @@ export function getCommand(
       conn: { remoteAddress },
     },
   }: Socket,
-  { user, host, port, auth, pass, key, knownHosts, config }: SSH,
+  {
+    user,
+    host,
+    port,
+    auth,
+    pass,
+    key,
+    knownHosts,
+    config,
+    allowRemoteHosts,
+  }: SSH,
   command: string,
   forcessh: boolean,
 ): [string[], boolean] {
   const sshAddress = address(headers, user, host);
-  const localLogin = !forcessh && localhost(host);
-  return localLogin
-    ? [loginOptions(command, remoteAddress), localLogin]
-    : [
-        sshOptions(
-          {
-            ...urlArgs(headers.referer, {
-              port: `${port}`,
-              pass: pass || '',
-              command,
-              auth,
-              knownHosts,
-              config: config || '',
-            }),
-            host: sshAddress,
-          },
-          key,
-        ),
-        user !== '' || user.includes('@') || sshAddress.includes('@'),
-      ];
+  if (!forcessh && localhost(host)) {
+    return [loginOptions(command, remoteAddress), true];
+  }
+  const args = urlArgs(headers.referer, {
+    host: sshAddress,
+    port: `${port}`,
+    pass: pass || '',
+    command,
+    auth,
+    knownHosts,
+    config: config || '',
+  });
+  if (!allowRemoteHosts) {
+    args.host = sshAddress;
+  }
+
+  return [
+    sshOptions(args, key),
+    user !== '' || user.includes('@') || sshAddress.includes('@'),
+  ];
 }

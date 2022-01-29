@@ -92,6 +92,11 @@ const opts = yargs
       'Allow WeTTY to be embedded in an iframe, defaults to allowing same origin',
     type: 'boolean',
   })
+  .option('allow-remote-hosts', {
+    description:
+      'Allow WeTTY to use the `host` param in a url as ssh destination',
+    type: 'boolean',
+  })
   .option('help', {
     alias: 'h',
     type: 'boolean',
