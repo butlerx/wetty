@@ -27,6 +27,7 @@ export async function server(
   const app = express();
   const client = html(basePath, title);
   app
+    .use(metrics)
     .use(`${basePath}/web_modules`, serveStatic('web_modules'))
     .use(`${basePath}/assets`, serveStatic('assets'))
     .use(`${basePath}/client`, serveStatic('client'))
@@ -42,8 +43,7 @@ export async function server(
     .use(redirect)
     .use(policies(allowIframe))
     .get(basePath, client)
-    .get(`${basePath}/ssh/:user`, client)
-    .get('/metrics', metrics);
+    .get(`${basePath}/ssh/:user`, client);
 
   const sslBuffer: SSLBuffer = await loadSSL(ssl);
 
