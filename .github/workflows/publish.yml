@@ -36,11 +36,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           registry-url: 'https://npm.pkg.github.com'
-      - name: Publish to Guthib PKG if version has been updated
+      - name: Publish to Github PKG if version has been updated
         uses: pascalgn/npm-publish-action@1.3.8
         with:
-          tag_name: 'v%s'
-          tag_message: 'v%s'
+          create_tag: false
           commit_pattern: "^Release (\\S+)"
           publish_args: '--non-interactive'
         env:
