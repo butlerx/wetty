@@ -12,14 +12,11 @@ export async function spawn(
   const logger = getLogger();
   const version = await envVersion();
   const cmd = version >= 9 ? ['-S', ...args] : args;
-  logger.debug('Spawning PTTY', { cmd });
+  logger.debug('Spawning PTY', { cmd });
   const term = pty.spawn('/usr/bin/env', cmd, xterm);
   const { pid } = term;
   const address = args[0] === 'ssh' ? args[1] : 'localhost';
-  logger.info('Process Started on behalf of user', {
-    pid,
-    address,
-  });
+  logger.info('Process Started on behalf of user', { pid, address });
   socket.emit('login');
   term.on('exit', (code: number) => {
     logger.info('Process exited', { code, pid });
