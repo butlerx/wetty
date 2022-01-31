@@ -8,7 +8,7 @@
  */
 import yargs from 'yargs';
 import { createRequire } from 'module';
-import { logger } from './shared/logger.js';
+import { setLevel, logger } from './shared/logger.js';
 import { start } from './server.js';
 import { loadConfigFile, mergeCliConf } from './shared/config.js';
 
@@ -104,6 +104,10 @@ const opts = yargs
       'Allow WeTTY to use the `host` param in a url as ssh destination',
     type: 'boolean',
   })
+  .option('log-level', {
+    description: 'set log level of wetty server',
+    type: 'string',
+  })
   .option('help', {
     alias: 'h',
     type: 'boolean',
@@ -114,11 +118,12 @@ const opts = yargs
 if (!opts.help) {
   loadConfigFile(opts.conf)
     .then(config => mergeCliConf(opts, config))
-    .then(conf =>
-      start(conf.ssh, conf.server, conf.command, conf.forceSSH, conf.ssl),
-    )
+    .then(conf => {
+      setLevel(conf.logLevel);
+      start(conf.ssh, conf.server, conf.command, conf.forceSSH, conf.ssl);
+    })
     .catch((err: Error) => {
-      logger.error(err);
+      logger().error('error in server', { err });
       process.exitCode = 1;
     });
 } else {

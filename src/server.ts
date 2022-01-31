@@ -5,7 +5,7 @@
 import type SocketIO from 'socket.io';
 import type { SSH, SSL, Server } from './shared/interfaces.js';
 import { getCommand } from './server/command.js';
-import { logger } from './shared/logger.js';
+import { logger as getLogger } from './shared/logger.js';
 import { login } from './server/login.js';
 import { server } from './server/socketServer.js';
 import { spawn } from './server/spawn.js';
@@ -29,6 +29,7 @@ export async function start(
   forcessh: boolean = forceSSHDefault,
   ssl?: SSL,
 ): Promise<SocketIO.Server> {
+  const logger = getLogger();
   if (ssh.key) {
     logger.warn(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! Password-less auth enabled using private key from ${ssh.key}.

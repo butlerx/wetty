@@ -1,4 +1,5 @@
 import type { SSH, Server } from './interfaces';
+import { isDev } from './env.js';
 
 export const sshDefault: SSH = {
   user: process.env.SSHUSER || '',
@@ -22,3 +23,4 @@ export const serverDefault: Server = {
 
 export const forceSSHDefault = process.env.FORCESSH === 'true' || false;
 export const defaultCommand = process.env.COMMAND || 'login';
+export const defaultLogLevel = isDev ? 'debug' : 'http';

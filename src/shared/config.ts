@@ -3,13 +3,14 @@ import path from 'path';
 import JSON5 from 'json5';
 import isUndefined from 'lodash/isUndefined.js';
 import type { Arguments } from 'yargs';
-
+import type winston from 'winston';
 import type { Config, SSH, Server, SSL } from './interfaces';
 import {
   sshDefault,
   serverDefault,
   forceSSHDefault,
   defaultCommand,
+  defaultLogLevel,
 } from './defaults.js';
 
 type confValue =
@@ -21,6 +22,7 @@ type confValue =
   | SSH
   | Server
   | SSL;
+
 /**
  * Cast given value to boolean
  *
@@ -41,6 +43,24 @@ function ensureBoolean(value: confValue): boolean {
   }
 }
 
+function parseLogLevel(
+  confLevel: winston.level,
+  optsLevel: unknown,
+): winston.level {
+  const logLevel = isUndefined(optsLevel) ? confLevel : `${optsLevel}`;
+  return [
+    'error',
+    'warn',
+    'info',
+    'http',
+    'verbose',
+    'debug',
+    'silly',
+  ].includes(logLevel)
+    ? (logLevel as winston.level)
+    : defaultLogLevel;
+}
+
 /**
  * Load JSON5 config from file and merge with default args
  * If no path is provided the default config is returned
@@ -55,6 +75,7 @@ export async function loadConfigFile(filepath?: string): Promise<Config> {
       server: serverDefault,
       command: defaultCommand,
       forceSSH: forceSSHDefault,
+      logLevel: defaultLogLevel,
     };
   }
   const content = await fs.readFile(path.resolve(filepath));
@@ -71,6 +92,7 @@ export async function loadConfigFile(filepath?: string): Promise<Config> {
       ? forceSSHDefault
       : ensureBoolean(parsed.forceSSH),
     ssl: parsed.ssl,
+    logLevel: parseLogLevel(defaultLogLevel, parsed.logLevel),
   };
 }
 
@@ -131,5 +153,6 @@ export function mergeCliConf(opts: Arguments, config: Config): Config {
       ? config.forceSSH
       : ensureBoolean(opts['force-ssh']),
     ssl: isUndefined(ssl.key) || isUndefined(ssl.cert) ? undefined : ssl,
+    logLevel: parseLogLevel(config.logLevel, opts['log-level']),
   };
 }

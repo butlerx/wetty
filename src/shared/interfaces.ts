@@ -1,3 +1,5 @@
+import type winston from 'winston';
+
 export interface SSH {
   [s: string]: string | number | boolean | undefined;
   user: string;
@@ -35,5 +37,6 @@ export interface Config {
   server: Server;
   forceSSH: boolean;
   command: string;
+  logLevel: winston.level;
   ssl?: SSL;
 }

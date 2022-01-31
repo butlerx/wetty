@@ -17,13 +17,13 @@ export const listen = (
   socket(
     !isUndefined(key) && !isUndefined(cert)
       ? https.createServer({ key, cert }, app).listen(port, host, () => {
-          logger.info('Server started', {
+          logger().info('Server started', {
             port,
             connection: 'https',
           });
         })
       : http.createServer(app).listen(port, host, () => {
-          logger.info('Server started', {
+          logger().info('Server started', {
             port,
             connection: 'http',
           });

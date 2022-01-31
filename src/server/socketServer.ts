@@ -17,7 +17,7 @@ export async function server(
   ssl?: SSL,
 ): Promise<SocketIO.Server> {
   const basePath = trim(base);
-  logger.info('Starting server', {
+  logger().info('Starting server', {
     ssl,
     port,
     base,
@@ -30,7 +30,13 @@ export async function server(
     .use(`${basePath}/web_modules`, serveStatic('web_modules'))
     .use(`${basePath}/assets`, serveStatic('assets'))
     .use(`${basePath}/client`, serveStatic('client'))
-    .use(winston.logger(logger))
+    .use(
+      winston.logger({
+        winstonInstance: logger(),
+        expressFormat: true,
+        level: 'http',
+      }),
+    )
     .use(compression())
     .use(favicon(basePath))
     .use(redirect)
