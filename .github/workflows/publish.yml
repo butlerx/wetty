@@ -44,4 +44,4 @@ jobs:
           publish_args: '--non-interactive'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NP<_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
