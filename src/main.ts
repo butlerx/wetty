@@ -7,11 +7,18 @@
  * This is the cli Interface for wetty.
  */
 import yargs from 'yargs';
+import { createRequire } from 'module';
 import { logger } from './shared/logger.js';
 import { start } from './server.js';
 import { loadConfigFile, mergeCliConf } from './shared/config.js';
 
+/* eslint-disable @typescript-eslint/no-var-requires */
+const require = createRequire(import.meta.url);
+const packageJson = require('../package.json');
+
 const opts = yargs
+  .scriptName(packageJson.name)
+  .version(packageJson.version)
   .options('conf', {
     type: 'string',
     description: 'config file to load config from',
