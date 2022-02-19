@@ -10,10 +10,10 @@ const localhost = (host: string): boolean =>
   (host === 'localhost' || host === '0.0.0.0' || host === '127.0.0.1');
 
 const urlArgs = (
-  referer: string,
+  referer: string | undefined,
   def: { [s: string]: string },
 ): { [s: string]: string } =>
-  Object.assign(def, url.parse(referer, true).query);
+  Object.assign(def, url.parse(referer || '', true).query);
 
 export function getCommand(
   {

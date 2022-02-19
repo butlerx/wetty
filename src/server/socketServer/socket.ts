@@ -1,5 +1,5 @@
 import type express from 'express';
-import socket from 'socket.io';
+import { Server } from 'socket.io';
 import http from 'http';
 import https from 'https';
 import isUndefined from 'lodash/isUndefined.js';
@@ -13,8 +13,8 @@ export const listen = (
   port: number,
   path: string,
   { key, cert }: SSLBuffer,
-): SocketIO.Server =>
-  socket(
+): Server =>
+  new Server(
     !isUndefined(key) && !isUndefined(cert)
       ? https.createServer({ key, cert }, app).listen(port, host, () => {
           logger().info('Server started', {

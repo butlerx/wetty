@@ -8,9 +8,9 @@ import { configureTerm, shouldFitTerm } from './term/confiruragtion.js';
 import { terminal as termElement } from '../shared/elements.js';
 
 export class Term extends Terminal {
-  socket: typeof Socket;
+  socket: Socket;
   fitAddon: FitAddon;
-  constructor(socket: typeof Socket) {
+  constructor(socket: Socket) {
     super();
     this.socket = socket;
     this.fitAddon = new FitAddon();
@@ -25,7 +25,7 @@ export class Term extends Terminal {
   }
 }
 
-export function terminal(socket: typeof Socket): Term | undefined {
+export function terminal(socket: Socket): Term | undefined {
   const term = new Term(socket) as Term;
   if (_.isNull(termElement)) return undefined;
   termElement.innerHTML = '';
