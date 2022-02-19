@@ -37,6 +37,6 @@ export interface Config {
   server: Server;
   forceSSH: boolean;
   command: string;
-  logLevel: winston.level;
+  logLevel: typeof winston.level;
   ssl?: SSL;
 }

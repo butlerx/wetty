@@ -44,9 +44,9 @@ function ensureBoolean(value: confValue): boolean {
 }
 
 function parseLogLevel(
-  confLevel: winston.level,
+  confLevel: typeof winston.level,
   optsLevel: unknown,
-): winston.level {
+): typeof winston.level {
   const logLevel = isUndefined(optsLevel) ? confLevel : `${optsLevel}`;
   return [
     'error',
@@ -57,7 +57,7 @@ function parseLogLevel(
     'debug',
     'silly',
   ].includes(logLevel)
-    ? (logLevel as winston.level)
+    ? (logLevel as typeof winston.level)
     : defaultLogLevel;
 }
 

@@ -23,7 +23,7 @@ let globalLogger = winston.createLogger({
   ],
 });
 
-export function setLevel(level: winston.level): void {
+export function setLevel(level: typeof winston.level): void {
   globalLogger = winston.createLogger({
     format: isDev ? dev : prod,
     transports: [
