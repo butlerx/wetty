@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 export function mobileKeyboard(): void {
-  const [screen] = document.getElementsByClassName('xterm-screen');
+  const [screen] = Array.from(document.getElementsByClassName('xterm-screen'));
   if (_.isNull(screen)) return;
   screen.setAttribute('contenteditable', 'true');
   screen.setAttribute('spellcheck', 'false');

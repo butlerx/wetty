@@ -30,7 +30,7 @@ function optionNumberSet(value) {
 }
 
 const allOptions = [];
-function inflateOptions(optionsSchema) {
+export function inflateOptions(optionsSchema) {
   const booleanOption = document.querySelector('#boolean_option.templ');
   const enumOption = document.querySelector('#enum_option.templ');
   const textOption = document.querySelector('#text_option.templ');

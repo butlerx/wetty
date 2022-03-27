@@ -1,7 +1,12 @@
 import _ from 'lodash';
+import type { Options } from './shared/options';
 
-export function loadOptions(): Record<string, unknown> {
-  const defaultOptions = { xterm: { fontSize: 14 } };
+const defaultOptions: Options = {
+  xterm: { fontSize: 14 },
+  wettyFitTerminal: true,
+};
+
+export function loadOptions(): Options {
   try {
     return _.isUndefined(localStorage.options)
       ? defaultOptions

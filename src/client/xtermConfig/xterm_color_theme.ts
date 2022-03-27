@@ -15,7 +15,7 @@ const selectionColorOpacityOption = {
   float: true,
   min: 0,
   max: 1,
-  get() {
+  get(): string {
     return (
       this.el.querySelector('input').value +
       Math.round(
@@ -23,7 +23,7 @@ const selectionColorOpacityOption = {
       ).toString(16)
     );
   },
-  set(value) {
+  set(value: string): void {
     this.el.querySelector('input').value = value.substring(0, 7);
     selectionColorOpacityOption.el.querySelector('input').value =
       Math.round((parseInt(value.substring(7), 16) / 255) * 100) / 100;
