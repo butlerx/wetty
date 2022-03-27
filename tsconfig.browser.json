@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig.json",
-  "include": [
-    "src/client"
-  ]
+  "compilerOptions": {
+    "lib": ["DOM"]
+  },
+  "include": ["src/client"]
 }

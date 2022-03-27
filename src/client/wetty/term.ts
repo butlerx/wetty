@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
+import type { Options } from './term/confiruragtion/shared/options';
 import { configureTerm, shouldFitTerm } from './term/confiruragtion.js';
 import { terminal as termElement } from '../shared/elements.js';
 
@@ -25,6 +26,16 @@ export class Term extends Terminal {
   }
 }
 
+declare global {
+  interface Window {
+    wetty_term?: Term;
+    wetty_close_config?: () => void;
+    wetty_save_config?: (newConfig: Options) => void;
+    clipboardData: DataTransfer;
+    loadOptions: (conf: Options) => void;
+  }
+}
+
 export function terminal(socket: Socket): Term | undefined {
   const term = new Term(socket) as Term;
   if (_.isNull(termElement)) return undefined;
@@ -32,6 +43,6 @@ export function terminal(socket: Socket): Term | undefined {
   term.open(termElement);
   configureTerm(term);
   window.onresize = term.resizeTerm;
-  (window as any).wetty_term = term;
+  window.wetty_term = term;
   return term;
 }

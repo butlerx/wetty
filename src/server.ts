@@ -33,7 +33,7 @@ export async function start(
   serverConf: Server = serverDefault,
   command: string = defaultCommand,
   forcessh: boolean = forceSSHDefault,
-  ssl?: SSL,
+  ssl: SSL | undefined = undefined,
 ): Promise<SocketIO.Server> {
   const logger = getLogger();
   if (ssh.key) {

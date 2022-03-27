@@ -1,7 +1,8 @@
 import type { Term } from '../../term';
 import { editor } from '../../../shared/elements';
+import type { Options } from './shared/options';
 
-export const onInput = (term: Term, updated: any) => {
+export const onInput = (term: Term, updated: Options) => {
   try {
     const updatedConf = JSON.stringify(updated, null, 2);
     if (localStorage.options === updatedConf) return;
@@ -16,16 +17,15 @@ export const onInput = (term: Term, updated: any) => {
     editor.classList.remove('error');
     localStorage.options = updatedConf;
   } catch (e) {
-    console.error('Configuration Error');
-    console.error(e);
+    console.error('Configuration Error', e);
     editor.classList.add('error');
   }
 };
 
-export function setOptions(term: Term, options: any) {
-  Object.keys(options.xterm).forEach(key => {
+export function setOptions(term: Term, { xterm }: Options) {
+  Object.keys(xterm).forEach(key => {
     if (key === 'cols' || key === 'rows') return;
-    const value = options.xterm[key];
+    const value = xterm[key];
     term.setOption(key, value);
   });
 }
