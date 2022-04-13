@@ -20,7 +20,7 @@ socket.on('connect', () => {
 
   if (!_.isNull(overlay)) overlay.style.display = 'none';
   window.addEventListener('beforeunload', verifyPrompt, false);
-  window.addEventListener('resize', term.resizeTerm, false);
+  window.addEventListener('resize', () => { term.resizeTerm() }, false);
 
   term.resizeTerm();
   term.focus();
