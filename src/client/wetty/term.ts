@@ -41,7 +41,7 @@ export function terminal(socket: Socket): Term | undefined {
   termElement.innerHTML = '';
   term.open(termElement);
   configureTerm(term);
-  window.onresize = term.resizeTerm;
+  window.onresize = () => { term.resizeTerm() };
   window.wetty_term = term;
   return term;
 }
