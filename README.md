@@ -19,7 +19,7 @@
 Terminal over HTTP and https. WeTTY is an alternative to ajaxterm and anyterm
 but much better than them because WeTTY uses xterm.js which is a full fledged
 implementation of terminal emulation written entirely in JavaScript. WeTTY uses
-websockets rather then Ajax and hence better response time.
+websockets rather than Ajax and hence better response time.
 
 ## Prerequisites
 
