@@ -54,6 +54,7 @@ function onCompleteFile(bufferCharacters: string): void {
     position: 'right',
     backgroundColor: '#fff',
     stopOnFocus: true,
+    escapeMarkup: false,
   }).showToast();
 }
 
