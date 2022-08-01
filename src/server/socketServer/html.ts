@@ -45,13 +45,14 @@ export const html = (base: string, title: string): RequestHandler => (
   _req: Request,
   res: Response,
 ): void => {
+  const relativeBase = base.replace(/^\//, "")
   res.send(
     render(
       title,
-      `${base}/favicon.ico`,
-      cssFiles.map(css => `${base}/assets/css/${css}.css`),
-      jsFiles.map(js => `${base}/client/${js}.js`),
-      `${base}/assets/xterm_config/index.html`,
+      `${relativeBase}/favicon.ico`,
+      cssFiles.map(css => `${relativeBase}/assets/css/${css}.css`),
+      jsFiles.map(js => `${relativeBase}/client/${js}.js`),
+      `${relativeBase}/assets/xterm_config/index.html`,
     ),
   );
 };
