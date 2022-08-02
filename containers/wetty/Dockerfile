@@ -4,7 +4,7 @@ WORKDIR /usr/src/app
 COPY . /usr/src/app
 RUN yarn && \
     yarn build && \
-    yarn install --production --ignore-scripts --prefer-offline
+    yarn install --production --ignore-scripts --prefer-offline  --ignore-engines
 
 FROM node:current-alpine
 LABEL maintainer="butlerx@notthe.cloud"
