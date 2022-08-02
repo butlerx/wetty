@@ -24,7 +24,7 @@ jobs:
         env:
           CI: true
       - name: Publish if version has been updated
-        uses: pascalgn/npm-publish-action@1.3.8
+        uses: pascalgn/npm-publish-action@1.3.9
         with:
           tag_name: 'v%s'
           tag_message: 'v%s'
@@ -37,7 +37,7 @@ jobs:
         with:
           registry-url: 'https://npm.pkg.github.com'
       - name: Publish to Github PKG if version has been updated
-        uses: pascalgn/npm-publish-action@1.3.8
+        uses: pascalgn/npm-publish-action@1.3.9
         with:
           create_tag: false
           commit_pattern: "^Release (\\S+)"
