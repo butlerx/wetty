@@ -135,7 +135,7 @@ window.inflateOptions([
   },
 ]);
 
-selectionColorOption.get = function () {
+selectionColorOption.get = function getInput() {
   return (
     this.el.querySelector('input').value +
     Math.round(
@@ -143,7 +143,7 @@ selectionColorOption.get = function () {
     ).toString(16)
   );
 };
-selectionColorOption.set = function (value) {
+selectionColorOption.set = function setInput(value) {
   this.el.querySelector('input').value = value.substring(0, 7);
   selectionColorOpacityOption.el.querySelector('input').value =
     Math.round((parseInt(value.substring(7), 16) / 255) * 100) / 100;

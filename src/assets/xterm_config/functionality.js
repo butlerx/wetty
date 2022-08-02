@@ -30,6 +30,8 @@ function optionNumberSet(value) {
 }
 
 const allOptions = [];
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 function inflateOptions(optionsSchema) {
   const booleanOption = document.querySelector('#boolean_option.templ');
   const enumOption = document.querySelector('#enum_option.templ');
@@ -132,8 +134,9 @@ window.loadOptions = config => {
 };
 
 if (window.top === window)
+  // eslint-disable-next-line no-alert
   alert(
-    'Error: Page is top level. This page is supposed to be accessed from inside Wetty.',
+    'Error: Page is top level. This page is supposed to be accessed from inside WeTTY.',
   );
 
 function saveConfig() {
