@@ -680,20 +680,6 @@
   resolved "https://registry.yarnpkg.com/@types/sinonjs__fake-timers/-/sinonjs__fake-timers-8.1.2.tgz#bf2e02a3dbd4aecaf95942ecd99b7402e03fad5e"
   integrity sha512-9GcLXF0/v3t80caGs5p2rRfkB+a8VBGLJZVih6CNFkx8IZ994wiKKLSRs9nuFwk1HevWs/1mnUmkApGrSGsShA==
 
-"@types/socket.io-client@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/socket.io-client/-/socket.io-client-3.0.0.tgz#d0b8ea22121b7c1df68b6a923002f9c8e3cefb42"
-  integrity sha512-s+IPvFoEIjKA3RdJz/Z2dGR4gLgysKi8owcnrVwNjgvc01Lk68LJDDsG2GRqegFITcxmvCMYM7bhMpwEMlHmDg==
-  dependencies:
-    socket.io-client "*"
-
-"@types/socket.io@^3.0.2":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@types/socket.io/-/socket.io-3.0.2.tgz#606c9639e3f93bb8454cba8f5f0a283d47917759"
-  integrity sha512-pu0sN9m5VjCxBZVK8hW37ZcMe8rjn4HHggBN5CbaRTvFwv5jOmuIRZEuddsBPa9Th0ts0SIo3Niukq+95cMBbQ==
-  dependencies:
-    socket.io "*"
-
 "@types/toastify-js@^1.9.2":
   version "1.11.1"
   resolved "https://registry.yarnpkg.com/@types/toastify-js/-/toastify-js-1.11.1.tgz#48f96596e087025c7f7821668599fd74dcdd8549"
@@ -703,13 +689,6 @@
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/@types/tough-cookie/-/tough-cookie-4.0.2.tgz#6286b4c7228d58ab7866d19716f3696e03a09397"
   integrity sha512-Q5vtl1W5ue16D+nIaW8JWebSSraJVlK+EthKn7e7UcD4KWsaSJ8BqGPXNaPghgtcn/fhvrN17Tv8ksUsQpiplw==
-
-"@types/winston@^2.4.4":
-  version "2.4.4"
-  resolved "https://registry.yarnpkg.com/@types/winston/-/winston-2.4.4.tgz#48cc744b7b42fad74b9a2e8490e0112bd9a3d08d"
-  integrity sha512-BVGCztsypW8EYwJ+Hq+QNYiT/MUyCif0ouBH+flrY66O5W+KIXAMML6E/0fJpm7VjIzgangahl5S03bJJQGrZw==
-  dependencies:
-    winston "*"
 
 "@types/yargs-parser@*":
   version "21.0.0"
@@ -2990,7 +2969,7 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-git-authors-cli@^1.0.28:
+git-authors-cli@^1.0.42:
   version "1.0.42"
   resolved "https://registry.yarnpkg.com/git-authors-cli/-/git-authors-cli-1.0.42.tgz#9f8a06beff9cc53f9f4c8bf45fe5bea291570f3c"
   integrity sha512-ZkqQt8QEF09kPjMVTx/wSP804o82XpU8VorTjPtA7296NWpzfR2WZbVNkuF78V4SKqCOmn8gDpBTL9T4GD9a9A==
@@ -4508,7 +4487,7 @@ nodeify@~1.0.1:
     is-promise "~1.0.0"
     promise "~1.3.0"
 
-nodemon@^2.0.4:
+nodemon@^2.0.19:
   version "2.0.19"
   resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-2.0.19.tgz#cac175f74b9cb8b57e770d47841995eebe4488bd"
   integrity sha512-4pv1f2bMDj0Eeg/MhGqxrtveeQ5/G/UVe9iO6uTZzjnRluSA4PVWf8CW99LUPwGB3eNIA7zUFoP77YuI7hOc0A==
@@ -5852,7 +5831,7 @@ smart-buffer@^4.2.0:
   resolved "https://registry.yarnpkg.com/smart-buffer/-/smart-buffer-4.2.0.tgz#6e1d71fa4f18c05f7d0ff216dd16a481d0e8d9ae"
   integrity sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==
 
-snowpack@^3.8.7:
+snowpack@^3.8.8:
   version "3.8.8"
   resolved "https://registry.yarnpkg.com/snowpack/-/snowpack-3.8.8.tgz#237f1c0ad49c68313864f3aa4438db3affee0806"
   integrity sha512-Y/4V8FdzzYpwmJU2TgXRRFytz+GFSliWULK9J5O6C72KyK60w20JKqCdRtVs1S6BuobCedF5vSBD1Gvtm+gsJg==
@@ -5916,7 +5895,7 @@ socket.io-adapter@~2.4.0:
   resolved "https://registry.yarnpkg.com/socket.io-adapter/-/socket.io-adapter-2.4.0.tgz#b50a4a9ecdd00c34d4c8c808224daa1a786152a6"
   integrity sha512-W4N+o69rkMEGVuk2D/cvca3uYsvGlMwsySWV447y99gUPghxq42BxqLNMndb+a1mm/5/7NeXVQS7RLa2XyXvYg==
 
-socket.io-client@*, socket.io-client@^4.4.1:
+socket.io-client@^4.4.1:
   version "4.5.1"
   resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-4.5.1.tgz#cab8da71976a300d3090414e28c2203a47884d84"
   integrity sha512-e6nLVgiRYatS+AHXnOnGi4ocOpubvOUCGhyWw8v+/FxW8saHkinG6Dfhi9TU0Kt/8mwJIAASxvw6eujQmjdZVA==
@@ -5943,7 +5922,7 @@ socket.io-parser@~4.2.0:
     "@socket.io/component-emitter" "~3.1.0"
     debug "~4.3.1"
 
-socket.io@*, socket.io@^4.4.1:
+socket.io@^4.4.1:
   version "4.5.1"
   resolved "https://registry.yarnpkg.com/socket.io/-/socket.io-4.5.1.tgz#aa7e73f8a6ce20ee3c54b2446d321bbb6b1a9029"
   integrity sha512-0y9pnIso5a9i+lJmsCdtmTTgJFFSvNQKDnPQRz28mGNnxbmqYg2QPtJTLFxhymFZhAIn50eHAKzJeiNaKr+yUQ==
@@ -6776,7 +6755,7 @@ winston-transport@^4.5.0:
     readable-stream "^3.6.0"
     triple-beam "^1.3.0"
 
-winston@*, winston@^3.3.3:
+winston@^3.3.3:
   version "3.8.1"
   resolved "https://registry.yarnpkg.com/winston/-/winston-3.8.1.tgz#76f15b3478cde170b780234e0c4cf805c5a7fb57"
   integrity sha512-r+6YAiCR4uI3N8eQNOg8k3P3PqwAm20cLKlzVD9E66Ch39+LZC+VH1UKf9JemQj2B3QoUHfKD7Poewn0Pr3Y1w==
