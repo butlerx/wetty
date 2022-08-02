@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import etag from 'etag';
 import fresh from 'fresh';
 import parseUrl from 'parseurl';
-import fs from 'fs';
+import fs from 'fs-extra';
 import { assetsPath } from './shared/path.js';
 
 const ONE_YEAR_MS = 60 * 60 * 24 * 365 * 1000; // 1 year
@@ -42,44 +42,44 @@ export function redirect(
  * @param basePath - server base path
  * @returns middleware
  */
-export function favicon(basePath: string): RequestHandler {
+export async function favicon(basePath: string): Promise<RequestHandler> {
   const path = assetsPath('assets', 'favicon.ico');
-  return (req: Request, res: Response, next: NextFunction): void => {
-    if (getPathName(req) !== `${basePath}/favicon.ico`) {
-      next();
-      return;
-    }
 
-    if (req.method !== 'GET' && req.method !== 'HEAD') {
-      res.statusCode = req.method === 'OPTIONS' ? 200 : 405;
-      res.setHeader('Allow', 'GET, HEAD, OPTIONS');
-      res.setHeader('Content-Length', '0');
-      res.end();
-      return;
-    }
+  try {
+    const icon = await fs.readFile(path);
+    return (req: Request, res: Response, next: NextFunction): void => {
+      if (getPathName(req) !== `${basePath}/favicon.ico`) {
+        next();
+      } else if (req.method !== 'GET' && req.method !== 'HEAD') {
+        res.statusCode = req.method === 'OPTIONS' ? 200 : 405;
+        res.setHeader('Allow', 'GET, HEAD, OPTIONS');
+        res.setHeader('Content-Length', '0');
+        res.end();
+      } else {
+        Object.entries({
+          'Cache-Control': `public, max-age=${Math.floor(ONE_YEAR_MS / 1000)}`,
+          ETag: etag(icon),
+        }).forEach(([key, value]) => {
+          res.setHeader(key, value);
+        });
 
-    fs.readFile(path, (err: Error | null, buf: Buffer) => {
-      if (err) return next(err);
-      Object.entries({
-        'Cache-Control': `public, max-age=${Math.floor(ONE_YEAR_MS / 1000)}`,
-        ETag: etag(buf),
-      }).forEach(([key, value]) => {
-        res.setHeader(key, value);
-      });
-
-      // Validate freshness
-      if (isFresh(req, res)) {
-        res.statusCode = 304;
-        return res.end();
+        // Validate freshness
+        if (isFresh(req, res)) {
+          res.statusCode = 304;
+          res.end();
+        } else {
+          // Send icon
+          res.statusCode = 200;
+          res.setHeader('Content-Length', icon.length);
+          res.setHeader('Content-Type', 'image/x-icon');
+          res.end(icon);
+        }
       }
-
-      // Send icon
-      res.statusCode = 200;
-      res.setHeader('Content-Length', buf.length);
-      res.setHeader('Content-Type', 'image/x-icon');
-      return res.end(buf);
-    });
-  };
+    };
+  } catch (err) {
+    return (_req: Request, _res: Response, next: NextFunction): void =>
+      next(err);
+  }
 }
 
 /**

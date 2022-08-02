@@ -39,7 +39,7 @@ export async function server(
       }),
     )
     .use(compression())
-    .use(favicon(basePath))
+    .use(await favicon(basePath))
     .use(redirect)
     .use(policies(allowIframe))
     .get(basePath, client)
