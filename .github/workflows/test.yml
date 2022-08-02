@@ -20,3 +20,23 @@ jobs:
         name: Compile Typescript
       - run: yarn test
         name: Run tests
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: |
+            wettyoss/wetty
+          tags: |
+            type=ref,event=pr
+            type=sha
+      - name: Build Docker
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: containers/wetty/Dockerfile
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
