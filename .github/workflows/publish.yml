@@ -15,7 +15,7 @@ jobs:
 
       # Test & Link package
       - name: Setup env
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 14
       - run: yarn
@@ -42,7 +42,7 @@ jobs:
           NPM_AUTH_TOKEN: ${{ secrets.npm_token }}
 
       # Publish to Github PKG
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: 14
           registry-url: 'https://npm.pkg.github.com'
