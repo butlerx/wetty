@@ -2,9 +2,7 @@ FROM node:current-alpine as builder
 RUN apk add -U build-base python3
 WORKDIR /usr/src/app
 COPY . /usr/src/app
-RUN yarn && \
-    yarn build && \
-    yarn install --production --ignore-scripts --prefer-offline
+RUN yarn install
 
 FROM node:current-alpine
 LABEL maintainer="butlerx@notthe.cloud"
