@@ -37,6 +37,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
+          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
           file: containers/wetty/Dockerfile
           push: false
           tags: ${{ steps.meta.outputs.tags }}
