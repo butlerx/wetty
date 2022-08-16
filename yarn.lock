@@ -691,15 +691,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/express-prometheus-middleware@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@types/express-prometheus-middleware@npm:1.2.1"
-  dependencies:
-    "@types/express": "*"
-  checksum: 191b7cdd940f90c4fbad738210da0cac638e4ce4e318540e35dd3b237c7360c0dbfba369b98a29584869166fd2d8689a1ef31d10fa62c59af280ca1b75fc2c8d
-  languageName: node
-  linkType: hard
-
 "@types/express-serve-static-core@npm:^4.17.18":
   version: 4.17.30
   resolution: "@types/express-serve-static-core@npm:4.17.30"
@@ -736,6 +727,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: add79e212acd5ac76b97b9045834e03a7996aef60a814185e0459088fd290519a3c1620865d588fa36c4498bf614210d2a703af5cf80aa1dbc125db78f6edac3
+  languageName: node
+  linkType: hard
+
+"@types/gc-stats@npm:^1":
+  version: 1.4.1
+  resolution: "@types/gc-stats@npm:1.4.1"
+  checksum: 07c08e5452f96e3afbaba259ec0f684f1172b0e1bdb466d8606bc9af0428399bf334b57944ef2762d61be122892619aabab11ff63cd07f2dfc7dd436118d04b6
   languageName: node
   linkType: hard
 
@@ -876,6 +874,16 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: dc6a6df507656004e242dcb02c784479deca516d5f4b58a1707e708022b269ae147e1da0521f3e8ad0d63638869d87e0adc023f0bd5454aa6f72ac66c7525cf5
+  languageName: node
+  linkType: hard
+
+"@types/response-time@npm:^2":
+  version: 2.3.5
+  resolution: "@types/response-time@npm:2.3.5"
+  dependencies:
+    "@types/express": "*"
+    "@types/node": "*"
+  checksum: 03b31064a6e28857a3dc331d540ed21ba9c5e09cbf44d032bb55ed3e37be1b2fbe65029e5ba0df5582860cc713c66fa991db7685d18431598950cdc90ca49801
   languageName: node
   linkType: hard
 
@@ -3417,23 +3425,6 @@ __metadata:
   dependencies:
     cb2promise: ~1.1.0
   checksum: 4ff02cf9d3399ceacc90832f0d109f4bb13db8489f01768d6e6f46f99b7d729fdfdf939140361ce2135f06468b4d868722210149e827a8b0a938dff0ca4a2e36
-  languageName: node
-  linkType: hard
-
-"express-prometheus-middleware@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "express-prometheus-middleware@npm:1.2.0"
-  dependencies:
-    prometheus-gc-stats: ^0.6.2
-    response-time: ^2.3.2
-    url-value-parser: ^2.0.0
-  peerDependencies:
-    express: 4.x
-    prom-client: ">= 10.x <= 13.x"
-  dependenciesMeta:
-    prometheus-gc-stats:
-      optional: true
-  checksum: ac0036470516fdbd2de461ad51e9351cd04552ff2c66ec0c2cd528d9851f7c84a41e837fd5f431770124736877eac450fabc6ee6186a1ac154f122d41c996eeb
   languageName: node
   linkType: hard
 
@@ -6495,13 +6486,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"optional@npm:^0.1.3":
-  version: 0.1.4
-  resolution: "optional@npm:0.1.4"
-  checksum: 81fd9884eac9c13b3624821f99aa825b71d46ffd547cd3f8cf9e1dfb0165e531448005288455895550f804bdd66459e4e7ae6e753805b8bf11a5983050d5b7c4
-  languageName: node
-  linkType: hard
-
 "optionator@npm:^0.8.1":
   version: 0.8.3
   resolution: "optionator@npm:0.8.3"
@@ -7089,27 +7073,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prom-client@npm:^13.0.1":
-  version: 13.2.0
-  resolution: "prom-client@npm:13.2.0"
+"prom-client@npm:^14.0.1":
+  version: 14.0.1
+  resolution: "prom-client@npm:14.0.1"
   dependencies:
     tdigest: ^0.1.1
-  checksum: e39b3cc91e48b9d163548d1c0cdbc954908c8995f4341f5435f66ec86afd7e5dd53cb0cbd62cbcca248ee35422959db8667f4f9fe414d7486422cb6aceb61e0c
-  languageName: node
-  linkType: hard
-
-"prometheus-gc-stats@npm:^0.6.2":
-  version: 0.6.3
-  resolution: "prometheus-gc-stats@npm:0.6.3"
-  dependencies:
-    gc-stats: ^1.4.0
-    optional: ^0.1.3
-  peerDependencies:
-    prom-client: ">= 10 <= 12"
-  dependenciesMeta:
-    gc-stats:
-      optional: true
-  checksum: fcf14c8f2c4691d00a16bee7d26a501b923dbce09e89c6e61ec6d6b0b9caf6714dee6feff5d284d7d2877f0c6c3a16d823e8052af9076c464e2c93f5ac129cbe
+  checksum: 864c19b7086eda8fae652385bc8b8aeb155f85922e58672d07a64918a603341e120e65e08f9d77ccab546518dc18930284da8743c2aac3c968f626d7063d6bba
   languageName: node
   linkType: hard
 
@@ -8939,7 +8908,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"url-value-parser@npm:^2.0.0":
+"url-value-parser@npm:^2.1.0":
   version: 2.1.0
   resolution: "url-value-parser@npm:2.1.0"
   checksum: 6a63eb10a76d10ce6b56c1b33184e105d1fd4f9da43ac401cf638afd7b95874049f8534b0d74d5090dd5ddf41a9a7d203bdd0cc9822c8859db7d7529e954a903
@@ -9108,9 +9077,9 @@ __metadata:
     "@types/compression": ^1.7.0
     "@types/etag": ^1.8.0
     "@types/express": ^4.17.8
-    "@types/express-prometheus-middleware": ^1.2.1
     "@types/fresh": ^0.5.0
     "@types/fs-extra": ^9.0.1
+    "@types/gc-stats": ^1
     "@types/helmet": ^0.0.48
     "@types/jsdom": ^12.2.4
     "@types/lodash": ^4.14.161
@@ -9118,6 +9087,7 @@ __metadata:
     "@types/morgan": ^1.7.37
     "@types/node": ^14.6.3
     "@types/parseurl": ^1.3.1
+    "@types/response-time": ^2
     "@types/sinon": ^10.0.13
     "@types/toastify-js": ^1.9.2
     "@types/yargs": ^15.0.5
@@ -9136,12 +9106,12 @@ __metadata:
     eslint-plugin-prettier: ^4.2.1
     etag: ^1.8.1
     express: ^4.17.1
-    express-prometheus-middleware: ^1.2.0
     express-winston: ^4.0.5
     file-type: ^12.3.0
     find-up: ^5.0.0
     fresh: ^0.5.2
     fs-extra: ^9.0.1
+    gc-stats: ^1.4.0
     git-authors-cli: ^1.0.42
     helmet: ^4.1.0
     husky: ^4.2.5
@@ -9155,7 +9125,8 @@ __metadata:
     nodemon: ^2.0.19
     parseurl: ^1.3.3
     prettier: ^2.5.1
-    prom-client: ^13.0.1
+    prom-client: ^14.0.1
+    response-time: ^2.3.2
     sass: ^1.54.4
     sinon: ^14.0.0
     snowpack: ^3.8.8
@@ -9164,6 +9135,7 @@ __metadata:
     toastify-js: ^1.9.1
     ts-node: ^10.9.1
     typescript: ^4.7.4
+    url-value-parser: ^2.1.0
     winston: ^3.3.3
     xterm: ^4.8.1
     xterm-addon-fit: ^0.4.0

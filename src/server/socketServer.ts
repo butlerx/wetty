@@ -26,8 +26,11 @@ export async function server(
 
   const app = express();
   const client = html(basePath, title);
+  const [redMiddleware, metricRoute] = metrics(basePath);
   app
-    .use(metrics)
+    .disable('x-powered-by')
+    .use(redMiddleware)
+    .use(`${basePath}/metrics`, metricRoute)
     .use(`${basePath}/web_modules`, serveStatic('web_modules'))
     .use(`${basePath}/assets`, serveStatic('assets'))
     .use(`${basePath}/client`, serveStatic('client'))
