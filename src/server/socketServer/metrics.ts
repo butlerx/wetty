@@ -76,7 +76,7 @@ function normalizeStatusCode(status: number): string {
   return '5XX';
 }
 
-export const metricMiddleware = (basePath: string): RequestHandler => {
+export function metricMiddleware(basePath: string): RequestHandler {
   const metricsPath = `${basePath}/metrics`;
 
   /**
@@ -115,7 +115,7 @@ export const metricMiddleware = (basePath: string): RequestHandler => {
       }
     }
   });
-};
+}
 
 /**
  * Metrics route to be used by prometheus to scrape metrics
