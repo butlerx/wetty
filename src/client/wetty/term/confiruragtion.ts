@@ -21,12 +21,14 @@ export function configureTerm(term: Term): void {
 
   function editorOnLoad() {
     editor?.contentWindow?.loadOptions(loadOptions());
+    /* eslint-disable @typescript-eslint/no-non-null-assertion */
     editor.contentWindow!.wetty_close_config = () => {
       optionsElem?.classList.toggle('opened');
     };
     editor.contentWindow!.wetty_save_config = (newConfig: Options) => {
       onInput(term, newConfig);
     };
+    /* eslint-enable @typescript-eslint/no-non-null-assertion */
   }
   if (
     (

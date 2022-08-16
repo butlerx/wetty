@@ -6,11 +6,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      # Test & Link package
       - name: Setup env
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: 14
       - run: yarn
@@ -23,8 +28,10 @@ jobs:
         name: Run tests
         env:
           CI: true
+
+      # Publish to NPM
       - name: Publish if version has been updated
-        uses: pascalgn/npm-publish-action@1.3.8
+        uses: pascalgn/npm-publish-action@1.3.9
         with:
           tag_name: 'v%s'
           tag_message: 'v%s'
@@ -33,11 +40,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_AUTH_TOKEN: ${{ secrets.npm_token }}
-      - uses: actions/setup-node@v2
+
+      # Publish to Github PKG
+      - uses: actions/setup-node@v3
         with:
+          node-version: 14
           registry-url: 'https://npm.pkg.github.com'
       - name: Publish to Github PKG if version has been updated
-        uses: pascalgn/npm-publish-action@1.3.8
+        uses: pascalgn/npm-publish-action@1.3.9
         with:
           create_tag: false
           commit_pattern: "^Release (\\S+)"

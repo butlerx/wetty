@@ -371,6 +371,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "LeszekBlazewski",
+      "name": "Leszek Błażewski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/34927142?v=4",
+      "profile": "https://github.com/LeszekBlazewski",
+      "contributions": [
+        "code",
+        "platform"
+      ]
     }
   ],
   "contributorsPerLine": 7
