@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import etag from 'etag';
 import fresh from 'fresh';
 import parseUrl from 'parseurl';
-import fs from 'fs-extra';
+import fs from 'fs/promises';
 import { assetsPath } from './shared/path.js';
 
 const ONE_YEAR_MS = 60 * 60 * 24 * 365 * 1000; // 1 year
@@ -43,7 +43,8 @@ export function redirect(
  * @returns middleware
  */
 export async function favicon(basePath: string): Promise<RequestHandler> {
-  const path = assetsPath('assets', 'favicon.ico');
+  const assets = await assetsPath();
+  const path = assets('assets', 'favicon.ico');
 
   try {
     const icon = await fs.readFile(path);

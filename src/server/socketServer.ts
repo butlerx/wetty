@@ -10,6 +10,7 @@ import { logger } from '../shared/logger.js';
 import { serveStatic, trim } from './socketServer/assets.js';
 import { policies } from './socketServer/security.js';
 import { loadSSL } from './socketServer/ssl.js';
+import { xTermConfHTML } from './socketServer/xtermConfig.js';
 import { metricMiddleware, metricRoute } from './socketServer/metrics.js';
 
 export async function server(
@@ -26,13 +27,14 @@ export async function server(
 
   const app = express();
   const client = html(basePath, title);
+  const xTermConf = await xTermConfHTML(basePath);
   app
     .disable('x-powered-by')
     .use(metricMiddleware(basePath))
     .use(`${basePath}/metrics`, metricRoute)
-    .use(`${basePath}/web_modules`, serveStatic('web_modules'))
-    .use(`${basePath}/assets`, serveStatic('assets'))
-    .use(`${basePath}/client`, serveStatic('client'))
+    .use(`${basePath}/web_modules`, await serveStatic('web_modules'))
+    .use(`${basePath}/assets`, await serveStatic('assets'))
+    .use(`${basePath}/client`, await serveStatic('client'))
     .use(
       winston.logger({
         winstonInstance: logger(),
@@ -45,7 +47,8 @@ export async function server(
     .use(redirect)
     .use(policies(allowIframe))
     .get(basePath, client)
-    .get(`${basePath}/ssh/:user`, client);
+    .get(`${basePath}/ssh/:user`, client)
+    .get(`${basePath}/xterm_config`, xTermConf);
 
   const sslBuffer: SSLBuffer = await loadSSL(ssl);
 

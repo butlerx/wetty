@@ -1,6 +1,6 @@
 import type { Term } from '../../term';
-import { editor } from '../../../shared/elements';
-import type { Options } from './shared/options';
+import { editor } from '../../disconnect/elements';
+import type { Options } from '../options';
 
 export const onInput = (term: Term, updated: Options) => {
   try {

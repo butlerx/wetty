@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import fs from 'fs/promises';
 import isUndefined from 'lodash/isUndefined.js';
 import { resolve } from 'path';
 import type { SSL, SSLBuffer } from '../../shared/interfaces';

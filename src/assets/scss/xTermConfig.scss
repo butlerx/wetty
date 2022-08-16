@@ -1,0 +1,103 @@
+html {
+  background-color: black;
+  overflow: hidden auto;
+}
+body {
+  overflow: hidden auto;
+  display: flex;
+  flex-flow: column nowrap;
+  font-family: monospace;
+  font-size: 1rem;
+  color: white;
+}
+h2 {
+  text-align: center;
+  text-decoration: underline;
+}
+header {
+  align-items: center;
+  h1 {
+    margin: 0;
+  }
+  button {
+    padding: 0.5em;
+    font-size: 1em;
+    margin: 0.5em;
+    border-radius: 0.5em;
+  }
+}
+.boolean_option {
+  display: grid;
+  grid-template-columns: 100fr min(30em, 50%);
+  grid-template-rows: auto;
+  align-items: center;
+  input {
+    margin: 0 0.5em;
+    font-size: 1em;
+    background-color: hsl(0, 0%, 20%);
+    color: white;
+    border: 2px solid white;
+    width: 2em;
+    height: 2em;
+    font-size: 0.75em;
+    justify-self: center;
+  }
+}
+.number_option {
+  display: grid;
+  grid-template-columns: 100fr min(30em, 50%);
+  grid-template-rows: auto;
+  align-items: center;
+  input {
+    margin: 0 0.5em;
+    font-size: 1em;
+    background-color: hsl(0, 0%, 20%);
+    color: white;
+    border: 2px solid white;
+    padding: 0.4em;
+  }
+}
+.color_option {
+  display: grid;
+  grid-template-columns: 100fr min(30em, 50%);
+  grid-template-rows: auto;
+  align-items: center;
+  input {
+    margin: 0 0.5em;
+    font-size: 1em;
+    background-color: hsl(0, 0%, 20%);
+    color: white;
+    border: 2px solid white;
+    width: 100%;
+    height: 100%;
+    background-color: lightgray;
+  }
+}
+.enum_option {
+  display: grid;
+  grid-template-columns: 100fr min(30em, 50%);
+  grid-template-rows: auto;
+  align-items: center;
+  select {
+    margin: 0 0.5em;
+    font-size: 1em;
+    background-color: hsl(0, 0%, 20%);
+    color: white;
+    border: 2px solid white;
+    padding: 0.4em;
+  }
+}
+.text_option {
+  display: grid;
+  grid-template-columns: 100fr min(30em, 50%);
+  grid-template-rows: auto;
+  align-items: center;
+  input {
+    margin: 0 0.5em;
+    font-size: 1em;
+    background-color: hsl(0, 0%, 20%);
+    color: white;
+    border: 2px solid white;
+    padding: 0.4em;
+  }
+}

@@ -1,4 +1,6 @@
-window.inflateOptions([
+import { inflateOptions } from './colorTheme/options';
+
+inflateOptions('General Options', [
   {
     type: 'text',
     name: 'Font Family',

@@ -1,12 +1,11 @@
 import type { Term } from '../term';
-import type { Options } from './confiruragtion/shared/options';
 import { copySelected, copyShortcut } from './confiruragtion/clipboard';
-import { onInput, setOptions } from './confiruragtion/editor';
-import { editor } from '../../shared/elements';
-import { loadOptions } from './confiruragtion/load';
+import { onInput, setOptions } from './load/editor';
+import { editor } from '../disconnect/elements';
+import { loadOptions, loadLocalStorage } from './load';
 
 export function configureTerm(term: Term): void {
-  const options = loadOptions();
+  const options = loadLocalStorage();
   try {
     setOptions(term, options);
   } catch {
@@ -19,17 +18,6 @@ export function configureTerm(term: Term): void {
     throw new Error("Couldn't initialize configuration menu");
   }
 
-  function editorOnLoad() {
-    editor?.contentWindow?.loadOptions(loadOptions());
-    /* eslint-disable @typescript-eslint/no-non-null-assertion */
-    editor.contentWindow!.wetty_close_config = () => {
-      optionsElem?.classList.toggle('opened');
-    };
-    editor.contentWindow!.wetty_save_config = (newConfig: Options) => {
-      onInput(term, newConfig);
-    };
-    /* eslint-enable @typescript-eslint/no-non-null-assertion */
-  }
   if (
     (
       editor.contentDocument ||
@@ -38,12 +26,12 @@ export function configureTerm(term: Term): void {
       })
     ).readyState === 'complete'
   ) {
-    editorOnLoad();
+    loadOptions();
   }
-  editor.addEventListener('load', editorOnLoad);
+  editor.addEventListener('load', loadOptions);
 
   toggle.addEventListener('click', e => {
-    editor?.contentWindow?.loadOptions(loadOptions());
+    loadOptions();
     optionsElem.classList.toggle('opened');
     e.preventDefault();
   });

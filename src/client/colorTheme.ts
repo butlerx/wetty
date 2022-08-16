@@ -1,9 +1,7 @@
-const selectionColorOption = {
-  type: 'color',
-  name: 'Selection Color',
-  description: 'Background color for selected text. Can be transparent.',
-  path: ['xterm', 'theme', 'selection'],
-};
+import _ from 'lodash';
+import type { Option } from './wetty/term/options/types';
+import { inflateOptions } from './colorTheme/options';
+
 const selectionColorOpacityOption = {
   type: 'number',
   name: 'Selection Color Opacity',
@@ -15,7 +13,14 @@ const selectionColorOpacityOption = {
   max: 1,
 };
 
-window.inflateOptions([
+const selectionColorOption = {
+  type: 'color',
+  name: 'Selection Color',
+  description: 'Background color for selected text. Can be transparent.',
+  path: ['xterm', 'theme', 'selection'],
+};
+
+inflateOptions('Color Theme', [
   {
     type: 'color',
     name: 'Foreground Color',
@@ -135,18 +140,35 @@ window.inflateOptions([
   },
 ]);
 
-selectionColorOption.get = function getInput() {
-  return (
-    this.el.querySelector('input').value +
-    Math.round(
-      selectionColorOpacityOption.el.querySelector('input').value * 255,
-    ).toString(16)
+(selectionColorOpacityOption as Option).get = () => undefined;
+(selectionColorOpacityOption as Option).set = () => 0;
+(selectionColorOption as Option).get = function getInput(this: Option): string {
+  const input = this.el.querySelector('input');
+  const value = _.isNull(input) ? 0 : input.value;
+  const opacityInput = (selectionColorOpacityOption as Option).el.querySelector(
+    'input',
   );
+  const opacityValue = _.isNull(opacityInput)
+    ? 0
+    : parseFloat(opacityInput.value);
+  return value + Math.round(opacityValue * 255).toString(16);
 };
-selectionColorOption.set = function setInput(value) {
-  this.el.querySelector('input').value = value.substring(0, 7);
-  selectionColorOpacityOption.el.querySelector('input').value =
-    Math.round((parseInt(value.substring(7), 16) / 255) * 100) / 100;
+
+(selectionColorOption as Option).set = function setInput(
+  this: Option,
+  value: string,
+) {
+  const input = this.el.querySelector('input');
+  const opacityInput = (selectionColorOpacityOption as Option).el.querySelector(
+    'input',
+  );
+  if (!_.isNull(input)) {
+    input.value = value.substring(0, 7);
+  }
+
+  if (!_.isNull(opacityInput)) {
+    opacityInput.value = (
+      Math.round((parseInt(value.substring(7), 16) / 255) * 100) / 100
+    ).toString();
+  }
 };
-selectionColorOpacityOption.get = () => 0;
-selectionColorOpacityOption.set = () => 0;

@@ -51,7 +51,7 @@ export const html = (base: string, title: string): RequestHandler => (
       `${base}/favicon.ico`,
       cssFiles.map(css => `${base}/assets/css/${css}.css`),
       jsFiles.map(js => `${base}/client/${js}.js`),
-      `${base}/assets/xterm_config/index.html`,
+      `${base}/xterm_config`,
     ),
   );
 };

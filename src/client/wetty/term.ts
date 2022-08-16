@@ -4,10 +4,11 @@ import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
 
-import type { Options } from './term/confiruragtion/shared/options';
-import { loadOptions } from './term/confiruragtion/load';
-import { configureTerm } from './term/confiruragtion.js';
-import { terminal as termElement } from '../shared/elements.js';
+import type { Options } from './term/options';
+import type { Json } from './term/options/types';
+import { loadOptions } from './term/load';
+import { configureTerm } from './term/confiruragtion';
+import { terminal as termElement } from './disconnect/elements';
 
 export class Term extends Terminal {
   socket: Socket;
@@ -36,11 +37,9 @@ export class Term extends Terminal {
 
 declare global {
   interface Window {
-    wetty_term?: Term;
-    wetty_close_config?: () => void;
-    wetty_save_config?: (newConfig: Options) => void;
+    wettyTerm?: Term;
+    wettyCloseConfig?: () => void;
     clipboardData: DataTransfer;
-    loadOptions: (conf: Options) => void;
   }
 }
 
@@ -53,6 +52,6 @@ export function terminal(socket: Socket): Term | undefined {
   window.onresize = function onResize() {
     term.resizeTerm();
   };
-  window.wetty_term = term;
+  window.wettyTerm = term;
   return term;
 }

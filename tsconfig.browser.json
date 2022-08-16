@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "lib": ["DOM"]
+    "lib": ["dom", "dom.iterable"]
   },
   "include": ["src/client"]
 }

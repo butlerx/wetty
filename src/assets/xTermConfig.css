@@ -21,8 +21,6 @@ h2 {
 }
 
 header {
-  display: flex;
-  flex-flow: row nowrap;
   align-items: center;
 }
 header button {
@@ -30,6 +28,9 @@ header button {
   font-size: 1em;
   margin: 0.5em;
   border-radius: 0.5em;
+}
+header h1 {
+  margin: 0;
 }
 
 .boolean_option,

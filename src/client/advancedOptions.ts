@@ -1,4 +1,6 @@
-window.inflateOptions([
+import { inflateOptions } from './colorTheme/options';
+
+inflateOptions('Advanced XTerm Options', [
   {
     type: 'boolean',
     name: 'Allow Proposed XTerm APIs',

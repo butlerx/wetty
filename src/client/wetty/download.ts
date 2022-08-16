@@ -94,8 +94,9 @@ export class FileDownloader {
       }
       // We're currently in the state of buffering a beginner marker...
 
-      const nextExpectedCharacter =
-        this.fileBegin[this.partialFileBegin.length];
+      const nextExpectedCharacter = this.fileBegin[
+        this.partialFileBegin.length
+      ];
       // If the next character *is* the next character in the fileBegin sequence.
       if (character === nextExpectedCharacter) {
         this.partialFileBegin += character;

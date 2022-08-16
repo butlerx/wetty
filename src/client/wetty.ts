@@ -2,13 +2,13 @@ import _ from 'lodash';
 import { dom, library } from '@fortawesome/fontawesome-svg-core';
 import { faCogs } from '@fortawesome/free-solid-svg-icons';
 
-import { FileDownloader } from './wetty/download.js';
-import { disconnect } from './wetty/disconnect.js';
-import { mobileKeyboard } from './wetty/mobile.js';
-import { overlay } from './shared/elements.js';
-import { socket } from './wetty/socket.js';
-import { verifyPrompt } from './shared/verify.js';
-import { terminal, Term } from './wetty/term.js';
+import { FileDownloader } from './wetty/download';
+import { disconnect } from './wetty/disconnect';
+import { mobileKeyboard } from './wetty/mobile';
+import { overlay } from './wetty/disconnect/elements';
+import { socket } from './wetty/socket';
+import { verifyPrompt } from './wetty/disconnect/verify';
+import { terminal, Term } from './wetty/term';
 
 // Setup for fontawesome
 library.add(faCogs);
