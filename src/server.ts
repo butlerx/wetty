@@ -3,12 +3,15 @@
  * @module WeTTy
  */
 import type SocketIO from 'socket.io';
-import { Gauge } from 'prom-client';
+import { Gauge, collectDefaultMetrics } from 'prom-client';
+import gc from 'gc-stats';
+
 import type { SSH, SSL, Server } from './shared/interfaces.js';
 import { getCommand } from './server/command.js';
 import { logger as getLogger } from './shared/logger.js';
 import { login } from './server/login.js';
 import { server } from './server/socketServer.js';
+import { gcMetrics } from './server/metrics.js';
 import { spawn } from './server/spawn.js';
 import {
   sshDefault,
@@ -43,6 +46,9 @@ export async function start(
 ! will be able to run remote operations without authentication.
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`);
   }
+
+  collectDefaultMetrics();
+  gc().on('stats', gcMetrics);
 
   const io = await server(serverConf, ssl);
   /**

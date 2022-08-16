@@ -10,7 +10,7 @@ import { logger } from '../shared/logger.js';
 import { serveStatic, trim } from './socketServer/assets.js';
 import { policies } from './socketServer/security.js';
 import { loadSSL } from './socketServer/ssl.js';
-import { metrics } from './socketServer/metrics.js';
+import { metricMiddleware, metricRoute } from './socketServer/metrics.js';
 
 export async function server(
   { base, port, host, title, allowIframe }: Server,
@@ -26,10 +26,9 @@ export async function server(
 
   const app = express();
   const client = html(basePath, title);
-  const [redMiddleware, metricRoute] = metrics(basePath);
   app
     .disable('x-powered-by')
-    .use(redMiddleware)
+    .use(metricMiddleware(basePath))
     .use(`${basePath}/metrics`, metricRoute)
     .use(`${basePath}/web_modules`, serveStatic('web_modules'))
     .use(`${basePath}/assets`, serveStatic('assets'))
