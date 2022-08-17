@@ -8,11 +8,17 @@ import { mobileKeyboard } from './wetty/mobile.js';
 import { overlay } from './shared/elements.js';
 import { socket } from './wetty/socket.js';
 import { verifyPrompt } from './shared/verify.js';
-import { terminal } from './wetty/term.js';
+import { terminal, Term } from './wetty/term.js';
 
 // Setup for fontawesome
 library.add(faCogs);
 dom.watch();
+
+function onResize(term: Term): () => void {
+  return function resize() {
+    term.resizeTerm();
+  };
+}
 
 socket.on('connect', () => {
   const term = terminal(socket);
@@ -20,7 +26,7 @@ socket.on('connect', () => {
 
   if (!_.isNull(overlay)) overlay.style.display = 'none';
   window.addEventListener('beforeunload', verifyPrompt, false);
-  window.addEventListener('resize', term.resizeTerm, false);
+  window.addEventListener('resize', onResize(term), false);
 
   term.resizeTerm();
   term.focus();

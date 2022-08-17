@@ -58,7 +58,3 @@ export function configureTerm(term: Term): void {
     false,
   );
 }
-
-export function shouldFitTerm(): boolean {
-  return loadOptions().wettyFitTerminal ?? true;
-}
