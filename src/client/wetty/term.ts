@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
+import { ImageAddon } from 'xterm-addon-image';
 
 import type { Options } from './term/confiruragtion/shared/options';
 import { loadOptions } from './term/confiruragtion/load';
@@ -20,6 +21,14 @@ export class Term extends Terminal {
     this.fitAddon = new FitAddon();
     this.loadAddon(this.fitAddon);
     this.loadAddon(new WebLinksAddon());
+    /**
+     * FIXMEs:
+     * - worker file prolly needs some better delivering story than just
+     *   being hardcopied to assets folder
+     * - apply some useful addon settings suitable for wetty
+     * - maybe introduce windows switch here (no ConPTY support for SIXEL atm)
+     */
+    this.loadAddon(new ImageAddon('/wetty/assets/xterm-addon-image-worker.js'));
     this.loadOptions = loadOptions;
   }
 
