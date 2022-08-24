@@ -21,13 +21,8 @@ export class Term extends Terminal {
     this.fitAddon = new FitAddon();
     this.loadAddon(this.fitAddon);
     this.loadAddon(new WebLinksAddon());
-    /**
-     * FIXMEs:
-     * - worker file prolly needs some better delivering story than just
-     *   being hardcopied to assets folder
-     * - apply some useful addon settings suitable for wetty
-     * - maybe introduce windows switch here (no ConPTY support for SIXEL atm)
-     */
+    // Note: worker file is currently hard copied from xterm-addon-image,
+    // the file needs to be refreshed upon a newer package version
     this.loadAddon(new ImageAddon('/wetty/assets/xterm-addon-image-worker.js'));
     this.loadOptions = loadOptions;
   }
