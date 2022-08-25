@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
+import { ImageAddon } from 'xterm-addon-image';
 
 import type { Options } from './term/confiruragtion/shared/options';
 import { loadOptions } from './term/confiruragtion/load';
@@ -20,6 +21,9 @@ export class Term extends Terminal {
     this.fitAddon = new FitAddon();
     this.loadAddon(this.fitAddon);
     this.loadAddon(new WebLinksAddon());
+    // Note: worker file is currently hard copied from xterm-addon-image,
+    // the file needs to be refreshed upon a newer package version
+    this.loadAddon(new ImageAddon('/wetty/assets/xterm-addon-image-worker.js'));
     this.loadOptions = loadOptions;
   }
 
