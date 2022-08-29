@@ -32,6 +32,7 @@ socket.on('connect', () => {
   term.focus();
   mobileKeyboard();
   const fileDownloader = new FileDownloader();
+  const fcClient = new FlowControlClient();
 
   term.onData((data: string) => {
     socket.emit('input', data);
@@ -41,9 +42,14 @@ socket.on('connect', () => {
   });
   socket
     .on('data', (data: string) => {
+      //FIXME: FileDownloader needs a backpressure shim as well
       const remainingData = fileDownloader.buffer(data);
       if (remainingData) {
-        term.write(remainingData);
+        if (fcClient.needsCommit(data.length)) {
+          term.write(remainingData, () => socket.emit('commit', fcClient.ackBytes));
+        } else {
+          term.write(remainingData);
+        }
       }
     })
     .on('login', () => {
@@ -56,3 +62,22 @@ socket.on('connect', () => {
       if (err) disconnect(err);
     });
 });
+
+/**
+ * Flow control client side.
+ * For low impact on overall throughput simply commits every `ackBytes`
+ * (default 2^19). The value should correspond to chosen values on server side
+ * to avoid perma blocking.
+ */
+class FlowControlClient {
+  public counter = 0;
+  constructor(public ackBytes: number = 524288) {}
+  public needsCommit(length: number): boolean {
+    this.counter += length;
+    if (this.counter >= this.ackBytes) {
+      this.counter -= this.ackBytes;
+      return true;
+    }
+    return false;
+  }
+}
