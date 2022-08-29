@@ -44,8 +44,8 @@ export function tinybuffer(socket: Socket, timeout: number, maxSize: number) {
  * indicating its final processing on xtermjs side. Returns `true`
  * if the underlying PTY should be resumed.
  *
- * Note: Chosen values for ackBytes, low and high must be within
- * reach of the chosen value of ackBytes on client side, otherwise
+ * Note: Chosen values for low and high must be within reach of the
+ * chosen value of ackBytes on client side, otherwise
  * flow control may block forever sooner or later.
  *
  * The default values are chosen quite high to lower negative impact on overall
@@ -55,14 +55,10 @@ export function tinybuffer(socket: Socket, timeout: number, maxSize: number) {
  */
 export class FlowControlServer {
   public counter = 0;
-  public ackBytes = 524288; // 2^19
-  public low = 524288;      // 2^19
-  public high = 4194304;    // 2^22
+  public low = 524288;      // 2^19 --> 2x ackBytes from frontend
+  public high = 2097152;    // 2^21 --> 8x ackBytes from frontend
 
-  constructor(ackBytes?: number, low?: number, high?: number) {
-    if (ackBytes) {
-      this.ackBytes = ackBytes;
-    }
+  constructor(low?: number, high?: number) {
     if (low) {
       this.low = low;
     }

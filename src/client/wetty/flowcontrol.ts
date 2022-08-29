@@ -1,12 +1,11 @@
 /**
  * Flow control client side.
  * For low impact on overall throughput simply commits every `ackBytes`
- * (default 2^19). The value should correspond to chosen values on server side
- * to avoid perma blocking.
+ * (default 2^18).
  */
 export class FlowControlClient {
   public counter = 0;
-  public ackBytes = 524288;
+  public ackBytes = 262144;
 
   constructor(ackBytes?: number) {
     if (ackBytes) {

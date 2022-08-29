@@ -43,10 +43,13 @@ socket.on('connect', () => {
   });
   socket
     .on('data', (data: string) => {
-      // FIXME: FileDownloader needs a backpressure shim as well
       const remainingData = fileDownloader.buffer(data);
+      const downloadLength = data.length - remainingData.length;
+      if (downloadLength && fcClient.needsCommit(downloadLength)) {
+        socket.emit('commit', fcClient.ackBytes);
+      }
       if (remainingData) {
-        if (fcClient.needsCommit(data.length)) {
+        if (fcClient.needsCommit(remainingData.length)) {
           term.write(remainingData, () => socket.emit('commit', fcClient.ackBytes));
         } else {
           term.write(remainingData);
