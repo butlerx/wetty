@@ -9,6 +9,7 @@ import { overlay } from './shared/elements.js';
 import { socket } from './wetty/socket.js';
 import { verifyPrompt } from './shared/verify.js';
 import { terminal, Term } from './wetty/term.js';
+import { FlowControlClient } from './wetty/flowcontrol.js';
 
 // Setup for fontawesome
 library.add(faCogs);
@@ -42,7 +43,7 @@ socket.on('connect', () => {
   });
   socket
     .on('data', (data: string) => {
-      //FIXME: FileDownloader needs a backpressure shim as well
+      // FIXME: FileDownloader needs a backpressure shim as well
       const remainingData = fileDownloader.buffer(data);
       if (remainingData) {
         if (fcClient.needsCommit(data.length)) {
@@ -62,22 +63,3 @@ socket.on('connect', () => {
       if (err) disconnect(err);
     });
 });
-
-/**
- * Flow control client side.
- * For low impact on overall throughput simply commits every `ackBytes`
- * (default 2^19). The value should correspond to chosen values on server side
- * to avoid perma blocking.
- */
-class FlowControlClient {
-  public counter = 0;
-  constructor(public ackBytes: number = 524288) {}
-  public needsCommit(length: number): boolean {
-    this.counter += length;
-    if (this.counter >= this.ackBytes) {
-      this.counter -= this.ackBytes;
-      return true;
-    }
-    return false;
-  }
-}
