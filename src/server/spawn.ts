@@ -28,8 +28,7 @@ export async function spawn(
   });
   const send = tinybuffer(socket, 2, 524288);
   const fcServer = new FlowControlServer();
-  term.on('data', (data: any) => {
-    //socket.emit('data', data);
+  term.on('data', (data: string) => {
     send(data);
     if (fcServer.account(data.length)) {
       term.pause();
