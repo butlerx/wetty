@@ -9,6 +9,7 @@ import { overlay } from './shared/elements.js';
 import { socket } from './wetty/socket.js';
 import { verifyPrompt } from './shared/verify.js';
 import { terminal, Term } from './wetty/term.js';
+import { FlowControlClient } from './wetty/flowcontrol.js';
 
 // Setup for fontawesome
 library.add(faCogs);
@@ -32,6 +33,7 @@ socket.on('connect', () => {
   term.focus();
   mobileKeyboard();
   const fileDownloader = new FileDownloader();
+  const fcClient = new FlowControlClient();
 
   term.onData((data: string) => {
     socket.emit('input', data);
@@ -42,8 +44,16 @@ socket.on('connect', () => {
   socket
     .on('data', (data: string) => {
       const remainingData = fileDownloader.buffer(data);
+      const downloadLength = data.length - remainingData.length;
+      if (downloadLength && fcClient.needsCommit(downloadLength)) {
+        socket.emit('commit', fcClient.ackBytes);
+      }
       if (remainingData) {
-        term.write(remainingData);
+        if (fcClient.needsCommit(remainingData.length)) {
+          term.write(remainingData, () => socket.emit('commit', fcClient.ackBytes));
+        } else {
+          term.write(remainingData);
+        }
       }
     })
     .on('login', () => {

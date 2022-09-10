@@ -4,6 +4,7 @@ import pty from 'node-pty';
 import { logger as getLogger } from '../shared/logger.js';
 import { xterm } from './shared/xterm.js';
 import { envVersion } from './spawn/env.js';
+import { tinybuffer, FlowControlServer } from './flowcontrol.js';
 
 export async function spawn(
   socket: SocketIO.Socket,
@@ -26,8 +27,13 @@ export async function spawn(
       .removeAllListeners('resize')
       .removeAllListeners('input');
   });
+  const send = tinybuffer(socket, 2, 524288);
+  const fcServer = new FlowControlServer();
   term.on('data', (data: string) => {
-    socket.emit('data', data);
+    send(data);
+    if (fcServer.account(data.length)) {
+      term.pause();
+    }
   });
   socket
     .on('resize', ({ cols, rows }) => {
@@ -39,5 +45,10 @@ export async function spawn(
     .on('disconnect', () => {
       term.kill();
       logger.info('Process exited', { code: 0, pid });
+    })
+    .on('commit', size => {
+      if (fcServer.commit(size)) {
+        term.resume();
+      }
     });
 }
