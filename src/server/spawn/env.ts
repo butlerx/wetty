@@ -1,6 +1,6 @@
 import { exec } from 'child_process';
 
-export const envVersion = (): Promise<number> =>
+const envVersion = (): Promise<number> =>
   new Promise((resolve, reject) => {
     exec('/usr/bin/env --version', (error, stdout, stderr): void => {
       if (error) {
@@ -17,3 +17,6 @@ export const envVersion = (): Promise<number> =>
       );
     });
   });
+
+export const envVersionOr = (fallback: number): Promise<number> =>
+  envVersion().catch(() => fallback);

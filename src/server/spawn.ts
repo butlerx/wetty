@@ -3,7 +3,7 @@ import isUndefined from 'lodash/isUndefined.js';
 import pty from 'node-pty';
 import { logger as getLogger } from '../shared/logger.js';
 import { xterm } from './shared/xterm.js';
-import { envVersion } from './spawn/env.js';
+import { envVersionOr } from './spawn/env.js';
 import { tinybuffer, FlowControlServer } from './flowcontrol.js';
 
 export async function spawn(
@@ -11,7 +11,7 @@ export async function spawn(
   args: string[],
 ): Promise<void> {
   const logger = getLogger();
-  const version = await envVersion();
+  const version = await envVersionOr(0);
   const cmd = version >= 9 ? ['-S', ...args] : args;
   logger.debug('Spawning PTY', { cmd });
   const term = pty.spawn('/usr/bin/env', cmd, xterm);
