@@ -3,6 +3,7 @@ RUN apk add -U build-base python3
 WORKDIR /usr/src/app
 COPY . /usr/src/app
 RUN yarn install
+RUN yarn build
 
 FROM node:current-alpine
 LABEL maintainer="butlerx@notthe.cloud"
