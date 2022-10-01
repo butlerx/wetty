@@ -1,14 +1,14 @@
 import type { Term } from '../term';
-import type { Options } from './confiruragtion/shared/options';
+import type { Options } from './options';
 import { copySelected, copyShortcut } from './confiruragtion/clipboard';
-import { onInput, setOptions } from './confiruragtion/editor';
-import { editor } from '../../shared/elements';
-import { loadOptions } from './confiruragtion/load';
+import { onInput } from './confiruragtion/editor';
+import { editor } from '../disconnect/elements';
+import { loadOptions } from './load';
 
 export function configureTerm(term: Term): void {
   const options = loadOptions();
   try {
-    setOptions(term, options);
+    term.options = options.xterm;
   } catch {
     /* Do nothing */
   }

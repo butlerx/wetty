@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import type { XTerm, Options } from './shared/options';
+import type { XTerm, Options } from './options';
 
 export const defaultOptions: Options = {
   xterm: { fontSize: 14 },
