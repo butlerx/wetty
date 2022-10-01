@@ -19,7 +19,6 @@
     "dev": "NODE_ENV=development concurrently --kill-others --success first \"snowpack dev\" \"nodemon .\"",
     "docker-compose-entrypoint": "ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts; yarn start",
     "lint": "eslint src",
-    "postinstall": "yarn build",
     "start": "NODE_ENV=production node .",
     "test": "mocha"
   },

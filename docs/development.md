@@ -7,7 +7,7 @@ To install from source run:
 ```bash
 $ git clone https://github.com/butlerx/wetty.git
 $ cd wetty
-$ yarn
+$ yarn install
 $ yarn build
 ```
 
