@@ -4,6 +4,7 @@ on:
   pull_request:
 jobs:
   build_and_test:
+    name: Build & Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -12,7 +13,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 14
-      - run: yarn
+      - run: yarn install
         name: Install dependencies
       - name: ESLint checks
         run: yarn lint
@@ -21,6 +22,7 @@ jobs:
       - run: yarn test
         name: Run tests
   validate-docker:
+    name: Validte Docker Build
     runs-on: ubuntu-latest
     strategy:
       matrix:
