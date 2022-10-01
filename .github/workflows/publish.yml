@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
     steps:
       - name: Checkout
@@ -37,7 +37,6 @@ jobs:
           tag_name: 'v%s'
           tag_message: 'v%s'
           commit_pattern: "^Release (\\S+)"
-          publish_args: '--non-interactive'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_AUTH_TOKEN: ${{ secrets.npm_token }}
@@ -52,7 +51,6 @@ jobs:
         with:
           create_tag: false
           commit_pattern: "^Release (\\S+)"
-          publish_args: '--non-interactive'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
