@@ -16,7 +16,7 @@
     "build": "snowpack build",
     "clean": "rm -rf build yarn-error.log",
     "contributor": "all-contributors",
-    "dev": "NODE_ENV=development concurrently --kill-others --success first \"snowpack dev\" \"nodemon .\"",
+    "dev": "NODE_ENV=development concurrently --kill-others --success first \"snowpack build --watch\" \"nodemon . --conf conf/config.json5\"",
     "docker-compose-entrypoint": "ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts; yarn start",
     "lint": "eslint src",
     "start": "NODE_ENV=production node .",
