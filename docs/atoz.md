@@ -407,6 +407,7 @@ SSHPORT
 KNOWNHOSTS
 FORCESSH
 COMMAND
+ALLOWIFRAME
 ```
 
 These can be used in the following way
