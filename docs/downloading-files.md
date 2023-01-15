@@ -10,7 +10,7 @@ https://vt100.net/docs/tp83/appendixc.html).
 To take advantage add the following bash function to your `.bashrc`
 
 ```bash
-funtion wetty-download() {
+function wetty-download() {
   file=${1:-/dev/stdin}
 
   if [[ -f $file || $file == "/dev/stdin" ]]; then
