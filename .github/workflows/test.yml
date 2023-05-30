@@ -48,7 +48,7 @@ jobs:
             type=ref,event=pr
             type=sha
       - name: Build Docker
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           context: .
           platforms: ${{ matrix.platform }}
