@@ -1,7 +1,22 @@
 ---
 version: 2
 updates:
-  - package-ecosystem: 'github-actions'
+  - package-ecosystem: npm
     directory: '/'
     schedule:
-      interval: 'daily'
+      interval: weekly
+    commit-message:
+      prefix: '[NPM] '
+
+  - package-ecosystem: github-actions
+    directory: '/'
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: '[GH action] '
+  - package-ecosystem: docker
+    directory: '/containers'
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: '[docker] '
