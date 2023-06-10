@@ -9,11 +9,11 @@ import { policies } from './socketServer/security.js';
 import { listen } from './socketServer/socket.js';
 import { loadSSL } from './socketServer/ssl.js';
 import type { SSL, SSLBuffer, Server } from '../shared/interfaces.js';
-import type { Application } from 'express';
+import type { Express } from 'express';
 import type SocketIO from 'socket.io';
 
 export async function server(
-  app: Application,
+  app: Express,
   { base, port, host, title, allowIframe }: Server,
   ssl?: SSL,
 ): Promise<SocketIO.Server> {

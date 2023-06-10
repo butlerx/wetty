@@ -19,7 +19,7 @@ import {
 } from './shared/defaults.js';
 import { logger as getLogger } from './shared/logger.js';
 import type { SSH, SSL, Server } from './shared/interfaces.js';
-import type { Application } from 'express';
+import type { Express } from 'express';
 import type SocketIO from 'socket.io';
 
 export * from './shared/interfaces.js';
@@ -45,7 +45,7 @@ export const start = (
   decorateServerWithSsh(express(), ssh, serverConf, command, forcessh, ssl);
 
 export async function decorateServerWithSsh(
-  app: Application,
+  app: Express,
   ssh: SSH = sshDefault,
   serverConf: Server = serverDefault,
   command: string = defaultCommand,

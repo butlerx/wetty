@@ -14,8 +14,6 @@ on:
         required: true
       DOCKERHUB_TOKEN:
         required: true
-      GITHUB_TOKEN:
-        required: true
 jobs:
   docker:
     runs-on: ubuntu-latest
