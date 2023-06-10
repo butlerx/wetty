@@ -8,6 +8,7 @@
  */
 import { createRequire } from 'module';
 import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 import { start } from './server.js';
 import { loadConfigFile, mergeCliConf } from './shared/config.js';
 import { setLevel, logger } from './shared/logger.js';
@@ -16,7 +17,7 @@ import { setLevel, logger } from './shared/logger.js';
 const require = createRequire(import.meta.url);
 const packageJson = require('../package.json');
 
-const opts = yargs
+const opts = yargs(hideBin(process.argv))
   .scriptName(packageJson.name)
   .version(packageJson.version)
   .options('conf', {
@@ -113,12 +114,13 @@ const opts = yargs
     type: 'boolean',
     description: 'Print help message',
   })
-  .boolean('allow_discovery').argv;
+  .boolean('allow_discovery')
+  .parseSync();
 
 if (!opts.help) {
   loadConfigFile(opts.conf)
-    .then(config => mergeCliConf(opts, config))
-    .then(conf => {
+    .then((config) => mergeCliConf(opts, config))
+    .then((conf) => {
       setLevel(conf.logLevel);
       start(conf.ssh, conf.server, conf.command, conf.forceSSH, conf.ssl);
     })

@@ -17,7 +17,7 @@ module.exports = {
     'func-style': ['error', 'declaration', { allowArrowFunctions: true }],
     'import/extensions': [
       'error',
-      'always',
+      'ignorePackages',
       {
         ts: 'never',
         js: 'ignorePackages',
