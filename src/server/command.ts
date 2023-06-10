@@ -1,4 +1,6 @@
+import process from 'node:process';
 import url from 'url';
+import _ from 'lodash';
 import { address } from './command/address.js';
 import { loginOptions } from './command/login.js';
 import { sshOptions } from './command/ssh.js';
@@ -6,6 +8,7 @@ import type { SSH } from '../shared/interfaces';
 import type { Socket } from 'socket.io';
 
 const localhost = (host: string): boolean =>
+  !_.isUndefined(process.getuid) &&
   process.getuid() === 0 &&
   (host === 'localhost' || host === '0.0.0.0' || host === '127.0.0.1');
 
