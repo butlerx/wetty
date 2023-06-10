@@ -1,12 +1,21 @@
 ---
-name: Docker Publish Image
+name: Docker Workflow
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - 'v*.*.*'
-
+  workflow_call:
+    inputs:
+      platforms:
+        required: true
+        type: string
+      push:
+        type: boolean
+        default: false
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: true
+      DOCKERHUB_TOKEN:
+        required: true
+      GITHUB_TOKEN:
+        required: true
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -50,8 +59,8 @@ jobs:
         with:
           context: .
           file: containers/wetty/Dockerfile
-          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
-          push: true
+          platforms: ${{ inputs.platforms }}
+          push: ${{ inputs.push }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ steps.meta.outputs.tags }}

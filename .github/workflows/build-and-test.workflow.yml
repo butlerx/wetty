@@ -1,0 +1,47 @@
+---
+name: Build & Test
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        required: false
+        type: string
+        default: '.'
+jobs:
+  build_and_test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Setup env
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: ESLint checks
+        run: yarn lint
+
+      - run: yarn build
+        name: Compile Typescript
+
+      - run: yarn test
+        name: Run tests
+        env:
+          CI: true
+
+      - uses: actions/cache@v3
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}

@@ -5,8 +5,13 @@ on:
     branches:
       - main
 jobs:
-  build:
+  test:
+    name: Build & Test
+    uses: ./.github/workflows/build-and-test.workflow.yml
+
+  publish:
     runs-on: ubuntu-latest
+    needs: test
     permissions:
       contents: write
       packages: write
@@ -14,21 +19,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # Test & Link package
       - name: Setup env
         uses: actions/setup-node@v3
         with:
-          node-version: 14
-      - run: yarn
-        name: Install dependencies
-      - name: ESLint checks
-        run: yarn lint
-      - run: yarn build
-        name: Compile Typescript
-      - run: yarn test
-        name: Run tests
-        env:
-          CI: true
+          node-version: 18
+          cache: 'yarn'
+
+      - uses: actions/cache@v3
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
 
       # Publish to NPM
       - name: Publish if version has been updated

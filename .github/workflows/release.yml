@@ -5,12 +5,10 @@ on:
     tags:
       - 'v*.*.*'
 jobs:
-  Release:
+  release:
     name: Create Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
       - name: Create Release
         uses: fregante/release-with-changelog@v3
         with:
@@ -24,3 +22,11 @@ jobs:
             {commits}
 
             {range}
+
+  docker:
+    name: Docker Publish Image
+    uses: ./.github/workflows/docker.workflow.yml
+    secrets: inherit
+    with:
+      platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+      push: true
