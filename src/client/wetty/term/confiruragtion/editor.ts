@@ -1,5 +1,5 @@
-import type { Term } from '../../term';
 import { editor } from '../../disconnect/elements';
+import type { Term } from '../../term';
 import type { Options } from '../options';
 
 export const onInput = (term: Term, updated: Options) => {

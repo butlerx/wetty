@@ -1,18 +1,19 @@
-import type SocketIO from 'socket.io';
-import express from 'express';
 import compression from 'compression';
 import winston from 'express-winston';
-import type { SSL, SSLBuffer, Server } from '../shared/interfaces.js';
-import { favicon, redirect } from './socketServer/middleware.js';
-import { html } from './socketServer/html.js';
-import { listen } from './socketServer/socket.js';
 import { logger } from '../shared/logger.js';
 import { serveStatic, trim } from './socketServer/assets.js';
-import { policies } from './socketServer/security.js';
-import { loadSSL } from './socketServer/ssl.js';
+import { html } from './socketServer/html.js';
 import { metricMiddleware, metricRoute } from './socketServer/metrics.js';
+import { favicon, redirect } from './socketServer/middleware.js';
+import { policies } from './socketServer/security.js';
+import { listen } from './socketServer/socket.js';
+import { loadSSL } from './socketServer/ssl.js';
+import type { SSL, SSLBuffer, Server } from '../shared/interfaces.js';
+import type { Application } from 'express';
+import type SocketIO from 'socket.io';
 
 export async function server(
+  app: Application,
   { base, port, host, title, allowIframe }: Server,
   ssl?: SSL,
 ): Promise<SocketIO.Server> {
@@ -24,7 +25,6 @@ export async function server(
     title,
   });
 
-  const app = express();
   const client = html(basePath, title);
   app
     .disable('x-powered-by')

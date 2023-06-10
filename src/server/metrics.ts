@@ -1,5 +1,5 @@
-import type { GCStatistics } from 'gc-stats';
 import { Counter } from 'prom-client';
+import type { GCStatistics } from 'gc-stats';
 
 const gcLabelNames = ['gctype'];
 const gcTypes = {

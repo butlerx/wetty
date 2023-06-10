@@ -1,6 +1,6 @@
-import findUp from 'find-up';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import findUp from 'find-up';
 
 const filePath = dirname(
   findUp.sync('package.json', {

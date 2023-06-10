@@ -1,9 +1,9 @@
 import url from 'url';
-import type { Socket } from 'socket.io';
-import type { SSH } from '../shared/interfaces';
 import { address } from './command/address.js';
 import { loginOptions } from './command/login.js';
 import { sshOptions } from './command/ssh.js';
+import type { SSH } from '../shared/interfaces';
+import type { Socket } from 'socket.io';
 
 const localhost = (host: string): boolean =>
   process.getuid() === 0 &&

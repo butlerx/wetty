@@ -1,8 +1,8 @@
-import type SocketIO from 'socket.io';
-import pty from 'node-pty';
 import { dirname, resolve as resolvePath } from 'path';
 import { fileURLToPath } from 'url';
+import pty from 'node-pty';
 import { xterm } from './shared/xterm.js';
+import type SocketIO from 'socket.io';
 
 const executable = resolvePath(
   dirname(fileURLToPath(import.meta.url)),

@@ -6,11 +6,11 @@
  *
  * This is the cli Interface for wetty.
  */
-import yargs from 'yargs';
 import { createRequire } from 'module';
-import { setLevel, logger } from './shared/logger.js';
+import yargs from 'yargs';
 import { start } from './server.js';
 import { loadConfigFile, mergeCliConf } from './shared/config.js';
+import { setLevel, logger } from './shared/logger.js';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 const require = createRequire(import.meta.url);

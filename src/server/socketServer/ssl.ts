@@ -1,6 +1,6 @@
+import { resolve } from 'path';
 import fs from 'fs-extra';
 import isUndefined from 'lodash/isUndefined.js';
-import { resolve } from 'path';
 import type { SSL, SSLBuffer } from '../../shared/interfaces';
 
 export async function loadSSL(ssl?: SSL): Promise<SSLBuffer> {

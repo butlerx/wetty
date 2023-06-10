@@ -1,10 +1,7 @@
-import fs from 'fs-extra';
 import path from 'path';
+import fs from 'fs-extra';
 import JSON5 from 'json5';
 import isUndefined from 'lodash/isUndefined.js';
-import type { Arguments } from 'yargs';
-import type winston from 'winston';
-import type { Config, SSH, Server, SSL } from './interfaces';
 import {
   sshDefault,
   serverDefault,
@@ -12,6 +9,9 @@ import {
   defaultCommand,
   defaultLogLevel,
 } from './defaults.js';
+import type { Config, SSH, Server, SSL } from './interfaces';
+import type winston from 'winston';
+import type { Arguments } from 'yargs';
 
 type confValue =
   | boolean

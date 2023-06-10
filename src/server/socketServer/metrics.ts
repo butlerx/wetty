@@ -1,8 +1,8 @@
-import type { Request, Response, RequestHandler } from 'express';
+import url from 'url';
 import { register, Counter, Histogram } from 'prom-client';
 import ResponseTime from 'response-time';
 import UrlValueParser from 'url-value-parser';
-import url from 'url';
+import type { Request, Response, RequestHandler } from 'express';
 
 const requestLabels = ['route', 'method', 'status'];
 

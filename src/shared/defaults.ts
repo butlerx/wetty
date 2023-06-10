@@ -1,5 +1,5 @@
-import type { SSH, Server } from './interfaces';
 import { isDev } from './env.js';
+import type { SSH, Server } from './interfaces';
 
 export const sshDefault: SSH = {
   user: process.env.SSHUSER || '',

@@ -1,10 +1,10 @@
-import type SocketIO from 'socket.io';
 import isUndefined from 'lodash/isUndefined.js';
 import pty from 'node-pty';
 import { logger as getLogger } from '../shared/logger.js';
+import { tinybuffer, FlowControlServer } from './flowcontrol.js';
 import { xterm } from './shared/xterm.js';
 import { envVersionOr } from './spawn/env.js';
-import { tinybuffer, FlowControlServer } from './flowcontrol.js';
+import type SocketIO from 'socket.io';
 
 export async function spawn(
   socket: SocketIO.Socket,

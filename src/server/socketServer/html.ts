@@ -1,5 +1,5 @@
-import type { Request, Response, RequestHandler } from 'express';
 import { isDev } from '../../shared/env.js';
+import type { Request, Response, RequestHandler } from 'express';
 
 const jsFiles = isDev ? ['dev', 'wetty'] : ['wetty'];
 const cssFiles = ['styles', 'options', 'overlay', 'terminal'];

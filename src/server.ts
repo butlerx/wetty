@@ -2,16 +2,14 @@
  * Create WeTTY server
  * @module WeTTy
  */
-import type SocketIO from 'socket.io';
-import { Gauge, collectDefaultMetrics } from 'prom-client';
+import express from 'express';
 import gc from 'gc-stats';
-
-import type { SSH, SSL, Server } from './shared/interfaces.js';
+import { Gauge, collectDefaultMetrics } from 'prom-client';
 import { getCommand } from './server/command.js';
-import { logger as getLogger } from './shared/logger.js';
 import { login } from './server/login.js';
-import { server } from './server/socketServer.js';
 import { gcMetrics } from './server/metrics.js';
+import { escapeShell } from './server/shared/shell.js';
+import { server } from './server/socketServer.js';
 import { spawn } from './server/spawn.js';
 import {
   sshDefault,
@@ -19,7 +17,13 @@ import {
   forceSSHDefault,
   defaultCommand,
 } from './shared/defaults.js';
-import { escapeShell } from './server/shared/shell.js';
+import { logger as getLogger } from './shared/logger.js';
+import type { SSH, SSL, Server } from './shared/interfaces.js';
+import type { Application } from 'express';
+import type SocketIO from 'socket.io';
+
+export * from './shared/interfaces.js';
+export { logger as getLogger } from './shared/logger.js';
 
 const wettyConnections = new Gauge({
   name: 'wetty_connections',
@@ -31,7 +35,17 @@ const wettyConnections = new Gauge({
  * @name startServer
  * @returns Promise that resolves SocketIO server
  */
-export async function start(
+export const start = (
+  ssh: SSH = sshDefault,
+  serverConf: Server = serverDefault,
+  command: string = defaultCommand,
+  forcessh: boolean = forceSSHDefault,
+  ssl: SSL | undefined = undefined,
+): Promise<SocketIO.Server> =>
+  decorateServerWithSsh(express(), ssh, serverConf, command, forcessh, ssl);
+
+export async function decorateServerWithSsh(
+  app: Application,
   ssh: SSH = sshDefault,
   serverConf: Server = serverDefault,
   command: string = defaultCommand,
@@ -50,7 +64,7 @@ export async function start(
   collectDefaultMetrics();
   gc().on('stats', gcMetrics);
 
-  const io = await server(serverConf, ssl);
+  const io = await server(app, serverConf, ssl);
   /**
    * Wetty server connected too
    * @fires WeTTy#connnection

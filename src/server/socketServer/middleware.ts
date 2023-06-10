@@ -1,9 +1,9 @@
-import type { Request, Response, NextFunction, RequestHandler } from 'express';
 import etag from 'etag';
 import fresh from 'fresh';
-import parseUrl from 'parseurl';
 import fs from 'fs-extra';
+import parseUrl from 'parseurl';
 import { assetsPath } from './shared/path.js';
+import type { Request, Response, NextFunction, RequestHandler } from 'express';
 
 const ONE_YEAR_MS = 60 * 60 * 24 * 365 * 1000; // 1 year
 

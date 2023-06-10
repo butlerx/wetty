@@ -1,9 +1,9 @@
-import type { Term } from '../term';
-import type { Options } from './options';
+import { editor } from '../disconnect/elements';
 import { copySelected, copyShortcut } from './confiruragtion/clipboard';
 import { onInput } from './confiruragtion/editor';
-import { editor } from '../disconnect/elements';
 import { loadOptions } from './load';
+import type { Options } from './options';
+import type { Term } from '../term';
 
 export function configureTerm(term: Term): void {
   const options = loadOptions();

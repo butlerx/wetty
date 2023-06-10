@@ -1,11 +1,11 @@
-import type express from 'express';
-import { Server } from 'socket.io';
 import http from 'http';
 import https from 'https';
 import isUndefined from 'lodash/isUndefined.js';
+import { Server } from 'socket.io';
 
 import { logger } from '../../shared/logger.js';
 import type { SSLBuffer } from '../../shared/interfaces.js';
+import type express from 'express';
 
 export const listen = (
   app: express.Express,

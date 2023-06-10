@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import 'mocha';
+import { JSDOM } from 'jsdom';
 import * as sinon from 'sinon';
 
-import { JSDOM } from 'jsdom';
 import { FileDownloader } from './download';
 
 const noop = (): void => {}; // eslint-disable-line @typescript-eslint/no-empty-function

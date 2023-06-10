@@ -1,14 +1,14 @@
-import type { Socket } from 'socket.io-client';
 import _ from 'lodash';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
-import { WebLinksAddon } from 'xterm-addon-web-links';
 import { ImageAddon } from 'xterm-addon-image';
+import { WebLinksAddon } from 'xterm-addon-web-links';
 
-import type { Options } from './term/options';
-import { loadOptions } from './term/load';
-import { configureTerm } from './term/confiruragtion';
 import { terminal as termElement } from './disconnect/elements';
+import { configureTerm } from './term/confiruragtion';
+import { loadOptions } from './term/load';
+import type { Options } from './term/options';
+import type { Socket } from 'socket.io-client';
 
 export class Term extends Terminal {
   socket: Socket;

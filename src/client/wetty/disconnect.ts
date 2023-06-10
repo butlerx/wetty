@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { verifyPrompt } from './disconnect/verify';
 import { overlay } from './disconnect/elements';
+import { verifyPrompt } from './disconnect/verify';
 
 export function disconnect(reason: string): void {
   if (_.isNull(overlay)) return;

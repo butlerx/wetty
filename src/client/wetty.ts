@@ -1,15 +1,15 @@
-import _ from 'lodash';
 import { dom, library } from '@fortawesome/fontawesome-svg-core';
 import { faCogs } from '@fortawesome/free-solid-svg-icons';
+import _ from 'lodash';
 
-import { FileDownloader } from './wetty/download';
 import { disconnect } from './wetty/disconnect';
-import { mobileKeyboard } from './wetty/mobile';
 import { overlay } from './wetty/disconnect/elements';
-import { socket } from './wetty/socket';
 import { verifyPrompt } from './wetty/disconnect/verify';
-import { terminal, Term } from './wetty/term';
+import { FileDownloader } from './wetty/download';
 import { FlowControlClient } from './wetty/flowcontrol';
+import { mobileKeyboard } from './wetty/mobile';
+import { socket } from './wetty/socket';
+import { terminal, Term } from './wetty/term';
 
 // Setup for fontawesome
 library.add(faCogs);
