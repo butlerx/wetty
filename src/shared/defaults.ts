@@ -18,7 +18,7 @@ export const serverDefault: Server = {
   port: parseInt(process.env.PORT || '3000', 10),
   host: '0.0.0.0',
   title: process.env.TITLE || 'WeTTY - The Web Terminal Emulator',
-  allowIframe: false,
+  allowIframe: process.env.ALLOWIFRAME === 'true' || false,
 };
 
 export const forceSSHDefault = process.env.FORCESSH === 'true' || false;
