@@ -7026,10 +7026,10 @@ xterm-addon-image@^0.2.0:
   resolved "https://registry.yarnpkg.com/xterm-addon-image/-/xterm-addon-image-0.2.0.tgz#47f58a522c7d21c7b2fc7a2d18aff324461974f1"
   integrity sha512-rGbwUcwnJQqN1LTdEhqUS83xtBpApUWOJISjN/Efbg8TplqdXsHOVDmEcnLvhBn5cCzAZIqD2OZaan1+cI7mWA==
 
-xterm-addon-web-links@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/xterm-addon-web-links/-/xterm-addon-web-links-0.7.0.tgz#dceac36170605f9db10a01d716bd83ee38f65c17"
-  integrity sha512-6PqoqzzPwaeSq22skzbvyboDvSnYk5teUYEoKBwMYvhbkwOQkemZccjWHT5FnNA8o1aInTc4PRYAl4jjPucCKA==
+xterm-addon-web-links@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/xterm-addon-web-links/-/xterm-addon-web-links-0.8.0.tgz#2cb1d57129271022569208578b0bf4774e7e6ea9"
+  integrity sha512-J4tKngmIu20ytX9SEJjAP3UGksah7iALqBtfTwT9ZnmFHVplCumYQsUJfKuS+JwMhjsjH61YXfndenLNvjRrEw==
 
 xterm@^5.0.0:
   version "5.2.0"

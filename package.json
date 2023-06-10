@@ -122,7 +122,7 @@
     "xterm": "^5.0.0",
     "xterm-addon-fit": "^0.6.0",
     "xterm-addon-image": "^0.2.0",
-    "xterm-addon-web-links": "^0.7.0",
+    "xterm-addon-web-links": "^0.8.0",
     "yargs": "^15.4.1"
   },
   "devDependencies": {
