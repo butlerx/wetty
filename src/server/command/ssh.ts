@@ -21,9 +21,10 @@ export function sshOptions(
   if (!isUndefined(config) && config !== '') {
     sshRemoteOptsBase = sshRemoteOptsBase.concat(['-F', config]);
   }
+  if (!isUndefined(port) && port !== '') {
+      sshRemoteOptsBase = sshRemoteOptsBase.concat(['-p', port]);
+  }
   sshRemoteOptsBase = sshRemoteOptsBase.concat([
-    '-p',
-    port,
     '-o',
     `PreferredAuthentications=${auth}`,
     '-o',
