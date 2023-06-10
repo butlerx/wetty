@@ -99,7 +99,7 @@
     "etag": "^1.8.1",
     "express": "^4.17.1",
     "express-winston": "^4.0.5",
-    "file-type": "^12.3.0",
+    "file-type": "^18.5.0",
     "find-up": "^5.0.0",
     "fresh": "^0.5.2",
     "fs-extra": "^9.0.1",
