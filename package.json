@@ -1,6 +1,6 @@
 {
   "name": "wetty",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "description": "WeTTY = Web + TTY. Terminal access in browser over http/https",
   "homepage": "https://github.com/butlerx/wetty",
   "license": "MIT",
@@ -42,7 +42,7 @@
     ]
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "nodemonConfig": {
     "ignore": [
