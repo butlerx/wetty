@@ -122,7 +122,7 @@
     "xterm-addon-fit": "^0.6.0",
     "xterm-addon-image": "^0.2.0",
     "xterm-addon-web-links": "^0.8.0",
-    "yargs": "^15.4.1"
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@snowpack/plugin-run-script": "^2.3.0",
@@ -143,7 +143,7 @@
     "@types/response-time": "^2",
     "@types/sinon": "^10.0.13",
     "@types/toastify-js": "^1.9.2",
-    "@types/yargs": "^15.0.5",
+    "@types/yargs": "^17.0.24",
     "@typescript-eslint/eslint-plugin": "^5.59.9",
     "@typescript-eslint/parser": "^5.59.9",
     "all-contributors-cli": "^6.17.2",
