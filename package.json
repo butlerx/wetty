@@ -158,7 +158,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "git-authors-cli": "^1.0.42",
     "husky": "^4.2.5",
-    "jsdom": "^16.5.0",
+    "jsdom": "^22.1.0",
     "lint-staged": "^13.2.2",
     "mocha": "^10.0.0",
     "nodemon": "^2.0.19",
