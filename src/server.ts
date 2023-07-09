@@ -18,7 +18,7 @@ import {
   defaultCommand,
 } from './shared/defaults.js';
 import { logger as getLogger } from './shared/logger.js';
-import type { SSH, SSL, Server } from './shared/interfaces.js';
+import type { SSH, SSL, Server, EnvHeaders } from './shared/interfaces.js';
 import type { Express } from 'express';
 import type SocketIO from 'socket.io';
 
@@ -41,8 +41,9 @@ export const start = (
   command: string = defaultCommand,
   forcessh: boolean = forceSSHDefault,
   ssl: SSL | undefined = undefined,
+  envFromHeaders: EnvHeaders | undefined = undefined,
 ): Promise<SocketIO.Server> =>
-  decorateServerWithSsh(express(), ssh, serverConf, command, forcessh, ssl);
+  decorateServerWithSsh(express(), ssh, serverConf, command, forcessh, ssl, envFromHeaders);
 
 export async function decorateServerWithSsh(
   app: Express,
@@ -51,6 +52,7 @@ export async function decorateServerWithSsh(
   command: string = defaultCommand,
   forcessh: boolean = forceSSHDefault,
   ssl: SSL | undefined = undefined,
+  envFromHeaders: EnvHeaders | undefined = undefined,
 ): Promise<SocketIO.Server> {
   const logger = getLogger();
   if (ssh.key) {
@@ -75,7 +77,7 @@ export async function decorateServerWithSsh(
      * @name connection
      */
     logger.info('Connection accepted.');
-    const [args, sshUser] = getCommand(socket, ssh, command, forcessh);
+    const [args, sshUser, customEnv] = getCommand(socket, ssh, command, forcessh, envFromHeaders);
     const cmd = args.join(' ');
     logger.debug('Command Generated', { user: sshUser, cmd });
     wettyConnections.inc();
@@ -86,7 +88,7 @@ export async function decorateServerWithSsh(
         args[1] = `${escapeShell(username.trim())}@${args[1]}`;
         logger.debug('Spawning term', { username: username.trim(), cmd });
       }
-      await spawn(socket, args);
+      await spawn(socket, args, customEnv);
     } catch (error) {
       logger.info('Disconnect signal sent', { err: error });
       wettyConnections.dec();

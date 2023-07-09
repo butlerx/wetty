@@ -9,12 +9,17 @@ import type SocketIO from 'socket.io';
 export async function spawn(
   socket: SocketIO.Socket,
   args: string[],
+  customEnv: object,
 ): Promise<void> {
   const logger = getLogger();
   const version = await envVersionOr(0);
   const cmd = version >= 9 ? ['-S', ...args] : args;
+  const spawnXterm = Object.assign({}, xterm);
+  spawnXterm.env = Object.assign(customEnv, ...Object.keys(process.env)
+    .filter((key) => !isUndefined(process.env[key]))
+    .map((key) => ({ [key]: process.env[key] })));
   logger.debug('Spawning PTY', { cmd });
-  const term = pty.spawn('/usr/bin/env', cmd, xterm);
+  const term = pty.spawn('/usr/bin/env', cmd, spawnXterm);
   const { pid } = term;
   const address = args[0] === 'ssh' ? args[1] : 'localhost';
   logger.info('Process Started on behalf of user', { pid, address });
