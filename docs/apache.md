@@ -40,6 +40,10 @@ E.g: You can ask the Idp to return a sAMAccountName within the SAML2Response
 NameID, and provision beforehand those allowed users on the OS WeTTY is running
 on.
 
+You can also use `--env-from-header` configuration (see command-line args or config)
+along with `--command` to export a `remote-user` HTTP header to the executed command.
+You will need then to handle the authentication process yourself using a custom script.
+
 ### SAML2 Metadata generation
 
 SAML2 metadata needs to be generated for this new service on the server and
