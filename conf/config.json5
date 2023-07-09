@@ -23,6 +23,10 @@
   ssl:{
     key: 'ssl.key',
     cert: 'ssl.cert',
+  },
+  envFromHeaders: {                             // Export request HTTP headers as env vars supplied to command
+    'ENV_VAR_NAME': 'lowercase_header_name',
+    'ORIG_ADDR': 'x-forwarded-for',             // Get original IP when behind a reverse proxy
   }
   */
 }
