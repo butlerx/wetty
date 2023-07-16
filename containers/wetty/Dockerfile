@@ -2,6 +2,7 @@ FROM node:current-alpine as builder
 RUN apk add -U build-base python3
 WORKDIR /usr/src/app
 COPY . /usr/src/app
+RUN yarn global add node-gyp
 RUN yarn install
 RUN yarn build
 
