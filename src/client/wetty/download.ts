@@ -7,7 +7,11 @@ const DEFAULT_FILE_END = '\u001b[4i';
 type OnCompleteFile = (bufferCharacters: string) => void;
 
 function onCompleteFile(bufferCharacters: string): void {
+  let fileNameBase64;
   let fileCharacters = bufferCharacters;
+  if (bufferCharacters.includes(":")) {
+    [fileNameBase64, fileCharacters] = bufferCharacters.split(":");
+  }
   // Try to decode it as base64, if it fails we assume it's not base64
   try {
     fileCharacters = window.atob(fileCharacters);
@@ -34,12 +38,23 @@ function onCompleteFile(bufferCharacters: string): void {
     mimeType = 'text/plain';
     fileExt = 'txt';
   }
-  const fileName = `file-${new Date()
-    .toISOString()
-    .split('.')[0]
-    .replace(/-/g, '')
-    .replace('T', '')
-    .replace(/:/g, '')}${fileExt ? `.${fileExt}` : ''}`;
+  let fileName;
+  try {
+    if (typeof fileNameBase64 === "string") {
+      fileName = window.atob(fileNameBase64);
+    }
+  } catch (err) {
+    // Filename wasn't base64-encoded so let's ignore it
+  }
+
+  if (typeof fileName !== "string") {
+    fileName = `file-${new Date()
+      .toISOString()
+      .split('.')[0]
+      .replace(/-/g, '')
+      .replace('T', '')
+      .replace(/:/g, '')}${fileExt ? `.${fileExt}` : ''}`;
+  }
 
   const blob = new Blob([new Uint8Array(bytes.buffer)], {
     type: mimeType,
