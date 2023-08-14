@@ -236,7 +236,7 @@ start up commands in the following section.
 echo https://$(curl -s4 icanhazip.com):3000
 ```
 
-_Please make make a note of this URL now._
+_Please make a note of this URL now._
 
 ## Running WeTTY
 
@@ -299,7 +299,7 @@ we generated earlier.
 `--ssh-host localhost` - optional setting telling WeTTY to connect the host
 `localhost`
 
-`--ssh-user $(whomai)` - defines our `ssh` username. In this case via the
+`--ssh-user $(whoami)` - defines our `ssh` username. In this case via the
 command substitution of `whoami` which will not require your input of a
 username.
 
@@ -439,7 +439,7 @@ Use `nano` to open a file for editing.
 nano ~/.config/systemd/user/wetty.service
 ```
 
-The copy and paste this code.
+Then copy and paste this code.
 
 **Note:** This is an example service file based on all the options documented
 and configured so far. You may not want all these option enabled so please
@@ -477,7 +477,7 @@ Use `nano` to open the file for editing.
 nano ~/.config/systemd/user/wetty.service
 ```
 
-The copy and paste this code.
+Then copy and paste this code.
 
 **Note:** This `ExecStart` assumes the location of your `config.json` to be
 `~/.config/wetty/config.json`. Please make sure you use the correct location for
@@ -505,7 +505,7 @@ exit `nano`.
 
 ### Activating your service
 
-The you can enable and start your service.
+Then you can enable and start your service.
 
 ```bash
 systemctl --user enable --now wetty
@@ -553,7 +553,7 @@ configured `wetty` to run via `https` using our self signed ssl certificates. If
 you chose not to run WeTTY with a self signed certificate you should changes
 this to `http://127.0.0.1:3000/wetty;`
 
-The copy and paste this into the `https` server block of your enable server
+Then copy and paste this into the `https` server block of your enable server
 configuration file.
 
 ```nginx
