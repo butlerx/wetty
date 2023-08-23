@@ -1,4 +1,4 @@
-import fileType from 'file-type';
+import { fileTypeFromBuffer } from 'file-type';
 import Toastify from 'toastify-js';
 
 const DEFAULT_FILE_BEGIN = '\u001b[5i';
@@ -6,7 +6,7 @@ const DEFAULT_FILE_END = '\u001b[4i';
 
 type OnCompleteFile = (bufferCharacters: string) => void;
 
-function onCompleteFile(bufferCharacters: string): void {
+async function onCompleteFile(bufferCharacters: string): Promise<void> {
   let fileCharacters = bufferCharacters;
   // Try to decode it as base64, if it fails we assume it's not base64
   try {
@@ -22,7 +22,7 @@ function onCompleteFile(bufferCharacters: string): void {
 
   let mimeType = 'application/octet-stream';
   let fileExt = '';
-  const typeData = fileType(bytes);
+  const typeData = await fileTypeFromBuffer(bytes);
   if (typeData) {
     mimeType = typeData.mime;
     fileExt = typeData.ext;
@@ -77,7 +77,7 @@ export class FileDownloader {
     this.onCompleteFileCallback = onCompleteFileCallback;
   }
 
-  bufferCharacter(character: string): string {
+  async bufferCharacter(character: string): Promise<string> {
     // If we are not currently buffering a file.
     if (this.fileBuffer.length === 0) {
       // If we are not currently expecting the rest of the fileBegin sequences.
@@ -125,7 +125,7 @@ export class FileDownloader {
       this.fileBuffer.length >= this.fileBegin.length + this.fileEnd.length &&
       this.fileBuffer.slice(-this.fileEnd.length).join('') === this.fileEnd
     ) {
-      this.onCompleteFileCallback(
+      await this.onCompleteFileCallback(
         this.fileBuffer
           .slice(
             this.fileBegin.length,

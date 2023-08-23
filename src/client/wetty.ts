@@ -42,8 +42,8 @@ socket.on('connect', () => {
     socket.emit('resize', size);
   });
   socket
-    .on('data', (data: string) => {
-      const remainingData = fileDownloader.buffer(data);
+    .on('data', async (data: string) => {
+      const remainingData = await fileDownloader.buffer(data);
       const downloadLength = data.length - remainingData.length;
       if (downloadLength && fcClient.needsCommit(downloadLength)) {
         socket.emit('commit', fcClient.ackBytes);
