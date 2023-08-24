@@ -95,6 +95,11 @@ const opts = yargs(hideBin(process.argv))
     description: 'command to run in shell',
     type: 'string',
   })
+  .option('env-from-header', {
+    alias: 'E',
+    description: 'Pass header information to command as env variable; e.g., --env-from-header HTTP_HOST:host',
+    type: 'array',
+  })
   .option('allow-iframe', {
     description:
       'Allow WeTTY to be embedded in an iframe, defaults to allowing same origin',
@@ -122,7 +127,7 @@ if (!opts.help) {
     .then((config) => mergeCliConf(opts, config))
     .then((conf) => {
       setLevel(conf.logLevel);
-      start(conf.ssh, conf.server, conf.command, conf.forceSSH, conf.ssl);
+      start(conf.ssh, conf.server, conf.command, conf.forceSSH, conf.ssl, conf.envFromHeaders);
     })
     .catch((err: Error) => {
       logger().error('error in server', { err });

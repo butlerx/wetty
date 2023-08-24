@@ -38,6 +38,7 @@ Starts WeTTY Server
 | [ssl]                     | `Object`  |               | SSL settings                                                                                                           |
 | [ssl.key]                 | `string`  |               | Path to ssl key                                                                                                        |
 | [ssl.cert]                | `string`  |               | Path to ssl cert                                                                                                       |
+| [envFromHeaders]          | `Object`  |               | Key/value pairs of env vars to export to the executed command; e.g., `{HTTP_HOST:'host'}`                              |
 
 ### "connection"
 

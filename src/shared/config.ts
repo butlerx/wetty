@@ -8,8 +8,9 @@ import {
   forceSSHDefault,
   defaultCommand,
   defaultLogLevel,
+  envFromHeadersDefault,
 } from './defaults.js';
-import type { Config, SSH, Server, SSL } from './interfaces';
+import type { Config, SSH, Server, SSL, EnvHeaders } from './interfaces';
 import type winston from 'winston';
 import type { Arguments } from 'yargs';
 
@@ -76,6 +77,7 @@ export async function loadConfigFile(filepath?: string): Promise<Config> {
       command: defaultCommand,
       forceSSH: forceSSHDefault,
       logLevel: defaultLogLevel,
+      envFromHeaders: envFromHeadersDefault,
     };
   }
   const content = await fs.readFile(path.resolve(filepath));
@@ -93,6 +95,9 @@ export async function loadConfigFile(filepath?: string): Promise<Config> {
       : ensureBoolean(parsed.forceSSH),
     ssl: parsed.ssl,
     logLevel: parseLogLevel(defaultLogLevel, parsed.logLevel),
+    envFromHeaders: isUndefined(parsed.envFromHeaders)
+      ? envFromHeadersDefault
+      : Object.assign(envFromHeadersDefault, parsed.envFromHeaders),
   };
 }
 
@@ -149,6 +154,11 @@ export function mergeCliConf(opts: Arguments, config: Config): Config {
       allowIframe: opts['allow-iframe'],
     }) as Server,
     command: isUndefined(opts.command) ? config.command : `${opts.command}`,
+    envFromHeaders: isUndefined(opts['env-from-header'])
+      ? config.envFromHeaders
+      : Object.fromEntries(
+          (opts['env-from-header'] as string[]).map((s:string) => s.split(':'))
+        ) as EnvHeaders,
     forceSSH: isUndefined(opts['force-ssh'])
       ? config.forceSSH
       : ensureBoolean(opts['force-ssh']),

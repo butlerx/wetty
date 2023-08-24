@@ -36,3 +36,17 @@ with `--base`.
 
 **Do not set this to `/ssh/${something}`, as this will break username matching
 code.**
+
+## Expose HTTP Headers as env vars
+
+If you wish to expose one (or many) request HTTP Headers as environment variables,
+you can specify that using the `--env-from-header` flag. The syntax is 
+`--env-from-header VARNAME:http_header_lowercase`.
+
+You can export as many variables as you want by using the flag multiple times. 
+However, the flag is useless if not combined with `--command` that could use these
+variables to achieve what you want to do.
+
+This flag is particularly if wetty is behind a reverse proxy and allow you to propagate
+some authentication information (username, ssh key ...) in the most secure way (command-line
+is not safe most of the same for sensitive information).

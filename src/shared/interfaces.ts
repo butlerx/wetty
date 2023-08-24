@@ -32,6 +32,10 @@ export interface Server {
   allowIframe: boolean;
 }
 
+export interface EnvHeaders {
+  [s: string]: string;
+}
+
 export interface Config {
   ssh: SSH;
   server: Server;
@@ -39,4 +43,5 @@ export interface Config {
   command: string;
   logLevel: typeof winston.level;
   ssl?: SSL;
+  envFromHeaders?: EnvHeaders;
 }

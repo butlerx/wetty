@@ -61,6 +61,8 @@ Options:
   --port, -p      wetty listen port                                     [number]
   --host          wetty listen host                                     [string]
   --command, -c   command to run in shell                               [string]
+  -E, --env-from-header     Pass header information to command as env variable;
+                            e.g., --env-from-header HTTP_HOST:host       [array]
   --allow-iframe  Allow wetty to be embedded in an iframe, defaults to allowing
                   same origin                                          [boolean]
 ```

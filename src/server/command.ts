@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { address } from './command/address.js';
 import { loginOptions } from './command/login.js';
 import { sshOptions } from './command/ssh.js';
-import type { SSH } from '../shared/interfaces';
+import type { SSH, EnvHeaders } from '../shared/interfaces';
 import type { Socket } from 'socket.io';
 
 const localhost = (host: string): boolean =>
@@ -38,10 +38,18 @@ export function getCommand(
   }: SSH,
   command: string,
   forcessh: boolean,
-): [string[], boolean] {
+  envFromHeaders: EnvHeaders | undefined,
+): [string[], boolean, EnvHeaders] {
   const sshAddress = address(headers, user, host);
+  const customEnv = !_.isUndefined(envFromHeaders)
+    ? Object.fromEntries(
+        Object.entries(envFromHeaders).map(
+          ([envVar, headerName]) => [envVar, headers[headerName] || '' ]
+        )
+      ) as EnvHeaders
+    : {};
   if (!forcessh && localhost(host)) {
-    return [loginOptions(command, remoteAddress), true];
+    return [loginOptions(command, remoteAddress), true, customEnv];
   }
   const args = urlArgs(headers.referer, {
     host: sshAddress,
@@ -59,5 +67,6 @@ export function getCommand(
   return [
     sshOptions(args, key),
     user !== '' || user.includes('@') || sshAddress.includes('@'),
+    customEnv,
   ];
 }
