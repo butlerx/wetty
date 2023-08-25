@@ -40,14 +40,14 @@ function onCompleteFile(bufferCharacters: string): void {
   }
   let fileName;
   try {
-    if (typeof fileNameBase64 === "string") {
+    if (fileNameBase64 !== undefined) {
       fileName = window.atob(fileNameBase64);
     }
   } catch (err) {
     // Filename wasn't base64-encoded so let's ignore it
   }
 
-  if (typeof fileName !== "string") {
+  if (fileName === undefined) {
     fileName = `file-${new Date()
       .toISOString()
       .split('.')[0]
