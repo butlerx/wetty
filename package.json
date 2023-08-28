@@ -148,7 +148,7 @@
     "@typescript-eslint/parser": "^5.59.9",
     "all-contributors-cli": "^6.17.2",
     "chai": "^4.3.6",
-    "concurrently": "^5.2.0",
+    "concurrently": "^8.2.1",
     "eslint": "^8.36.0",
     "eslint-config-airbnb-base": "latest",
     "eslint-config-prettier": "^8.6.0",
