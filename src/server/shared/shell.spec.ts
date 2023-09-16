@@ -17,4 +17,9 @@ describe('Values passed to escapeShell should be safe to pass woth sub processes
     const cmd = escapeShell("-oProxyCommand='bash' -c `wget localhost:2222`");
     expect(cmd).to.equal('oProxyCommandbash-cwgetlocalhost2222');
   });
+
+  it('should remove dashes even when there are illegal characters before them', () => {
+    const cmd = escapeShell("`-oProxyCommand='bash' -c `wget localhost:2222`");
+    expect(cmd).to.equal('oProxyCommandbash-cwgetlocalhost2222');
+  });
 });

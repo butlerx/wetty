@@ -17,32 +17,22 @@ export function sshOptions(
   const cmd = parseCommand(command, path);
   const hostChecking = knownHosts !== '/dev/null' ? 'yes' : 'no';
   logger().info(`Authentication Type: ${auth}`);
-  let sshRemoteOptsBase = ['ssh', host, '-t'];
-  if (!isUndefined(config) && config !== '') {
-    sshRemoteOptsBase = sshRemoteOptsBase.concat(['-F', config]);
-  }
-  if (!isUndefined(port) && port !== '') {
-      sshRemoteOptsBase = sshRemoteOptsBase.concat(['-p', port]);
-  }
-  sshRemoteOptsBase = sshRemoteOptsBase.concat([
-    '-o',
-    `PreferredAuthentications=${auth}`,
-    '-o',
-    `UserKnownHostsFile=${knownHosts}`,
-    '-o',
-    `StrictHostKeyChecking=${hostChecking}`,
-  ]);
-  if (!isUndefined(key)) {
-    return sshRemoteOptsBase.concat(['-i', key, cmd]);
-  }
-  if (pass !== '') {
-    return ['sshpass', '-p', pass].concat(sshRemoteOptsBase, [cmd]);
-  }
-  if (auth === 'none') {
-    sshRemoteOptsBase.splice(sshRemoteOptsBase.indexOf('-o'), 2);
-  }
 
-  return cmd === '' ? sshRemoteOptsBase : sshRemoteOptsBase.concat([cmd]);
+  return [
+    ...pass ? ['sshpass', '-p', pass] : [],
+    'ssh',
+    '-t',
+    ...config ? ['-F', config] : [],
+    ...port ? ['-p', port] : [],
+    ...key ? ['-i', key] : [],
+    ...auth !== 'none' ? ['-o', `PreferredAuthentications=${auth}`] : [],
+    '-o', `UserKnownHostsFile=${knownHosts}`,
+    '-o', `StrictHostKeyChecking=${hostChecking}`,
+    '-o', 'EscapeChar=none',
+    '--',
+    host,
+    ...cmd ? [cmd] : [],
+  ];
 }
 
 function parseCommand(command: string, path?: string): string {

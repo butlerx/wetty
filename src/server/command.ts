@@ -14,17 +14,23 @@ const localhost = (host: string): boolean =>
 
 const urlArgs = (
   referer: string | undefined,
-  def: { [s: string]: string },
-): { [s: string]: string } =>
-  Object.assign(def, url.parse(referer || '', true).query);
-
-export function getCommand(
   {
-    request: { headers },
-    client: {
-      conn: { remoteAddress },
-    },
-  }: Socket,
+    allowRemoteCommand,
+    allowRemoteHosts,
+  }: {
+    allowRemoteCommand: boolean;
+    allowRemoteHosts: boolean;
+  },
+): { [s: string]: string } =>
+  _.pick(
+    _.pickBy(url.parse(referer || '', true).query, _.isString),
+    ['pass'],
+    allowRemoteCommand ? ['command', 'path'] : [],
+    allowRemoteHosts ? ['port', 'host'] : [],
+  );
+
+export async function getCommand(
+  socket: Socket,
   {
     user,
     host,
@@ -35,15 +41,22 @@ export function getCommand(
     knownHosts,
     config,
     allowRemoteHosts,
+    allowRemoteCommand,
   }: SSH,
   command: string,
-  forcessh: boolean,
-): [string[], boolean] {
-  const sshAddress = address(headers, user, host);
+  forcessh: boolean
+): Promise<string[]> {
+  const {
+    request: { headers: { referer } },
+    client: { conn: { remoteAddress } },
+  } = socket;
+
   if (!forcessh && localhost(host)) {
-    return [loginOptions(command, remoteAddress), true];
+    return loginOptions(command, remoteAddress);
   }
-  const args = urlArgs(headers.referer, {
+
+  const sshAddress = await address(socket, user, host);
+  const args = {
     host: sshAddress,
     port: `${port}`,
     pass: pass || '',
@@ -51,13 +64,7 @@ export function getCommand(
     auth,
     knownHosts,
     config: config || '',
-  });
-  if (!allowRemoteHosts) {
-    args.host = sshAddress;
-  }
-
-  return [
-    sshOptions(args, key),
-    user !== '' || user.includes('@') || sshAddress.includes('@'),
-  ];
+    ...urlArgs(referer, { allowRemoteHosts, allowRemoteCommand }),
+  };
+  return sshOptions(args, key);
 }

@@ -6,9 +6,7 @@ import express from 'express';
 import gc from 'gc-stats';
 import { Gauge, collectDefaultMetrics } from 'prom-client';
 import { getCommand } from './server/command.js';
-import { login } from './server/login.js';
 import { gcMetrics } from './server/metrics.js';
-import { escapeShell } from './server/shared/shell.js';
 import { server } from './server/socketServer.js';
 import { spawn } from './server/spawn.js';
 import {
@@ -75,17 +73,11 @@ export async function decorateServerWithSsh(
      * @name connection
      */
     logger.info('Connection accepted.');
-    const [args, sshUser] = getCommand(socket, ssh, command, forcessh);
-    const cmd = args.join(' ');
-    logger.debug('Command Generated', { user: sshUser, cmd });
     wettyConnections.inc();
 
     try {
-      if (!sshUser) {
-        const username = await login(socket);
-        args[1] = `${escapeShell(username.trim())}@${args[1]}`;
-        logger.debug('Spawning term', { username: username.trim(), cmd });
-      }
+      const args = await getCommand(socket, ssh, command, forcessh);
+      logger.debug('Command Generated', { cmd: args.join(' ') });
       await spawn(socket, args);
     } catch (error) {
       logger.info('Disconnect signal sent', { err: error });

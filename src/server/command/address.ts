@@ -1,23 +1,32 @@
 import _ from 'lodash';
+import { Socket } from 'socket.io';
+import { login } from '../login.js';
 import { escapeShell } from '../shared/shell.js';
-import type { IncomingHttpHeaders } from 'http';
 
-export function address(
-  headers: IncomingHttpHeaders,
+export async function address(
+  socket: Socket,
   user: string,
   host: string,
-): string {
+): Promise<string> {
   // Check request-header for username
-  const remoteUser = headers['remote-user'];
-  if (!_.isUndefined(remoteUser) && !Array.isArray(remoteUser)) {
-    return `${escapeShell(remoteUser)}@${host}`;
-  }
-  if (!_.isUndefined(headers.referer)) {
-    const match = headers.referer.match('.+/ssh/([^/]+)$');
-    if (match) {
-      const username = escapeShell(match[1].split('?')[0]);
-      return `${username}@${host}`;
+  const { request: { headers: {
+    'remote-user': userFromHeader,
+    referer
+  } } } = socket;
+
+  let username: string | undefined;
+  if (!_.isUndefined(userFromHeader) && !Array.isArray(userFromHeader)) {
+    username = userFromHeader;
+  } else {
+    const userFromPathMatch = referer?.match('.+/ssh/([^/]+)$');
+    if (userFromPathMatch) {
+      // eslint-disable-next-line prefer-destructuring
+      username = userFromPathMatch[1].split('?')[0];
+    } else if (user) {
+      username = user;
+    } else {
+      username = await login(socket);
     }
   }
-  return user ? `${escapeShell(user)}@${host}` : host;
+  return `${escapeShell(username)}@${host}`;
 }

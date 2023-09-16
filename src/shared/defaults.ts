@@ -10,6 +10,7 @@ export const sshDefault: SSH = {
   port: parseInt(process.env.SSHPORT || '22', 10),
   knownHosts: process.env.KNOWNHOSTS || '/dev/null',
   allowRemoteHosts: false,
+  allowRemoteCommand: false,
   config: process.env.SSHCONFIG || undefined,
 };
 

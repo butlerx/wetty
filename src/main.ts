@@ -102,7 +102,12 @@ const opts = yargs(hideBin(process.argv))
   })
   .option('allow-remote-hosts', {
     description:
-      'Allow WeTTY to use the `host` param in a url as ssh destination',
+      'Allow WeTTY to use the `host` and `port` params in a url as ssh destination',
+    type: 'boolean',
+  })
+  .option('allow-remote-command', {
+    description:
+      'Allow WeTTY to use the `command` and `path` params in a url as command and working directory on ssh host',
     type: 'boolean',
   })
   .option('log-level', {

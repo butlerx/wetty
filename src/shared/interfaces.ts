@@ -8,6 +8,7 @@ export interface SSH {
   port: number;
   knownHosts: string;
   allowRemoteHosts: boolean;
+  allowRemoteCommand: boolean;
   pass?: string;
   key?: string;
   config?: string;

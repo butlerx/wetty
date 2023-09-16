@@ -138,6 +138,7 @@ export function mergeCliConf(opts: Arguments, config: Config): Config {
       pass: opts['ssh-pass'],
       key: opts['ssh-key'],
       allowRemoteHosts: opts['allow-remote-hosts'],
+      allowRemoteCommand: opts['allow-remote-command'],
       config: opts['ssh-config'],
       knownHosts: opts['known-hosts'],
     }) as SSH,
