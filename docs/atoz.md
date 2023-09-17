@@ -14,7 +14,7 @@ to use them but they are not required to use WeTTY in general.
 
 ## Required dependencies
 
-`Node` - WeTTY requires node v14 or greater. We will install this locally for a
+`Node` - WeTTY requires node v20 or greater. We will install this locally for a
 non root user later in the guide.
 
 `python` - This should be installed by default but we will include it in our
@@ -79,11 +79,11 @@ This command will download and install `nvm` and reload our shell.
 curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash && source ~/.profile
 ```
 
-This command will install the latest version of the v14 branch, which is the
+This command will install the latest version of the v20 branch, which is the
 minimum required version for WeTTY.
 
 ```bash
-nvm install 14
+nvm install 20
 ```
 
 You can now call `node` to check it works using this command.
@@ -95,7 +95,7 @@ node -v
 Your result should look something like this.
 
 ```bash
-v14.16.1
+v20.2.0
 ```
 
 **Note:** There is an important consideration with the `nvm` method. `node` is
@@ -107,11 +107,11 @@ unavailable. The way we over come this issue for the needs of this guide is by
 using this command substitution to provide the full path, where applicable:
 
 ```bash
-$(source ~/.nvm/nvm.sh && nvm which 14)
+$(source ~/.nvm/nvm.sh && nvm which 20)
 ```
 
 **Why?** This command will always provide us with the path to the most current
-version of `node 14` installed via `nvm` regardless of other versions of `node`
+version of `node 20` installed via `nvm` regardless of other versions of `node`
 installed with `nvm`.
 
 ## Generate OpenSSL certificates
@@ -490,7 +490,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/bin/bash -c "$$(source /home/$$(whoami)/.nvm/nvm.sh && nvm which 14) /home/$$(whoami)/bin/wetty --conf /home/$$(whoami)/.config/wetty/config.json"
+ExecStart=/bin/bash -c "$$(source /home/$$(whoami)/.nvm/nvm.sh && nvm which 20) /home/$$(whoami)/bin/wetty --conf /home/$$(whoami)/.config/wetty/config.json"
 Restart=always
 RestartSec=2
 TimeoutStopSec=5
@@ -658,7 +658,7 @@ yarn global upgrade wetty --prefix ~/
 To update or downgrade to a specific version you use this command:
 
 ```bash
-yarn global add wetty@2.0.2 --prefix ~/
+yarn global add wetty@2.7.0 --prefix ~/
 ```
 
 Now restart your `wetty` service.
@@ -682,5 +682,5 @@ source ~/.nvm/nvm.sh
 You can use the same command you used to install it with `nvm`
 
 ```bash
-nvm install 14
+nvm install 20
 ```
