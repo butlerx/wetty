@@ -6,8 +6,8 @@ bundled with the npm package to make this easier.
 ### init.d
 
 ```bash
-$ yarn global add wetty
-$ sudo cp ~/.config/yarn/global/node_modules/wetty/conf/wetty.conf /etc/init
+$ npm -g i wetty
+$ sudo cp ~/.node_modules/wetty/conf/wetty.conf /etc/init
 $ sudo start wetty
 ```
 
@@ -15,7 +15,7 @@ $ sudo start wetty
 
 ```bash
 $ yarn global add wetty
-$ cp ~/.config/yarn/global/node_modules/wetty/conf/wetty.service  ~/.config/systemd/user/
+$ cp ~/.node_modules/wetty/conf/wetty.service  ~/.config/systemd/user/
 $ systemctl --user enable wetty
 $ systemctl --user start wetty
 ```

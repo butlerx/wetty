@@ -7,13 +7,13 @@ To install from source run:
 ```bash
 $ git clone https://github.com/butlerx/wetty.git
 $ cd wetty
-$ yarn install
-$ yarn build
+$ pnpm install
+$ pnpm build
 ```
 
 ## Development Env
 
-To run WeTTY in dev mode you can run `yarn dev`.
+To run WeTTY in dev mode you can run `pnpm dev`.
 
 WeTTY will then be served from `http://localhost:3000/wetty` on your machine.
 

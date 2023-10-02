@@ -96,7 +96,7 @@ here `idp.xml` and exchange you foo.xml with it.
         </Location>
 
         # security hazard for switching between users, disabled if remote-user set as recent github commit
-        # but not yet published via yarn, so we put here a double security belt
+        # but not yet published via npm, so we put here a double security belt
         <Location /wetty/ssh/>
             Deny from all
         </Location>
@@ -120,7 +120,7 @@ After=network.target
 [Service]
 User=wetty
 Type=simple
-WorkingDirectory=/home/wetty/.config/yarn/global/node_modules/wetty/
+WorkingDirectory=/home/wetty/.node_modules/wetty/
 ExecStart=/usr/bin/node . -p 3000 --host 127.0.0.1 --ssh-key /home/wetty/.ssh/wetty --ssh-auth publickey --force-ssh --title "Foo bar terminal services"
 TimeoutStopSec=20
 KillMode=mixed
