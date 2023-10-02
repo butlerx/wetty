@@ -3,6 +3,7 @@ RUN apk add -U build-base python3
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
+RUN npx pnpm i -g pnpm@latest
 WORKDIR /usr/src/app
 COPY . /usr/src/app
 

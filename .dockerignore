@@ -1,10 +1,12 @@
 node_modules
-.esm-cache
-dist
-*.yml
+.git
+.gitignore
 *.md
-*.log
+*.yml
 *.png
 **/*.conf
 **/*.service
+dist
+build
+docs
 Dockerfile

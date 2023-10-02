@@ -64,6 +64,9 @@ importers:
       sass:
         specifier: ^1.54.4
         version: 1.67.0
+      serve-static:
+        specifier: ^1.15.0
+        version: 1.15.0
       socket.io:
         specifier: ^4.5.1
         version: 4.7.2
@@ -143,6 +146,9 @@ importers:
       '@types/response-time':
         specifier: ^2
         version: 2.3.5
+      '@types/serve-static':
+        specifier: ^1.15.3
+        version: 1.15.3
       '@types/sinon':
         specifier: ^10.0.13
         version: 10.0.16
@@ -1227,7 +1233,7 @@ packages:
       '@types/body-parser': 1.19.3
       '@types/express-serve-static-core': 4.17.36
       '@types/qs': 6.9.8
-      '@types/serve-static': 1.15.2
+      '@types/serve-static': 1.15.3
     dev: true
 
   /@types/fresh@0.5.0:
@@ -1350,8 +1356,8 @@ packages:
       '@types/node': 20.6.2
     dev: true
 
-  /@types/serve-static@1.15.2:
-    resolution: {integrity: sha512-J2LqtvFYCzaj8pVYKw8klQXrLLk7TBZmQ4ShlcdkELFKGwGMfevMLneMMRkMgZxotOD9wg497LpC7O8PcvAmfw==}
+  /@types/serve-static@1.15.3:
+    resolution: {integrity: sha512-yVRvFsEMrv7s0lGhzrggJjNOSmZCdgCjw9xWrPr/kNNLp6FaDfMC1KaYl3TSJ0c58bECwNBMoQrZJ8hA8E1eFg==}
     dependencies:
       '@types/http-errors': 2.0.2
       '@types/mime': 3.0.1
@@ -3983,6 +3989,8 @@ packages:
     dependencies:
       nan: 2.18.0
       node-pre-gyp: 0.13.0
+    transitivePeerDependencies:
+      - supports-color
     dev: false
     bundledDependencies:
       - node-pre-gyp
