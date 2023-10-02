@@ -19,23 +19,26 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - name: Setup env
         uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: yarn install
+        run: pnpm install
 
       - name: ESLint checks
-        run: yarn lint
+        run: pnpm lint
 
-      - run: yarn build
+      - run: pnpm build
         name: Compile Typescript
 
-      - run: yarn test
+      - run: pnpm test
         name: Run tests
         env:
           CI: true

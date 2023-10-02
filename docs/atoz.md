@@ -21,7 +21,7 @@ non root user later in the guide.
 `apt-get` command to be safe.
 
 `build-essential` - We need this specifically for `node-gyp` to build packages
-when using `npm` or `yarn` to install packages.
+when using `npm` to install packages.
 
 As the `root` or `sudo` user run these commands:
 
@@ -191,9 +191,9 @@ sed -r '/^ssh-ed25519(.*)wetty-keyfile$/d' -i ~/.ssh/authorized_keys
 
 ## Install WeTTY
 
-**Note:** we are using `-g` for `npm` or `global` for `yarn` along with
-`--prefix ~/` so that the application's symbolic link is installed to our
-`~/bin` directory and available in our local user's `PATH`.
+**Note:** we are using `-g` for `npm` along with `--prefix ~/` so that the
+application's symbolic link is installed to our `~/bin` directory and available
+in our local user's `PATH`.
 
 As your local user run these commands:
 
@@ -204,16 +204,10 @@ please run the following command.
 mkdir -p ~/bin && source ~/.profile
 ```
 
-Now use `npm` to install the `yarn` packet manager.
+Then use `npm` to install `wetty`.
 
 ```bash
-npm install -g yarn --prefix ~/
-```
-
-Then use `yarn` to install `wetty`.
-
-```bash
-yarn global add wetty --prefix ~/
+npm -g i wetty --prefix ~/
 ```
 
 Once successfully installed the application should be available in your local
@@ -649,16 +643,14 @@ behind either:
 
 ## Updating WeTTY
 
-With `yarn`:
-
 ```bash
-yarn global upgrade wetty --prefix ~/
+npm -g update wetty --prefix ~/
 ```
 
 To update or downgrade to a specific version you use this command:
 
 ```bash
-yarn global add wetty@2.7.0 --prefix ~/
+npm -g i wetty@2.7.0 --prefix ~/
 ```
 
 Now restart your `wetty` service.

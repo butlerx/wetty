@@ -28,7 +28,7 @@ websockets rather than Ajax and hence better response time.
 ## Install
 
 ```sh
-yarn global add wetty
+npm -g i wetty
 ```
 
 ## Usage

@@ -14,10 +14,10 @@
   ],
   "scripts": {
     "build": "snowpack build",
-    "clean": "rm -rf build yarn-error.log",
+    "clean": "rm -rf build",
     "contributor": "all-contributors",
     "dev": "NODE_ENV=development concurrently --kill-others --success first \"snowpack build --watch\" \"nodemon . --conf conf/config.json5\"",
-    "docker-compose-entrypoint": "ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts; yarn start",
+    "docker-compose-entrypoint": "ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts; pnpm start",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "start": "NODE_ENV=production node .",
@@ -228,5 +228,5 @@
     "Tri Nguyen <tri@tridnguyen.com>",
     "Vamshi K Ponnapalli <vamship@users.noreply.github.com>"
   ],
-  "packageManager": "yarn@3.2.2"
+  "packageManager": "pnpm@8.0.0"
 }
