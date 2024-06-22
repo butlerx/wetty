@@ -19,8 +19,8 @@ export async function spawn(
   const address = args[0] === 'ssh' ? args[1] : 'localhost';
   logger.info('Process Started on behalf of user', { pid, address });
   socket.emit('login');
-  term.on('exit', (code: number) => {
-    logger.info('Process exited', { code, pid });
+  term.onExit(({exitCode}) => {
+    logger.info('Process exited', { exitCode, pid });
     socket.emit('logout');
     socket
       .removeAllListeners('disconnect')
@@ -29,7 +29,7 @@ export async function spawn(
   });
   const send = tinybuffer(socket, 2, 524288);
   const fcServer = new FlowControlServer();
-  term.on('data', (data: string) => {
+  term.onData((data: string) => {
     send(data);
     if (fcServer.account(data.length)) {
       term.pause();
