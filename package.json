@@ -13,10 +13,10 @@
     "conf/"
   ],
   "scripts": {
-    "build": "snowpack build",
+    "build": "source build.sh",
     "clean": "rm -rf build",
     "contributor": "all-contributors",
-    "dev": "NODE_ENV=development concurrently --kill-others --success first \"snowpack build --watch\" \"nodemon . --conf conf/config.json5\"",
+    "dev": "NODE_ENV=development concurrently --kill-others --success first \"npm run build -- --watch\" \"nodemon . --conf conf/config.json5\"",
     "docker-compose-entrypoint": "ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts; pnpm start",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
@@ -49,47 +49,6 @@
       "*.scss",
       "src/*",
       "*.json"
-    ]
-  },
-  "snowpack": {
-    "buildOptions": {
-      "metaUrlPath": "web_modules"
-    },
-    "packageOptions": {
-      "sourceMap": true,
-      "installTypes": true
-    },
-    "mount": {
-      "src/client": "/client",
-      "src/assets": "/assets"
-    },
-    "exclude": [
-      "src/server/**/*.ts",
-      "src/client/**/*.spec.ts",
-      "src/*.ts"
-    ],
-    "plugins": [
-      [
-        "@snowpack/plugin-run-script",
-        {
-          "cmd": "tsc -p tsconfig.browser.json --noEmit",
-          "watch": "$1 --watch"
-        }
-      ],
-      [
-        "@snowpack/plugin-run-script",
-        {
-          "cmd": "sass src/assets/scss:build/assets/css --load-path=node_modules -s compressed --no-source-map",
-          "watch": "$1 --watch"
-        }
-      ],
-      [
-        "@snowpack/plugin-run-script",
-        {
-          "cmd": "tsc -p tsconfig.node.json",
-          "watch": "$1 --watch"
-        }
-      ]
     ]
   },
   "dependencies": {
@@ -151,6 +110,7 @@
     "all-contributors-cli": "^6.17.2",
     "chai": "^4.3.6",
     "concurrently": "^5.2.0",
+    "esbuild": "^0.21.5",
     "eslint": "^8.36.0",
     "eslint-config-airbnb-base": "latest",
     "eslint-config-prettier": "^8.6.0",
@@ -166,7 +126,6 @@
     "nodemon": "^2.0.19",
     "prettier": "^2.5.1",
     "sinon": "^14.0.0",
-    "snowpack": "^3.8.8",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.3"
   },
