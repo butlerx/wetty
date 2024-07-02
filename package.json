@@ -21,17 +21,13 @@
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "start": "NODE_ENV=production node .",
-    "test": "mocha"
+    "test": "mocha",
+    "prepare": "husky install"
   },
   "repository": "git://github.com/butlerx/wetty.git",
   "author": "Cian Butler <butlerx@notthe.cloud> (cianbutler.ie)",
   "bugs": {
     "url": "https://github.com/butlerx/wetty/issues"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   },
   "lint-staged": {
     "*.{js,ts}": [
@@ -119,7 +115,7 @@
     "eslint-plugin-mocha": "^10.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "git-authors-cli": "^1.0.42",
-    "husky": "^4.2.5",
+    "husky": "^9.0.11",
     "jsdom": "^16.5.0",
     "lint-staged": "^13.2.2",
     "mocha": "^10.0.0",
@@ -189,5 +185,5 @@
     "Tri Nguyen <tri@tridnguyen.com>",
     "Vamshi K Ponnapalli <vamship@users.noreply.github.com>"
   ],
-  "packageManager": "pnpm@8.0.0"
+  "packageManager": "pnpm@9.4.0+sha512.f549b8a52c9d2b8536762f99c0722205efc5af913e77835dbccc3b0b0b2ca9e7dc8022b78062c17291c48e88749c70ce88eb5a74f1fa8c4bf5e18bb46c8bd83a"
 }
