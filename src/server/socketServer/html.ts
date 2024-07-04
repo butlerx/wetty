@@ -1,24 +1,20 @@
 import { isDev } from '../../shared/env.js';
 import type { Request, Response, RequestHandler } from 'express';
 
-const jsFiles = isDev ? ['dev', 'wetty'] : ['wetty'];
-const cssFiles = ['styles', 'options', 'overlay', 'terminal'];
+const jsFiles = isDev ? ['dev.js', 'wetty.js'] : ['wetty.js'];
 
 const render = (
   title: string,
-  favicon: string,
-  css: string[],
-  js: string[],
-  configUrl: string,
+  base: string,
 ): string => `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link rel="icon" type="image/x-icon" href="${favicon}">
+    <link rel="icon" type="image/x-icon" href="${base}/client/favicon.ico">
     <title>${title}</title>
-    ${css.map(file => `<link rel="stylesheet" href="${file}" />`).join('\n')}
+    <link rel="stylesheet" href="${base}/client/wetty.css" />
   </head>
   <body>
     <div id="overlay">
@@ -32,12 +28,13 @@ const render = (
          href="#"
          alt="Toggle options"
        ><i class="fas fa-cogs"></i></a>
-      <iframe class="editor" src="${configUrl}"></iframe>
+      <iframe class="editor" src="${base}/client/xterm_config/index.html"></iframe>
     </div>
     <div id="terminal"></div>
-    ${js
-      .map(file => `<script type="module" src="${file}"></script>`)
-      .join('\n')}
+    ${jsFiles
+        .map(file => `    <script type="module" src="${base}/client/${file}"></script>`)
+        .join('\n')
+    }
   </body>
 </html>`;
 
@@ -48,10 +45,7 @@ export const html = (base: string, title: string): RequestHandler => (
   res.send(
     render(
       title,
-      `${base}/favicon.ico`,
-      cssFiles.map(css => `${base}/assets/css/${css}.css`),
-      jsFiles.map(js => `${base}/client/${js}.js`),
-      `${base}/assets/xterm_config/index.html`,
+      base,
     ),
   );
 };

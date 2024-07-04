@@ -28,7 +28,7 @@ module.exports = {
     ],
     'import/no-extraneous-dependencies': [
       'error',
-      { devDependencies: ['**/*.test.*', '**/*.spec.*'] },
+      { devDependencies: ['**/*.test.*', '**/*.spec.*', 'build.js'] },
     ],
     'import/order': [
       'error',

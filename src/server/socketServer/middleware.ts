@@ -43,12 +43,12 @@ export function redirect(
  * @returns middleware
  */
 export async function favicon(basePath: string): Promise<RequestHandler> {
-  const path = assetsPath('assets', 'favicon.ico');
+  const path = assetsPath('client', 'favicon.ico');
 
   try {
     const icon = await fs.readFile(path);
     return (req: Request, res: Response, next: NextFunction): void => {
-      if (getPathName(req) !== `${basePath}/favicon.ico`) {
+      if (getPathName(req) !== `${basePath}/client/favicon.ico`) {
         next();
       } else if (req.method !== 'GET' && req.method !== 'HEAD') {
         res.statusCode = req.method === 'OPTIONS' ? 200 : 405;

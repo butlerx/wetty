@@ -13,10 +13,10 @@
     "conf/"
   ],
   "scripts": {
-    "build": "source build.sh",
+    "build": "node build.js",
     "clean": "rm -rf build",
     "contributor": "all-contributors",
-    "dev": "NODE_ENV=development concurrently --kill-others --success first \"npm run build -- --watch\" \"nodemon . --conf conf/config.json5\"",
+    "dev": "NODE_ENV=development concurrently --kill-others --raw --success first \"pnpm build --watch\" \"nodemon -w build -i build/client -w conf/config.json5 --delay 200ms . -- --conf conf/config.json5\"",
     "docker-compose-entrypoint": "ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts; pnpm start",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
@@ -39,13 +39,6 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "*.scss",
-      "src/*",
-      "*.json"
-    ]
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
@@ -105,8 +98,10 @@
     "@typescript-eslint/parser": "^5.59.9",
     "all-contributors-cli": "^6.17.2",
     "chai": "^4.3.6",
-    "concurrently": "^5.2.0",
+    "concurrently": "^8.2.2",
     "esbuild": "^0.21.5",
+    "esbuild-plugin-copy": "^2.1.1",
+    "esbuild-sass-plugin": "^3.3.1",
     "eslint": "^8.36.0",
     "eslint-config-airbnb-base": "latest",
     "eslint-config-prettier": "^8.6.0",
@@ -119,7 +114,7 @@
     "jsdom": "^16.5.0",
     "lint-staged": "^13.2.2",
     "mocha": "^10.0.0",
-    "nodemon": "^2.0.19",
+    "nodemon": "^3.1.4",
     "prettier": "^2.5.1",
     "sinon": "^14.0.0",
     "ts-node": "^10.9.1",

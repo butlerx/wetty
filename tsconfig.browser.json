@@ -2,7 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "lib": ["DOM"],
-    "noEmit": true
+    "noEmit": true,
+    "incremental": true
   },
   "include": ["src/client"]
 }
