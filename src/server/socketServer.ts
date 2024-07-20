@@ -30,8 +30,6 @@ export async function server(
     .disable('x-powered-by')
     .use(metricMiddleware(basePath))
     .use(`${basePath}/metrics`, metricRoute)
-    .use(`${basePath}/web_modules`, serveStatic('web_modules'))
-    .use(`${basePath}/assets`, serveStatic('assets'))
     .use(`${basePath}/client`, serveStatic('client'))
     .use(
       winston.logger({

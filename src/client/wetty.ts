@@ -2,6 +2,8 @@ import { dom, library } from '@fortawesome/fontawesome-svg-core';
 import { faCogs } from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
 
+import '../assets/scss/styles.scss';
+
 import { disconnect } from './wetty/disconnect';
 import { overlay } from './wetty/disconnect/elements';
 import { verifyPrompt } from './wetty/disconnect/verify';

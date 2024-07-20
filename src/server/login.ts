@@ -25,7 +25,8 @@ export function login(socket: SocketIO.Socket): Promise<string> {
     socket
       .on('input', (input: string) => {
         term.write(input);
-        buf = /\177/.exec(input) ? buf.slice(0, -1) : buf + input;
+        // eslint-disable-next-line no-control-regex
+        buf = /\x0177/.exec(input) ? buf.slice(0, -1) : buf + input;
       })
       .on('disconnect', () => {
         term.kill();
