@@ -45,7 +45,7 @@ async function buildClient(watching){
         platform: 'browser',
         format: 'esm',
         minify: !watching,
-        sourcemap: !watching,
+        sourcemap: watching,
         plugins: [
             typechecker,
             sassPlugin({
