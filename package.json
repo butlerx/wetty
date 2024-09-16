@@ -98,7 +98,7 @@
     "@typescript-eslint/parser": "^5.59.9",
     "all-contributors-cli": "^6.17.2",
     "chai": "^4.3.6",
-    "concurrently": "^8.2.2",
+    "concurrently": "^9.0.1",
     "esbuild": "^0.21.5",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-sass-plugin": "^3.3.1",
