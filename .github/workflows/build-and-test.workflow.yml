@@ -44,7 +44,7 @@ jobs:
         env:
           CI: true
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: restore-build
         with:
           path: ./*
