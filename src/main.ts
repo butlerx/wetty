@@ -12,7 +12,7 @@ import { hideBin } from 'yargs/helpers';
 import { start } from './server.js';
 import { loadConfigFile, mergeCliConf } from './shared/config.js';
 import { setLevel, logger } from './shared/logger.js';
-import { unlinkSync, existsSync } from 'fs';
+import { unlinkSync, existsSync, lstatSync } from 'fs';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 const require = createRequire(import.meta.url);
@@ -133,7 +133,7 @@ if (!opts.help) {
   function cleanup() {
     if (opts.socket) {
       const socket = opts.socket.toString();
-      if (existsSync(socket)) {
+      if (existsSync(socket) && lstatSync(socket).isSocket()) {
         unlinkSync(socket);
       }
     }
