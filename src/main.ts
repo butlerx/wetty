@@ -90,6 +90,10 @@ const opts = yargs(hideBin(process.argv))
     description: 'wetty listen host',
     type: 'string',
   })
+  .option('socket', {
+    description: 'Make wetty listen on unix socket',
+    type: 'string',
+  })
   .option('command', {
     alias: 'c',
     description: 'command to run in shell',
@@ -119,6 +123,8 @@ const opts = yargs(hideBin(process.argv))
     type: 'boolean',
     description: 'Print help message',
   })
+  .conflicts('host', 'socket')
+  .conflicts('port', 'socket')
   .boolean('allow_discovery')
   .parseSync();
 

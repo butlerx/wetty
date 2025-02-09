@@ -14,7 +14,7 @@ import type SocketIO from 'socket.io';
 
 export async function server(
   app: Express,
-  { base, port, host, title, allowIframe }: Server,
+  { base, port, host, title, allowIframe, socket }: Server,
   ssl?: SSL,
 ): Promise<SocketIO.Server> {
   const basePath = trim(base);
@@ -47,5 +47,5 @@ export async function server(
 
   const sslBuffer: SSLBuffer = await loadSSL(ssl);
 
-  return listen(app, host, port, basePath, sslBuffer);
+  return listen(app, host, port, basePath, sslBuffer, socket);
 }
