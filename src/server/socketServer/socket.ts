@@ -34,8 +34,6 @@ export const listen = (
     });
   }
 
-  console.error(socket)
-
   // Create Socket.IO server
   return new Server(server, {
     path: `${path}/socket.io`,
