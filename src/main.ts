@@ -12,6 +12,7 @@ import { hideBin } from 'yargs/helpers';
 import { start } from './server.js';
 import { loadConfigFile, mergeCliConf } from './shared/config.js';
 import { setLevel, logger } from './shared/logger.js';
+import { unlinkSync, existsSync } from 'fs';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 const require = createRequire(import.meta.url);
@@ -129,6 +130,19 @@ const opts = yargs(hideBin(process.argv))
   .parseSync();
 
 if (!opts.help) {
+  function cleanup() {
+    if (opts.socket) {
+      const socket = opts.socket.toString();
+      if (existsSync(socket)) {
+        unlinkSync(socket);
+      }
+    }
+  }
+  function exit() {
+    process.exit(1);
+  }
+  process.on('SIGINT', exit);
+  process.on('exit', cleanup);
   loadConfigFile(opts.conf)
     .then((config) => mergeCliConf(opts, config))
     .then((conf) => {
