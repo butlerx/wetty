@@ -6,13 +6,13 @@
  *
  * This is the cli Interface for wetty.
  */
+import { unlinkSync, existsSync, lstatSync } from 'fs';
 import { createRequire } from 'module';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { start } from './server.js';
 import { loadConfigFile, mergeCliConf } from './shared/config.js';
 import { setLevel, logger } from './shared/logger.js';
-import { unlinkSync, existsSync, lstatSync } from 'fs';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 const require = createRequire(import.meta.url);
@@ -129,18 +129,19 @@ const opts = yargs(hideBin(process.argv))
   .boolean('allow_discovery')
   .parseSync();
 
-if (!opts.help) {
-  function cleanup() {
-    if (opts.socket) {
-      const socket = opts.socket.toString();
-      if (existsSync(socket) && lstatSync(socket).isSocket()) {
-        unlinkSync(socket);
-      }
+function cleanup() {
+  if (opts.socket) {
+    const socket = opts.socket.toString();
+    if (existsSync(socket) && lstatSync(socket).isSocket()) {
+      unlinkSync(socket);
     }
   }
-  function exit() {
-    process.exit(1);
-  }
+}
+function exit() {
+  process.exit(1);
+}
+
+if (!opts.help) {
   process.on('SIGINT', exit);
   process.on('exit', cleanup);
   loadConfigFile(opts.conf)
