@@ -148,7 +148,7 @@ This is all we need to do for now in regards to https.
 ## Generate the ssh key file
 
 **Why?** So that later we can set up automatic login via `ssh`. Our instance
-will authorise using this key file stored locally.
+will authorize using this key file stored locally.
 
 Make the required directory, if it does not exist, using this command:
 
@@ -156,7 +156,7 @@ Make the required directory, if it does not exist, using this command:
 mkdir -p ~/.ssh
 ```
 
-Create the `ssh` private key using `ed25519` that we need to authorise our local
+Create the `ssh` private key using `ed25519` that we need to authorize our local
 connection, using this command:
 
 ```bash
@@ -238,7 +238,7 @@ Now we have all the ground work done we can focus on our WeTTY server
 configuration settings.
 
 For example, the below command would provide a `https` instance with automatic
-`ssh` authorisation using our `wetty` private key on port `3000` accessible at
+`ssh` authorization using our `wetty` private key on port `3000` accessible at
 `https://IP:3000` .
 
 **Important note:** This command will run in your current terminal session and
