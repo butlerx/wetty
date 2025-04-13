@@ -52,7 +52,7 @@ $ mellon_create_metadata.sh urn:https://foo.bar.tlz https://foo.bar.tld/mellon
 
 Then we move the generated files over `/etc/apache2/saml2/foo.{xml,key,cert}`.
 
-You need to put here additionaly the metadata from your SAML2 provider, named
+You need to put here additionally the metadata from your SAML2 provider, named
 here `idp.xml` and exchange you foo.xml with it.
 
 ### Apache2 conf
@@ -74,7 +74,7 @@ here `idp.xml` and exchange you foo.xml with it.
                 MellonEnable info
 
                 # this propagates to apache2 (and thus to access log) the proper user id, and not
-                # the transiant nameid that is taken by default
+                # the transient nameid that is taken by default
                 # it has no impact on the backend as we propagate identify via remote-user header there
                 MellonUser "NameID"
 
@@ -109,7 +109,7 @@ If you want to have a seamless login by trusting your IdP for authentication,
 you can create password-less users on the WeTTY platform and have them trust an
 SSH key used by the NodeJS, owned by the dedicated WeTTY OS user.
 
-WeTTY instanciation with proper parameters, especially the SSH private key is
+WeTTY instantiation with proper parameters, especially the SSH private key is
 done via the following systemd service `/etc/systemd/system/wetty.service`:
 
 ```
@@ -131,7 +131,7 @@ RestartSec=2
 WantedBy=multi-user.target
 ```
 
-For your new users to be automically trusting this SSH key when provisionning,
+For your new users to be automatically trusting this SSH key when provisioning,
 you may add the pubkey to `/etc/skel/.ssh/authorized_keys`.
 
 ### Security precautions
@@ -139,12 +139,12 @@ you may add the pubkey to `/etc/skel/.ssh/authorized_keys`.
 You probably don't want local users to impersonate each other, for that you need
 to make sure that:
 
-1. NodeJS is listenning only to localhost: provided by `wetty.service`
+1. NodeJS is listening only to localhost: provided by `wetty.service`
 2. **Only** the apache2 process can join the WeTTY port. Else local users will
    be able to connect and forge a `remote-user` header: provided by
    `iptables -A OUTPUT -o lo -p tcp --dport 3000 -m owner \! --uid-owner www-data -j DROP`
 3. Validate your WeTTY version does not allow access to `/wetty/ssh/` else again
-   you will be able to impersonnate anyone: provided by either:
+   you will be able to impersonate anyone: provided by either:
    1. WeTTY version 2.0.3 and beyond implements this by disabling this feature
       in case of `remote-user` presence
    2. apache2 conf as provided in previous section (containing the
