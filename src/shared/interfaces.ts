@@ -28,6 +28,7 @@ export interface Server {
   [s: string]: string | number | boolean;
   port: number;
   host: string;
+  socket: string | boolean;
   title: string;
   base: string;
   allowIframe: boolean;
