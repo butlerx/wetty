@@ -16,10 +16,11 @@ export function login(socket: SocketIO.Socket): Promise<string> {
   const term = pty.spawn('/usr/bin/env', ['node', executable], xterm);
   let buf = '';
   return new Promise((resolve, reject) => {
-    term.on('exit', () => {
+    term.onExit(({ exitCode }) => {
+      console.error(`Process exited with code: ${exitCode}`);
       resolve(buf);
     });
-    term.on('data', (data: string) => {
+    term.onData((data: string) => {
       socket.emit('data', data);
     });
     socket
