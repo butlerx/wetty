@@ -36,6 +36,87 @@ export class Term extends Terminal {
   }
 }
 
+const ctrlButton = document.getElementById('onscreen-ctrl');
+let crtlFlag = false; // This indicates whether the CTRL key is pressed or not
+
+/**
+ * Toggles the state of the `crtlFlag` variable and updates the visual state
+ * of the `ctrlButton` element accordingly. If `crtlFlag` is set to `true`,
+ * the `active` class is added to the `ctrlButton`; otherwise, it is removed.
+ * After toggling, the terminal (`wetty_term`) is focused if it exists.
+ *
+ * @remarks
+ * This function assumes the existence of global variables `crtlFlag`, 
+ * `ctrlButton`, and `window.wetty_term`. Ensure these are properly defined 
+ * and initialized before calling this function.
+ */
+const toggleCTRL = (): void => {
+  crtlFlag = !crtlFlag;
+  if (ctrlButton) {
+    if (crtlFlag) {
+      ctrlButton.classList.add('active');
+    } else {
+      ctrlButton.classList.remove('active');
+    }
+  }
+  window.wetty_term?.focus();
+}
+
+/**
+ * Simulates a backspace key press by sending the backspace character
+ * (ASCII code 127) to the terminal. This function is intended to be used
+ * in conjunction with the `simulateCTRLAndKey` function to handle
+ * keyboard shortcuts.
+ *
+ * @remarks
+ * This function assumes the existence of a global variable `window.wetty_term`.
+ * Ensure this is properly defined and initialized before calling this function.
+ */
+const simulateBackspace = (): void => {
+  window.wetty_term?.input('\x7F', true);
+}
+
+/**
+ * Simulates a CTRL + key press by sending the corresponding character
+ * (converted from the key's ASCII code) to the terminal. This function
+ * is intended to be used in conjunction with the `toggleCTRL` function
+ * to handle keyboard shortcuts.
+ *
+ * @param key - The key that was pressed, which will be converted to
+ *              its corresponding character code.
+ *
+ * @remarks
+ * This function assumes the existence of a global variable `window.wetty_term`.
+ * Ensure this is properly defined and initialized before calling this function.
+ */
+const simulateCTRLAndKey = (key: string): void => {
+  window.wetty_term?.input(`${String.fromCharCode(key.toUpperCase().charCodeAt(0) - 64)}`, false);
+}
+
+/**
+ * Handles the keydown event for the CTRL key. When the CTRL key is pressed,
+ * it sets the `crtlFlag` variable to true and updates the visual state of
+ * the `ctrlButton` element. If the CTRL key is released, it sets `crtlFlag`
+ * to false and updates the visual state of the `ctrlButton` element.
+ *
+ * @param e - The keyboard event object.
+ */
+document.addEventListener('keyup', (e) => {
+  if (crtlFlag) {
+    // if key is a character
+    if (e.key.length === 1 && e.key.match(/^[a-zA-Z0-9]$/)) {
+      simulateCTRLAndKey(e.key);
+      // delayed backspace is needed to remove the character added to the terminal
+      // when CTRL + key is pressed.
+      // this is a workaround because e.preventDefault() cannot be used.
+      _.debounce(() => {
+        simulateBackspace();
+      }, 100)();
+    }
+    toggleCTRL();
+  }
+});
+
 declare global {
   interface Window {
     wetty_term?: Term;
@@ -43,6 +124,7 @@ declare global {
     wetty_save_config?: (newConfig: Options) => void;
     clipboardData: DataTransfer;
     loadOptions: (conf: Options) => void;
+    toggleCTRL? : (event: KeyboardEvent) => void;
   }
 }
 
@@ -56,5 +138,6 @@ export function terminal(socket: Socket): Term | undefined {
     term.resizeTerm();
   };
   window.wetty_term = term;
+  window.toggleCTRL = toggleCTRL;
   return term;
 }

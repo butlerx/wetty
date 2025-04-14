@@ -50,3 +50,26 @@
     color: red;
   }
 }
+
+#functions {
+  height: 16px;
+  position: fixed;
+  right: 2em;
+  top: 3em;
+  width: 16px;
+  z-index: 20;
+
+  #onscreen-ctrl {
+    bottom: 1em;
+    right: 1em;
+    svg {
+      fill: white;
+    }
+  }
+
+  #onscreen-ctrl.active {
+    svg {
+      fill: green;
+    }
+  }
+}
