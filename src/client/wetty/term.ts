@@ -1,8 +1,8 @@
+import { FitAddon } from '@xterm/addon-fit';
+import { ImageAddon } from '@xterm/addon-image';
+import { WebLinksAddon } from '@xterm/addon-web-links';
+import { Terminal } from '@xterm/xterm';
 import _ from 'lodash';
-import { Terminal } from 'xterm';
-import { FitAddon } from 'xterm-addon-fit';
-import { ImageAddon } from 'xterm-addon-image';
-import { WebLinksAddon } from 'xterm-addon-web-links';
 
 import { terminal as termElement } from './disconnect/elements';
 import { configureTerm } from './term/confiruragtion';

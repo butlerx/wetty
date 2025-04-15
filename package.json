@@ -43,6 +43,10 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.2",
     "@fortawesome/free-solid-svg-icons": "^6.1.2",
+    "@xterm/xterm": "^5.2.0",
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/addon-image": "^0.8.0",
+    "@xterm/addon-web-links": "^0.11.0",
     "compression": "^1.7.4",
     "etag": "^1.8.1",
     "express": "^4.17.1",
@@ -67,10 +71,6 @@
     "toastify-js": "^1.9.1",
     "url-value-parser": "^2.1.0",
     "winston": "^3.3.3",
-    "xterm": "^5.2.0",
-    "xterm-addon-fit": "^0.7.0",
-    "xterm-addon-image": "^0.5.0",
-    "xterm-addon-web-links": "^0.8.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
