@@ -59,17 +59,31 @@
   width: 16px;
   z-index: 20;
 
-  #onscreen-ctrl {
+  .onscreen-buttons {
     bottom: 1em;
-    right: 1em;
-    svg {
-      fill: white;
+    right: 2em;
+    text-decoration: none;
+    color: white;
+    > div {
+      border: 3px solid rgba(255, 255, 255, 1);
+      border-radius: 2px;
+      padding: 5px;
+      width: 40px;
+      right: 2em;
+      position: relative;
+      margin-top: 5px;
+    }
+  }
+
+  .onscreen-buttons:active {
+    > div {
+      background-color: rgba(255, 255, 255, 0.25);
     }
   }
 
   #onscreen-ctrl.active {
-    svg {
-      fill: green;
+    > div {
+      background-color: lightgray;
     }
   }
 }
