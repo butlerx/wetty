@@ -111,7 +111,6 @@ document.addEventListener('keyup', (e) => {
  * After sending the ESC character, the terminal is focused.
  */
 const pressESC = (): void => {
-  console.log('ESC');
   if (crtlFlag) {
     toggleCTRL();
   }
