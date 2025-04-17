@@ -51,6 +51,24 @@ const render = (
       </a>
       <a class="toggler onscreen-buttons"
         href="#"
+        alt="Left"
+        onclick="window.pressLEFT()"
+      >
+        <div>
+          Left
+        </div>
+      </a>
+      <a class="toggler onscreen-buttons"
+        href="#"
+        alt="Right"
+        onclick="window.pressRIGHT()"
+      >
+        <div>
+          Right
+        </div>
+      </a>
+      <a class="toggler onscreen-buttons"
+        href="#"
         alt="Esc"
         onclick="window.pressESC()"
       >

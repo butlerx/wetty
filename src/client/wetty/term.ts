@@ -157,6 +157,32 @@ const pressTAB = (): void => {
   window.wetty_term?.focus();
 }
 
+/**
+ * Simulates pressing the LEFT arrow key by sending the LEFT character (ASCII code 68)
+ * to the terminal. If the CTRL key is active, it toggles the CTRL state off.
+ * After sending the LEFT character, the terminal is focused.
+ */
+const pressLEFT = (): void => {
+  if (crtlFlag) {
+    toggleCTRL();
+  }
+  window.wetty_term?.input('\x1B[D', false);
+  window.wetty_term?.focus();
+}
+
+/**
+ * Simulates pressing the RIGHT arrow key by sending the RIGHT character (ASCII code 67)
+ * to the terminal. If the CTRL key is active, it toggles the CTRL state off.
+ * After sending the RIGHT character, the terminal is focused.
+ */
+const pressRIGHT = (): void => {
+  if (crtlFlag) {
+    toggleCTRL();
+  }
+  window.wetty_term?.input('\x1B[C', false);
+  window.wetty_term?.focus();
+}
+
 declare global {
   interface Window {
     wetty_term?: Term;
@@ -169,6 +195,8 @@ declare global {
     pressUP?: () => void;
     pressDOWN?: () => void;
     pressTAB?: () => void;
+    pressLEFT?: () => void;
+    pressRIGHT?: () => void;
   }
 }
 
@@ -187,5 +215,7 @@ export function terminal(socket: Socket): Term | undefined {
   window.pressUP = pressUP;
   window.pressDOWN = pressDOWN;
   window.pressTAB = pressTAB;
+  window.pressLEFT = pressLEFT;
+  window.pressRIGHT = pressRIGHT;
   return term;
 }
