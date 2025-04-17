@@ -44,11 +44,6 @@ let crtlFlag = false; // This indicates whether the CTRL key is pressed or not
  * of the `ctrlButton` element accordingly. If `crtlFlag` is set to `true`,
  * the `active` class is added to the `ctrlButton`; otherwise, it is removed.
  * After toggling, the terminal (`wetty_term`) is focused if it exists.
- *
- * @remarks
- * This function assumes the existence of global variables `crtlFlag`, 
- * `ctrlButton`, and `window.wetty_term`. Ensure these are properly defined 
- * and initialized before calling this function.
  */
 const toggleCTRL = (): void => {
   crtlFlag = !crtlFlag;
@@ -68,9 +63,6 @@ const toggleCTRL = (): void => {
  * in conjunction with the `simulateCTRLAndKey` function to handle
  * keyboard shortcuts.
  *
- * @remarks
- * This function assumes the existence of a global variable `window.wetty_term`.
- * Ensure this is properly defined and initialized before calling this function.
  */
 const simulateBackspace = (): void => {
   window.wetty_term?.input('\x7F', true);
@@ -84,10 +76,6 @@ const simulateBackspace = (): void => {
  *
  * @param key - The key that was pressed, which will be converted to
  *              its corresponding character code.
- *
- * @remarks
- * This function assumes the existence of a global variable `window.wetty_term`.
- * Ensure this is properly defined and initialized before calling this function.
  */
 const simulateCTRLAndKey = (key: string): void => {
   window.wetty_term?.input(`${String.fromCharCode(key.toUpperCase().charCodeAt(0) - 64)}`, false);
@@ -117,6 +105,20 @@ document.addEventListener('keyup', (e) => {
   }
 });
 
+/**
+ * Simulates pressing the ESC key by sending the ESC character (ASCII code 27)
+ * to the terminal. If the CTRL key is active, it toggles the CTRL state off.
+ * After sending the ESC character, the terminal is focused.
+ */
+const pressESC = (): void => {
+  console.log('ESC');
+  if (crtlFlag) {
+    toggleCTRL();
+  }
+  window.wetty_term?.input('\x1B', false);
+  window.wetty_term?.focus();
+}
+
 declare global {
   interface Window {
     wetty_term?: Term;
@@ -125,6 +127,7 @@ declare global {
     clipboardData: DataTransfer;
     loadOptions: (conf: Options) => void;
     toggleCTRL? : (event: KeyboardEvent) => void;
+    pressESC?: () => void;
   }
 }
 
@@ -139,5 +142,6 @@ export function terminal(socket: Socket): Term | undefined {
   };
   window.wetty_term = term;
   window.toggleCTRL = toggleCTRL;
+  window.pressESC = pressESC;
   return term;
 }

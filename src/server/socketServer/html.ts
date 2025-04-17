@@ -50,6 +50,7 @@ const render = (
       <a class="toggler onscreen-buttons"
         href="#"
         alt="Esc"
+        onclick="window.pressESC()"
       >
         <div>
           Esc
