@@ -68,6 +68,15 @@ const render = (
           Ctrl
         </div>
       </a>
+      <a class="toggler onscreen-buttons"
+        href="#"
+        alt="Tab"
+        onclick="window.pressTAB()"
+      >
+        <div>
+          Tab
+        </div>
+      </a>
     </div>
     <div id="terminal"></div>
     ${jsFiles

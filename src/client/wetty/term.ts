@@ -144,6 +144,19 @@ const pressDOWN = (): void => {
   window.wetty_term?.focus();
 }
 
+/**
+ * Simulates pressing the TAB key by sending the TAB character (ASCII code 9)
+ * to the terminal. If the CTRL key is active, it toggles the CTRL state off.
+ * After sending the TAB character, the terminal is focused.
+ */
+const pressTAB = (): void => {
+  if (crtlFlag) {
+    toggleCTRL();
+  }
+  window.wetty_term?.input('\x09', false);
+  window.wetty_term?.focus();
+}
+
 declare global {
   interface Window {
     wetty_term?: Term;
@@ -155,6 +168,7 @@ declare global {
     pressESC?: () => void;
     pressUP?: () => void;
     pressDOWN?: () => void;
+    pressTAB?: () => void;
   }
 }
 
@@ -172,5 +186,6 @@ export function terminal(socket: Socket): Term | undefined {
   window.pressESC = pressESC;
   window.pressUP = pressUP;
   window.pressDOWN = pressDOWN;
+  window.pressTAB = pressTAB;
   return term;
 }
