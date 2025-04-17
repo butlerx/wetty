@@ -34,6 +34,7 @@ const render = (
       <a class="toggler onscreen-buttons"
         href="#"
         alt="Up"
+        onclick="window.pressUP()"
       >
         <div>
           Up
@@ -42,6 +43,7 @@ const render = (
       <a class="toggler onscreen-buttons"
         href="#"
         alt="Down"
+        onclick="window.pressDOWN()"
       >
         <div>
           Down

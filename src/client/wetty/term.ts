@@ -118,6 +118,32 @@ const pressESC = (): void => {
   window.wetty_term?.focus();
 }
 
+/**
+ * Simulates pressing the UP arrow key by sending the UP character (ASCII code 65)
+ * to the terminal. If the CTRL key is active, it toggles the CTRL state off.
+ * After sending the UP character, the terminal is focused.
+ */
+const pressUP = (): void => {
+  if (crtlFlag) {
+    toggleCTRL();
+  }
+  window.wetty_term?.input('\x1B[A', false);
+  window.wetty_term?.focus();
+}
+
+/**
+ * Simulates pressing the DOWN arrow key by sending the DOWN character (ASCII code 66)
+ * to the terminal. If the CTRL key is active, it toggles the CTRL state off.
+ * After sending the DOWN character, the terminal is focused.
+ */
+const pressDOWN = (): void => {
+  if (crtlFlag) {
+    toggleCTRL();
+  }
+  window.wetty_term?.input('\x1B[B', false);
+  window.wetty_term?.focus();
+}
+
 declare global {
   interface Window {
     wetty_term?: Term;
@@ -127,6 +153,8 @@ declare global {
     loadOptions: (conf: Options) => void;
     toggleCTRL? : (event: KeyboardEvent) => void;
     pressESC?: () => void;
+    pressUP?: () => void;
+    pressDOWN?: () => void;
   }
 }
 
@@ -142,5 +170,7 @@ export function terminal(socket: Socket): Term | undefined {
   window.wetty_term = term;
   window.toggleCTRL = toggleCTRL;
   window.pressESC = pressESC;
+  window.pressUP = pressUP;
+  window.pressDOWN = pressDOWN;
   return term;
 }
