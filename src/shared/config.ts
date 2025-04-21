@@ -145,6 +145,7 @@ export function mergeCliConf(opts: Arguments, config: Config): Config {
     server: objectAssign(config.server, {
       base: opts.base,
       host: opts.host,
+      socket: opts.socket,
       port: opts.port,
       title: opts.title,
       allowIframe: opts['allow-iframe'],

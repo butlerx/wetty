@@ -13,24 +13,31 @@ export const listen = (
   port: number,
   path: string,
   { key, cert }: SSLBuffer,
-): Server =>
-  new Server(
-    !isUndefined(key) && !isUndefined(cert)
-      ? https.createServer({ key, cert }, app).listen(port, host, () => {
-          logger().info('Server started', {
-            port,
-            connection: 'https',
-          });
-        })
-      : http.createServer(app).listen(port, host, () => {
-          logger().info('Server started', {
-            port,
-            connection: 'http',
-          });
-        }),
-    {
-      path: `${path}/socket.io`,
-      pingInterval: 3000,
-      pingTimeout: 7000,
-    },
-  );
+  socket?: string | boolean
+): Server =>{
+  // Create the base HTTP/HTTPS server
+  const server = !isUndefined(key) && !isUndefined(cert)
+    ? https.createServer({ key, cert }, app)
+    : http.createServer(app);
+
+  // Start listening on either Unix socket or TCP
+  if (socket) {
+    server.listen(socket, () => {
+      logger().info('Server listening on Unix socket', { socket });
+    });
+  } else {
+    server.listen(port, host, () => {
+      logger().info('Server started', {
+        port,
+        connection: !isUndefined(key) && !isUndefined(cert) ? 'https' : 'http',
+      });
+    });
+  }
+
+  // Create Socket.IO server
+  return new Server(server, {
+    path: `${path}/socket.io`,
+    pingInterval: 3000,
+    pingTimeout: 7000,
+  });
+}

@@ -6,6 +6,7 @@
  *
  * This is the cli Interface for wetty.
  */
+import { unlinkSync, existsSync, lstatSync } from 'fs';
 import { createRequire } from 'module';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
@@ -90,6 +91,10 @@ const opts = yargs(hideBin(process.argv))
     description: 'wetty listen host',
     type: 'string',
   })
+  .option('socket', {
+    description: 'Make wetty listen on unix socket',
+    type: 'string',
+  })
   .option('command', {
     alias: 'c',
     description: 'command to run in shell',
@@ -119,10 +124,26 @@ const opts = yargs(hideBin(process.argv))
     type: 'boolean',
     description: 'Print help message',
   })
+  .conflicts('host', 'socket')
+  .conflicts('port', 'socket')
   .boolean('allow_discovery')
   .parseSync();
 
+function cleanup() {
+  if (opts.socket) {
+    const socket = opts.socket.toString();
+    if (existsSync(socket) && lstatSync(socket).isSocket()) {
+      unlinkSync(socket);
+    }
+  }
+}
+function exit() {
+  process.exit(1);
+}
+
 if (!opts.help) {
+  process.on('SIGINT', exit);
+  process.on('exit', cleanup);
   loadConfigFile(opts.conf)
     .then((config) => mergeCliConf(opts, config))
     .then((conf) => {
