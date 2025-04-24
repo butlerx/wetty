@@ -1,5 +1,5 @@
 import { dom, library } from '@fortawesome/fontawesome-svg-core';
-import { faCogs } from '@fortawesome/free-solid-svg-icons';
+import { faCogs, faKeyboard } from '@fortawesome/free-solid-svg-icons';
 import _ from 'lodash';
 
 import '../assets/scss/styles.scss';
@@ -15,6 +15,7 @@ import { terminal, Term } from './wetty/term';
 
 // Setup for fontawesome
 library.add(faCogs);
+library.add(faKeyboard);
 dom.watch();
 
 function onResize(term: Term): () => void {

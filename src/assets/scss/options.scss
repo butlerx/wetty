@@ -50,3 +50,62 @@
     color: red;
   }
 }
+
+#functions {
+  position: fixed;
+  right: 2em;
+  top: 6em;
+  z-index: 20;
+
+  > a {
+    padding: 10px;
+    position: absolute;
+    right: -10px;
+    top: -40px;
+    color: variables.$lgrey;
+
+    :hover {
+      color: variables.$white;
+    }
+  }
+
+  .onscreen-buttons {
+    display: none;
+    width: 200px;
+    height: 200px;
+    border: solid 2px rgba(255, 255, 255, 0.25);
+    border-radius: 0.3em;
+    background-color: rgba(0, 0, 0, 0.85);
+    > a {
+      bottom: 1em;
+      right: 2em;
+      text-decoration: none;
+      color: white;
+      > div {
+        padding: 5px;
+        outline: 2px solid white;
+        margin: 10px;
+        display: inline-block;
+        font-weight: bold;
+        border-radius: 10px;
+      }
+    }
+  }
+
+  .active {
+    display: block;
+  }
+
+  .onscreen-buttons > a:active {
+    > div {
+      background-color: rgba(255, 255, 255, 0.25);
+    }
+  }
+
+  #onscreen-ctrl.active {
+    display: inline-block;
+    > div {
+      background-color: lightgray;
+    }
+  }
+}

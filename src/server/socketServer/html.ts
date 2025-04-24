@@ -30,6 +30,79 @@ const render = (
        ><i class="fas fa-cogs"></i></a>
       <iframe class="editor" src="${base}/client/xterm_config/index.html"></iframe>
     </div>
+    <div id="functions">
+      <a class="toggler"
+         href="#"
+         alt="Toggle options"
+         onclick="window.toggleFunctions()"
+       ><i class="fas fa-keyboard"></i></a>
+      <div class="onscreen-buttons">
+        <a
+          href="#"
+          alt="Up"
+          onclick="window.pressUP()"
+        >
+          <div>
+            Up
+          </div>
+        </a>
+        <a
+          href="#"
+          alt="Down"
+          onclick="window.pressDOWN()"
+        >
+          <div>
+            Down
+          </div>
+        </a>
+        <a
+          href="#"
+          alt="Left"
+          onclick="window.pressLEFT()"
+        >
+          <div>
+            Left
+          </div>
+        </a>
+        <a
+          href="#"
+          alt="Right"
+          onclick="window.pressRIGHT()"
+        >
+          <div>
+            Right
+          </div>
+        </a>
+        <a
+          href="#"
+          alt="Esc"
+          onclick="window.pressESC()"
+        >
+          <div>
+            Esc
+          </div>
+        </a>
+        <a
+          id="onscreen-ctrl"
+          href="#"
+          alt="Ctrl"
+          onclick="window.toggleCTRL()"
+        >
+          <div>
+            Ctrl
+          </div>
+        </a>
+        <a
+          href="#"
+          alt="Tab"
+          onclick="window.pressTAB()"
+        >
+          <div>
+            Tab
+          </div>
+        </a>
+      </div>
+    </div>
     <div id="terminal"></div>
     ${jsFiles
         .map(file => `    <script type="module" src="${base}/client/${file}"></script>`)
