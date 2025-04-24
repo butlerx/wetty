@@ -37,18 +37,18 @@ export class Term extends Terminal {
 }
 
 const ctrlButton = document.getElementById('onscreen-ctrl');
-let crtlFlag = false; // This indicates whether the CTRL key is pressed or not
+let ctrlFlag = false; // This indicates whether the CTRL key is pressed or not
 
 /**
- * Toggles the state of the `crtlFlag` variable and updates the visual state
- * of the `ctrlButton` element accordingly. If `crtlFlag` is set to `true`,
+ * Toggles the state of the `ctrlFlag` variable and updates the visual state
+ * of the `ctrlButton` element accordingly. If `ctrlFlag` is set to `true`,
  * the `active` class is added to the `ctrlButton`; otherwise, it is removed.
  * After toggling, the terminal (`wetty_term`) is focused if it exists.
  */
 const toggleCTRL = (): void => {
-  crtlFlag = !crtlFlag;
+  ctrlFlag = !ctrlFlag;
   if (ctrlButton) {
-    if (crtlFlag) {
+    if (ctrlFlag) {
       ctrlButton.classList.add('active');
     } else {
       ctrlButton.classList.remove('active');
@@ -83,14 +83,14 @@ const simulateCTRLAndKey = (key: string): void => {
 
 /**
  * Handles the keydown event for the CTRL key. When the CTRL key is pressed,
- * it sets the `crtlFlag` variable to true and updates the visual state of
- * the `ctrlButton` element. If the CTRL key is released, it sets `crtlFlag`
+ * it sets the `ctrlFlag` variable to true and updates the visual state of
+ * the `ctrlButton` element. If the CTRL key is released, it sets `ctrlFlag`
  * to false and updates the visual state of the `ctrlButton` element.
  *
  * @param e - The keyboard event object.
  */
 document.addEventListener('keyup', (e) => {
-  if (crtlFlag) {
+  if (ctrlFlag) {
     // if key is a character
     if (e.key.length === 1 && e.key.match(/^[a-zA-Z0-9]$/)) {
       simulateCTRLAndKey(e.key);
@@ -111,7 +111,7 @@ document.addEventListener('keyup', (e) => {
  * After sending the ESC character, the terminal is focused.
  */
 const pressESC = (): void => {
-  if (crtlFlag) {
+  if (ctrlFlag) {
     toggleCTRL();
   }
   window.wetty_term?.input('\x1B', false);
@@ -124,7 +124,7 @@ const pressESC = (): void => {
  * After sending the UP character, the terminal is focused.
  */
 const pressUP = (): void => {
-  if (crtlFlag) {
+  if (ctrlFlag) {
     toggleCTRL();
   }
   window.wetty_term?.input('\x1B[A', false);
@@ -137,7 +137,7 @@ const pressUP = (): void => {
  * After sending the DOWN character, the terminal is focused.
  */
 const pressDOWN = (): void => {
-  if (crtlFlag) {
+  if (ctrlFlag) {
     toggleCTRL();
   }
   window.wetty_term?.input('\x1B[B', false);
@@ -150,7 +150,7 @@ const pressDOWN = (): void => {
  * After sending the TAB character, the terminal is focused.
  */
 const pressTAB = (): void => {
-  if (crtlFlag) {
+  if (ctrlFlag) {
     toggleCTRL();
   }
   window.wetty_term?.input('\x09', false);
@@ -163,7 +163,7 @@ const pressTAB = (): void => {
  * After sending the LEFT character, the terminal is focused.
  */
 const pressLEFT = (): void => {
-  if (crtlFlag) {
+  if (ctrlFlag) {
     toggleCTRL();
   }
   window.wetty_term?.input('\x1B[D', false);
@@ -176,7 +176,7 @@ const pressLEFT = (): void => {
  * After sending the RIGHT character, the terminal is focused.
  */
 const pressRIGHT = (): void => {
-  if (crtlFlag) {
+  if (ctrlFlag) {
     toggleCTRL();
   }
   window.wetty_term?.input('\x1B[C', false);
@@ -204,7 +204,7 @@ declare global {
     clipboardData: DataTransfer;
     loadOptions: (conf: Options) => void;
     toggleFunctions?: () => void;
-    toggleCTRL? : (event: KeyboardEvent) => void;
+    toggleCTRL? : () => void;
     pressESC?: () => void;
     pressUP?: () => void;
     pressDOWN?: () => void;
