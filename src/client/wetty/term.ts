@@ -183,6 +183,19 @@ const pressRIGHT = (): void => {
   window.wetty_term?.focus();
 }
 
+/**
+ * Toggles the visibility of the onscreen buttons by adding or removing
+ * the 'active' class to the element with the ID 'onscreen-buttons'.
+ */
+const toggleFunctions = (): void => {
+  const element = document.querySelector('div#functions > div.onscreen-buttons')
+  if (element?.classList.contains('active')) {
+    element?.classList.remove('active');
+  } else {
+    element?.classList.add('active');
+  }
+}
+
 declare global {
   interface Window {
     wetty_term?: Term;
@@ -190,6 +203,7 @@ declare global {
     wetty_save_config?: (newConfig: Options) => void;
     clipboardData: DataTransfer;
     loadOptions: (conf: Options) => void;
+    toggleFunctions?: () => void;
     toggleCTRL? : (event: KeyboardEvent) => void;
     pressESC?: () => void;
     pressUP?: () => void;
@@ -210,6 +224,7 @@ export function terminal(socket: Socket): Term | undefined {
     term.resizeTerm();
   };
   window.wetty_term = term;
+  window.toggleFunctions = toggleFunctions;
   window.toggleCTRL = toggleCTRL;
   window.pressESC = pressESC;
   window.pressUP = pressUP;
