@@ -209,7 +209,7 @@ importers:
         version: 4.2.1(eslint-config-prettier@8.10.0(eslint@8.57.0))(eslint@8.57.0)(prettier@2.8.8)
       git-authors-cli:
         specifier: ^1.0.42
-        version: 1.0.49
+        version: 1.0.52
       husky:
         specifier: ^9.0.11
         version: 9.0.11
@@ -1451,6 +1451,7 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -1658,8 +1659,8 @@ packages:
   get-tsconfig@4.7.5:
     resolution: {integrity: sha512-ZCuZCnlqNzjb4QprAzXKdpp/gh6KTxSJuw3IBsPnV/7fV4NxC9ckB+vPTt8w7fJA0TaSD7c55BR47JD6MEDyDw==}
 
-  git-authors-cli@1.0.49:
-    resolution: {integrity: sha512-aodJH0A8DPxS4s2AyBhX3Z00Oz20PSJnff6JOC7AnfAQ0F8XEOmbQQNVSQW3pAzwW6os/RlTiNc9pDFWAQsk/Q==}
+  git-authors-cli@1.0.52:
+    resolution: {integrity: sha512-8Q8r9nRKEgtFkAmAbc5ZPihTg1hxtca6KRzp86cVENGknKv9xuoEH3wvXlkoMvA5e6Egh4WCpb794Zv1QynbeA==}
     engines: {node: '>= 8'}
     hasBin: true
 
@@ -4934,7 +4935,7 @@ snapshots:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
-  git-authors-cli@1.0.49:
+  git-authors-cli@1.0.52:
     dependencies:
       email-regex: 4.0.0
       json-future: 2.2.21
