@@ -102,7 +102,7 @@
     "esbuild": "^0.21.5",
     "esbuild-plugin-copy": "^2.1.1",
     "esbuild-sass-plugin": "^3.3.1",
-    "eslint": "^8.36.0",
+    "eslint": "^9.26.0",
     "eslint-config-airbnb-base": "latest",
     "eslint-config-prettier": "^8.6.0",
     "eslint-import-resolver-typescript": "^3.4.0",
