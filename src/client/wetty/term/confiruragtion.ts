@@ -5,6 +5,38 @@ import { loadOptions } from './load';
 import type { Options } from './options';
 import type { Term } from '../term';
 
+export function modifierHandler(e: KeyboardEvent): boolean {
+  // We only care about keydown events with modifiers
+  if (e.type !== 'keydown') return true;
+
+  const modifiers =
+    (e.shiftKey ? 1 : 0) |
+    (e.altKey ? 2 : 0) |
+    (e.ctrlKey ? 4 : 0) |
+    (e.metaKey ? 8 : 0);
+
+  // If no modifiers, let xterm handle it normally
+  if (modifiers === 0) return true;
+
+  // Key codes for special keys we want to support generically
+  const specialKeys: Record<string, number> = {
+    Enter: 13,
+    Tab: 9,
+    Backspace: 127,
+    Escape: 27,
+  };
+
+  if (specialKeys[e.key]) {
+    const code = specialKeys[e.key];
+    const mod = modifiers + 1; // CSI u uses 1-based modifier mapping
+    // Send the CSI u sequence: ESC [ code ; mod u
+    window.wetty_term?.input(`\x1b[${code};${mod}u`, false);
+    return false; // Intercepted
+  }
+
+  return true;
+}
+
 export function configureTerm(term: Term): void {
   const options = loadOptions();
   try {
@@ -42,13 +74,9 @@ export function configureTerm(term: Term): void {
   }
   editor.addEventListener('load', editorOnLoad);
 
-  toggle.addEventListener('click', e => {
-    editor?.contentWindow?.loadOptions(loadOptions());
-    optionsElem.classList.toggle('opened');
-    e.preventDefault();
+  term.attachCustomKeyEventHandler(e => {
+    return copyShortcut(e) && modifierHandler(e);
   });
-
-  term.attachCustomKeyEventHandler(copyShortcut);
 
   document.addEventListener(
     'mouseup',
@@ -57,4 +85,10 @@ export function configureTerm(term: Term): void {
     },
     false,
   );
+
+  toggle.addEventListener('click', e => {
+    editor?.contentWindow?.loadOptions(loadOptions());
+    optionsElem.classList.toggle('opened');
+    e.preventDefault();
+  });
 }
