@@ -14,7 +14,7 @@ import type SocketIO from 'socket.io';
 
 export async function server(
   app: Express,
-  { base, port, host, title, allowIframe, socket }: Server,
+  { base, port, host, title, allowIframe, socket, theme }: Server,
   ssl?: SSL,
 ): Promise<SocketIO.Server> {
   const basePath = trim(base);
@@ -23,9 +23,10 @@ export async function server(
     port,
     base,
     title,
+    theme,
   });
 
-  const client = html(basePath, title);
+  const client = html(basePath, title, theme);
   app
     .disable('x-powered-by')
     .use(metricMiddleware(basePath))

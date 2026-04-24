@@ -14,6 +14,7 @@
     port:         3000,                                // Port to listen on
     host:         '0.0.0.0',                           // address to listen on
     title:        'WeTTY - The Web Terminal Emulator', // Page title
+    // theme:     'default',                           // Terminal color theme. See README for full list.
     bypassHelmet: false,                               // Disable Helmet security checks
   },
 

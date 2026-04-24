@@ -58,6 +58,7 @@ Options:
   --port, -p      wetty listen port                                     [number]
   --host          wetty listen host                                     [string]
   --command, -c   command to run in shell                               [string]
+  --theme         Default terminal color theme                          [string]
   --allow-iframe  Allow wetty to be embedded in an iframe, defaults to allowing
                   same origin                                          [boolean]
 ```
@@ -94,6 +95,88 @@ and possibly Let’s Encrypt support. Popular containers to achieve this are
 [nginx-proxy](https://github.com/nginx-proxy/nginx-proxy) and
 [traefik](https://traefik.io/traefik/). For traefik there is an example
 docker-compose file in the containers directory.
+
+## Terminal Themes
+
+WeTTY supports terminal color themes that can be set via a CLI flag or
+overridden per-session with a URL query parameter. The default theme is
+unchanged from previous versions.
+
+### Setting a default theme
+
+```sh
+wetty --theme dracula
+```
+
+Or via environment variable: `THEME=dracula`
+
+Or in `config.json5`:
+
+```json5
+server: {
+  theme: 'dracula',
+}
+```
+
+### Per-session theme via URL
+
+Users can override the theme for their session by adding `?theme=<name>` to
+the URL:
+
+```
+http://yourserver:3000/wetty?theme=light
+http://yourserver:3000/wetty/ssh/user?theme=catppuccin-mocha
+```
+
+### Available themes
+
+Theme previews are from the
+[iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes)
+project.
+
+#### Basics
+
+| Theme | Name | Preview |
+|-------|------|---------|
+| `default` | WeTTY Default (Tango) | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/builtin-tango-dark.png) |
+| `dark` | Builtin Dark | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/builtin-dark.png) |
+| `light` | GitHub Light Default | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/github-light-default.png) |
+
+#### Popular
+
+| Theme | Name | Preview |
+|-------|------|---------|
+| `dracula` | Dracula | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/dracula.png) |
+| `solarized-dark` | Solarized Dark | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/iterm2-solarized-dark.png) |
+| `solarized-light` | Solarized Light | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/iterm2-solarized-light.png) |
+| `gruvbox-dark` | Gruvbox Dark | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/gruvbox-dark.png) |
+| `nord` | Nord | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/nord.png) |
+| `catppuccin-mocha` | Catppuccin Mocha | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/catppuccin-mocha.png) |
+| `catppuccin-macchiato` | Catppuccin Macchiato | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/catppuccin-macchiato.png) |
+| `catppuccin-frappe` | Catppuccin Frappe | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/catppuccin-frappe.png) |
+| `catppuccin-latte` | Catppuccin Latte | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/catppuccin-latte.png) |
+| `monokai` | Monokai Classic | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/monokai-classic.png) |
+| `tokyo-night` | TokyoNight | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/tokyonight.png) |
+| `tokyo-night-storm` | TokyoNight Storm | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/tokyonight-storm.png) |
+| `tokyo-night-moon` | TokyoNight Moon | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/tokyonight-moon.png) |
+| `one-dark` | Atom One Dark | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/one-half-dark.png) |
+| `cobalt2` | Cobalt2 | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/cobalt2.png) |
+| `snazzy` | Snazzy | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/snazzy.png) |
+
+#### Classic / Retro
+
+| Theme | Name | Preview |
+|-------|------|---------|
+| `c64` | Commodore 64 | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/c64.png) |
+| `ibm-cga` | IBM 5153 CGA | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/ibm-5153-cga.png) |
+| `apple-classic` | Apple Classic | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/apple-classic.png) |
+| `matrix` | Matrix | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/matrix.png) |
+| `zenburn` | Zenburn | [preview](https://raw.githubusercontent.com/mbadolato/iTerm2-Color-Schemes/master/screenshots/zenburn.png) |
+
+Theme colors are sourced from the MIT-licensed
+[iTerm2-Color-Schemes](https://github.com/mbadolato/iTerm2-Color-Schemes)
+project. Browse all available previews at
+[iterm2colorschemes.com](https://iterm2colorschemes.com/).
 
 ## FAQ
 

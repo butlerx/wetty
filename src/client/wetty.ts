@@ -12,11 +12,23 @@ import { FlowControlClient } from './wetty/flowcontrol';
 import { mobileKeyboard } from './wetty/mobile';
 import { socket } from './wetty/socket';
 import { terminal, Term } from './wetty/term';
+import { getTheme, resolveThemeName } from './wetty/term/themes';
 
 // Setup for fontawesome
 library.add(faCogs);
 library.add(faKeyboard);
 dom.watch();
+
+// Apply theme background early to reduce flash of wrong color
+(function applyEarlyBackground() {
+  const themeName = resolveThemeName();
+  if (themeName) {
+    const theme = getTheme(themeName);
+    if (theme) {
+      document.body.style.backgroundColor = theme.background;
+    }
+  }
+})();
 
 function onResize(term: Term): () => void {
   return function resize() {

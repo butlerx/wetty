@@ -1,4 +1,5 @@
 import { isDev } from '../../shared/env.js';
+import { isValidTheme, themeBackgrounds } from '../../shared/themes.js';
 import type { Request, Response, RequestHandler } from 'express';
 
 const jsFiles = isDev ? ['dev.js', 'wetty.js'] : ['wetty.js'];
@@ -6,17 +7,22 @@ const jsFiles = isDev ? ['dev.js', 'wetty.js'] : ['wetty.js'];
 const render = (
   title: string,
   base: string,
-): string => `<!doctype html>
+  theme: string,
+): string => {
+  const safeTheme = isValidTheme(theme) ? theme : 'default';
+  const bgColor = themeBackgrounds[safeTheme] || '#000000';
+  return `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="default-theme" content="${safeTheme}">
     <link rel="icon" type="image/x-icon" href="${base}/client/favicon.ico">
     <title>${title}</title>
     <link rel="stylesheet" href="${base}/client/wetty.css" />
   </head>
-  <body>
+  <body style="background-color: ${bgColor}">
     <div id="overlay">
       <div class="error">
         <div id="msg"></div>
@@ -110,8 +116,9 @@ const render = (
     }
   </body>
 </html>`;
+};
 
-export const html = (base: string, title: string): RequestHandler => (
+export const html = (base: string, title: string, theme: string): RequestHandler => (
   _req: Request,
   res: Response,
 ): void => {
@@ -119,6 +126,7 @@ export const html = (base: string, title: string): RequestHandler => (
     render(
       title,
       base,
+      theme,
     ),
   );
 };

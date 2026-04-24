@@ -32,6 +32,7 @@ export interface Server {
   title: string;
   base: string;
   allowIframe: boolean;
+  theme: string;
 }
 
 export interface Config {

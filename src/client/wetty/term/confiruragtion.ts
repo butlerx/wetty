@@ -2,11 +2,21 @@ import { editor } from '../disconnect/elements';
 import { copySelected, copyShortcut } from './confiruragtion/clipboard';
 import { onInput } from './confiruragtion/editor';
 import { loadOptions } from './load';
+import { getTheme, resolveThemeName } from './themes';
 import type { Options } from './options';
 import type { Term } from '../term';
 
 export function configureTerm(term: Term): void {
   const options = loadOptions();
+
+  const themeName = resolveThemeName();
+  if (themeName && themeName !== 'default') {
+    const theme = getTheme(themeName);
+    if (theme) {
+      options.xterm = { ...options.xterm, theme };
+    }
+  }
+
   try {
     term.options = options.xterm;
   } catch {

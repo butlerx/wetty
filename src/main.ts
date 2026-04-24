@@ -100,6 +100,11 @@ const opts = yargs(hideBin(process.argv))
     description: 'command to run in shell',
     type: 'string',
   })
+  .option('theme', {
+    description:
+      'Default terminal color theme. Use ?theme= in the URL to override per-session. Available: default, dark, light, dracula, solarized-dark, solarized-light, gruvbox-dark, nord, catppuccin-mocha, catppuccin-macchiato, catppuccin-frappe, catppuccin-latte, monokai, tokyo-night, tokyo-night-storm, tokyo-night-moon, one-dark, cobalt2, snazzy, c64, ibm-cga, apple-classic, matrix, zenburn',
+    type: 'string',
+  })
   .option('allow-iframe', {
     description:
       'Allow WeTTY to be embedded in an iframe, defaults to allowing same origin',

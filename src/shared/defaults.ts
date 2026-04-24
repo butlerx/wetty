@@ -21,6 +21,7 @@ export const serverDefault: Server = {
   socket: false,
   title: process.env.TITLE || 'WeTTY - The Web Terminal Emulator',
   allowIframe: process.env.ALLOWIFRAME === 'true' || false,
+  theme: process.env.THEME || 'default',
 };
 
 export const forceSSHDefault = process.env.FORCESSH === 'true' || false;
