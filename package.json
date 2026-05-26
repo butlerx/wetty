@@ -108,7 +108,7 @@
     "globals": "^17.6.0",
     "husky": "^9.1.7",
     "jsdom": "^25.0.1",
-    "lint-staged": "^15.5.2",
+    "lint-staged": "^17.0.5",
     "mocha": "12.0.0-beta-10",
     "nodemon": "^3.1.14",
     "prettier": "^3.8.3",
