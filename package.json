@@ -23,6 +23,10 @@
     "test": "mocha",
     "prepare": "husky"
   },
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
   "repository": "git://github.com/butlerx/wetty.git",
   "author": "Cian Butler <butlerx@notthe.cloud> (cianbutler.ie)",
   "bugs": {
@@ -73,8 +77,6 @@
     "@commitlint/cli": "^21.0.1",
     "@commitlint/config-conventional": "^21.0.1",
     "@eslint/js": "^10.0.1",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
     "@types/chai": "^5.2.3",
     "@types/compression": "^1.8.1",
     "@types/etag": "^1.8.4",
