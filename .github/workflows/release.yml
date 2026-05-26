@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
