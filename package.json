@@ -71,7 +71,7 @@
     "toastify-js": "^1.12.0",
     "url-value-parser": "^2.2.0",
     "winston": "^3.19.0",
-    "yargs": "^17.7.2"
+    "yargs": "^18.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.0.1",

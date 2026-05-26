@@ -90,8 +90,8 @@ importers:
         specifier: ^3.19.0
         version: 3.19.0
       yargs:
-        specifier: ^17.7.2
-        version: 17.7.2
+        specifier: ^18.0.0
+        version: 18.0.0
     devDependencies:
       '@commitlint/cli':
         specifier: ^21.0.1
