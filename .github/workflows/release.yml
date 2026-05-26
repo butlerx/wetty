@@ -19,6 +19,9 @@ jobs:
       pull-requests: write
       packages: write
       id-token: write
+    outputs:
+      new_release_published: ${{ steps.check.outputs.new_release_published }}
+      new_release_version: ${{ steps.check.outputs.new_release_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -40,7 +43,34 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Get latest tag before release
+        id: before
+        run: echo "tag=$(git describe --tags --abbrev=0 2>/dev/null || echo 'none')" >> $GITHUB_OUTPUT
+
       - name: Release
+        id: semantic
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm exec semantic-release
+
+      - name: Check if new release was created
+        id: check
+        run: |
+          git fetch --tags
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo 'none')
+          if [ "$LATEST_TAG" != "${{ steps.before.outputs.tag }}" ]; then
+            echo "new_release_published=true" >> $GITHUB_OUTPUT
+            echo "new_release_version=${LATEST_TAG#v}" >> $GITHUB_OUTPUT
+          else
+            echo "new_release_published=false" >> $GITHUB_OUTPUT
+          fi
+
+  docker:
+    name: Docker Publish
+    needs: release
+    if: needs.release.outputs.new_release_published == 'true'
+    uses: ./.github/workflows/docker.workflow.yml
+    secrets: inherit
+    with:
+      platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+      push: true
