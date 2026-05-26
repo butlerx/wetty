@@ -72,9 +72,8 @@ Options:
   --log-level             set log level of wetty server                  [string]
 ```
 
-Open your browser on `http://yourserver:3000/wetty` and you will prompted to
-login. Or go to `http://yourserver:3000/wetty/ssh/<username>` to specify the
-user beforehand.
+Open your browser on `http://yourserver:3000` and you will prompted to login. Or
+go to `http://yourserver:3000/ssh/<username>` to specify the user beforehand.
 
 If you run it as root it will launch `/bin/login` (where you can specify the
 user name), else it will launch `ssh` and connect by default to `localhost`. The
@@ -97,7 +96,7 @@ docker run --rm -p 3000:3000 wettyoss/wetty --ssh-host=<YOUR-IP>
 ```
 
 and you will be able to open a ssh session to the host given by `YOUR-IP` under
-the URL [http://localhost:3000/wetty](http://localhost:3000/wetty).
+the URL [http://localhost:3000](http://localhost:3000).
 
 It is recommended to drive WeTTY behind a reverse proxy to have HTTPS security
 and possibly Let’s Encrypt support. Popular containers to achieve this are

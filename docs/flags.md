@@ -30,9 +30,9 @@ connect to.
 ## Default User
 
 You can specify the default user used to ssh to a host using the `--ssh-user`.
-This user can overwritten by going to
-`http://yourserver:3000/wetty/ssh/<username>`. If this is left blank a user will
-be prompted to enter their username when they connect.
+This user can overwritten by going to `http://yourserver:3000/ssh/<username>`.
+If this is left blank a user will be prompted to enter their username when they
+connect.
 
 ## SSH Port
 
@@ -41,8 +41,8 @@ ssh port this can be specified with the flag `--ssh-port`.
 
 ## WeTTY URL
 
-If you'd prefer an HTTP base prefix other than `/wetty`, you can specify that
-with `--base`.
+If you'd prefer an HTTP base prefix other than `/`, you can specify that with
+`--base`.
 
 **Do not set this to `/ssh/${something}`, as this will break username matching
 code.**
