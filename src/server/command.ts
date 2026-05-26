@@ -1,6 +1,4 @@
 import process from 'node:process';
-import url from 'url';
-import _ from 'lodash';
 import { address } from './command/address.js';
 import { loginOptions } from './command/login.js';
 import { sshOptions } from './command/ssh.js';
@@ -8,8 +6,7 @@ import type { SSH } from '../shared/interfaces';
 import type { Socket } from 'socket.io';
 
 const localhost = (host: string): boolean =>
-  !_.isUndefined(process.getuid) &&
-  process.getuid() === 0 &&
+  process.getuid?.() === 0 &&
   (host === 'localhost' || host === '0.0.0.0' || host === '127.0.0.1');
 
 const urlArgs = (
@@ -21,13 +18,21 @@ const urlArgs = (
     allowRemoteCommand: boolean;
     allowRemoteHosts: boolean;
   },
-): { [s: string]: string } =>
-  _.pick(
-    _.pickBy(url.parse(referer || '', true).query, _.isString),
-    ['pass'],
-    allowRemoteCommand ? ['command', 'path'] : [],
-    allowRemoteHosts ? ['port', 'host'] : [],
-  );
+): Record<string, string> => {
+  const allowedKeys = new Set([
+    'pass',
+    ...(allowRemoteCommand ? ['command', 'path'] : []),
+    ...(allowRemoteHosts ? ['port', 'host'] : []),
+  ]);
+  const parsed = new URL(referer ?? '', 'http://localhost');
+  const result: Record<string, string> = {};
+  for (const [key, value] of parsed.searchParams) {
+    if (allowedKeys.has(key)) {
+      result[key] = value;
+    }
+  }
+  return result;
+};
 
 export async function getCommand(
   socket: Socket,
@@ -44,11 +49,15 @@ export async function getCommand(
     allowRemoteCommand,
   }: SSH,
   command: string,
-  forcessh: boolean
+  forcessh: boolean,
 ): Promise<string[]> {
   const {
-    request: { headers: { referer } },
-    client: { conn: { remoteAddress } },
+    request: {
+      headers: { referer },
+    },
+    client: {
+      conn: { remoteAddress },
+    },
   } = socket;
 
   if (!forcessh && localhost(host)) {
@@ -58,12 +67,12 @@ export async function getCommand(
   const sshAddress = await address(socket, user, host);
   const args = {
     host: sshAddress,
-    port: `${port}`,
-    pass: pass || '',
+    port: String(port),
+    pass: pass ?? '',
     command,
     auth,
     knownHosts,
-    config: config || '',
+    config: config ?? '',
     ...urlArgs(referer, { allowRemoteHosts, allowRemoteCommand }),
   };
   return sshOptions(args, key);

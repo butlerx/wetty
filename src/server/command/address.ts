@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { Socket } from 'socket.io';
 import { login } from '../login.js';
 import { escapeShell } from '../shared/shell.js';
@@ -9,13 +8,14 @@ export async function address(
   host: string,
 ): Promise<string> {
   // Check request-header for username
-  const { request: { headers: {
-    'remote-user': userFromHeader,
-    referer
-  } } } = socket;
+  const {
+    request: {
+      headers: { 'remote-user': userFromHeader, referer },
+    },
+  } = socket;
 
   let username: string | undefined;
-  if (!_.isUndefined(userFromHeader) && !Array.isArray(userFromHeader)) {
+  if (userFromHeader !== undefined && !Array.isArray(userFromHeader)) {
     username = userFromHeader;
   } else {
     const userFromPathMatch = referer?.match('.+/ssh/([^/]+)$');

@@ -11,13 +11,14 @@ export const onInput = (term: Term, updated: Options) => {
       !updated.wettyFitTerminal &&
       updated.xterm.cols != null &&
       updated.xterm.rows != null
-    )
+    ) {
       term.resize(updated.xterm.cols, updated.xterm.rows);
+    }
     term.resizeTerm();
-    editor.classList.remove('error');
+    editor?.classList.remove('error');
     localStorage.options = updatedConf;
   } catch (e) {
     console.error('Configuration Error', e); // eslint-disable-line no-console
-    editor.classList.add('error');
+    editor?.classList.add('error');
   }
 };

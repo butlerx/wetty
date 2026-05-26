@@ -8,6 +8,15 @@
 html,
 body {
   background-color: variables.$black;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
   height: 100%;
   margin: 0;
   overflow: hidden;

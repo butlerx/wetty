@@ -1,4 +1,3 @@
-import isUndefined from 'lodash/isUndefined.js';
 import pty from 'node-pty';
 import { logger as getLogger } from '../shared/logger.js';
 import { tinybuffer, FlowControlServer } from './flowcontrol.js';
@@ -19,7 +18,7 @@ export async function spawn(
   const address = args[0] === 'ssh' ? args[1] : 'localhost';
   logger.info('Process Started on behalf of user', { pid, address });
   socket.emit('login');
-  term.onExit(({exitCode}) => {
+  term.onExit(({ exitCode }) => {
     logger.info('Process exited', { exitCode, pid });
     socket.emit('logout');
     socket
@@ -36,17 +35,17 @@ export async function spawn(
     }
   });
   socket
-    .on('resize', ({ cols, rows }) => {
+    .on('resize', ({ cols, rows }: { cols: number; rows: number }) => {
       term.resize(cols, rows);
     })
-    .on('input', input => {
-      if (!isUndefined(term)) term.write(input);
+    .on('input', (input: string) => {
+      term.write(input);
     })
     .on('disconnect', () => {
       term.kill();
       logger.info('Process exited', { code: 0, pid });
     })
-    .on('commit', size => {
+    .on('commit', (size: number) => {
       if (fcServer.commit(size)) {
         term.resume();
       }

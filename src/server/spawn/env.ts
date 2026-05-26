@@ -4,12 +4,14 @@ const envVersion = (): Promise<number> =>
   new Promise((resolve, reject) => {
     exec('/usr/bin/env --version', (error, stdout, stderr): void => {
       if (error) {
-        return reject(Error(`error getting env version: ${error.message}`));
+        reject(Error(`error getting env version: ${error.message}`));
+        return;
       }
       if (stderr) {
-        return reject(Error(`error getting env version: ${stderr}`));
+        reject(Error(`error getting env version: ${stderr}`));
+        return;
       }
-      return resolve(
+      resolve(
         parseInt(
           stdout.split(/\r?\n/)[0].split(' (GNU coreutils) ')[1].split('.')[0],
           10,

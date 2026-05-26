@@ -1,10 +1,9 @@
 {
   "compilerOptions": {
-    "module": "es2020",
-    "target": "es2019",
-    "moduleResolution": "node",
+    "module": "es2022",
+    "target": "es2022",
+    "moduleResolution": "bundler",
     "declaration": true,
-    "downlevelIteration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,

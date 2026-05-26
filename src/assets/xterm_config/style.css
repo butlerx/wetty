@@ -8,16 +8,30 @@ body {
 body {
   display: flex;
   flex-flow: column nowrap;
-  font-family: monospace;
-  font-size: 1rem;
-  color: white;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.85rem;
+  color: #e0e0e0;
+  padding: 0 1em 1em;
 }
 .templ {
   display: none;
 }
+h1 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0.8em 0 0.4em;
+}
 h2 {
-  text-align: center;
-  text-decoration: underline;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.4em;
+  margin: 1.2em 0 0.6em;
 }
 
 header {
@@ -26,10 +40,18 @@ header {
   align-items: center;
 }
 header button {
-  padding: 0.5em;
-  font-size: 1em;
+  padding: 0.4em 0.8em;
+  font-size: 0.8em;
   margin: 0.5em;
-  border-radius: 0.5em;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e0e0e0;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+header button:hover {
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .boolean_option,
@@ -38,41 +60,118 @@ header button {
 .enum_option,
 .text_option {
   display: grid;
-  grid-template-columns: 100fr min(30em, 50%);
+  grid-template-columns: 1fr auto;
   grid-template-rows: auto;
   align-items: center;
+  padding: 0.4em 0;
+  gap: 0.8em;
 }
-.boolean_option input,
-.number_option input,
-.color_option input,
-.text_option input,
-.enum_option select {
-  margin: 0 0.5em;
-  font-size: 1em;
-  background-color: hsl(0, 0%, 20%);
-  color: white;
-  border: 2px solid white;
+.boolean_option p,
+.number_option p,
+.color_option p,
+.enum_option p,
+.text_option p {
+  margin: 0;
+}
+.boolean_option .title,
+.number_option .title,
+.color_option .title,
+.enum_option .title,
+.text_option .title {
+  font-size: 0.85rem;
+  color: #e0e0e0;
+}
+.boolean_option .desc,
+.number_option .desc,
+.color_option .desc,
+.enum_option .desc,
+.text_option .desc {
+  font-size: 0.75rem;
+  color: #888;
 }
 
+/* Text, number, select inputs */
 .number_option input,
 .text_option input,
 .enum_option select {
-  padding: 0.4em;
+  padding: 0.35em 0.5em;
+  font-size: 0.8rem;
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  min-width: 100px;
+  max-width: 180px;
 }
-.boolean_option input {
-  width: 2em;
-  height: 2em;
-  font-size: 0.75em;
-  justify-self: center;
+.number_option input:focus,
+.text_option input:focus,
+.enum_option select:focus {
+  border-color: rgba(100, 160, 240, 0.6);
 }
-.color_option input {
-  width: 100%;
-  height: 100%;
-  background-color: lightgray;
+
+/* Toggle switch for boolean checkboxes */
+.boolean_option input[type='checkbox'] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 36px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  border: none;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  justify-self: end;
+}
+.boolean_option input[type='checkbox']::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #aaa;
+  border-radius: 50%;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.boolean_option input[type='checkbox']:checked {
+  background: rgba(60, 130, 220, 0.8);
+}
+.boolean_option input[type='checkbox']:checked::after {
+  transform: translateX(16px);
+  background: white;
+}
+
+/* Color picker */
+.color_option input[type='color'] {
+  width: 36px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  justify-self: end;
+  overflow: hidden;
+}
+.color_option input[type='color']::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+.color_option input[type='color']::-webkit-color-swatch {
+  border: none;
+  border-radius: 4px;
 }
 
 .unbounded .title::before {
-  content: 'UNBOUND OPTION ';
-  color: red;
+  content: 'UNBOUND ';
+  color: #ff6b6b;
   font-weight: bold;
+  font-size: 0.7rem;
+}
+
+.error_reporting {
+  font-size: 0.75rem;
+  color: #ff6b6b;
 }

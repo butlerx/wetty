@@ -5,7 +5,7 @@ import findUp from 'find-up';
 const filePath = dirname(
   findUp.sync('package.json', {
     cwd: dirname(fileURLToPath(import.meta.url)),
-  }) || process.cwd(),
+  }) ?? process.cwd(),
 );
 
 export const assetsPath = (...args: string[]) =>

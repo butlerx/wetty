@@ -1,6 +1,6 @@
+import { readFile } from 'node:fs/promises';
 import etag from 'etag';
 import fresh from 'fresh';
-import fs from 'fs-extra';
 import parseUrl from 'parseurl';
 import { assetsPath } from './shared/path.js';
 import type { Request, Response, NextFunction, RequestHandler } from 'express';
@@ -31,9 +31,9 @@ export function redirect(
   res: Response,
   next: NextFunction,
 ): void {
-  if (req.path.substr(-1) === '/' && req.path.length > 1)
+  if (req.path.endsWith('/') && req.path.length > 1) {
     res.redirect(301, req.path.slice(0, -1) + req.url.slice(req.path.length));
-  else next();
+  } else next();
 }
 
 /**
@@ -46,7 +46,7 @@ export async function favicon(basePath: string): Promise<RequestHandler> {
   const path = assetsPath('client', 'favicon.ico');
 
   try {
-    const icon = await fs.readFile(path);
+    const icon = await readFile(path);
     return (req: Request, res: Response, next: NextFunction): void => {
       if (getPathName(req) !== `${basePath}/client/favicon.ico`) {
         next();
@@ -57,7 +57,7 @@ export async function favicon(basePath: string): Promise<RequestHandler> {
         res.end();
       } else {
         Object.entries({
-          'Cache-Control': `public, max-age=${Math.floor(ONE_YEAR_MS / 1000)}`,
+          'Cache-Control': `public, max-age=${String(Math.floor(ONE_YEAR_MS / 1000))}`,
           ETag: etag(icon),
         }).forEach(([key, value]) => {
           res.setHeader(key, value);
@@ -77,8 +77,9 @@ export async function favicon(basePath: string): Promise<RequestHandler> {
       }
     };
   } catch (err) {
-    return (_req: Request, _res: Response, next: NextFunction): void =>
+    return (_req: Request, _res: Response, next: NextFunction): void => {
       next(err);
+    };
   }
 }
 
@@ -92,8 +93,8 @@ export async function favicon(basePath: string): Promise<RequestHandler> {
 function getPathName(req: Request): string | undefined {
   try {
     const url = parseUrl(req);
-    return url?.pathname ? url.pathname : undefined;
-  } catch (e) {
+    return url?.pathname ?? undefined;
+  } catch {
     return undefined;
   }
 }

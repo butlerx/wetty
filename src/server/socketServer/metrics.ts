@@ -1,4 +1,3 @@
-import url from 'url';
 import { register, Counter, Histogram } from 'prom-client';
 import ResponseTime from 'response-time';
 import UrlValueParser from 'url-value-parser';
@@ -50,9 +49,9 @@ const responseLength = new Histogram({
  * @returns {string} a normalized path, withoud ids.
  */
 function normalizePath(originalUrl: string, placeholder = '#val'): string {
-  const { pathname } = url.parse(originalUrl);
+  const { pathname } = new URL(originalUrl, 'http://localhost');
   const urlParser = new UrlValueParser();
-  return urlParser.replacePathValues(pathname || '', placeholder);
+  return urlParser.replacePathValues(pathname, placeholder);
 }
 
 /**

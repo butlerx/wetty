@@ -14,11 +14,13 @@ import { start } from './server.js';
 import { loadConfigFile, mergeCliConf } from './shared/config.js';
 import { setLevel, logger } from './shared/logger.js';
 
-/* eslint-disable @typescript-eslint/no-var-requires */
 const require = createRequire(import.meta.url);
-const packageJson = require('../package.json');
+const packageJson = require('../package.json') as {
+  name: string;
+  version: string;
+};
 
-const opts = yargs(hideBin(process.argv))
+const yargsInstance = yargs(hideBin(process.argv))
   .scriptName(packageJson.name)
   .version(packageJson.version)
   .options('conf', {
@@ -126,12 +128,13 @@ const opts = yargs(hideBin(process.argv))
   })
   .conflicts('host', 'socket')
   .conflicts('port', 'socket')
-  .boolean('allow_discovery')
-  .parseSync();
+  .boolean('allow_discovery');
+
+const opts = yargsInstance.parseSync();
 
 function cleanup() {
   if (opts.socket) {
-    const socket = opts.socket.toString();
+    const { socket } = opts;
     if (existsSync(socket) && lstatSync(socket).isSocket()) {
       unlinkSync(socket);
     }
@@ -144,17 +147,23 @@ function exit() {
 if (!opts.help) {
   process.on('SIGINT', exit);
   process.on('exit', cleanup);
-  loadConfigFile(opts.conf)
+  void loadConfigFile(opts.conf)
     .then((config) => mergeCliConf(opts, config))
     .then((conf) => {
       setLevel(conf.logLevel);
-      start(conf.ssh, conf.server, conf.command, conf.forceSSH, conf.ssl);
+      return start(
+        conf.ssh,
+        conf.server,
+        conf.command,
+        conf.forceSSH,
+        conf.ssl,
+      );
     })
-    .catch((err: Error) => {
+    .catch((err: unknown) => {
       logger().error('error in server', { err });
       process.exitCode = 1;
     });
 } else {
-  yargs.showHelp();
+  yargsInstance.showHelp();
   process.exitCode = 0;
 }

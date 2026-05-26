@@ -1,6 +1,5 @@
 import { dom, library } from '@fortawesome/fontawesome-svg-core';
 import { faCogs, faKeyboard } from '@fortawesome/free-solid-svg-icons';
-import _ from 'lodash';
 
 import '../assets/scss/styles.scss';
 
@@ -26,9 +25,9 @@ function onResize(term: Term): () => void {
 
 socket.on('connect', () => {
   const term = terminal(socket);
-  if (_.isUndefined(term)) return;
+  if (term === undefined) return;
 
-  if (!_.isNull(overlay)) overlay.style.display = 'none';
+  if (overlay !== null) overlay.style.display = 'none';
   window.addEventListener('beforeunload', verifyPrompt, false);
   window.addEventListener('resize', onResize(term), false);
 

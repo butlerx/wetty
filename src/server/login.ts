@@ -17,7 +17,8 @@ export function login(socket: SocketIO.Socket): Promise<string> {
   let buf = '';
   return new Promise((resolve, reject) => {
     term.onExit(({ exitCode }) => {
-      console.error(`Process exited with code: ${exitCode}`);
+      // eslint-disable-next-line no-console
+      console.error(`Process exited with code: ${String(exitCode)}`);
       resolve(buf);
     });
     term.onData((data: string) => {
@@ -31,7 +32,7 @@ export function login(socket: SocketIO.Socket): Promise<string> {
       })
       .on('disconnect', () => {
         term.kill();
-        reject();
+        reject(new Error('Client disconnected'));
       });
   });
 }

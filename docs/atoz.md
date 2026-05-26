@@ -355,18 +355,21 @@ pass validation.
   "ssh": {
         "user": "username", // default user to use when ssh-ing
         "host": "localhost", // Server to ssh to
-        "auth": "publickey,password", // shh authentication, method. Defaults to "password", you can use "publickey,password" instead'
+        "auth": "publickey,password", // ssh authentication method. Defaults to "password", you can use "publickey,password" instead'
         "pass": "password", // Password to use when ssh-ing
         "key": "/home/username/.ssh/wetty", // path to an optional client private key, connection will be password-less and insecure!
         "port": 22, // Port to ssh to
-        "knownHosts": "/dev/null" // ssh knownHosts file to use
+        "knownHosts": "/dev/null", // ssh knownHosts file to use
+        "config": "/home/username/.ssh/config", // alternative ssh configuration file
+        "allowRemoteHosts": false, // Allow using the host and port params in a url as ssh destination
+        "allowRemoteCommand": false // Allow using the command and path params in a url as command and working directory
     },
     "server": {
         "base": "/wetty/", // URL base to serve resources from
         "port": 3000, // Port to listen on
         "host": "0.0.0.0", // listen on all interfaces or can be 127.0.0.1 with nginx
         "title": "WeTTY - The Web Terminal Emulator", // Page title
-        "bypassHelmet": false // Disable Helmet security checks
+        "allowIframe": false // Allow WeTTY to be embedded in an iframe
     },
     "forceSSH": false, // Force sshing to local machine over login if running as root
     "command": "login", // Command to run on server. Login will use ssh if connecting to different server
@@ -398,6 +401,7 @@ SSHAUTH
 SSHPASS
 SSHKEY
 SSHPORT
+SSHCONFIG
 KNOWNHOSTS
 FORCESSH
 COMMAND
@@ -446,7 +450,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/bin/bash -c "$$(source /home/$$(whoami)/.nvm/nvm.sh && nvm which 12) /home/$$(whoami)/bin/wetty --host 0.0.0.0 -p 3000 --title wetty --base / --ssh-key /home/$$(whoami)/.ssh/wetty --ssh-host localhost --ssh-user $$(whoami) --ssh-port 22 --ssh-auth publickey --ssl-key /home/$$(whoami)/.ssl/wetty.key --ssl-cert /home/$$(whoami)/.ssl/wetty.crt"
+ExecStart=/bin/bash -c "$$(source /home/$$(whoami)/.nvm/nvm.sh && nvm which 20) /home/$$(whoami)/bin/wetty --host 0.0.0.0 -p 3000 --title wetty --base / --ssh-key /home/$$(whoami)/.ssh/wetty --ssh-host localhost --ssh-user $$(whoami) --ssh-port 22 --ssh-auth publickey --ssl-key /home/$$(whoami)/.ssl/wetty.key --ssl-cert /home/$$(whoami)/.ssl/wetty.crt"
 Restart=always
 RestartSec=2
 TimeoutStopSec=5
@@ -615,30 +619,40 @@ behind either:
 `wetty -h` configuration options for reference.
 
 ```bash
-  --help, -h      Print help message                                   [boolean]
-  --version       Show version number                                  [boolean]
-  --conf          config file to load config from                       [string]
-  --ssl-key       path to SSL key                                       [string]
-  --ssl-cert      path to SSL certificate                               [string]
-  --ssh-host      ssh server host                                       [string]   [default: "localhost"]
-  --ssh-port      ssh server port                                       [number]   [default: 22]
-  --ssh-user      ssh user                                              [string]   [default: ""]
-  --title         window title                                          [string]   [default: "WeTTY - The Web Terminal Emulator"]
-  --ssh-auth      defaults to "password", you can use "publickey,password"
-                  instead                                               [string]   [default: "password"]
-  --ssh-pass      ssh password                                          [string]
-  --ssh-key       path to an optional client private key (connection will be
-                  password-less and insecure!)                          [string]
-  --ssh-config    Specifies an alternative ssh configuration file. For further
-                  details see "-F" option in ssh(1)                     [string]   [default: ""]
-  --force-ssh     Connecting through ssh even if running as root        [boolean]  [default: false]
-  --known-hosts   path to known hosts file                              [string]
-  --base, -b      base path to wetty                                    [string]   [default: "/wetty/"]
-  --port, -p      wetty listen port                                     [number]   [default: 3000]
-  --host          wetty listen host                                     [string]   [default: "0.0.0.0"]
-  --command, -c   command to run in shell                               [string]   [default: "login"]
-  --allow-iframe  Allow wetty to be embedded in an iframe, defaults to allowing
-                  same origin                                           [boolean]  [default: false]
+  --help, -h              Print help message                            [boolean]
+  --version               Show version number                           [boolean]
+  --conf                  config file to load config from                [string]
+  --ssl-key               path to SSL key                                [string]
+  --ssl-cert              path to SSL certificate                        [string]
+  --ssh-host              ssh server host                                [string]   [default: "localhost"]
+  --ssh-port              ssh server port                                [number]   [default: 22]
+  --ssh-user              ssh user                                       [string]   [default: ""]
+  --title                 window title                                   [string]   [default: "WeTTY - The Web Terminal Emulator"]
+  --ssh-auth              defaults to "password", you can use
+                          "publickey,password" instead                   [string]   [default: "password"]
+  --ssh-pass              ssh password                                   [string]
+  --ssh-key               path to an optional client private key
+                          (connection will be password-less and
+                          insecure!)                                     [string]
+  --ssh-config            Specifies an alternative ssh configuration
+                          file. For further details see "-F" option in
+                          ssh(1)                                         [string]   [default: ""]
+  --force-ssh             Connecting through ssh even if running as
+                          root                                          [boolean]  [default: false]
+  --known-hosts           path to known hosts file                       [string]
+  --base, -b              base path to wetty                             [string]   [default: "/wetty/"]
+  --port, -p              wetty listen port                              [number]   [default: 3000]
+  --host                  wetty listen host                              [string]   [default: "0.0.0.0"]
+  --socket                Make wetty listen on unix socket               [string]
+  --command, -c           command to run in shell                        [string]   [default: "login"]
+  --allow-iframe          Allow wetty to be embedded in an iframe,
+                          defaults to allowing same origin              [boolean]  [default: false]
+  --allow-remote-hosts    Allow wetty to use the host and port params
+                          in a url as ssh destination                   [boolean]  [default: false]
+  --allow-remote-command  Allow wetty to use the command and path
+                          params in a url as command and working
+                          directory on ssh host                         [boolean]  [default: false]
+  --log-level             set log level of wetty server                  [string]
 ```
 
 ## Updating WeTTY

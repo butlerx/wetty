@@ -4,6 +4,7 @@
 - [AtoZ](atoz.md)
 - [auto-login](auto-login.md)
 - [development](development.md)
+- [docker](docker.md)
 - [downloading-files](downloading-files.md)
 - [flags](flags.md)
 - [https](https.md)

@@ -1,4 +1,3 @@
-import isUndefined from 'lodash/isUndefined.js';
 import type { IPtyForkOptions } from 'node-pty';
 
 export const xterm: IPtyForkOptions = {
@@ -6,10 +5,9 @@ export const xterm: IPtyForkOptions = {
   cols: 80,
   rows: 30,
   cwd: process.cwd(),
-  env: Object.assign(
-    {},
-    ...Object.keys(process.env)
-      .filter((key: string) => !isUndefined(process.env[key]))
-      .map((key: string) => ({ [key]: process.env[key] })),
+  env: Object.fromEntries(
+    Object.entries(process.env).filter(
+      (entry): entry is [string, string] => entry[1] !== undefined,
+    ),
   ),
 };

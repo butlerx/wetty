@@ -2,13 +2,10 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "incremental": true,
+    "rootDir": "./src",
     "outDir": "./build",
     "sourceMap": true
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "src/client"
-  ]
+  "include": ["src"],
+  "exclude": ["src/client"]
 }

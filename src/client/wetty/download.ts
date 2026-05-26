@@ -1,4 +1,4 @@
-import fileType from 'file-type';
+import { fileTypeFromBuffer } from 'file-type';
 import Toastify from 'toastify-js';
 
 const DEFAULT_FILE_BEGIN = '\u001b[5i';
@@ -9,13 +9,12 @@ type OnCompleteFile = (bufferCharacters: string) => void;
 function onCompleteFile(bufferCharacters: string): void {
   let fileNameBase64;
   let fileCharacters = bufferCharacters;
-  if (bufferCharacters.includes(":")) {
-    [fileNameBase64, fileCharacters] = bufferCharacters.split(":");
+  if (bufferCharacters.includes(':')) {
+    [fileNameBase64, fileCharacters] = bufferCharacters.split(':');
   }
-  // Try to decode it as base64, if it fails we assume it's not base64
   try {
     fileCharacters = window.atob(fileCharacters);
-  } catch (err) {
+  } catch {
     // Assuming it's not base64...
   }
 
@@ -24,15 +23,21 @@ function onCompleteFile(bufferCharacters: string): void {
     bytes[i] = fileCharacters.charCodeAt(i);
   }
 
+  void detectAndDownload(bytes, fileCharacters, fileNameBase64);
+}
+
+async function detectAndDownload(
+  bytes: Uint8Array,
+  fileCharacters: string,
+  fileNameBase64: string | undefined,
+): Promise<void> {
   let mimeType = 'application/octet-stream';
   let fileExt = '';
-  const typeData = fileType(bytes);
+  const typeData = await fileTypeFromBuffer(bytes);
   if (typeData) {
     mimeType = typeData.mime;
     fileExt = typeData.ext;
   }
-  // Check if the buffer is ASCII
-  // Ref: https://stackoverflow.com/a/14313213
   // eslint-disable-next-line no-control-regex
   else if (/^[\x00-\xFF]*$/.test(fileCharacters)) {
     mimeType = 'text/plain';
@@ -43,20 +48,18 @@ function onCompleteFile(bufferCharacters: string): void {
     if (fileNameBase64 !== undefined) {
       fileName = window.atob(fileNameBase64);
     }
-  } catch (err) {
+  } catch {
     // Filename wasn't base64-encoded so let's ignore it
   }
 
-  if (fileName === undefined) {
-    fileName = `file-${new Date()
-      .toISOString()
-      .split('.')[0]
-      .replace(/-/g, '')
-      .replace('T', '')
-      .replace(/:/g, '')}${fileExt ? `.${fileExt}` : ''}`;
-  }
+  fileName ??= `file-${new Date()
+    .toISOString()
+    .split('.')[0]
+    .replace(/-/g, '')
+    .replace('T', '')
+    .replace(/:/g, '')}${fileExt ? `.${fileExt}` : ''}`;
 
-  const blob = new Blob([new Uint8Array(bytes.buffer)], {
+  const blob = new Blob([bytes.buffer as ArrayBuffer], {
     type: mimeType,
   });
   const blobUrl = URL.createObjectURL(blob);
@@ -160,7 +163,7 @@ export class FileDownloader {
     if (
       this.fileBuffer.length === 0 &&
       this.partialFileBegin.length === 0 &&
-      data.indexOf(this.fileBegin[0]) === -1
+      !data.includes(this.fileBegin[0])
     ) {
       return data;
     }

@@ -1,111 +1,206 @@
 @use './variables';
 
+// ─── Config Panel ──────────────────────────────────────────────────────────────
+
 #options {
-  height: 16px;
   position: absolute;
   right: 1em;
-  top: 1em;
-  width: 16px;
+  top: 3.5em;
   z-index: 20;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   .toggler {
     color: variables.$lgrey;
     display: inline-block;
     font-size: 16px;
     position: absolute;
-    right: 1em;
+    right: 0;
     top: 0;
-    z-index: 20;
+    z-index: 21;
+    padding: 6px;
+    border-radius: 6px;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
+    text-decoration: none;
 
-    :hover {
+    &:hover {
       color: variables.$white;
+      background-color: rgba(255, 255, 255, 0.1);
     }
   }
 
   .editor {
-    background-color: rgba(0, 0, 0, 0.85);
-    border-color: rgba(255, 255, 255, 0.25);
-    border-radius: 0.3em;
-    color: #eee;
     display: none;
-    font-size: 24px;
-    height: 100%;
-    padding: 0.5em;
-    position: relative;
-    right: 2em;
-    top: 1em;
     width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 12px;
+    background-color: transparent;
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+    transition:
+      opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
 #options.opened {
-  height: max(min(300px, 75vh), 50vh);
-  width: max(min(500px, 75vw), 50vw);
+  height: max(min(400px, 70vh), 50vh);
+  width: max(min(520px, 80vw), 50vw);
+  background-color: rgba(20, 20, 20, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.3);
+  padding: 2.5em 0.75em 0.75em;
 
   .editor {
     display: flex;
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 
   .error {
-    color: red;
+    color: #ff6b6b;
   }
 }
 
+// ─── Keyboard Shortcuts Panel ──────────────────────────────────────────────────
+
 #functions {
   position: fixed;
-  right: 2em;
-  top: 6em;
+  right: 1em;
+  top: 1em;
   z-index: 20;
 
-  > a {
-    padding: 10px;
-    position: absolute;
-    right: -10px;
-    top: -40px;
+  > a.toggler {
+    display: inline-block;
+    padding: 6px;
+    border-radius: 6px;
     color: variables.$lgrey;
+    text-decoration: none;
+    font-size: 16px;
+    transition:
+      color 0.2s ease,
+      background-color 0.2s ease;
 
-    :hover {
+    &:hover {
       color: variables.$white;
+      background-color: rgba(255, 255, 255, 0.1);
     }
   }
 
   .onscreen-buttons {
-    display: none;
-    width: 200px;
-    height: 200px;
-    border: solid 2px rgba(255, 255, 255, 0.25);
-    border-radius: 0.3em;
-    background-color: rgba(0, 0, 0, 0.85);
+    position: absolute;
+    right: 0;
+    top: 5em;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px) scale(0.96);
+    transition:
+      opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+      visibility 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 12px;
+    background-color: rgba(20, 20, 20, 0.92);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.5),
+      0 2px 8px rgba(0, 0, 0, 0.3);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    width: auto;
+    height: auto;
+
     > a {
-      bottom: 1em;
-      right: 2em;
       text-decoration: none;
-      color: white;
+      color: variables.$white;
+
       > div {
-        padding: 5px;
-        outline: 2px solid white;
-        margin: 10px;
-        display: inline-block;
-        font-weight: bold;
-        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 48px;
+        height: 36px;
+        padding: 4px 10px;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        color: rgba(255, 255, 255, 0.9);
+        background: linear-gradient(
+          180deg,
+          rgba(60, 60, 60, 0.9) 0%,
+          rgba(40, 40, 40, 0.95) 100%
+        );
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-bottom: 2px solid rgba(0, 0, 0, 0.4);
+        border-radius: 6px;
+        box-shadow:
+          0 1px 3px rgba(0, 0, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        transition:
+          background 0.15s ease,
+          transform 0.1s ease,
+          box-shadow 0.15s ease;
+        cursor: pointer;
+        user-select: none;
+
+        &:hover {
+          background: linear-gradient(
+            180deg,
+            rgba(75, 75, 75, 0.95) 0%,
+            rgba(55, 55, 55, 0.95) 100%
+          );
+          box-shadow:
+            0 2px 6px rgba(0, 0, 0, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        }
+
+        &:active {
+          transform: translateY(1px);
+          border-bottom-width: 1px;
+          background: linear-gradient(
+            180deg,
+            rgba(45, 45, 45, 0.95) 0%,
+            rgba(35, 35, 35, 0.95) 100%
+          );
+          box-shadow:
+            0 0 2px rgba(0, 0, 0, 0.3),
+            inset 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
       }
     }
   }
 
-  .active {
-    display: block;
+  .onscreen-buttons.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
   }
 
-  .onscreen-buttons > a:active {
-    > div {
-      background-color: rgba(255, 255, 255, 0.25);
-    }
-  }
-
+  // Ctrl key active state — highlighted when toggled on
   #onscreen-ctrl.active {
-    display: inline-block;
     > div {
-      background-color: lightgray;
+      background: linear-gradient(
+        180deg,
+        rgba(80, 140, 220, 0.9) 0%,
+        rgba(50, 110, 190, 0.95) 100%
+      );
+      border-color: rgba(100, 160, 240, 0.5);
+      color: variables.$white;
+      box-shadow:
+        0 1px 4px rgba(50, 120, 200, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
   }
 }

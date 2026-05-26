@@ -1,9 +1,7 @@
-import isUndefined from 'lodash/isUndefined.js';
-
-const getRemoteAddress = (remoteAddress: string): string =>
-  isUndefined(remoteAddress.split(':')[3])
-    ? 'localhost'
-    : remoteAddress.split(':')[3];
+function getRemoteAddress(remoteAddress: string): string {
+  const parts = remoteAddress.split(':');
+  return parts.length > 3 ? parts[3] : 'localhost';
+}
 
 export function loginOptions(command: string, remoteAddress: string): string[] {
   return command === 'login'

@@ -1,15 +1,12 @@
+import { PerformanceObserver, constants } from 'node:perf_hooks';
 import { Counter } from 'prom-client';
-import type { GCStatistics } from 'gc-stats';
 
 const gcLabelNames = ['gctype'];
-const gcTypes = {
-  0: 'Unknown',
-  1: 'Scavenge',
-  2: 'MarkSweepCompact',
-  3: 'ScavengeAndMarkSweepCompact',
-  4: 'IncrementalMarking',
-  8: 'WeakPhantom',
-  15: 'All',
+const gcTypes: Record<number, string> = {
+  [constants.NODE_PERFORMANCE_GC_MINOR]: 'Scavenge',
+  [constants.NODE_PERFORMANCE_GC_MAJOR]: 'MarkSweepCompact',
+  [constants.NODE_PERFORMANCE_GC_INCREMENTAL]: 'IncrementalMarking',
+  [constants.NODE_PERFORMANCE_GC_WEAKCB]: 'WeakPhantom',
 };
 
 const gcCount = new Counter({
@@ -24,19 +21,15 @@ const gcTimeCount = new Counter({
   labelNames: gcLabelNames,
 });
 
-const gcReclaimedCount = new Counter({
-  name: `nodejs_gc_reclaimed_bytes_total`,
-  help: 'Total number of bytes reclaimed by GC.',
-  labelNames: gcLabelNames,
-});
-
-export const gcMetrics = ({ gctype, diff, pause }: GCStatistics): void => {
-  const gcType = gcTypes[gctype];
-
-  gcCount.labels(gcType).inc();
-  gcTimeCount.labels(gcType).inc(pause / 1e9);
-
-  if (diff.usedHeapSize < 0) {
-    gcReclaimedCount.labels(gcType).inc(diff.usedHeapSize * -1);
-  }
-};
+export function observeGC(): void {
+  const obs = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+      const kind =
+        (entry as unknown as { detail?: { kind?: number } }).detail?.kind ?? 0;
+      const gcType = gcTypes[kind] ?? 'Unknown';
+      gcCount.labels(gcType).inc();
+      gcTimeCount.labels(gcType).inc(entry.duration / 1000);
+    }
+  });
+  obs.observe({ entryTypes: ['gc'] });
+}

@@ -1,14 +1,19 @@
 import { FitAddon } from '@xterm/addon-fit';
 import { ImageAddon } from '@xterm/addon-image';
 import { WebLinksAddon } from '@xterm/addon-web-links';
+import { WebglAddon } from '@xterm/addon-webgl';
 import { Terminal } from '@xterm/xterm';
-import _ from 'lodash';
 
 import { terminal as termElement } from './disconnect/elements';
-import { configureTerm } from './term/confiruragtion';
+import { configureTerm } from './term/configuration';
 import { loadOptions } from './term/load';
 import type { Options } from './term/options';
 import type { Socket } from 'socket.io-client';
+
+const isMobile =
+  /iPhone|iPad|iPod|Android|webOS|BlackBerry|Opera Mini|IEMobile/i.test(
+    navigator.userAgent,
+  );
 
 export class Term extends Terminal {
   socket: Socket;
@@ -23,6 +28,13 @@ export class Term extends Terminal {
     this.loadAddon(new WebLinksAddon());
     this.loadAddon(new ImageAddon());
     this.loadOptions = loadOptions;
+    if (!isMobile) {
+      try {
+        this.loadAddon(new WebglAddon());
+      } catch {
+        // WebGL not available — DOM renderer will be used
+      }
+    }
   }
 
   resizeTerm(): void {
@@ -32,7 +44,7 @@ export class Term extends Terminal {
   }
 
   get shouldFitTerm(): boolean {
-    return this.loadOptions().wettyFitTerminal ?? true;
+    return this.loadOptions().wettyFitTerminal;
   }
 }
 
@@ -55,7 +67,7 @@ const toggleCTRL = (): void => {
     }
   }
   window.wetty_term?.focus();
-}
+};
 
 /**
  * Simulates a backspace key press by sending the backspace character
@@ -66,7 +78,7 @@ const toggleCTRL = (): void => {
  */
 const simulateBackspace = (): void => {
   window.wetty_term?.input('\x7F', true);
-}
+};
 
 /**
  * Simulates a CTRL + key press by sending the corresponding character
@@ -78,8 +90,11 @@ const simulateBackspace = (): void => {
  *              its corresponding character code.
  */
 const simulateCTRLAndKey = (key: string): void => {
-  window.wetty_term?.input(`${String.fromCharCode(key.toUpperCase().charCodeAt(0) - 64)}`, false);
-}
+  window.wetty_term?.input(
+    String.fromCharCode(key.toUpperCase().charCodeAt(0) - 64),
+    false,
+  );
+};
 
 /**
  * Handles the keydown event for the CTRL key. When the CTRL key is pressed,
@@ -92,14 +107,14 @@ const simulateCTRLAndKey = (key: string): void => {
 document.addEventListener('keyup', (e) => {
   if (ctrlFlag) {
     // if key is a character
-    if (e.key.length === 1 && e.key.match(/^[a-zA-Z0-9]$/)) {
+    if (e.key.length === 1 && /^[a-zA-Z0-9]$/.exec(e.key)) {
       simulateCTRLAndKey(e.key);
       // delayed backspace is needed to remove the character added to the terminal
       // when CTRL + key is pressed.
       // this is a workaround because e.preventDefault() cannot be used.
-      _.debounce(() => {
+      setTimeout(() => {
         simulateBackspace();
-      }, 100)();
+      }, 100);
     }
     toggleCTRL();
   }
@@ -116,7 +131,7 @@ const pressESC = (): void => {
   }
   window.wetty_term?.input('\x1B', false);
   window.wetty_term?.focus();
-}
+};
 
 /**
  * Simulates pressing the UP arrow key by sending the UP character (ASCII code 65)
@@ -129,7 +144,7 @@ const pressUP = (): void => {
   }
   window.wetty_term?.input('\x1B[A', false);
   window.wetty_term?.focus();
-}
+};
 
 /**
  * Simulates pressing the DOWN arrow key by sending the DOWN character (ASCII code 66)
@@ -142,7 +157,7 @@ const pressDOWN = (): void => {
   }
   window.wetty_term?.input('\x1B[B', false);
   window.wetty_term?.focus();
-}
+};
 
 /**
  * Simulates pressing the TAB key by sending the TAB character (ASCII code 9)
@@ -155,7 +170,7 @@ const pressTAB = (): void => {
   }
   window.wetty_term?.input('\x09', false);
   window.wetty_term?.focus();
-}
+};
 
 /**
  * Simulates pressing the LEFT arrow key by sending the LEFT character (ASCII code 68)
@@ -168,7 +183,7 @@ const pressLEFT = (): void => {
   }
   window.wetty_term?.input('\x1B[D', false);
   window.wetty_term?.focus();
-}
+};
 
 /**
  * Simulates pressing the RIGHT arrow key by sending the RIGHT character (ASCII code 67)
@@ -181,30 +196,30 @@ const pressRIGHT = (): void => {
   }
   window.wetty_term?.input('\x1B[C', false);
   window.wetty_term?.focus();
-}
+};
 
 /**
  * Toggles the visibility of the onscreen buttons by adding or removing
  * the 'active' class to the element with the ID 'onscreen-buttons'.
  */
 const toggleFunctions = (): void => {
-  const element = document.querySelector('div#functions > div.onscreen-buttons')
+  const element = document.querySelector(
+    'div#functions > div.onscreen-buttons',
+  );
   if (element?.classList.contains('active')) {
-    element?.classList.remove('active');
+    element.classList.remove('active');
   } else {
     element?.classList.add('active');
+    document.getElementById('options')?.classList.remove('opened');
   }
-}
+};
 
 declare global {
   interface Window {
     wetty_term?: Term;
-    wetty_close_config?: () => void;
-    wetty_save_config?: (newConfig: Options) => void;
     clipboardData: DataTransfer;
-    loadOptions: (conf: Options) => void;
     toggleFunctions?: () => void;
-    toggleCTRL? : () => void;
+    toggleCTRL?: () => void;
     pressESC?: () => void;
     pressUP?: () => void;
     pressDOWN?: () => void;
@@ -216,7 +231,7 @@ declare global {
 
 export function terminal(socket: Socket): Term | undefined {
   const term = new Term(socket);
-  if (_.isNull(termElement)) return undefined;
+  if (termElement === null) return undefined;
   termElement.innerHTML = '';
   term.open(termElement);
   configureTerm(term);

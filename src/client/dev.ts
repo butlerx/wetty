@@ -1,5 +1,5 @@
-caches.keys().then(cacheNames => {
-  cacheNames.forEach(cacheName => {
-    caches.delete(cacheName);
+void caches.keys().then((cacheNames) => {
+  cacheNames.forEach((cacheName) => {
+    void caches.delete(cacheName);
   });
 });

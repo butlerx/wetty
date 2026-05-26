@@ -5,7 +5,7 @@ This is handy for quick deployments. Just modify `docker-compose.yml` for your
 host and run:
 
 ```sh
-$ docker-compose up -d
+$ docker compose up -d
 ```
 
 This will start 2 containers, one will be WeTTY container running ssh client the

@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import type { XTerm, Options } from './options';
+import type { Options } from './options';
 
 export const defaultOptions: Options = {
   xterm: { fontSize: 14 },
@@ -9,14 +8,13 @@ export const defaultOptions: Options = {
 
 export function loadOptions(): Options {
   try {
-    let options = _.isUndefined(localStorage.options)
-      ? defaultOptions
-      : JSON.parse(localStorage.options);
-    // Convert old options to new options
+    const raw = localStorage.options as string | undefined;
+    let options: Options =
+      raw === undefined ? defaultOptions : (JSON.parse(raw) as Options);
     if (!('xterm' in options)) {
-      const xterm = options;
+      const { xterm } = options;
       options = defaultOptions;
-      options.xterm = xterm as unknown as XTerm;
+      options.xterm = xterm;
     }
     return options;
   } catch {

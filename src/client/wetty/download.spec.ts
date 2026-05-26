@@ -5,7 +5,7 @@ import * as sinon from 'sinon';
 
 import { FileDownloader } from './download';
 
-const noop = (): void => {}; // eslint-disable-line @typescript-eslint/no-empty-function
+const noop = (): void => {};
 
 describe('FileDownloader', () => {
   const FILE_BEGIN = 'BEGIN';

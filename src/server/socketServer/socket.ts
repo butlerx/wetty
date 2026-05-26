@@ -1,6 +1,5 @@
 import http from 'http';
 import https from 'https';
-import isUndefined from 'lodash/isUndefined.js';
 import { Server } from 'socket.io';
 
 import { logger } from '../../shared/logger.js';
@@ -13,12 +12,13 @@ export const listen = (
   port: number,
   path: string,
   { key, cert }: SSLBuffer,
-  socket?: string | boolean
-): Server =>{
+  socket?: string | boolean,
+): Server => {
   // Create the base HTTP/HTTPS server
-  const server = !isUndefined(key) && !isUndefined(cert)
-    ? https.createServer({ key, cert }, app)
-    : http.createServer(app);
+  const server =
+    key !== undefined && cert !== undefined
+      ? https.createServer({ key, cert }, app)
+      : http.createServer(app);
 
   // Start listening on either Unix socket or TCP
   if (socket) {
@@ -29,7 +29,7 @@ export const listen = (
     server.listen(port, host, () => {
       logger().info('Server started', {
         port,
-        connection: !isUndefined(key) && !isUndefined(cert) ? 'https' : 'http',
+        connection: key !== undefined && cert !== undefined ? 'https' : 'http',
       });
     });
   }
@@ -40,4 +40,4 @@ export const listen = (
     pingInterval: 3000,
     pingTimeout: 7000,
   });
-}
+};

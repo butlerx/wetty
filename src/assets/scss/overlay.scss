@@ -1,7 +1,8 @@
 @use './variables';
 
 #overlay {
-  background-color: variables.$grey;
+  background-color: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(8px);
   display: none;
   height: 100%;
   position: absolute;
@@ -13,16 +14,55 @@
     flex-direction: column;
     height: 100%;
     justify-content: center;
+    align-items: center;
     width: 100%;
 
     #msg {
-      align-self: center;
       color: variables.$white;
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: 0.5em;
     }
 
-    input {
-      align-self: center;
+    input[type='button'] {
       margin: 16px;
+      padding: 0.5em 1.6em;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: variables.$white;
+      background: linear-gradient(
+        180deg,
+        rgba(60, 130, 220, 0.85) 0%,
+        rgba(40, 100, 190, 0.9) 100%
+      );
+      border: 1px solid rgba(100, 160, 240, 0.4);
+      border-radius: 8px;
+      cursor: pointer;
+      transition:
+        background 0.2s ease,
+        transform 0.1s ease,
+        box-shadow 0.2s ease;
+      box-shadow:
+        0 2px 8px rgba(40, 100, 200, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+      &:hover {
+        background: linear-gradient(
+          180deg,
+          rgba(70, 145, 235, 0.9) 0%,
+          rgba(50, 115, 210, 0.95) 100%
+        );
+        box-shadow:
+          0 4px 12px rgba(40, 100, 200, 0.4),
+          inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      }
+
+      &:active {
+        transform: translateY(1px);
+        box-shadow:
+          0 1px 4px rgba(40, 100, 200, 0.3),
+          inset 0 1px 2px rgba(0, 0, 0, 0.2);
+      }
     }
   }
 }

@@ -1,32 +1,47 @@
 ---
-name: Create Release
+name: Release
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches:
+      - main
 jobs:
+  test:
+    name: Build & Test
+    uses: ./.github/workflows/build-and-test.workflow.yml
+
   release:
-    name: Create Release
+    name: Release
+    needs: test
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      packages: write
+      id-token: write
     steps:
-      - name: Create Release
-        uses: fregante/release-with-changelog@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          title: 'Release {tag}'
-          exclude: true
-          commit-template: '- {title} ← {hash}'
-          template: |
-            ### Changelog
+          fetch-depth: 0
+          persist-credentials: false
 
-            {commits}
+      - uses: pnpm/action-setup@v4
 
-            {range}
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
 
-  docker:
-    name: Docker Publish Image
-    uses: ./.github/workflows/docker.workflow.yml
-    secrets: inherit
-    with:
-      platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
-      push: true
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.npm_token }}
+        run: pnpm exec semantic-release

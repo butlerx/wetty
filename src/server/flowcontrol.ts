@@ -21,9 +21,8 @@ export function tinybuffer(socket: Socket, timeout: number, maxSize: number) {
         clearTimeout(sender);
         sender = null;
       }
-    }
-    else if (!sender) {
-      sender = setTimeout(() => {
+    } else {
+      sender ??= setTimeout(() => {
         socket.emit('data', s.join(''));
         s.length = 0;
         length = 0;
@@ -55,14 +54,14 @@ export function tinybuffer(socket: Socket, timeout: number, maxSize: number) {
  */
 export class FlowControlServer {
   public counter = 0;
-  public low = 524288;      // 2^19 --> 2x ackBytes from frontend
-  public high = 2097152;    // 2^21 --> 8x ackBytes from frontend
+  public low = 524288; // 2^19 --> 2x ackBytes from frontend
+  public high = 2097152; // 2^21 --> 8x ackBytes from frontend
 
   constructor(low?: number, high?: number) {
-    if (low) {
+    if (low != null) {
       this.low = low;
     }
-    if (high) {
+    if (high != null) {
       this.high = high;
     }
   }

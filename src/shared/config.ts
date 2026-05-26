@@ -1,7 +1,6 @@
+import { readFile } from 'node:fs/promises';
 import path from 'path';
-import fs from 'fs-extra';
 import JSON5 from 'json5';
-import isUndefined from 'lodash/isUndefined.js';
 import {
   sshDefault,
   serverDefault,
@@ -13,15 +12,7 @@ import type { Config, SSH, Server, SSL } from './interfaces';
 import type winston from 'winston';
 import type { Arguments } from 'yargs';
 
-type confValue =
-  | boolean
-  | string
-  | number
-  | undefined
-  | unknown
-  | SSH
-  | Server
-  | SSL;
+type confValue = boolean | string | number | undefined | SSH | Server | SSL;
 
 /**
  * Cast given value to boolean
@@ -47,7 +38,10 @@ function parseLogLevel(
   confLevel: typeof winston.level,
   optsLevel: unknown,
 ): typeof winston.level {
-  const logLevel = isUndefined(optsLevel) ? confLevel : `${optsLevel}`;
+  const logLevel =
+    optsLevel === undefined || typeof optsLevel !== 'string'
+      ? confLevel
+      : optsLevel;
   return [
     'error',
     'warn',
@@ -57,7 +51,7 @@ function parseLogLevel(
     'debug',
     'silly',
   ].includes(logLevel)
-    ? (logLevel as typeof winston.level)
+    ? logLevel
     : defaultLogLevel;
 }
 
@@ -69,7 +63,7 @@ function parseLogLevel(
  * @returns variable cast to boolean
  */
 export async function loadConfigFile(filepath?: string): Promise<Config> {
-  if (isUndefined(filepath)) {
+  if (filepath === undefined) {
     return {
       ssh: sshDefault,
       server: serverDefault,
@@ -78,19 +72,29 @@ export async function loadConfigFile(filepath?: string): Promise<Config> {
       logLevel: defaultLogLevel,
     };
   }
-  const content = await fs.readFile(path.resolve(filepath));
-  const parsed = JSON5.parse(content.toString()) as Config;
+  const content = await readFile(path.resolve(filepath));
+  const parsed: Partial<{
+    ssh: Partial<SSH>;
+    server: Partial<Server>;
+    command: string;
+    forceSSH: confValue;
+    ssl: SSL;
+    logLevel: unknown;
+  }> = JSON5.parse(content.toString());
   return {
-    ssh: isUndefined(parsed.ssh)
-      ? sshDefault
-      : Object.assign(sshDefault, parsed.ssh),
-    server: isUndefined(parsed.server)
-      ? serverDefault
-      : Object.assign(serverDefault, parsed.server),
-    command: isUndefined(parsed.command) ? defaultCommand : `${parsed.command}`,
-    forceSSH: isUndefined(parsed.forceSSH)
-      ? forceSSHDefault
-      : ensureBoolean(parsed.forceSSH),
+    ssh:
+      parsed.ssh === undefined
+        ? sshDefault
+        : Object.assign(sshDefault, parsed.ssh),
+    server:
+      parsed.server === undefined
+        ? serverDefault
+        : Object.assign(serverDefault, parsed.server),
+    command: parsed.command ?? defaultCommand,
+    forceSSH:
+      parsed.forceSSH === undefined
+        ? forceSSHDefault
+        : ensureBoolean(parsed.forceSSH),
     ssl: parsed.ssl,
     logLevel: parseLogLevel(defaultLogLevel, parsed.logLevel),
   };
@@ -111,7 +115,7 @@ const objectAssign = (
   Object.fromEntries(
     Object.entries(source).map(([key, value]) => [
       key,
-      isUndefined(source[key]) ? target[key] : value,
+      source[key] === undefined ? target[key] : value,
     ]),
   ) as SSH | Server;
 
@@ -124,11 +128,11 @@ const objectAssign = (
  *
  */
 export function mergeCliConf(opts: Arguments, config: Config): Config {
-  const ssl = {
-    key: opts['ssl-key'],
-    cert: opts['ssl-cert'],
+  const ssl: Partial<SSL> = {
+    key: opts['ssl-key'] as string | undefined,
+    cert: opts['ssl-cert'] as string | undefined,
     ...config.ssl,
-  } as SSL;
+  };
   return {
     ssh: objectAssign(config.ssh, {
       user: opts['ssh-user'],
@@ -141,7 +145,7 @@ export function mergeCliConf(opts: Arguments, config: Config): Config {
       allowRemoteCommand: opts['allow-remote-command'],
       config: opts['ssh-config'],
       knownHosts: opts['known-hosts'],
-    }) as SSH,
+    } as Record<string, confValue>) as SSH,
     server: objectAssign(config.server, {
       base: opts.base,
       host: opts.host,
@@ -149,12 +153,19 @@ export function mergeCliConf(opts: Arguments, config: Config): Config {
       port: opts.port,
       title: opts.title,
       allowIframe: opts['allow-iframe'],
-    }) as Server,
-    command: isUndefined(opts.command) ? config.command : `${opts.command}`,
-    forceSSH: isUndefined(opts['force-ssh'])
-      ? config.forceSSH
-      : ensureBoolean(opts['force-ssh']),
-    ssl: isUndefined(ssl.key) || isUndefined(ssl.cert) ? undefined : ssl,
+    } as Record<string, confValue>) as Server,
+    command:
+      opts.command === undefined || typeof opts.command !== 'string'
+        ? config.command
+        : opts.command,
+    forceSSH:
+      opts['force-ssh'] === undefined
+        ? config.forceSSH
+        : ensureBoolean(opts['force-ssh'] as confValue),
+    ssl:
+      ssl.key === undefined || ssl.cert === undefined
+        ? undefined
+        : (ssl as SSL),
     logLevel: parseLogLevel(config.logLevel, opts['log-level']),
   };
 }

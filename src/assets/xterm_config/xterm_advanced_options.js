@@ -82,14 +82,7 @@ window.inflateOptions([
     path: ['xterm', 'minimumContrastRatio'],
     float: true,
   },
-  {
-    type: 'enum',
-    name: 'Renderer Type',
-    description:
-      'The terminal renderer to use. Canvas is preferred, but a DOM renderer is also available. Note: Letter spacing and cursor blink do not work in the DOM renderer.',
-    path: ['xterm', 'rendererType'],
-    enum: ['canvas', 'dom'],
-  },
+
   {
     type: 'boolean',
     name: 'Right Click Selects Words',
@@ -109,13 +102,7 @@ window.inflateOptions([
     description: 'The size of tab stops in the terminal.',
     path: ['xterm', 'tabStopWidth'],
   },
-  {
-    type: 'boolean',
-    name: 'Windows Mode',
-    description:
-      "\"Whether 'Windows mode' is enabled. Because Windows backends winpty and conpty operate by doing line wrapping on their side, xterm.js does not have access to wrapped lines. When Windows mode is enabled the following changes will be in effect:\n- Reflow is disabled.\n- Lines are assumed to be wrapped if the last character of the line is not whitespace.",
-    path: ['xterm', 'windowsMode'],
-  },
+
   {
     type: 'text',
     name: 'Word Separator',

@@ -3,10 +3,7 @@ import type { Request, Response, RequestHandler } from 'express';
 
 const jsFiles = isDev ? ['dev.js', 'wetty.js'] : ['wetty.js'];
 
-const render = (
-  title: string,
-  base: string,
-): string => `<!doctype html>
+const render = (title: string, base: string): string => `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf8">
@@ -23,6 +20,24 @@ const render = (
         <input type="button" onclick="location.reload();" value="reconnect" />
       </div>
     </div>
+    <div id="functions">
+      <a class="toggler"
+         href="#"
+         alt="Toggle keyboard"
+         onclick="window.toggleFunctions()"
+       ><i class="fas fa-keyboard"></i></a>
+      <div class="onscreen-buttons">
+        <a href="#" onclick="window.pressESC()"><div>Esc</div></a>
+        <a href="#" onclick="window.pressTAB()"><div>Tab</div></a>
+        <a id="onscreen-ctrl" href="#" onclick="window.toggleCTRL()"><div>Ctrl</div></a>
+        <a href="#" onclick="window.pressLEFT()"><div>&#9664;</div></a>
+        <a href="#" onclick="window.pressUP()"><div>&#9650;</div></a>
+        <a href="#" onclick="window.pressRIGHT()"><div>&#9654;</div></a>
+        <a href="#" style="visibility:hidden"><div></div></a>
+        <a href="#" onclick="window.pressDOWN()"><div>&#9660;</div></a>
+        <a href="#" style="visibility:hidden"><div></div></a>
+      </div>
+    </div>
     <div id="options">
       <a class="toggler"
          href="#"
@@ -30,95 +45,18 @@ const render = (
        ><i class="fas fa-cogs"></i></a>
       <iframe class="editor" src="${base}/client/xterm_config/index.html"></iframe>
     </div>
-    <div id="functions">
-      <a class="toggler"
-         href="#"
-         alt="Toggle options"
-         onclick="window.toggleFunctions()"
-       ><i class="fas fa-keyboard"></i></a>
-      <div class="onscreen-buttons">
-        <a
-          href="#"
-          alt="Up"
-          onclick="window.pressUP()"
-        >
-          <div>
-            Up
-          </div>
-        </a>
-        <a
-          href="#"
-          alt="Down"
-          onclick="window.pressDOWN()"
-        >
-          <div>
-            Down
-          </div>
-        </a>
-        <a
-          href="#"
-          alt="Left"
-          onclick="window.pressLEFT()"
-        >
-          <div>
-            Left
-          </div>
-        </a>
-        <a
-          href="#"
-          alt="Right"
-          onclick="window.pressRIGHT()"
-        >
-          <div>
-            Right
-          </div>
-        </a>
-        <a
-          href="#"
-          alt="Esc"
-          onclick="window.pressESC()"
-        >
-          <div>
-            Esc
-          </div>
-        </a>
-        <a
-          id="onscreen-ctrl"
-          href="#"
-          alt="Ctrl"
-          onclick="window.toggleCTRL()"
-        >
-          <div>
-            Ctrl
-          </div>
-        </a>
-        <a
-          href="#"
-          alt="Tab"
-          onclick="window.pressTAB()"
-        >
-          <div>
-            Tab
-          </div>
-        </a>
-      </div>
-    </div>
     <div id="terminal"></div>
     ${jsFiles
-        .map(file => `    <script type="module" src="${base}/client/${file}"></script>`)
-        .join('\n')
-    }
+      .map(
+        (file) =>
+          `    <script type="module" src="${base}/client/${file}"></script>`,
+      )
+      .join('\n')}
   </body>
 </html>`;
 
-export const html = (base: string, title: string): RequestHandler => (
-  _req: Request,
-  res: Response,
-): void => {
-  res.send(
-    render(
-      title,
-      base,
-    ),
-  );
-};
+export const html =
+  (base: string, title: string): RequestHandler =>
+  (_req: Request, res: Response): void => {
+    res.send(render(title, base));
+  };
