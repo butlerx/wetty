@@ -17,7 +17,6 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
-      packages: write
       id-token: write
     outputs:
       new_release_published: ${{ steps.check.outputs.new_release_published }}
@@ -36,6 +35,7 @@ jobs:
         with:
           node-version: 24
           cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
