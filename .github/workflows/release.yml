@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+permissions: {}
 jobs:
   test:
     name: Build & Test
@@ -23,15 +24,15 @@ jobs:
       new_release_version: ${{ steps.check.outputs.new_release_version }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 24
           cache: 'pnpm'
@@ -58,19 +59,26 @@ jobs:
         run: |
           git fetch --tags
           LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo 'none')
-          if [ "$LATEST_TAG" != "${{ steps.before.outputs.tag }}" ]; then
+          if [ "$LATEST_TAG" != "${STEPS_BEFORE_OUTPUTS_TAG}" ]; then
             echo "new_release_published=true" >> $GITHUB_OUTPUT
             echo "new_release_version=${LATEST_TAG#v}" >> $GITHUB_OUTPUT
           else
             echo "new_release_published=false" >> $GITHUB_OUTPUT
           fi
+        env:
+          STEPS_BEFORE_OUTPUTS_TAG: ${{ steps.before.outputs.tag }}
 
   docker:
     name: Docker Publish
     needs: release
     if: needs.release.outputs.new_release_published == 'true'
     uses: ./.github/workflows/docker.workflow.yml
-    secrets: inherit
+    permissions:
+      contents: read
+      packages: write
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
     with:
       platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
       push: true

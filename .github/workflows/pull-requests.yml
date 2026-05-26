@@ -2,18 +2,22 @@
 name: Pull Request
 on:
   pull_request:
+permissions: {}
 jobs:
   commitlint:
     name: Lint Commits
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
+          persist-credentials: false
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
           cache: 'pnpm'
@@ -37,7 +41,6 @@ jobs:
           - linux/arm/v6
           - linux/arm/v7
           - linux/arm64
-    secrets: inherit
     with:
       platforms: ${{ matrix.platform }}
       push: false
