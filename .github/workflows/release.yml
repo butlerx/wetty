@@ -9,6 +9,8 @@ jobs:
   test:
     name: Build & Test
     uses: ./.github/workflows/build-and-test.workflow.yml
+    permissions:
+      contents: read
 
   release:
     name: Release

@@ -30,10 +30,15 @@ jobs:
   test:
     name: Build & Test
     uses: ./.github/workflows/build-and-test.workflow.yml
+    permissions:
+      contents: read
 
   validate-docker:
     name: Validate Docker Build
     uses: ./.github/workflows/docker.workflow.yml
+    permissions:
+      contents: read
+      packages: write
     strategy:
       matrix:
         platform:
