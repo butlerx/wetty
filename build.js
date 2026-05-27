@@ -78,7 +78,7 @@ async function buildClient(watching) {
     const buildCtx = await esbuild.context(esConf);
     await buildCtx.watch();
   } else {
-    esbuild.build(esConf);
+    await esbuild.build(esConf);
   }
 }
 
@@ -87,7 +87,7 @@ async function buildClient(watching) {
 async function buildServer(watching) {
   const tscArgs = ['tsc', '-p', 'tsconfig.node.json'];
   if (watching) tscArgs.push('--watch', '--preserveWatchOutput');
-  const [_tsc, tscDone] = cmd('pnpm', tscArgs);
+  const [_tsc, tscDone] = cmd('npx', tscArgs);
   if (!watching) await tscDone;
 }
 
