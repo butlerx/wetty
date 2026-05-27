@@ -4,9 +4,9 @@ import Toastify from 'toastify-js';
 const DEFAULT_FILE_BEGIN = '\u001b[5i';
 const DEFAULT_FILE_END = '\u001b[4i';
 
-type OnCompleteFile = (bufferCharacters: string) => void;
+type OnCompleteFile = (bufferCharacters: string) => Promise<void>;
 
-function onCompleteFile(bufferCharacters: string): void {
+async function onCompleteFile(bufferCharacters: string): Promise<void> {
   let fileNameBase64;
   let fileCharacters = bufferCharacters;
   if (bufferCharacters.includes(':')) {
@@ -23,7 +23,7 @@ function onCompleteFile(bufferCharacters: string): void {
     bytes[i] = fileCharacters.charCodeAt(i);
   }
 
-  void detectAndDownload(bytes, fileCharacters, fileNameBase64);
+  await detectAndDownload(bytes, fileCharacters, fileNameBase64);
 }
 
 async function detectAndDownload(
@@ -62,17 +62,24 @@ async function detectAndDownload(
   const blob = new Blob([bytes.buffer as ArrayBuffer], {
     type: mimeType,
   });
-  const blobUrl = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.target = '_blank';
+  link.download = fileName;
+  link.textContent = fileName;
+
+  const wrapper = document.createElement('span');
+  wrapper.textContent = 'Download ready: ';
+  wrapper.appendChild(link);
 
   Toastify({
-    text: `Download ready: <a href="${blobUrl}" target="_blank" download="${fileName}">${fileName}</a>`,
+    node: wrapper,
     duration: 10000,
-    newWindow: true,
     gravity: 'bottom',
     position: 'right',
     backgroundColor: '#fff',
     stopOnFocus: true,
-    escapeMarkup: false,
   }).showToast();
 }
 
@@ -143,7 +150,7 @@ export class FileDownloader {
       this.fileBuffer.length >= this.fileBegin.length + this.fileEnd.length &&
       this.fileBuffer.slice(-this.fileEnd.length).join('') === this.fileEnd
     ) {
-      this.onCompleteFileCallback(
+      void this.onCompleteFileCallback(
         this.fileBuffer
           .slice(
             this.fileBegin.length,
