@@ -19,4 +19,4 @@ You can also pass the ssh password as an optional query parameter to auto-login
 the user like this (Only while running WeTTY as a non root account or when
 specifying the ssh host):
 
-`http://yourserver:3000/wetty/ssh/<username>?pass=<password>`
+`http://yourserver:3000/ssh/<username>?pass=<password>`

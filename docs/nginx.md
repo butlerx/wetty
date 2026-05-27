@@ -5,12 +5,12 @@ As said earlier you can use Nginx to add https to WeTTY.
 **Note** that if your proxy is configured for https you should run WeTTY without
 SSL
 
-If you configure nginx to use a base path other than `/wetty`, then specify that
-path with the `--base` flag, or the `BASE` environment variable.
+If you configure nginx to use a base path other than `/`, then specify that path
+with the `--base` flag, or the `BASE` environment variable.
 
 The following confs assume you want to serve WeTTY on the url
-`example.com/wetty` and are running WeTTY with the default base and serving it
-on the same server
+`example.com/wetty` and are running WeTTY with `--base /wetty` on the same
+server.
 
 For a more detailed look see the
 [nginx.conf](https://github.com/butlerx/wetty/blob/main/conf/nginx.template)

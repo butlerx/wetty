@@ -273,10 +273,9 @@ proxy through nginx.
 `--title wetty` - an optional setting to set the window title for this `wetty`
 session.
 
-`--base /` - changes the default base URL setting from `/wetty/` to define the
-remote URL. We use `--base /` to make `wetty` accessible on the URL format
-`https://IP:3000` instead of `https://IP:3000/wetty` but we would change this
-back if we use nginx to reverse proxy the application.
+`--base /` - keeps the default base URL setting and serves `wetty` from the root
+URL. This gives you `https://IP:3000` instead of `https://IP:3000/wetty`. You
+can switch to a prefixed base path like `/wetty/` when using a reverse proxy.
 
 ### SSH settings explained
 
@@ -365,7 +364,7 @@ pass validation.
         "allowRemoteCommand": false // Allow using the command and path params in a url as command and working directory
     },
     "server": {
-        "base": "/wetty/", // URL base to serve resources from
+        "base": "/", // URL base to serve resources from
         "port": 3000, // Port to listen on
         "host": "0.0.0.0", // listen on all interfaces or can be 127.0.0.1 with nginx
         "title": "WeTTY - The Web Terminal Emulator", // Page title
@@ -640,7 +639,7 @@ behind either:
   --force-ssh             Connecting through ssh even if running as
                           root                                          [boolean]  [default: false]
   --known-hosts           path to known hosts file                       [string]
-  --base, -b              base path to wetty                             [string]   [default: "/wetty/"]
+  --base, -b              base path to wetty                             [string]   [default: "/"]
   --port, -p              wetty listen port                              [number]   [default: 3000]
   --host                  wetty listen host                              [string]   [default: "0.0.0.0"]
   --socket                Make wetty listen on unix socket               [string]

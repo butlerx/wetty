@@ -5,12 +5,12 @@ As said earlier you can use a proxy to add https to WeTTY.
 **Note** that if your proxy is configured for https you should run WeTTY without
 SSL
 
-If your proxy uses a base path other than `/wetty`, specify the path with the
+If your proxy uses a base path other than `/`, specify the path with the
 `--base` flag, or the `BASE` environment variable.
 
 The following confs assume you want to serve WeTTY on the url
-`example.com/wetty` and are running WeTTY with the default base and serving it
-on the same server
+`example.com/wetty` and are running WeTTY with `--base /wetty` on the same
+server.
 
 Put the following configuration in apache's conf:
 
