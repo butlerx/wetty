@@ -9,6 +9,9 @@ const localhost = (host: string): boolean =>
   process.getuid?.() === 0 &&
   (host === 'localhost' || host === '0.0.0.0' || host === '127.0.0.1');
 
+const isLocalHost = (host: string): boolean =>
+  host === 'localhost' || host === '0.0.0.0' || host === '127.0.0.1';
+
 const urlArgs = (
   referer: string | undefined,
   {
@@ -59,6 +62,10 @@ export async function getCommand(
       conn: { remoteAddress },
     },
   } = socket;
+
+  if (!forcessh && command !== 'login' && isLocalHost(host)) {
+    return loginOptions(command, remoteAddress);
+  }
 
   if (!forcessh && localhost(host)) {
     return loginOptions(command, remoteAddress);
