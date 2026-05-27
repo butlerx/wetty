@@ -32,4 +32,4 @@ RUN apk add -U coreutils openssh-client sshpass && \
     mkdir -p ~/.ssh
 
 EXPOSE 3000
-CMD ["pnpm", "start"]
+ENTRYPOINT ["node", "./build/main.js"]
