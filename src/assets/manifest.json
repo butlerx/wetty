@@ -1,0 +1,17 @@
+{
+  "name": "WeTTY - Web Terminal",
+  "short_name": "WeTTY",
+  "start_url": "../",
+  "scope": "../",
+  "display": "standalone",
+  "background_color": "#1e1e1e",
+  "theme_color": "#1e1e1e",
+  "icons": [
+    {
+      "src": "wetty.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
