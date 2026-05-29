@@ -107,7 +107,7 @@
     "git-authors-cli": "^1.0.53",
     "globals": "^17.6.0",
     "husky": "^9.1.7",
-    "jsdom": "^25.0.1",
+    "jsdom": "^29.1.1",
     "lint-staged": "^17.0.5",
     "mocha": "12.0.0-beta-10",
     "nodemon": "^3.1.14",
