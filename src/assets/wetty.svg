@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="80" fill="#1e1e1e"/>
+  <rect x="60" y="70" width="392" height="320" rx="24" fill="#0a0a0a" stroke="#4a4a4a" stroke-width="8"/>
+  <text x="100" y="160" font-family="monospace" font-size="64" font-weight="bold" fill="#4ec94e">user@host</text>
+  <text x="100" y="250" font-family="monospace" font-size="56" fill="#ffffff">~/develop/wetty</text>
+  <text x="100" y="340" font-family="monospace" font-size="56" fill="#ffffff">$ <tspan fill="#4ec94e">_</tspan></text>
+</svg>

@@ -12,6 +12,17 @@ import { mobileKeyboard } from './wetty/mobile';
 import { socket } from './wetty/socket';
 import { terminal, Term } from './wetty/term';
 
+if ('serviceWorker' in navigator) {
+  const scripts = Array.from(document.getElementsByTagName('script'));
+  const own = scripts.find((s) => s.src.endsWith('/wetty.js'));
+  if (own) {
+    const base = own.src.replace(/\/client\/wetty\.js$/, '');
+    void navigator.serviceWorker.register(`${base}/sw.js`, {
+      scope: `${base}/`,
+    });
+  }
+}
+
 // Setup for fontawesome
 library.add(faCogs);
 library.add(faKeyboard);

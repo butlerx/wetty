@@ -67,6 +67,9 @@ async function buildClient(watching) {
         assets: [
           { from: './src/assets/xterm_config/*', to: 'xterm_config' },
           { from: './src/assets/favicon.ico', to: 'favicon.ico' },
+          { from: './src/assets/manifest.json', to: 'manifest.json' },
+          { from: './src/assets/sw.js', to: '../sw.js' },
+          { from: './src/assets/wetty.svg', to: 'wetty.svg' },
         ],
         watch: watching,
       }),
