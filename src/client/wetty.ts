@@ -17,7 +17,7 @@ if ('serviceWorker' in navigator) {
   const own = scripts.find((s) => s.src.endsWith('/wetty.js'));
   if (own) {
     const base = own.src.replace(/\/client\/wetty\.js$/, '');
-    void navigator.serviceWorker.register(`${base}/client/sw.js`, {
+    void navigator.serviceWorker.register(`${base}/sw.js`, {
       scope: `${base}/`,
     });
   }

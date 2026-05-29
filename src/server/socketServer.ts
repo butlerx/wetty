@@ -6,6 +6,7 @@ import { html } from './socketServer/html.js';
 import { metricMiddleware, metricRoute } from './socketServer/metrics.js';
 import { favicon, redirect } from './socketServer/middleware.js';
 import { policies } from './socketServer/security.js';
+import { assetsPath } from './socketServer/shared/path.js';
 import { listen } from './socketServer/socket.js';
 import { loadSSL } from './socketServer/ssl.js';
 import type { SSL, SSLBuffer, Server } from '../shared/interfaces.js';
@@ -31,6 +32,9 @@ export async function server(
     .use(metricMiddleware(basePath))
     .use(`${basePath}/metrics`, metricRoute)
     .use(`${basePath}/client`, serveStatic('client'))
+    .get(`${basePath}/sw.js`, (_req, res) => {
+      res.sendFile(assetsPath('sw.js'));
+    })
     .use(
       winston.logger({
         winstonInstance: logger(),
