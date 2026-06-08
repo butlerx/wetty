@@ -7,6 +7,7 @@ import { Terminal } from '@xterm/xterm';
 import { terminal as termElement } from './disconnect/elements';
 import { configureTerm } from './term/configuration';
 import { loadOptions } from './term/load';
+import { setTitle } from './title';
 import type { Options } from './term/options';
 import type { Socket } from 'socket.io-client';
 
@@ -35,6 +36,7 @@ export class Term extends Terminal {
         // WebGL not available — DOM renderer will be used
       }
     }
+    this.onTitleChange(setTitle);
   }
 
   resizeTerm(): void {
