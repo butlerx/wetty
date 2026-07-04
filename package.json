@@ -86,7 +86,7 @@
     "@types/toastify-js": "^1.12.4",
     "@types/yargs": "^17.0.35",
     "@typescript-eslint/parser": "^8.60.0",
-    "@j178/prek": "latest",
+    "@j178/prek": "^0.4.8",
     "all-contributors-cli": "^6.26.1",
     "chai": "^6.2.2",
     "concurrently": "^10.0.0",
