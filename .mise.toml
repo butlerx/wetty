@@ -14,15 +14,7 @@ description = "Build Rust native addon and copy .node file into build/"
 run = """
 set -e
 cargo build --release --features node-binding -p wetty-server
-mkdir -p build
-# Rename the cdylib to a .node file Node.js can require()
-if [ -f target/release/libwetty_server.so ]; then
-  cp target/release/libwetty_server.so build/wetty_server.node
-elif [ -f target/release/libwetty_server.dylib ]; then
-  cp target/release/libwetty_server.dylib build/wetty_server.node
-elif [ -f target/release/wetty_server.dll ]; then
-  cp target/release/wetty_server.dll build/wetty_server.node
-fi
+sh scripts/copy-addon.sh release
 """
 
 [tasks."build:ts"]
