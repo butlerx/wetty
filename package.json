@@ -12,7 +12,7 @@
     "conf/"
   ],
   "scripts": {
-    "build": "node build.js",
+    "build": "node mise/tasks/build-ts.js",
     "build:rust": "cargo build --release --features node-binding -p wetty-server && sh scripts/copy-addon.sh release",
     "clean": "rm -rf build",
     "contributor": "all-contributors",
@@ -23,7 +23,7 @@
     "start": "NODE_ENV=production node ./build/main.js",
     "test": "mocha",
     "test:rust": "cargo test -p wetty-server",
-    "prepare": "husky"
+    "prepare": "prek install"
   },
   "publishConfig": {
     "provenance": true,
@@ -33,14 +33,6 @@
   "author": "Cian Butler <butlerx@notthe.cloud> (cianbutler.ie)",
   "bugs": {
     "url": "https://github.com/butlerx/wetty/issues"
-  },
-  "lint-staged": {
-    "*.{js,ts}": [
-      "eslint --fix"
-    ],
-    "*.{json,scss,md}": [
-      "prettier --write"
-    ]
   },
   "engines": {
     "node": ">=20.0.0"
@@ -94,6 +86,7 @@
     "@types/toastify-js": "^1.12.4",
     "@types/yargs": "^17.0.35",
     "@typescript-eslint/parser": "^8.60.0",
+    "@j178/prek": "latest",
     "all-contributors-cli": "^6.26.1",
     "chai": "^6.2.2",
     "concurrently": "^10.0.0",
@@ -108,9 +101,7 @@
     "eslint-plugin-prettier": "^5.5.5",
     "git-authors-cli": "^1.0.53",
     "globals": "^17.6.0",
-    "husky": "^9.1.7",
     "jsdom": "^29.1.1",
-    "lint-staged": "^17.0.5",
     "mocha": "12.0.0-beta-10",
     "nodemon": "^3.1.14",
     "prettier": "^3.8.3",

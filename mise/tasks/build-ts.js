@@ -1,7 +1,13 @@
+#!/usr/bin/env node
+// mise description="Build TypeScript client + server"
+import { resolve } from 'node:path';
 import { spawn } from 'node:child_process';
 import * as esbuild from 'esbuild';
 import { copy } from 'esbuild-plugin-copy';
 import { sassPlugin } from 'esbuild-sass-plugin';
+
+// Resolve repository root regardless of where this script lives.
+const ROOT = resolve(import.meta.dirname, '..', '..');
 
 /** @param {string} prog
  * @param {string[]} [args=[]]
@@ -9,7 +15,7 @@ import { sassPlugin } from 'esbuild-sass-plugin';
  */
 function cmd(prog, args = []) {
   const proc = spawn(prog, args, {
-    cwd: import.meta.dirname,
+    cwd: ROOT,
     stdio: 'inherit',
     env: process.env,
   });

@@ -2,6 +2,7 @@
 node = "22"
 rust = "1.96.0"
 pnpm = "9.4.0"
+prek = "latest"
 
 [settings]
 # Trust this .mise.toml for use in CI and developer machines
@@ -19,7 +20,7 @@ sh scripts/copy-addon.sh release
 
 [tasks."build:ts"]
 description = "Build TypeScript client + server"
-run = "node build.js"
+run = "node mise/tasks/build-ts.js"
 depends = ["build:rust"]
 
 [tasks.build]
@@ -63,4 +64,4 @@ run = "cargo fmt --all"
 
 [tasks.dev]
 description = "Start dev server with auto-rebuild"
-run = "NODE_ENV=development pnpm exec concurrently --kill-others --raw --success first 'mise run build:rust' 'node build.js --watch' 'nodemon -w build -i build/client -w conf/config.json5 --delay 200ms ./build/main.js -- --conf conf/config.json5'"
+run = "NODE_ENV=development pnpm exec concurrently --kill-others --raw --success first 'mise run build:rust' 'node mise/tasks/build-ts.js --watch' 'nodemon -w build -i build/client -w conf/config.json5 --delay 200ms ./build/main.js -- --conf conf/config.json5'"

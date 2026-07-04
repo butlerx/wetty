@@ -24,6 +24,7 @@ Dockerfile
 .prettierrc.js
 tsconfig
 docs
+mise/
 
 # Rust build artifacts (do not publish)
 target/
