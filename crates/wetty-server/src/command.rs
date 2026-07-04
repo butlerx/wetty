@@ -28,7 +28,9 @@ pub fn escape_shell(username: &str) -> String {
 /// Mirrors `src/server/command/login.ts :: loginOptions`.
 pub fn login_options(command: &str, remote_address: &str) -> Vec<String> {
     if command == "login" {
-        // Extract the plain IPv4 from e.g. "::ffff:127.0.0.1"
+        // Remote address may arrive as an IPv6-mapped IPv4 address in the form
+        // "::ffff:127.0.0.1".  Split on ':' gives ["", "", "ffff", "127.0.0.1"]
+        // so index 3 is the plain IPv4 part; fall back to "localhost" otherwise.
         let parts: Vec<&str> = remote_address.split(':').collect();
         let addr = if parts.len() > 3 { parts[3] } else { "localhost" };
         vec!["login".into(), "-h".into(), addr.into()]

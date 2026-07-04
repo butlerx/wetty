@@ -46,9 +46,14 @@ pub fn on_connect(
         .map(String::from);
 
     // Extract /ssh/<user> from the Referer path, if present.
+    // Extract the username from the last `/ssh/<user>` segment of the Referer
+    // URL, stripping any trailing query-string. `rfind` is used so that the
+    // rightmost `/ssh/` segment wins (e.g. `/wetty/ssh/alice` → `"alice"`).
     let path_user = referer.as_deref().and_then(|r| {
-        let re_match: Option<&str> = r.rsplit("/ssh/").next().filter(|_| r.contains("/ssh/"));
-        re_match.map(|s| s.split('?').next().unwrap_or(s).to_string())
+        r.rfind("/ssh/").map(|idx| {
+            let after = &r[idx + 5..]; // skip the 5-char "/ssh/" prefix
+            after.split('?').next().unwrap_or(after).to_string()
+        })
     });
 
     // For now we use the socket's peer address; in axum-socketioxide the

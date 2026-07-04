@@ -37,13 +37,13 @@ async function buildRust() {
     throw new Error(`cargo build exited with code ${ret}`);
   }
 
-  // Copy the built .node addon into build/ so it is importable at runtime.
+  // Copy the built .node addon into build/ using the shared helper script.
   const profileDir = profile === 'release' ? 'release' : 'debug';
-  const [, cpDone] = cmd('sh', [
-    '-c',
-    `mkdir -p build && cp target/${profileDir}/libwetty_server.so build/wetty_server.node 2>/dev/null || cp target/${profileDir}/wetty_server.dll build/wetty_server.node 2>/dev/null || cp target/${profileDir}/libwetty_server.dylib build/wetty_server.node 2>/dev/null || true`,
-  ]);
-  await cpDone;
+  const [, cpDone] = cmd('sh', ['scripts/copy-addon.sh', profileDir]);
+  const { ret: cpRet } = await cpDone;
+  if (cpRet !== 0) {
+    throw new Error('copy-addon.sh failed');
+  }
 }
 
 /** @type import('esbuild').Plugin */

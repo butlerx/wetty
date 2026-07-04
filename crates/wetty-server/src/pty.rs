@@ -83,9 +83,17 @@ pub fn spawn(args: &[String]) -> Result<PtyChannels, Box<dyn std::error::Error +
 
     let output_tx_clone = output_tx.clone();
 
+    // Capture the tokio runtime handle while we are still inside an async
+    // context (spawn() is called from a tokio task).  The handle is moved into
+    // the OS thread below so that `tokio::spawn` calls inside `TinyBuffer::push`
+    // can schedule work on the same runtime.
+    let rt = tokio::runtime::Handle::current();
+
     // ── Reader thread: PTY stdout → TinyBuffer → output_tx ───────────────────
     std::thread::spawn(move || {
-        let rt = tokio::runtime::Handle::current();
+        // Enter the runtime so that `tokio::spawn` inside TinyBuffer::push
+        // resolves to the correct runtime for this OS thread.
+        let _rt_guard = rt.enter();
         let buf = TinyBuffer::new(output_tx_clone);
         let mut raw = vec![0u8; 4096];
         loop {
@@ -94,7 +102,6 @@ pub fn spawn(args: &[String]) -> Result<PtyChannels, Box<dyn std::error::Error +
                 Ok(0) | Err(_) => break,
                 Ok(n) => {
                     let chunk = String::from_utf8_lossy(&raw[..n]).into_owned();
-                    let _ = rt; // keep runtime alive
                     buf.push(chunk);
                 }
             }

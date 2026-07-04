@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "build": "node build.js",
-    "build:rust": "cargo build --release --features node-binding -p wetty-server && mkdir -p build && cp target/release/libwetty_server.so build/wetty_server.node 2>/dev/null || cp target/release/wetty_server.dll build/wetty_server.node 2>/dev/null || cp target/release/libwetty_server.dylib build/wetty_server.node 2>/dev/null || true",
+    "build:rust": "cargo build --release --features node-binding -p wetty-server && sh scripts/copy-addon.sh release",
     "clean": "rm -rf build",
     "contributor": "all-contributors",
     "dev": "NODE_ENV=development concurrently --kill-others --raw --success first \"pnpm build --watch\" \"nodemon -w build -i build/client -w conf/config.json5 --delay 200ms ./build/main.js -- --conf conf/config.json5\"",

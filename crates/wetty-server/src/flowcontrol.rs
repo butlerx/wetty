@@ -236,14 +236,15 @@ mod tests {
         let buf = TinyBuffer::new(tx);
         buf.push("foo".into());
         buf.push("bar".into());
-        let result = tokio::time::timeout(
-            Duration::from_millis(50),
-            rx.recv(),
-        )
-        .await
-        .expect("timed out")
-        .unwrap();
-        assert!(result == "foobar" || result == "foo" || result == "bar",
-            "unexpected: {result}");
+        // Collect all messages that arrive within the flush window (> 2 ms).
+        // Batching is non-deterministic; we assert on the concatenated content.
+        let mut combined = String::new();
+        loop {
+            match tokio::time::timeout(Duration::from_millis(20), rx.recv()).await {
+                Ok(Some(s)) => combined.push_str(&s),
+                _ => break,
+            }
+        }
+        assert_eq!(combined, "foobar");
     }
 }

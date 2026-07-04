@@ -40,7 +40,8 @@ use crate::socket::on_connect;
 
 fn render_html(base: &str, title: &str) -> String {
     // NOTE: Use r##"..."## so that href="#" inside the template does not
-    // accidentally terminate the raw string (which uses r#"..."# as delimiters).
+    // accidentally terminate the raw string (r##"..."## requires two hashes to
+    // close, whereas href="#" only has one).
     format!(
         r##"<!doctype html>
 <html lang="en">
