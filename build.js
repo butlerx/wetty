@@ -21,6 +21,31 @@ function cmd(prog, args = []) {
   return [proc, done];
 }
 
+/** Build the Rust native addon (wetty-server) and copy the .node file.
+ * @returns {Promise<void>}
+ */
+async function buildRust() {
+  const profile = process.env.NODE_ENV === 'production' ? 'release' : 'dev';
+  const cargoArgs =
+    profile === 'release'
+      ? ['build', '--release', '--features', 'node-binding', '-p', 'wetty-server']
+      : ['build', '--features', 'node-binding', '-p', 'wetty-server'];
+
+  const [, cargoDone] = cmd('cargo', cargoArgs);
+  const { ret } = await cargoDone;
+  if (ret !== 0) {
+    throw new Error(`cargo build exited with code ${ret}`);
+  }
+
+  // Copy the built .node addon into build/ so it is importable at runtime.
+  const profileDir = profile === 'release' ? 'release' : 'debug';
+  const [, cpDone] = cmd('sh', [
+    '-c',
+    `mkdir -p build && cp target/${profileDir}/libwetty_server.so build/wetty_server.node 2>/dev/null || cp target/${profileDir}/wetty_server.dll build/wetty_server.node 2>/dev/null || cp target/${profileDir}/libwetty_server.dylib build/wetty_server.node 2>/dev/null || true`,
+  ]);
+  await cpDone;
+}
+
 /** @type import('esbuild').Plugin */
 const typechecker = {
   name: 'typechecker',
@@ -95,5 +120,7 @@ async function buildServer(watching) {
 }
 
 const watching = process.argv.includes('--watch');
+// Build the Rust native addon first so that the TypeScript import resolves.
+if (!watching) await buildRust();
 await buildClient(watching);
 await buildServer(watching);

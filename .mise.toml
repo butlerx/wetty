@@ -1,0 +1,74 @@
+[tools]
+node = "22"
+rust = "1.96.0"
+pnpm = "9.4.0"
+
+[settings]
+# Trust this .mise.toml for use in CI and developer machines
+experimental = true
+
+# ── Build tasks ───────────────────────────────────────────────────────────────
+
+[tasks."build:rust"]
+description = "Build Rust native addon and copy .node file into build/"
+run = """
+set -e
+cargo build --release --features node-binding -p wetty-server
+mkdir -p build
+# Rename the cdylib to a .node file Node.js can require()
+if [ -f target/release/libwetty_server.so ]; then
+  cp target/release/libwetty_server.so build/wetty_server.node
+elif [ -f target/release/libwetty_server.dylib ]; then
+  cp target/release/libwetty_server.dylib build/wetty_server.node
+elif [ -f target/release/wetty_server.dll ]; then
+  cp target/release/wetty_server.dll build/wetty_server.node
+fi
+"""
+
+[tasks."build:ts"]
+description = "Build TypeScript client + server"
+run = "node build.js"
+depends = ["build:rust"]
+
+[tasks.build]
+description = "Build everything (Rust addon + TypeScript)"
+depends = ["build:rust", "build:ts"]
+
+# ── Test tasks ────────────────────────────────────────────────────────────────
+
+[tasks."test:rust"]
+description = "Run Rust unit and integration tests"
+run = "cargo test --workspace"
+
+[tasks."test:ts"]
+description = "Run TypeScript/mocha tests"
+run = "pnpm exec mocha"
+depends = ["build"]
+
+[tasks.test]
+description = "Run all tests (Rust + TypeScript)"
+depends = ["test:rust", "test:ts"]
+
+# ── Lint / check tasks ────────────────────────────────────────────────────────
+
+[tasks.lint]
+description = "Lint TypeScript sources with ESLint"
+run = "pnpm exec eslint src"
+
+[tasks."lint:fix"]
+description = "Auto-fix ESLint issues"
+run = "pnpm exec eslint --fix src"
+
+[tasks."check:rust"]
+description = "Run cargo clippy"
+run = "cargo clippy --workspace -- -D warnings"
+
+[tasks."fmt:rust"]
+description = "Format Rust sources"
+run = "cargo fmt --all"
+
+# ── Dev task ──────────────────────────────────────────────────────────────────
+
+[tasks.dev]
+description = "Start dev server with auto-rebuild"
+run = "NODE_ENV=development pnpm exec concurrently --kill-others --raw --success first 'mise run build:rust' 'node build.js --watch' 'nodemon -w build -i build/client -w conf/config.json5 --delay 200ms ./build/main.js -- --conf conf/config.json5'"

@@ -1,0 +1,71 @@
+[package]
+name = "wetty-server"
+version = "0.1.0"
+edition = "2021"
+description = "Rust HTTP/WebSocket server backing WeTTY – exposes a napi-rs Node.js addon"
+license = "MIT"
+
+[lib]
+# cdylib  → .node native addon consumed by Node.js
+# rlib    → used by Rust integration tests (without the node-binding feature)
+crate-type = ["cdylib", "rlib"]
+
+[features]
+# Enable the `node-binding` feature when building the .node addon for Node.js.
+# Tests run WITHOUT this feature so napi C symbols are never linked.
+node-binding = ["dep:napi", "dep:napi-derive", "dep:napi-build"]
+
+[dependencies]
+# HTTP
+axum          = { version = "0.8", features = ["macros", "ws"] }
+hyper         = { version = "1",   features = ["full"] }
+hyper-util    = { version = "0.1", features = ["tokio", "server-auto"] }
+tower         = { version = "0.5", features = ["full"] }
+tower-http    = { version = "0.6", features = ["compression-full", "fs", "trace", "set-header"] }
+
+# Socket.IO
+socketioxide  = { version = "0.15", features = ["v4"] }
+
+# Async runtime
+tokio         = { version = "1", features = ["full"] }
+futures-util  = "0.3"
+tokio-stream  = "0.1"
+
+# PTY
+portable-pty  = "0.8"
+
+# TLS
+rustls              = { version = "0.23", features = ["ring"] }
+tokio-rustls        = "0.26"
+rustls-pemfile      = "2"
+
+# Metrics
+prometheus  = { version = "0.13", features = ["process"] }
+
+# napi-rs Node.js addon bridge (optional – only for the .node artifact)
+napi         = { version = "2", features = ["async", "napi6"], optional = true }
+napi-derive  = { version = "2", optional = true }
+
+# Serialization
+serde       = { version = "1", features = ["derive"] }
+serde_json  = "1"
+
+# Utility
+tracing             = "0.1"
+tracing-subscriber  = { version = "0.3", features = ["env-filter", "fmt"] }
+url                 = "2"
+libc          = "0.2"
+once_cell           = "1"
+axum-server   = { version = "0.7", features = ["tls-rustls"] }
+thiserror           = "1"
+bytes               = "1"
+
+[build-dependencies]
+# napi-build generates the napi_register_module_v1 entry point.
+# Only linked when building the Node.js addon.
+napi-build = { version = "2", optional = true }
+
+[dev-dependencies]
+tokio              = { version = "1", features = ["full"] }
+reqwest            = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+rcgen              = "0.13"

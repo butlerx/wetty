@@ -1,13 +1,23 @@
 /**
  * Create WeTTY server
  * @module WeTTy
+ *
+ * This module is a thin shim that delegates to the Rust napi-rs native addon
+ * (`wetty-server`).  The public API signatures are identical to the previous
+ * Express/Socket.IO implementation with one intentional breaking change:
+ *
+ *   - `start()` and `decorateServerWithSsh()` now return
+ *     `Promise<ServerHandle>` instead of `Promise<SocketIO.Server>`.
+ *
+ * Callers who previously called methods on the returned `SocketIO.Server`
+ * (e.g. `io.on('connection', ...)`) will need to adapt.  The `ServerHandle`
+ * exposes a single `close()` method to gracefully shut down the server.
  */
-import express from 'express';
-import { Gauge, collectDefaultMetrics } from 'prom-client';
-import { getCommand } from './server/command.js';
-import { observeGC } from './server/metrics.js';
-import { server } from './server/socketServer.js';
-import { spawn } from './server/spawn.js';
+import {
+  start as rustStart,
+  decorateServerWithSsh as rustDecorate,
+  type ServerHandle,
+} from '../build/wetty_server.node';
 import {
   sshDefault,
   serverDefault,
@@ -16,21 +26,15 @@ import {
 } from './shared/defaults.js';
 import { logger as getLogger } from './shared/logger.js';
 import type { SSH, SSL, Server } from './shared/interfaces.js';
-import type { Express } from 'express';
-import type SocketIO from 'socket.io';
 
 export * from './shared/interfaces.js';
 export { logger as getLogger } from './shared/logger.js';
-
-const wettyConnections = new Gauge({
-  name: 'wetty_connections',
-  help: 'number of active socket connections to wetty',
-});
+export type { ServerHandle };
 
 /**
  * Starts WeTTy Server
  * @name startServer
- * @returns Promise that resolves SocketIO server
+ * @returns Promise that resolves a {@link ServerHandle}
  */
 export const start = (
   ssh: SSH = sshDefault,
@@ -38,17 +42,7 @@ export const start = (
   command: string = defaultCommand,
   forcessh: boolean = forceSSHDefault,
   ssl?: SSL,
-): Promise<SocketIO.Server> =>
-  decorateServerWithSsh(express(), ssh, serverConf, command, forcessh, ssl);
-
-export async function decorateServerWithSsh(
-  app: Express,
-  ssh: SSH = sshDefault,
-  serverConf: Server = serverDefault,
-  command: string = defaultCommand,
-  forcessh: boolean = forceSSHDefault,
-  ssl?: SSL,
-): Promise<SocketIO.Server> {
+): Promise<ServerHandle> => {
   const logger = getLogger();
   if (ssh.key) {
     logger.warn(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -57,31 +51,22 @@ export async function decorateServerWithSsh(
 ! will be able to run remote operations without authentication.
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`);
   }
+  return rustStart(ssh, serverConf, command, forcessh, ssl ?? null);
+};
 
-  collectDefaultMetrics();
-  observeGC();
-
-  const io = await server(app, serverConf, ssl);
-  /**
-   * Wetty server connected too
-   * @fires WeTTy#connnection
-   */
-  io.on('connection', async (socket: SocketIO.Socket) => {
-    /**
-     * @event wetty#connection
-     * @name connection
-     */
-    logger.info('Connection accepted.');
-    wettyConnections.inc();
-
-    try {
-      const args = await getCommand(socket, ssh, command, forcessh);
-      logger.debug('Command Generated', { cmd: args.join(' ') });
-      await spawn(socket, args);
-    } catch (error) {
-      logger.info('Disconnect signal sent', { err: error });
-      wettyConnections.dec();
-    }
-  });
-  return io;
+/**
+ * Attach WeTTy to an existing server – kept for backward compatibility.
+ *
+ * @deprecated The `app` parameter is ignored in the Rust backend.
+ *   Prefer {@link start} for new code.
+ */
+export async function decorateServerWithSsh(
+  _app: unknown,
+  ssh: SSH = sshDefault,
+  serverConf: Server = serverDefault,
+  command: string = defaultCommand,
+  forcessh: boolean = forceSSHDefault,
+  ssl?: SSL,
+): Promise<ServerHandle> {
+  return start(ssh, serverConf, command, forcessh, ssl);
 }

@@ -24,3 +24,7 @@ Dockerfile
 .prettierrc.js
 tsconfig
 docs
+
+# Rust build artifacts (do not publish)
+target/
+Cargo.lock

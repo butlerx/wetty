@@ -23,25 +23,26 @@ jobs:
           fetch-depth: 2
           persist-credentials: false
 
-      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
-
-      - name: Setup env
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      - name: Set up mise (Node, Rust, pnpm)
+        uses: jdx/mise-action@v2
         with:
-          node-version: 22
-          cache: 'pnpm'
+          install: true
+          cache: true
 
-      - name: Install dependencies
+      - name: Install Node dependencies
         run: pnpm install
+
+      - name: Run Rust tests
+        run: cargo test -p wetty-server
 
       - name: ESLint checks
         run: pnpm lint
 
-      - run: pnpm build
-        name: Compile Typescript
+      - name: Compile (Rust addon + TypeScript)
+        run: pnpm build
 
-      - run: pnpm test
-        name: Run tests
+      - name: Run TypeScript tests
+        run: pnpm test
         env:
           CI: true
 
