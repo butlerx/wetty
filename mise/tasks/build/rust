@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#MISE description="Build Rust native addon and copy .node file into build/"
+set -e
+cargo build --release --features node-binding -p server
+sh scripts/copy-addon.sh release

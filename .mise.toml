@@ -1,67 +1,74 @@
 [tools]
 node = "22"
-rust = "1.96.0"
+rust = "stable"
 pnpm = "9.4.0"
 prek = "latest"
 
 [settings]
-# Trust this .mise.toml for use in CI and developer machines
 experimental = true
-
-# ── Build tasks ───────────────────────────────────────────────────────────────
-
-[tasks."build:rust"]
-description = "Build Rust native addon and copy .node file into build/"
-run = """
-set -e
-cargo build --release --features node-binding -p wetty-server
-sh scripts/copy-addon.sh release
-"""
-
-[tasks."build:ts"]
-description = "Build TypeScript client + server"
-run = "node mise/tasks/build-ts.js"
-depends = ["build:rust"]
 
 [tasks.build]
 description = "Build everything (Rust addon + TypeScript)"
-depends = ["build:rust", "build:ts"]
-
-# ── Test tasks ────────────────────────────────────────────────────────────────
+depends     = ["build:rust", "build:ts"]
+alias       = "b"
 
 [tasks."test:rust"]
 description = "Run Rust unit and integration tests"
-run = "cargo test --workspace"
+run         = "cargo test --workspace"
 
 [tasks."test:ts"]
 description = "Run TypeScript/mocha tests"
-run = "pnpm exec mocha"
-depends = ["build"]
+run         = "pnpm exec mocha"
+depends     = ["build"]
 
 [tasks.test]
 description = "Run all tests (Rust + TypeScript)"
-depends = ["test:rust", "test:ts"]
-
-# ── Lint / check tasks ────────────────────────────────────────────────────────
+depends     = ["test:rust", "test:ts"]
+alias       = "t"
 
 [tasks.lint]
-description = "Lint TypeScript sources with ESLint"
-run = "pnpm exec eslint src"
+description = "Lint all sources"
+depends     = ["lint:ts", "lint:rust"]
+alias       = "l"
 
-[tasks."lint:fix"]
+[tasks."lint:ts"]
+description = "Lint TypeScript sources with ESLint"
+run         = "pnpm exec eslint src"
+
+[tasks."lint:ts:fix"]
 description = "Auto-fix ESLint issues"
-run = "pnpm exec eslint --fix src"
+run         = "pnpm exec eslint --fix src"
+
+[tasks."lint:rust"]
+description = "Run cargo clippy"
+run         = "cargo clippy --workspace -- -D warnings"
+
+[tasks."lint:rust:fix"]
+description = "Auto-fix clippy warnings"
+run         = "cargo clippy --workspace --fix --allow-dirty -- -D warnings"
+
+[tasks.check]
+description = "Type-check all sources"
+depends     = ["check:ts", "check:rust"]
+alias       = "c"
+
+[tasks."check:ts"]
+description = "Type-check TypeScript sources"
+run         = "pnpm exec tsc --noEmit"
 
 [tasks."check:rust"]
-description = "Run cargo clippy"
-run = "cargo clippy --workspace -- -D warnings"
+description = "Check Rust sources compile"
+run         = "cargo check --workspace"
+
+[tasks.fmt]
+description = "Format all sources"
+depends     = ["fmt:ts", "fmt:rust"]
+alias       = "f"
+
+[tasks."fmt:ts"]
+description = "Format TypeScript sources with Prettier"
+run         = "pnpm exec prettier --write src"
 
 [tasks."fmt:rust"]
 description = "Format Rust sources"
-run = "cargo fmt --all"
-
-# ── Dev task ──────────────────────────────────────────────────────────────────
-
-[tasks.dev]
-description = "Start dev server with auto-rebuild"
-run = "NODE_ENV=development pnpm exec concurrently --kill-others --raw --success first 'mise run build:rust' 'node mise/tasks/build-ts.js --watch' 'nodemon -w build -i build/client -w conf/config.json5 --delay 200ms ./build/main.js -- --conf conf/config.json5'"
+run         = "cargo fmt --all"

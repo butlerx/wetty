@@ -1,0 +1,67 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        exclude: (?x).png
+  - repo: local
+    hooks:
+      - id: eslint
+        name: ESLint
+        language: system
+        entry: pnpm exec eslint --fix
+        types_or:
+          - javascript
+          - ts
+      - id: prettier
+        name: Prettier
+        language: system
+        entry: pnpm exec prettier --write
+        types_or:
+          - json
+          - scss
+          - markdown
+      - id: commitlint
+        name: Commitlint
+        language: system
+        entry: pnpm exec commitlint --edit
+        stages:
+          - commit-msg
+        pass_filenames: false
+  - repo: https://github.com/tombi-toml/tombi-pre-commit
+    rev: v0.10.0
+    hooks:
+      - id: tombi-format
+      - id: tombi-lint
+  - repo: https://github.com/rhysd/actionlint
+    rev: v1.7.11
+    hooks:
+      - id: actionlint
+  - repo: https://github.com/google/yamlfmt
+    rev: v0.21.0
+    hooks:
+      - id: yamlfmt
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
+    rev: v1.22.0
+    hooks:
+      - id: zizmor
+        pass_filenames: false
+        args:
+          - '--no-progress' # https://github.com/zizmorcore/zizmor/issues/582
+          - '.github'
+
+  - repo: https://github.com/doublify/pre-commit-rust
+    rev: v1.0
+    hooks:
+      - id: fmt
+      - id: clippy
+        args:
+          - '--all-features'
+          - '--'
+          - '-D'
+          - 'warnings'

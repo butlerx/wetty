@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// mise description="Build TypeScript client + server"
+//MISE description="Build TypeScript client + server"
+//MISE depends=["build:rust"]
 import { resolve } from 'node:path';
 import { spawn } from 'node:child_process';
 import * as esbuild from 'esbuild';
@@ -7,7 +8,7 @@ import { copy } from 'esbuild-plugin-copy';
 import { sassPlugin } from 'esbuild-sass-plugin';
 
 // Resolve repository root regardless of where this script lives.
-const ROOT = resolve(import.meta.dirname, '..', '..');
+const ROOT = resolve(import.meta.dirname, '..', '..', '..');
 
 /** @param {string} prog
  * @param {string[]} [args=[]]
