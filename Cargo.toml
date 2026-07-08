@@ -1,8 +1,8 @@
 [workspace]
-members = ["crates/wetty-server"]
 resolver = "2"
+members  = ["crates/*"]
 
 [profile.release]
-lto = true
+strip         = true
+lto           = true
 codegen-units = 1
-strip = true
