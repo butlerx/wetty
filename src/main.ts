@@ -11,8 +11,8 @@ import { createRequire } from 'module';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { start } from './server.js';
-import { loadConfigFile, mergeCliConf } from './shared/config.js';
-import { setLevel, logger } from './shared/logger.js';
+import { loadConfigFile, mergeCliConf } from './config/config.js';
+import { setLevel, logger } from './config/logger.js';
 
 const require = createRequire(import.meta.url);
 const packageJson = require('../package.json') as {
