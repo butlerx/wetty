@@ -15,7 +15,6 @@
  */
 import {
   start as rustStart,
-  decorateServerWithSsh as rustDecorate,
   type ServerHandle,
 } from '../build/wetty_server.node';
 import {
@@ -23,13 +22,19 @@ import {
   serverDefault,
   forceSSHDefault,
   defaultCommand,
-} from './shared/defaults.js';
-import { logger as getLogger } from './shared/logger.js';
-import type { SSH, SSL, Server } from './shared/interfaces.js';
+} from './config/defaults.js';
+import { logger } from './config/logger.js';
+import type { SSH, SSL, Server } from './config/interfaces.js';
 
-export * from './shared/interfaces.js';
-export { logger as getLogger } from './shared/logger.js';
+export * from './config/interfaces.js';
+export { logger } from './config/logger.js';
 export type { ServerHandle };
+
+const SSH_KEY_WARNING = [
+  'Password-less auth enabled using private key.',
+  'This is dangerous, anything that reaches the wetty server',
+  'will be able to run remote operations without authentication.',
+].join(' ');
 
 /**
  * Starts WeTTy Server
@@ -43,13 +48,8 @@ export const start = (
   forcessh: boolean = forceSSHDefault,
   ssl?: SSL,
 ): Promise<ServerHandle> => {
-  const logger = getLogger();
   if (ssh.key) {
-    logger.warn(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! Password-less auth enabled using private key from ${ssh.key}.
-! This is dangerous, anything that reaches the wetty server
-! will be able to run remote operations without authentication.
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!`);
+    logger().warn(SSH_KEY_WARNING);
   }
   return rustStart(ssh, serverConf, command, forcessh, ssl ?? null);
 };
