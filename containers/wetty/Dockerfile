@@ -1,34 +1,32 @@
-# ---------- Base image ----------
-FROM node:22-alpine AS base
-RUN apk add -U build-base python3 py3-setuptools make g++ git
+# ---------- Build stage ----------
+FROM node:22-alpine AS build
 WORKDIR /usr/src/app
 
-# Install pnpm matching the version in packageManager
-RUN npm install -g pnpm@9
+ENV MISE_DATA_DIR="/mise"
+ENV MISE_CONFIG_DIR="/mise"
+ENV MISE_CACHE_DIR="/mise/cache"
+ENV MISE_INSTALL_PATH="/usr/local/bin/mise"
+ENV PATH="/mise/shims:$PATH"
 
-COPY . /usr/src/app
+RUN apk add -U curl bash build-base git && \
+    curl https://mise.run | sh
 
-# ---------- Production dependencies ----------
-FROM base AS prod-deps
-RUN --mount=type=cache,id=pnpm,target=/root/.pnpm-store pnpm install --prod --frozen-lockfile --ignore-scripts
-# Rebuild only the native modules we need
-RUN cd node_modules/node-pty && npm run install && cd ../..
-
-# ---------- Build stage ----------
-FROM base AS build
+COPY . .
+RUN mise trust -a && mise install
 RUN --mount=type=cache,id=pnpm,target=/root/.pnpm-store pnpm install --frozen-lockfile
-RUN pnpm run build
+RUN mise run build
+RUN --mount=type=cache,id=pnpm,target=/root/.pnpm-store pnpm install --prod --frozen-lockfile
 
 # ---------- Final runtime image ----------
-FROM base
+FROM node:22-alpine
 LABEL maintainer="butlerx@notthe.cloud"
 WORKDIR /usr/src/app
 ENV NODE_ENV=production
 
-COPY --from=prod-deps /usr/src/app/node_modules /usr/src/app/node_modules
-COPY --from=build /usr/src/app/build /usr/src/app/build
+COPY --from=build /usr/src/app/build build/
+COPY --from=build /usr/src/app/node_modules node_modules/
 
-RUN apk add -U coreutils openssh-client sshpass && \
+RUN apk add -U --no-cache openssh-client sshpass && \
     mkdir -p ~/.ssh
 
 EXPOSE 3000

@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-#MISE description="Start dev server with auto-rebuild"
-set -e
-NODE_ENV=development pnpm exec concurrently \
-  --kill-others --raw --success first \
-  'mise run build:rust' \
-  'node mise/tasks/build/ts.js --watch' \
-  'nodemon -w build -i build/client -w conf/config.json5 --delay 200ms ./build/main.js -- --conf conf/config.json5'

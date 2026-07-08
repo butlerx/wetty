@@ -1,20 +1,20 @@
----
-version: '3.5'
 services:
   wetty:
     image: wettyoss/wetty
     build:
       context: .
       dockerfile: containers/wetty/Dockerfile
-    entrypoint: pnpm run docker-compose-entrypoint
+    entrypoint:
+      - /bin/sh
+      - -c
+      - ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts && node ./build/main.js
     tty: true
-    working_dir: /usr/src/app
     ports:
       - '3000:3000'
     environment:
-      SSHHOST: 'wetty-ssh'
+      SSHHOST: wetty-ssh
       SSHPORT: 22
-      NODE_ENV: 'development'
+      NODE_ENV: development
 
   web:
     image: nginx
@@ -23,10 +23,10 @@ services:
     ports:
       - '80:80'
     environment:
-      - NGINX_DOMAIN=wetty.com
-      - NGINX_PORT=80
-      - WETTY_HOST=wetty
-      - WETTY_PORT=3000
+      NGINX_DOMAIN: wetty.com
+      NGINX_PORT: 80
+      WETTY_HOST: wetty
+      WETTY_PORT: 3000
     command: >-
       /bin/bash -c "envsubst
       '$${NGINX_DOMAIN},$${NGINX_PORT},$${WETTY_HOST},$${WETTY_PORT}' <

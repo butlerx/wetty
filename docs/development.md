@@ -8,12 +8,12 @@ To install from source run:
 $ git clone https://github.com/butlerx/wetty.git
 $ cd wetty
 $ pnpm install
-$ pnpm build
+$ mise run build
 ```
 
 ## Development Env
 
-To run WeTTY in dev mode you can run `pnpm dev`.
+To run WeTTY in dev mode you can run `mise run dev`.
 
 WeTTY will then be served from `http://localhost:3000` on your machine.
 

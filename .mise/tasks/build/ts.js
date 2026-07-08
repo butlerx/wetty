@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 //MISE description="Build TypeScript client + server"
-//MISE depends=["build:rust"]
 import { resolve } from 'node:path';
 import { spawn } from 'node:child_process';
 import * as esbuild from 'esbuild';
@@ -26,31 +25,6 @@ function cmd(prog, args = []) {
     });
   });
   return [proc, done];
-}
-
-/** Build the Rust native addon (wetty-server) and copy the .node file.
- * @returns {Promise<void>}
- */
-async function buildRust() {
-  const profile = process.env.NODE_ENV === 'production' ? 'release' : 'dev';
-  const cargoArgs =
-    profile === 'release'
-      ? ['build', '--release', '--features', 'node-binding', '-p', 'wetty-server']
-      : ['build', '--features', 'node-binding', '-p', 'wetty-server'];
-
-  const [, cargoDone] = cmd('cargo', cargoArgs);
-  const { ret } = await cargoDone;
-  if (ret !== 0) {
-    throw new Error(`cargo build exited with code ${ret}`);
-  }
-
-  // Copy the built .node addon into build/ using the shared helper script.
-  const profileDir = profile === 'release' ? 'release' : 'debug';
-  const [, cpDone] = cmd('sh', ['scripts/copy-addon.sh', profileDir]);
-  const { ret: cpRet } = await cpDone;
-  if (cpRet !== 0) {
-    throw new Error('copy-addon.sh failed');
-  }
 }
 
 /** @type import('esbuild').Plugin */
@@ -127,7 +101,5 @@ async function buildServer(watching) {
 }
 
 const watching = process.argv.includes('--watch');
-// Build the Rust native addon first so that the TypeScript import resolves.
-if (!watching) await buildRust();
 await buildClient(watching);
 await buildServer(watching);

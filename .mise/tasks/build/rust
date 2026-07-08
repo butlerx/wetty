@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#MISE description="Build Rust native addon and copy .node file into build/"
+set -e
+cargo build --release --features node-binding -p server
+mkdir -p build
+find target/release -maxdepth 1 \( -name 'libwetty_server.so' -o -name 'libwetty_server.dylib' -o -name 'wetty_server.dll' \) \
+  -exec cp {} build/wetty_server.node \;

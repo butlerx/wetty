@@ -1,7 +1,7 @@
 toml-version = "v1.0.0"
 
 [files]
-exclude = ["**/uv.lock", "**/*.lock"]
+exclude = ["**/*.lock"]
 
 [format.rules]
 group-blank-lines-limit         = 2

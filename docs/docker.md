@@ -1,8 +1,14 @@
 # Dockerized Version
 
 WeTTY can be run from a container to ssh to a remote host or the host system.
-This is handy for quick deployments. Just modify `docker-compose.yml` for your
-host and run:
+This is handy for quick deployments. Just modify `compose.yml` for your host and
+run:
+
+```sh
+$ mise run start:docker
+```
+
+or directly with Docker Compose:
 
 ```sh
 $ docker compose up -d
@@ -20,7 +26,8 @@ The default username is `term` and the password is `term`, if you did not modify
 In the docker version all flags can be accessed as environment variables such as
 `SSHHOST` or `SSHPORT`.
 
-If you don't want to build the image yourself just remove the line `build; .`
+If you don't want to build the image yourself just remove the `build` section
+from `compose.yml`.
 
 If you wish to use the WeTTY container in prod just modify the WeTTY container
 to have `SSHHOST` point to the server you want to ssh to and remove the ssh

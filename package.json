@@ -12,9 +12,6 @@
     "conf/"
   ],
   "scripts": {
-    "build": "node mise/tasks/build/ts.js",
-    "start": "NODE_ENV=production node ./build/main.js",
-    "docker-compose-entrypoint": "ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts; pnpm start",
     "prepare": "prek install"
   },
   "publishConfig": {

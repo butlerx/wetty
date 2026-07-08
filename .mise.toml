@@ -1,11 +1,23 @@
 [tools]
-node = "22"
-rust = "stable"
-pnpm = "9.4.0"
-prek = "latest"
+docker-cli     = "latest"
+docker-compose = "latest"
+node           = "22"
+rust           = "stable"
+pnpm           = "9.4.0"
+prek           = "latest"
 
 [settings]
 experimental = true
+
+[tasks.start]
+description = "Start production server"
+run         = "NODE_ENV=production node ./build/main.js"
+depends     = ["build"]
+alias       = "s"
+
+[tasks."start:docker"]
+description = "Start services with Docker Compose"
+run         = "docker compose up --build"
 
 [tasks.build]
 description = "Build everything (Rust addon + TypeScript)"
