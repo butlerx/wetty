@@ -18,6 +18,7 @@ repos:
         types_or:
           - javascript
           - ts
+        exclude: \.mise/
       - id: prettier
         name: Prettier
         language: system
@@ -62,6 +63,7 @@ repos:
       - id: fmt
       - id: clippy
         args:
+          - '--tests'
           - '--all-features'
           - '--'
           - '-D'

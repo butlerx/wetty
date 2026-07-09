@@ -3,9 +3,11 @@
 //! Spins up the router on a random port and validates HTTP behaviour.
 
 use reqwest::redirect::Policy;
+use server::{
+    app::{build_router, trim_base},
+    config::{ServerConfig, SshConfig},
+};
 use std::path::PathBuf;
-use wetty_server::app::{build_router, trim_base};
-use wetty_server::config::{ServerConfig, SshConfig};
 
 fn test_build_dir() -> PathBuf {
     // Tests run from the workspace root; the compiled browser assets live in
@@ -38,7 +40,7 @@ async fn spawn_test_server(port: u16) -> String {
         ssh,
         "echo hello".into(),
         false,
-        test_build_dir(),
+        &test_build_dir(),
     );
 
     let addr = format!("127.0.0.1:{port}");

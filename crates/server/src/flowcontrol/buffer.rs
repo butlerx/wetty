@@ -126,11 +126,8 @@ mod tests {
         buf.push("foo".into());
         buf.push("bar".into());
         let mut combined = String::new();
-        loop {
-            match tokio::time::timeout(Duration::from_millis(20), rx.recv()).await {
-                Ok(Some(s)) => combined.push_str(&s),
-                _ => break,
-            }
+        while let Ok(Some(s)) = tokio::time::timeout(Duration::from_millis(20), rx.recv()).await {
+            combined.push_str(&s);
         }
         assert_eq!(combined, "foobar");
     }

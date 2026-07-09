@@ -64,12 +64,12 @@ sources     = ["src/**/*.ts", "eslint.config.mjs"]
 
 [tasks."lint:rust"]
 description = "Run cargo clippy"
-run         = "cargo clippy --workspace -- -D warnings"
+run         = "cargo clippy --workspace --tests --all-features -- -D warnings"
 sources     = ["Cargo.toml", "Cargo.lock", "crates/**/*.rs"]
 
 [tasks."lint:rust:fix"]
 description = "Auto-fix clippy warnings"
-run         = "cargo clippy --workspace --fix --allow-dirty -- -D warnings"
+run         = "cargo clippy --workspace --fix --tests --all-features --allow-dirty -- -D warnings"
 sources     = ["Cargo.toml", "Cargo.lock", "crates/**/*.rs"]
 
 [tasks.check]

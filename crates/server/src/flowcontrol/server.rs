@@ -69,15 +69,19 @@ mod tests {
 
     #[test]
     fn commit_returns_true_when_crossing_low_watermark() {
-        let mut fc = FlowControlServer::default();
-        fc.counter = 600_000;
+        let mut fc = FlowControlServer {
+            counter: 600_000,
+            ..Default::default()
+        };
         assert!(fc.commit(200_000));
     }
 
     #[test]
     fn commit_returns_false_when_already_below_low() {
-        let mut fc = FlowControlServer::default();
-        fc.counter = 100_000;
+        let mut fc = FlowControlServer {
+            counter: 100_000,
+            ..Default::default()
+        };
         assert!(!fc.commit(10_000));
     }
 

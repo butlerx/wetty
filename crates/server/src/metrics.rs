@@ -133,7 +133,10 @@ mod tests {
     fn registry_gather_contains_wetty_connections() {
         init();
         let families = REGISTRY.gather();
-        let names: Vec<_> = families.iter().map(|f| f.get_name()).collect();
+        let names: Vec<_> = families
+            .iter()
+            .map(prometheus::proto::MetricFamily::get_name)
+            .collect();
         assert!(
             names.contains(&"wetty_connections"),
             "expected wetty_connections in registry, got: {names:?}"

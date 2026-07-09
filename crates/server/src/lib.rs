@@ -45,7 +45,7 @@ mod napi_bindings {
 
     // ── ServerHandle ─────────────────────────────────────────────────────────
 
-    /// Handle to a running WeTTY server instance.
+    /// Handle to a running `WeTTY` server instance.
     ///
     /// Call `close()` to trigger graceful shutdown.
     #[napi]
@@ -57,6 +57,9 @@ mod napi_bindings {
     #[napi]
     impl ServerHandle {
         /// Gracefully shut down the server.
+        ///
+        /// # Errors
+        /// Returns a napi error if shutdown signalling fails.
         #[napi]
         pub fn close(&self) -> napi::Result<()> {
             if let Some(tx) = self.shutdown_tx.blocking_lock().take() {
@@ -66,6 +69,9 @@ mod napi_bindings {
         }
 
         /// Wait for the server to stop. Resolves when the server exits.
+        ///
+        /// # Errors
+        /// Returns a napi error if the join handle is unavailable.
         #[napi]
         pub async fn wait(&self) -> napi::Result<()> {
             if let Some(handle) = self.join_handle.lock().await.take() {
@@ -87,13 +93,13 @@ mod napi_bindings {
 
     // ── Internal server starter ───────────────────────────────────────────────
 
-    async fn start_server(
+    fn start_server(
         ssh: SshConfig,
         server_conf: ServerConfig,
         command: String,
         forcessh: bool,
         ssl: Option<SslConfig>,
-    ) -> napi::Result<ServerHandle> {
+    ) -> ServerHandle {
         let (shutdown_tx, shutdown_rx) = oneshot::channel::<()>();
 
         let build = build_dir();
@@ -107,16 +113,20 @@ mod napi_bindings {
             }
         });
 
-        Ok(ServerHandle {
+        ServerHandle {
             shutdown_tx: Mutex::new(Some(shutdown_tx)),
             join_handle: Mutex::new(Some(join_handle)),
-        })
+        }
     }
 
     // ── Exported napi functions ───────────────────────────────────────────────
 
-    /// Start a WeTTY server with the given options.
+    /// Start a `WeTTY` server with the given options.
+    ///
+    /// # Errors
+    /// Returns a napi error if the server fails to bind or start.
     #[napi]
+    #[allow(clippy::unused_async)]
     pub async fn start(
         ssh: Option<SshConfig>,
         server_conf: Option<ServerConfig>,
@@ -131,19 +141,22 @@ mod napi_bindings {
             )
             .try_init();
 
-        start_server(
+        Ok(start_server(
             ssh.unwrap_or_default(),
             server_conf.unwrap_or_default(),
             command.unwrap_or_else(|| "login".into()),
             forcessh.unwrap_or(false),
             ssl,
-        )
-        .await
+        ))
     }
 
-    /// Start a WeTTY server, accepting an existing Express app as the first
+    /// Start a `WeTTY` server, accepting an existing Express app as the first
     /// argument for backward-compatibility.  The `app` argument is **ignored**.
+    ///
+    /// # Errors
+    /// Returns a napi error if the server fails to bind or start.
     #[napi]
+    #[allow(clippy::unused_async)]
     pub async fn decorate_server_with_ssh(
         ssh: Option<SshConfig>,
         server_conf: Option<ServerConfig>,
@@ -158,14 +171,13 @@ mod napi_bindings {
             )
             .try_init();
 
-        start_server(
+        Ok(start_server(
             ssh.unwrap_or_default(),
             server_conf.unwrap_or_default(),
             command.unwrap_or_else(|| "login".into()),
             forcessh.unwrap_or(false),
             ssl,
-        )
-        .await
+        ))
     }
 }
 

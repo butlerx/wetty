@@ -46,7 +46,10 @@ mod tests {
     #[test]
     fn url_args_allows_pass_always() {
         let result = url_args(Some("http://localhost/wetty?pass=s3cr3t"), false, false);
-        assert_eq!(result.get("pass").map(|s| s.as_str()), Some("s3cr3t"));
+        assert_eq!(
+            result.get("pass").map(std::string::String::as_str),
+            Some("s3cr3t")
+        );
     }
 
     #[test]
@@ -56,7 +59,7 @@ mod tests {
             false, // allow_remote_hosts = false
             false,
         );
-        assert!(result.get("host").is_none());
+        assert!(!result.contains_key("host"));
     }
 
     #[test]
@@ -66,7 +69,10 @@ mod tests {
             true, // allow_remote_hosts = true
             false,
         );
-        assert_eq!(result.get("host").map(|s| s.as_str()), Some("allowed.com"));
+        assert_eq!(
+            result.get("host").map(std::string::String::as_str),
+            Some("allowed.com")
+        );
     }
 
     #[test]
@@ -76,13 +82,16 @@ mod tests {
             false,
             true, // allow_remote_command = true
         );
-        assert_eq!(result.get("command").map(|s| s.as_str()), Some("htop"));
+        assert_eq!(
+            result.get("command").map(std::string::String::as_str),
+            Some("htop")
+        );
     }
 
     #[test]
     fn url_args_blocks_command_when_disabled() {
         let result = url_args(Some("http://localhost/wetty?command=htop"), false, false);
-        assert!(result.get("command").is_none());
+        assert!(!result.contains_key("command"));
     }
 
     #[test]

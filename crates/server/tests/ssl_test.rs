@@ -1,7 +1,6 @@
 //! Integration tests – TLS configuration loading.
 
-use wetty_server::config::SslConfig;
-use wetty_server::ssl::load_ssl;
+use server::{config::SslConfig, ssl::load_ssl};
 
 #[test]
 fn plain_http_when_ssl_is_none() {
