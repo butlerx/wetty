@@ -10,7 +10,6 @@
 //! - Service-worker helper route
 //! - Socket.IO upgrade layer (socketioxide)
 
-use std::net::SocketAddr;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
@@ -23,11 +22,9 @@ use axum::{
 };
 use socketioxide::{extract::SocketRef, SocketIo};
 use tokio::fs;
-use tokio::net::TcpListener;
 use tower_http::{compression::CompressionLayer, services::ServeDir, trace::TraceLayer};
-use tracing::info;
 
-use crate::config::{ServerConfig, SshConfig, SslConfig};
+use crate::config::{ServerConfig, SshConfig};
 use crate::metrics::metrics_handler;
 use crate::security::SecurityLayer;
 use crate::socket::on_connect;
@@ -178,70 +175,4 @@ pub fn build_router(
     (router, io)
 }
 
-// ── Server startup ────────────────────────────────────────────────────────────
 
-/// Binds a TCP listener and serves `router` until `shutdown_rx` fires.
-///
-/// # Errors
-///
-/// Returns an error if binding the listener fails, TLS configuration is
-/// invalid, or the server encounters a fatal runtime error.
-pub async fn serve(
-    router: Router,
-    server: &ServerConfig,
-    ssl: Option<&SslConfig>,
-    shutdown_rx: tokio::sync::oneshot::Receiver<()>,
-) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
-    if !server.socket.is_empty() {
-        // UNIX socket
-        #[cfg(unix)]
-        {
-            use tokio::net::UnixListener;
-            let path = Path::new(&server.socket);
-            if path.exists() {
-                std::fs::remove_file(path)?;
-            }
-            let listener = UnixListener::bind(path)?;
-            info!("Server listening on UNIX socket {}", server.socket);
-            axum::serve(listener, router)
-                .with_graceful_shutdown(async {
-                    let _ = shutdown_rx.await;
-                })
-                .await?;
-        }
-        #[cfg(not(unix))]
-        return Err("UNIX sockets are not supported on this platform".into());
-    } else if let Some(ssl_conf) = ssl {
-        // HTTPS via axum-server with rustls
-        use axum_server::tls_rustls::RustlsConfig;
-
-        let tls_config = RustlsConfig::from_pem_file(&ssl_conf.cert, &ssl_conf.key).await?;
-        let addr: SocketAddr = format!("{}:{}", server.host, server.port).parse()?;
-        info!("Server listening on https://{addr}");
-
-        let handle = axum_server::Handle::new();
-        let handle_clone = handle.clone();
-        tokio::spawn(async move {
-            let _ = shutdown_rx.await;
-            handle_clone.graceful_shutdown(Some(std::time::Duration::from_secs(5)));
-        });
-
-        axum_server::bind_rustls(addr, tls_config)
-            .handle(handle)
-            .serve(router.into_make_service())
-            .await?;
-    } else {
-        // Plain HTTP
-        let addr: SocketAddr = format!("{}:{}", server.host, server.port).parse()?;
-        let listener = TcpListener::bind(addr).await?;
-        info!("Server listening on http://{addr}");
-        axum::serve(listener, router)
-            .with_graceful_shutdown(async {
-                let _ = shutdown_rx.await;
-            })
-            .await?;
-    }
-
-    info!("Server shut down");
-    Ok(())
-}

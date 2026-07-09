@@ -1,6 +1,8 @@
 node_modules
 .git
 .gitignore
+.mise/
+target/
 *.md
 *.yml
 *.png

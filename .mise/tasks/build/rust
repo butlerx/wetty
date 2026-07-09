@@ -2,7 +2,6 @@
 #MISE description="Build Rust native addon and copy .node file into build/"
 #MISE sources=["Cargo.toml", "Cargo.lock", "crates/**/*.rs"]
 #MISE outputs=["build/wetty_server.node"]
-
 #USAGE flag "--release" help="Build in release mode"
 
 set -e

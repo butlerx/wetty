@@ -5,12 +5,6 @@ This is handy for quick deployments. Just modify `compose.yml` for your host and
 run:
 
 ```sh
-$ mise run start:docker
-```
-
-or directly with Docker Compose:
-
-```sh
 $ docker compose up -d
 ```
 

@@ -48,6 +48,10 @@ description = "Lint all sources"
 depends     = ["lint:ts", "lint:rust"]
 alias       = "l"
 
+[tasks."lint:fix"]
+description = "Auto-fix all sources"
+depends     = ["lint:ts:fix", "lint:rust:fix"]
+
 [tasks."lint:ts"]
 description = "Lint TypeScript sources with ESLint"
 run         = "pnpm exec eslint src"
@@ -76,7 +80,12 @@ alias       = "c"
 [tasks."check:ts"]
 description = "Type-check TypeScript sources"
 run         = "pnpm exec tsc --noEmit"
-sources     = ["src/**/*.ts", "tsconfig.json", "tsconfig.node.json", "tsconfig.browser.json"]
+sources     = [
+  "src/**/*.ts",
+  "tsconfig.json",
+  "tsconfig.node.json",
+  "tsconfig.browser.json"
+]
 
 [tasks."check:rust"]
 description = "Check Rust sources compile"
@@ -97,3 +106,8 @@ sources     = ["src/**/*.ts"]
 description = "Format Rust sources"
 run         = "cargo fmt --all"
 sources     = ["crates/**/*.rs"]
+
+[tasks.clean]
+description = "Remove build artifacts"
+run         = ["rm -rf build/", "cargo clean"]
+alias       = "cl"

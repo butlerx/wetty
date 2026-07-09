@@ -13,18 +13,17 @@ import { start, decorateServerWithSsh } from './server.js';
 
 describe('server shim (Rust backend)', () => {
   it('start() resolves a ServerHandle with a close() method', async () => {
-    // Use defaults – binds to a random port via the Rust config.
     const handle = await start();
     expect(handle).to.exist;
-    expect(handle.close).to.be.a('function');
-    await handle.close();
+    expect(handle).to.have.property('close').that.is.a('function');
+    handle.close();
   });
 
   it('decorateServerWithSsh() ignores the first (app) argument', async () => {
-    // The _app argument is deprecated and ignored by the Rust backend.
+    // eslint-disable-next-line @typescript-eslint/no-deprecated
     const handle = await decorateServerWithSsh(null);
     expect(handle).to.exist;
-    expect(handle.close).to.be.a('function');
-    await handle.close();
+    expect(handle).to.have.property('close').that.is.a('function');
+    handle.close();
   });
 });
