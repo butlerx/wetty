@@ -32,17 +32,17 @@ jobs:
       - name: Install Node dependencies
         run: pnpm install
 
-      - name: Run Rust tests
-        run: cargo test -p wetty-server
+      - name: Validate with prek
+        run: mise exec -- prek run --all-files
 
-      - name: ESLint checks
-        run: pnpm lint
+      - name: Lint
+        run: mise run lint
 
-      - name: Compile (Rust addon + TypeScript)
-        run: pnpm build
+      - name: Build
+        run: mise run build
 
-      - name: Run TypeScript tests
-        run: pnpm test
+      - name: Test
+        run: mise run test
         env:
           CI: true
 

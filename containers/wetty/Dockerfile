@@ -12,7 +12,7 @@ RUN apk add -U curl bash build-base git && \
     curl https://mise.run | sh
 
 COPY . .
-RUN mise trust -a && mise install
+RUN mise trust -a && mise install node rust pnpm
 RUN --mount=type=cache,id=pnpm,target=/root/.pnpm-store pnpm install --frozen-lockfile
 RUN mise run build
 RUN --mount=type=cache,id=pnpm,target=/root/.pnpm-store pnpm install --prod --frozen-lockfile

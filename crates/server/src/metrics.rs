@@ -6,24 +6,23 @@
 
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
-use once_cell::sync::Lazy;
 use prometheus::{
-    Counter, Histogram, HistogramOpts, IntGauge, Opts, Registry, TextEncoder,
-    Encoder,
+    Counter, Encoder, Histogram, HistogramOpts, IntGauge, Opts, Registry, TextEncoder,
 };
 
 // ── Registry ──────────────────────────────────────────────────────────────────
 
 /// Module-level Prometheus registry (shared singleton).
-pub static REGISTRY: Lazy<Registry> = Lazy::new(Registry::new);
+pub static REGISTRY: std::sync::LazyLock<Registry> = std::sync::LazyLock::new(Registry::new);
 
 // ── Gauges / counters ─────────────────────────────────────────────────────────
 
 /// Number of active Socket.IO connections.
-pub static WETTY_CONNECTIONS: Lazy<IntGauge> = Lazy::new(|| {
-    let gauge = IntGauge::with_opts(
-        Opts::new("wetty_connections", "number of active socket connections to wetty")
-    )
+pub static WETTY_CONNECTIONS: std::sync::LazyLock<IntGauge> = std::sync::LazyLock::new(|| {
+    let gauge = IntGauge::with_opts(Opts::new(
+        "wetty_connections",
+        "number of active socket connections to wetty",
+    ))
     .expect("create wetty_connections gauge");
     REGISTRY
         .register(Box::new(gauge.clone()))
@@ -32,10 +31,11 @@ pub static WETTY_CONNECTIONS: Lazy<IntGauge> = Lazy::new(|| {
 });
 
 /// Total HTTP requests received.
-pub static HTTP_REQUESTS_TOTAL: Lazy<Counter> = Lazy::new(|| {
-    let c = Counter::with_opts(
-        Opts::new("http_requests_total", "Counter for total requests received")
-    )
+pub static HTTP_REQUESTS_TOTAL: std::sync::LazyLock<Counter> = std::sync::LazyLock::new(|| {
+    let c = Counter::with_opts(Opts::new(
+        "http_requests_total",
+        "Counter for total requests received",
+    ))
     .expect("create http_requests_total");
     REGISTRY
         .register(Box::new(c.clone()))
@@ -44,7 +44,7 @@ pub static HTTP_REQUESTS_TOTAL: Lazy<Counter> = Lazy::new(|| {
 });
 
 /// HTTP request duration histogram (seconds).
-pub static HTTP_REQUEST_DURATION: Lazy<Histogram> = Lazy::new(|| {
+pub static HTTP_REQUEST_DURATION: std::sync::LazyLock<Histogram> = std::sync::LazyLock::new(|| {
     let h = Histogram::with_opts(
         HistogramOpts::new(
             "http_request_duration_seconds",
@@ -60,13 +60,13 @@ pub static HTTP_REQUEST_DURATION: Lazy<Histogram> = Lazy::new(|| {
 });
 
 /// Response size histogram (bytes).
-pub static HTTP_RESPONSE_LENGTH: Lazy<Histogram> = Lazy::new(|| {
+pub static HTTP_RESPONSE_LENGTH: std::sync::LazyLock<Histogram> = std::sync::LazyLock::new(|| {
     let h = Histogram::with_opts(
         HistogramOpts::new(
             "http_response_length_bytes",
             "Content-Length of HTTP response",
         )
-        .buckets(vec![512.0, 1024.0, 5120.0, 10240.0, 51200.0, 102400.0]),
+        .buckets(vec![512.0, 1024.0, 5120.0, 10_240.0, 51_200.0, 102_400.0]),
     )
     .expect("create response length histogram");
     REGISTRY
@@ -78,10 +78,10 @@ pub static HTTP_RESPONSE_LENGTH: Lazy<Histogram> = Lazy::new(|| {
 /// Ensure all lazy statics are initialised.
 /// Call once at startup from `app.rs`.
 pub fn init() {
-    Lazy::force(&WETTY_CONNECTIONS);
-    Lazy::force(&HTTP_REQUESTS_TOTAL);
-    Lazy::force(&HTTP_REQUEST_DURATION);
-    Lazy::force(&HTTP_RESPONSE_LENGTH);
+    std::sync::LazyLock::force(&WETTY_CONNECTIONS);
+    std::sync::LazyLock::force(&HTTP_REQUESTS_TOTAL);
+    std::sync::LazyLock::force(&HTTP_REQUEST_DURATION);
+    std::sync::LazyLock::force(&HTTP_RESPONSE_LENGTH);
 }
 
 // ── Axum handler ─────────────────────────────────────────────────────────────
@@ -93,10 +93,7 @@ pub async fn metrics_handler() -> Response {
     match encoder.encode_to_string(&REGISTRY.gather()) {
         Ok(body) => (
             StatusCode::OK,
-            [(
-                axum::http::header::CONTENT_TYPE,
-                encoder.format_type(),
-            )],
+            [(axum::http::header::CONTENT_TYPE, encoder.format_type())],
             body,
         )
             .into_response(),

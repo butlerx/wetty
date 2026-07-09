@@ -13,6 +13,7 @@ use crate::config::SshConfig;
 
 /// Remove characters that are unsafe to pass as a shell username / host.
 /// Mirrors `src/server/shared/shell.ts :: escapeShell`.
+#[must_use]
 pub fn escape_shell(username: &str) -> String {
     let stripped: String = username
         .chars()
@@ -26,13 +27,18 @@ pub fn escape_shell(username: &str) -> String {
 
 /// Build args for a local login session (running as root on localhost).
 /// Mirrors `src/server/command/login.ts :: loginOptions`.
+#[must_use]
 pub fn login_options(command: &str, remote_address: &str) -> Vec<String> {
     if command == "login" {
         // Remote address may arrive as an IPv6-mapped IPv4 address in the form
         // "::ffff:127.0.0.1".  Split on ':' gives ["", "", "ffff", "127.0.0.1"]
         // so index 3 is the plain IPv4 part; fall back to "localhost" otherwise.
         let parts: Vec<&str> = remote_address.split(':').collect();
-        let addr = if parts.len() > 3 { parts[3] } else { "localhost" };
+        let addr = if parts.len() > 3 {
+            parts[3]
+        } else {
+            "localhost"
+        };
         vec!["login".into(), "-h".into(), addr.into()]
     } else {
         vec![command.into()]
@@ -41,60 +47,69 @@ pub fn login_options(command: &str, remote_address: &str) -> Vec<String> {
 
 // ── SSH options ───────────────────────────────────────────────────────────────
 
+/// SSH command-line arguments, passed by reference to avoid allocations.
+pub struct SshArgs<'a> {
+    pub host: &'a str,
+    pub port: &'a str,
+    pub pass: &'a str,
+    pub command: &'a str,
+    pub auth: &'a str,
+    pub known_hosts: &'a str,
+    pub config: &'a str,
+    pub path: Option<&'a str>,
+    pub key: Option<&'a str>,
+}
+
 /// Build the `ssh` (or `sshpass` + `ssh`) argument list.
 /// Mirrors `src/server/command/ssh.ts :: sshOptions`.
-pub fn ssh_options(args: &HashMap<String, String>, key: Option<&str>) -> Vec<String> {
-    let empty = String::new();
-    let pass = args.get("pass").unwrap_or(&empty);
-    let path = args.get("path");
-    let command = args.get("command").map(|s| s.as_str()).unwrap_or("login");
-    let host = args.get("host").unwrap_or(&empty);
-    let port = args.get("port").unwrap_or(&empty);
-    let auth = args.get("auth").unwrap_or(&empty);
-    let known_hosts = args.get("known_hosts").map(|s| s.as_str()).unwrap_or("/dev/null");
-    let config = args.get("config").unwrap_or(&empty);
+#[must_use]
+pub fn ssh_options(args: &SshArgs<'_>) -> Vec<String> {
+    let cmd = parse_command(args.command, args.path);
+    let host_checking = if args.known_hosts == "/dev/null" {
+        "no"
+    } else {
+        "yes"
+    };
 
-    let cmd = parse_command(command, path.map(|s| s.as_str()));
-    let host_checking = if known_hosts == "/dev/null" { "no" } else { "yes" };
+    let sshpass_prefix =
+        (!args.pass.is_empty()).then(|| ["sshpass".into(), "-p".into(), args.pass.into()]);
 
-    let mut result: Vec<String> = Vec::new();
+    let config_flag = (!args.config.is_empty()).then(|| ["-F".into(), args.config.into()]);
 
-    if !pass.is_empty() {
-        result.extend(["sshpass".into(), "-p".into(), pass.clone()]);
-    }
+    let port_flag = (!args.port.is_empty()).then(|| ["-p".into(), args.port.into()]);
 
-    result.extend(["ssh".into(), "-t".into()]);
+    let key_flag = args
+        .key
+        .filter(|k| !k.is_empty())
+        .map(|k| ["-i".into(), k.into()]);
 
-    if !config.is_empty() {
-        result.extend(["-F".into(), config.clone()]);
-    }
-    if !port.is_empty() {
-        result.extend(["-p".into(), port.clone()]);
-    }
-    if let Some(k) = key {
-        if !k.is_empty() {
-            result.extend(["-i".into(), k.into()]);
-        }
-    }
-    if auth != "none" {
-        result.extend(["-o".into(), format!("PreferredAuthentications={auth}")]);
-    }
-    result.extend([
-        "-o".into(),
-        format!("UserKnownHostsFile={known_hosts}"),
-        "-o".into(),
-        format!("StrictHostKeyChecking={host_checking}"),
-        "-o".into(),
-        "EscapeChar=none".into(),
-        "--".into(),
-        host.clone(),
-    ]);
+    let auth_flag = (args.auth != "none").then(|| {
+        [
+            "-o".into(),
+            format!("PreferredAuthentications={}", args.auth),
+        ]
+    });
 
-    if !cmd.is_empty() {
-        result.push(cmd);
-    }
-
-    result
+    sshpass_prefix
+        .into_iter()
+        .flatten()
+        .chain(["ssh".into(), "-t".into()])
+        .chain(config_flag.into_iter().flatten())
+        .chain(port_flag.into_iter().flatten())
+        .chain(key_flag.into_iter().flatten())
+        .chain(auth_flag.into_iter().flatten())
+        .chain([
+            "-o".into(),
+            format!("UserKnownHostsFile={}", args.known_hosts),
+            "-o".into(),
+            format!("StrictHostKeyChecking={host_checking}"),
+            "-o".into(),
+            "EscapeChar=none".into(),
+            "--".into(),
+            args.host.into(),
+        ])
+        .chain((!cmd.is_empty()).then_some(cmd))
+        .collect()
 }
 
 fn parse_command(command: &str, path: Option<&str>) -> String {
@@ -116,6 +131,7 @@ fn parse_command(command: &str, path: Option<&str>) -> String {
 
 /// Parse the `Referer` header URL, extracting only allowed query-string keys.
 /// Mirrors `src/server/command.ts :: urlArgs`.
+#[must_use]
 pub fn url_args(
     referer: Option<&str>,
     allow_remote_hosts: bool,
@@ -131,8 +147,8 @@ pub fn url_args(
 
     let referer_str = referer.unwrap_or("");
     // Parse as absolute URL; fall back to treating it as a path on localhost.
-    let parsed = Url::parse(referer_str)
-        .or_else(|_| Url::parse(&format!("http://localhost{referer_str}")));
+    let parsed =
+        Url::parse(referer_str).or_else(|_| Url::parse(&format!("http://localhost{referer_str}")));
 
     match parsed {
         Ok(url) => url
@@ -171,6 +187,7 @@ fn is_localhost(host: &str) -> bool {
 
 /// Build the command argument list for the session.
 /// Mirrors `src/server/command.ts :: getCommand`.
+#[must_use]
 pub fn get_command(
     info: &SocketInfo,
     ssh: &SshConfig,
@@ -181,23 +198,17 @@ pub fn get_command(
         return login_options(command, &info.remote_address);
     }
 
-    // Determine SSH destination user
-    let username: String = if let Some(u) = &info.header_user {
-        u.clone()
-    } else if let Some(u) = &info.path_user {
-        u.clone()
-    } else if !ssh.user.is_empty() {
-        ssh.user.clone()
-    } else {
-        // No username available – prompt via the login PTY at connection time.
-        // The caller (socket.rs) is responsible for the interactive prompt flow.
-        String::new()
-    };
+    let username = info
+        .header_user
+        .as_deref()
+        .or(info.path_user.as_deref())
+        .or((!ssh.user.is_empty()).then_some(ssh.user.as_str()))
+        .unwrap_or("");
 
     let ssh_host = if username.is_empty() {
         ssh.host.clone()
     } else {
-        format!("{}@{}", escape_shell(&username), ssh.host)
+        format!("{}@{}", escape_shell(username), ssh.host)
     };
 
     let url_params = url_args(
@@ -206,18 +217,31 @@ pub fn get_command(
         ssh.allow_remote_command,
     );
 
-    let mut args: HashMap<String, String> = HashMap::new();
-    args.insert("host".into(), ssh_host);
-    args.insert("port".into(), ssh.port.to_string());
-    args.insert("pass".into(), ssh.pass.clone().unwrap_or_default());
-    args.insert("command".into(), command.into());
-    args.insert("auth".into(), ssh.auth.clone());
-    args.insert("known_hosts".into(), ssh.known_hosts.clone());
-    args.insert("config".into(), ssh.config.clone().unwrap_or_default());
-    // URL params can override pass, command, path, port, host
-    args.extend(url_params);
+    let port_str = ssh.port.to_string();
+    let pass_default = ssh.pass.as_deref().unwrap_or("");
+    let config_default = ssh.config.as_deref().unwrap_or("");
 
-    ssh_options(&args, ssh.key.as_deref())
+    let args = SshArgs {
+        host: url_params
+            .get("host")
+            .map_or(&ssh_host, std::string::String::as_str),
+        port: url_params
+            .get("port")
+            .map_or(&port_str, std::string::String::as_str),
+        pass: url_params
+            .get("pass")
+            .map_or(pass_default, std::string::String::as_str),
+        command: url_params
+            .get("command")
+            .map_or(command, std::string::String::as_str),
+        path: url_params.get("path").map(std::string::String::as_str),
+        auth: &ssh.auth,
+        known_hosts: &ssh.known_hosts,
+        config: config_default,
+        key: ssh.key.as_deref(),
+    };
+
+    ssh_options(&args)
 }
 
 // ── Tests ─────────────────────────────────────────────────────────────────────
@@ -270,21 +294,23 @@ mod tests {
 
     // ssh_options --------------------------------------------------------------
 
-    fn base_ssh_args() -> HashMap<String, String> {
-        let mut m = HashMap::new();
-        m.insert("host".into(), "user@example.com".into());
-        m.insert("port".into(), "22".into());
-        m.insert("auth".into(), "password".into());
-        m.insert("known_hosts".into(), "/dev/null".into());
-        m.insert("config".into(), String::new());
-        m.insert("pass".into(), String::new());
-        m.insert("command".into(), "login".into());
-        m
+    fn base_ssh_args() -> SshArgs<'static> {
+        SshArgs {
+            host: "user@example.com",
+            port: "22",
+            auth: "password",
+            known_hosts: "/dev/null",
+            config: "",
+            pass: "",
+            command: "login",
+            path: None,
+            key: None,
+        }
     }
 
     #[test]
     fn ssh_options_basic() {
-        let args = ssh_options(&base_ssh_args(), None);
+        let args = ssh_options(&base_ssh_args());
         assert!(args.contains(&"ssh".into()));
         assert!(args.contains(&"user@example.com".into()));
         assert!(args.contains(&"StrictHostKeyChecking=no".into()));
@@ -292,9 +318,10 @@ mod tests {
 
     #[test]
     fn ssh_options_with_password() {
-        let mut m = base_ssh_args();
-        m.insert("pass".into(), "secret".into());
-        let args = ssh_options(&m, None);
+        let args = ssh_options(&SshArgs {
+            pass: "secret",
+            ..base_ssh_args()
+        });
         assert_eq!(args[0], "sshpass");
         assert_eq!(args[1], "-p");
         assert_eq!(args[2], "secret");
@@ -302,7 +329,10 @@ mod tests {
 
     #[test]
     fn ssh_options_with_key() {
-        let args = ssh_options(&base_ssh_args(), Some("/home/user/.ssh/id_rsa"));
+        let args = ssh_options(&SshArgs {
+            key: Some("/home/user/.ssh/id_rsa"),
+            ..base_ssh_args()
+        });
         assert!(args.contains(&"-i".into()));
         let idx = args.iter().position(|a| a == "-i").unwrap();
         assert_eq!(args[idx + 1], "/home/user/.ssh/id_rsa");
@@ -310,9 +340,10 @@ mod tests {
 
     #[test]
     fn ssh_options_known_hosts_strict_when_not_dev_null() {
-        let mut m = base_ssh_args();
-        m.insert("known_hosts".into(), "/etc/ssh/known_hosts".into());
-        let args = ssh_options(&m, None);
+        let args = ssh_options(&SshArgs {
+            known_hosts: "/etc/ssh/known_hosts",
+            ..base_ssh_args()
+        });
         assert!(args.contains(&"StrictHostKeyChecking=yes".into()));
     }
 
@@ -338,7 +369,7 @@ mod tests {
     fn url_args_allows_host_when_enabled() {
         let result = url_args(
             Some("http://localhost/wetty?host=allowed.com"),
-            true,  // allow_remote_hosts = true
+            true, // allow_remote_hosts = true
             false,
         );
         assert_eq!(result.get("host").map(|s| s.as_str()), Some("allowed.com"));
@@ -356,11 +387,7 @@ mod tests {
 
     #[test]
     fn url_args_blocks_command_when_disabled() {
-        let result = url_args(
-            Some("http://localhost/wetty?command=htop"),
-            false,
-            false,
-        );
+        let result = url_args(Some("http://localhost/wetty?command=htop"), false, false);
         assert!(result.get("command").is_none());
     }
 

@@ -3,11 +3,11 @@
 //! Reads PEM-encoded certificate and key files from disk and builds a
 //! `rustls::ServerConfig` suitable for use with `axum-server` TLS.
 
+use rustls::ServerConfig;
+use rustls_pemfile::{certs, private_key};
 use std::fs;
 use std::io::{self, BufReader};
 use std::path::Path;
-use rustls::ServerConfig;
-use rustls_pemfile::{certs, private_key};
 use thiserror::Error;
 
 use crate::config::SslConfig;
@@ -31,10 +31,13 @@ pub enum SslError {
 /// Load a [`ServerConfig`] from the given paths.
 ///
 /// Returns `None` when `ssl` is `None` (plain HTTP mode).
+///
+/// # Errors
+///
+/// Returns `SslError` if certificate/key files cannot be read or are invalid.
 pub fn load_ssl(ssl: Option<&SslConfig>) -> Result<Option<ServerConfig>, SslError> {
-    let ssl = match ssl {
-        Some(s) => s,
-        None => return Ok(None),
+    let Some(ssl) = ssl else {
+        return Ok(None);
     };
 
     let certs = load_certs(&ssl.cert)?;
@@ -53,12 +56,13 @@ fn load_certs(path: &str) -> Result<Vec<rustls::pki_types::CertificateDer<'stati
         source: e,
     })?;
     let mut reader = BufReader::new(file.as_slice());
-    let cert_chain: Vec<_> = certs(&mut reader)
-        .collect::<Result<_, _>>()
-        .map_err(|e| SslError::Io {
-            path: path.into(),
-            source: e,
-        })?;
+    let cert_chain: Vec<_> =
+        certs(&mut reader)
+            .collect::<Result<_, _>>()
+            .map_err(|e| SslError::Io {
+                path: path.into(),
+                source: e,
+            })?;
 
     if cert_chain.is_empty() {
         return Err(SslError::NoCertificates(path.into()));

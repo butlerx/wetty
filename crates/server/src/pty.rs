@@ -26,7 +26,7 @@ pub struct PtyChannels {
     /// Send resize events to the PTY (from socket "resize" events).
     pub resize_tx: mpsc::Sender<(u16, u16)>,
     /// Send commit (flow-control ack) events (from socket "commit" events).
-    pub commit_tx: mpsc::Sender<usize>,
+    pub commit_tx: mpsc::Sender<i64>,
     /// Receive PTY stdout for forwarding to the socket as "data" events.
     pub output_rx: mpsc::Receiver<String>,
     /// Fires once when the PTY process exits; carries the exit code.
@@ -39,12 +39,21 @@ pub struct PtyChannels {
 ///
 /// Returns `PtyChannels` that the caller (socket handler) uses to wire up
 /// the Socket.IO events.
+///
+/// # Errors
+///
+/// Returns an error if the PTY cannot be opened or the child process fails to
+/// spawn.
+///
+/// # Panics
+///
+/// Panics if `args` is empty.
 pub fn spawn(args: &[String]) -> Result<PtyChannels, Box<dyn std::error::Error + Send + Sync>> {
     assert!(!args.is_empty(), "spawn called with empty args");
 
     let (input_tx, input_rx) = mpsc::channel::<String>(64);
     let (resize_tx, resize_rx) = mpsc::channel::<(u16, u16)>(16);
-    let (commit_tx, commit_rx) = mpsc::channel::<usize>(64);
+    let (commit_tx, commit_rx) = mpsc::channel::<i64>(64);
     let (output_tx, output_rx) = mpsc::channel::<String>(64);
     let (exit_tx, exit_rx) = mpsc::channel::<i32>(1);
     let (kill_tx, kill_rx) = mpsc::channel::<()>(1);
@@ -135,13 +144,13 @@ pub fn spawn(args: &[String]) -> Result<PtyChannels, Box<dyn std::error::Error +
                 }
                 Some(size) = commit_rx.recv() => {
                     let mut fc = fc.lock().unwrap();
-                    if fc.commit(size as i64) {
+                    if fc.commit(size) {
                         // resume – nothing further needed in Rust since we
                         // don't actually pause the OS-level PTY here; the
                         // flow control is advisory for the socket layer.
                     }
                 }
-                Some(_) = kill_rx.recv() => {
+                Some(()) = kill_rx.recv() => {
                     info!("PTY kill signal received");
                     break;
                 }

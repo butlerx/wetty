@@ -24,11 +24,7 @@ use axum::{
 use socketioxide::{extract::SocketRef, SocketIo};
 use tokio::fs;
 use tokio::net::TcpListener;
-use tower_http::{
-    compression::CompressionLayer,
-    services::ServeDir,
-    trace::TraceLayer,
-};
+use tower_http::{compression::CompressionLayer, services::ServeDir, trace::TraceLayer};
 use tracing::info;
 
 use crate::config::{ServerConfig, SshConfig, SslConfig};
@@ -100,9 +96,14 @@ async fn redirect_trailing_slash(
 // ── Router builder ────────────────────────────────────────────────────────────
 
 /// Normalise the base path: always starts with `/`, never ends with `/`.
+#[must_use]
 pub fn trim_base(base: &str) -> String {
     let b = base.trim_end_matches('/');
-    if b.is_empty() { "/".into() } else { b.into() }
+    if b.is_empty() {
+        "/".into()
+    } else {
+        b.into()
+    }
 }
 
 /// Build the full axum `Router` for the given configuration.
@@ -114,7 +115,7 @@ pub fn build_router(
     ssh: SshConfig,
     command: String,
     forcessh: bool,
-    build_dir: PathBuf,
+    build_dir: &Path,
 ) -> (Router, SocketIo) {
     crate::metrics::init();
 
@@ -125,7 +126,7 @@ pub fn build_router(
     let state = Arc::new(AppState {
         base: base.clone(),
         title,
-        build_dir: build_dir.clone(),
+        build_dir: build_dir.to_path_buf(),
     });
 
     // ── Socket.IO ─────────────────────────────────────────────────────────────
@@ -133,20 +134,14 @@ pub fn build_router(
     // socketioxide with a matching req_path.
     let socket_prefix = if base == "/" { "" } else { base.as_str() };
     let socket_path = format!("{socket_prefix}/socket.io");
-    let (socket_layer, io) = SocketIo::builder()
-        .req_path(socket_path)
-        .build_layer();
+    let (socket_layer, io) = SocketIo::builder().req_path(socket_path).build_layer();
 
     // Register the connection handler on the root namespace.
-    {
-        let ssh_clone = ssh.clone();
-        let cmd_clone = command.clone();
-        io.ns("/", move |socket: SocketRef| {
-            let ssh = ssh_clone.clone();
-            let cmd = cmd_clone.clone();
-            on_connect(socket, ssh, cmd, forcessh);
-        });
-    }
+    let ssh = Arc::new(ssh);
+    let command = Arc::new(command);
+    io.ns("/", move |socket: SocketRef| {
+        on_connect(socket, &ssh, &command, forcessh);
+    });
 
     // ── Static client files ───────────────────────────────────────────────────
     let client_dir = build_dir.join("client");
@@ -186,6 +181,11 @@ pub fn build_router(
 // ── Server startup ────────────────────────────────────────────────────────────
 
 /// Binds a TCP listener and serves `router` until `shutdown_rx` fires.
+///
+/// # Errors
+///
+/// Returns an error if binding the listener fails, TLS configuration is
+/// invalid, or the server encounters a fatal runtime error.
 pub async fn serve(
     router: Router,
     server: &ServerConfig,
@@ -204,7 +204,9 @@ pub async fn serve(
             let listener = UnixListener::bind(path)?;
             info!("Server listening on UNIX socket {}", server.socket);
             axum::serve(listener, router)
-                .with_graceful_shutdown(async { let _ = shutdown_rx.await; })
+                .with_graceful_shutdown(async {
+                    let _ = shutdown_rx.await;
+                })
                 .await?;
         }
         #[cfg(not(unix))]
@@ -234,7 +236,9 @@ pub async fn serve(
         let listener = TcpListener::bind(addr).await?;
         info!("Server listening on http://{addr}");
         axum::serve(listener, router)
-            .with_graceful_shutdown(async { let _ = shutdown_rx.await; })
+            .with_graceful_shutdown(async {
+                let _ = shutdown_rx.await;
+            })
             .await?;
     }
 

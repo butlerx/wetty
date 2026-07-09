@@ -21,12 +21,7 @@ struct ResizePayload {
 /// Register the namespace handler on the root `/` namespace.
 ///
 /// `io.ns("/", on_connect(…))` should be called once during app setup.
-pub fn on_connect(
-    socket: SocketRef,
-    ssh: SshConfig,
-    command: String,
-    forcessh: bool,
-) {
+pub fn on_connect(socket: SocketRef, ssh: &SshConfig, command: &str, forcessh: bool) {
     info!("Connection accepted: {}", socket.id);
     WETTY_CONNECTIONS.inc();
 
@@ -73,7 +68,7 @@ pub fn on_connect(
         header_user,
     };
 
-    let args = get_command(&info, &ssh, &command, forcessh);
+    let args = get_command(&info, ssh, command, forcessh);
     debug!("Command generated: {:?}", args);
 
     // Spawn PTY
@@ -100,55 +95,55 @@ pub fn on_connect(
     let _ = socket.emit("login", &());
 
     // ── socket → PTY: input ───────────────────────────────────────────────────
-    let input_tx_clone = input_tx.clone();
-    socket.on("input", move |_socket: SocketRef, Data::<String>(data)| {
-        let _ = input_tx_clone.try_send(data);
+    socket.on("input", {
+        let input_tx = input_tx.clone();
+        move |_socket: SocketRef, Data::<String>(data)| {
+            let _ = input_tx.try_send(data);
+        }
     });
 
     // ── socket → PTY: resize ─────────────────────────────────────────────────
-    let resize_tx_clone = resize_tx.clone();
     socket.on(
         "resize",
         move |_socket: SocketRef, TryData::<ResizePayload>(payload)| {
             if let Ok(p) = payload {
-                let _ = resize_tx_clone.try_send((p.cols, p.rows));
+                let _ = resize_tx.try_send((p.cols, p.rows));
             }
         },
     );
 
     // ── socket → PTY: flow-control commit ────────────────────────────────────
-    let commit_tx_clone = commit_tx.clone();
     socket.on(
         "commit",
         move |_socket: SocketRef, Data::<serde_json::Value>(val)| {
-            let size = val.as_u64().unwrap_or(0) as usize;
-            let _ = commit_tx_clone.try_send(size);
+            let size = val.as_i64().unwrap_or(0);
+            let _ = commit_tx.try_send(size);
         },
     );
 
     // ── socket disconnect: kill PTY ───────────────────────────────────────────
-    let kill_tx_clone = kill_tx.clone();
     socket.on_disconnect(move |_socket: SocketRef, _reason: DisconnectReason| {
         info!("Socket disconnected – killing PTY");
-        let _ = kill_tx_clone.try_send(());
+        let _ = kill_tx.try_send(());
     });
 
     // ── PTY → socket: output data ─────────────────────────────────────────────
-    let socket_data = socket.clone();
-    tokio::spawn(async move {
-        while let Some(data) = output_rx.recv().await {
-            if socket_data.emit("data", &data).is_err() {
-                break;
+    tokio::spawn({
+        let socket = socket.clone();
+        async move {
+            while let Some(data) = output_rx.recv().await {
+                if socket.emit("data", &data).is_err() {
+                    break;
+                }
             }
         }
     });
 
     // ── PTY exit → socket: logout ─────────────────────────────────────────────
-    let socket_exit = socket.clone();
     tokio::spawn(async move {
         if let Some(exit_code) = exit_rx.recv().await {
             info!("PTY process exited with code {exit_code}");
-            let _ = socket_exit.emit("logout", &());
+            let _ = socket.emit("logout", &());
         }
         WETTY_CONNECTIONS.dec();
     });

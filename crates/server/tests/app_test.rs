@@ -2,8 +2,8 @@
 //!
 //! Spins up the router on a random port and validates HTTP behaviour.
 
-use std::path::PathBuf;
 use reqwest::redirect::Policy;
+use std::path::PathBuf;
 use wetty_server::app::{build_router, trim_base};
 use wetty_server::config::{ServerConfig, SshConfig};
 
@@ -33,8 +33,13 @@ fn default_server_conf(port: u16) -> ServerConfig {
 async fn spawn_test_server(port: u16) -> String {
     let server_conf = default_server_conf(port);
     let ssh = SshConfig::default();
-    let (router, _io) =
-        build_router(&server_conf, ssh, "echo hello".into(), false, test_build_dir());
+    let (router, _io) = build_router(
+        &server_conf,
+        ssh,
+        "echo hello".into(),
+        false,
+        test_build_dir(),
+    );
 
     let addr = format!("127.0.0.1:{port}");
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
@@ -102,9 +107,7 @@ async fn metrics_route_returns_200_with_content_type() {
 #[tokio::test]
 async fn security_headers_are_present() {
     let base_url = spawn_test_server(0).await;
-    let resp = reqwest::get(format!("{base_url}/wetty"))
-        .await
-        .unwrap();
+    let resp = reqwest::get(format!("{base_url}/wetty")).await.unwrap();
     let headers = resp.headers();
 
     assert!(
@@ -145,7 +148,10 @@ async fn trailing_slash_is_redirected() {
         .get("location")
         .and_then(|v| v.to_str().ok())
         .unwrap_or("");
-    assert!(loc.ends_with("/wetty"), "redirect target should strip trailing slash");
+    assert!(
+        loc.ends_with("/wetty"),
+        "redirect target should strip trailing slash"
+    );
 }
 
 #[tokio::test]

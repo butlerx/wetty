@@ -9,8 +9,8 @@
 
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
-use tokio::time::sleep;
 use tokio::sync::mpsc;
+use tokio::time::sleep;
 
 // ── FlowControlServer ────────────────────────────────────────────────────────
 
@@ -24,8 +24,8 @@ use tokio::sync::mpsc;
 #[derive(Debug, Clone)]
 pub struct FlowControlServer {
     pub counter: i64,
-    pub low: i64,   // 2^19 = 524 288 – resume below this
-    pub high: i64,  // 2^21 = 2 097 152 – pause above this
+    pub low: i64,  // 2^19 = 524 288 – resume below this
+    pub high: i64, // 2^21 = 2 097 152 – pause above this
 }
 
 impl Default for FlowControlServer {
@@ -39,8 +39,13 @@ impl Default for FlowControlServer {
 }
 
 impl FlowControlServer {
+    #[must_use]
     pub fn new(low: i64, high: i64) -> Self {
-        Self { counter: 0, low, high }
+        Self {
+            counter: 0,
+            low,
+            high,
+        }
     }
 
     /// Returns `true` if the PTY should now be **paused**.
@@ -83,6 +88,7 @@ struct TinyBufferState {
 
 impl TinyBuffer {
     /// Creates a new `TinyBuffer` that forwards flushed data to `sender`.
+    #[must_use]
     pub fn new(sender: mpsc::Sender<String>) -> Self {
         Self {
             sender,
@@ -94,6 +100,10 @@ impl TinyBuffer {
     }
 
     /// Feed a chunk of PTY output into the buffer.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the internal mutex is poisoned.
     pub fn push(&self, data: String) {
         let flush_now = {
             let mut st = self.state.lock().unwrap();
@@ -162,7 +172,7 @@ mod tests {
     fn account_returns_false_when_already_above_high() {
         let mut fc = FlowControlServer::default();
         fc.account(2_200_000); // go above high
-        // already above – should not signal pause again
+                               // already above – should not signal pause again
         assert!(!fc.account(100));
     }
 
@@ -203,13 +213,10 @@ mod tests {
         let buf = TinyBuffer::new(tx);
         buf.push("hello".into());
         // Should arrive after at most a few ms
-        let result = tokio::time::timeout(
-            Duration::from_millis(50),
-            rx.recv(),
-        )
-        .await
-        .expect("timed out waiting for flush")
-        .unwrap();
+        let result = tokio::time::timeout(Duration::from_millis(50), rx.recv())
+            .await
+            .expect("timed out waiting for flush")
+            .unwrap();
         assert_eq!(result, "hello");
     }
 
@@ -220,13 +227,10 @@ mod tests {
         // Push a chunk larger than the max to trigger immediate flush
         let big = "x".repeat(TINY_BUFFER_MAX + 1);
         buf.push(big.clone());
-        let result = tokio::time::timeout(
-            Duration::from_millis(50),
-            rx.recv(),
-        )
-        .await
-        .expect("timed out")
-        .unwrap();
+        let result = tokio::time::timeout(Duration::from_millis(50), rx.recv())
+            .await
+            .expect("timed out")
+            .unwrap();
         assert_eq!(result, big);
     }
 

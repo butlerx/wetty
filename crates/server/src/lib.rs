@@ -18,7 +18,7 @@
 //! is loaded by Node.js; linking them into a regular `cargo test` binary would
 //! fail.  Integration tests import the inner modules (`app`, `config`, …) directly.
 
-#![deny(clippy::all)]
+#![warn(clippy::pedantic)]
 
 pub mod app;
 pub mod command;
@@ -96,14 +96,10 @@ mod napi_bindings {
         let (shutdown_tx, shutdown_rx) = oneshot::channel::<()>();
 
         let build = build_dir();
-        let (router, _io) = super::app::build_router(&server_conf, ssh, command, forcessh, build);
-
-        let server_conf_clone = server_conf.clone();
-        let ssl_clone = ssl.clone();
+        let (router, _io) = super::app::build_router(&server_conf, ssh, command, forcessh, &build);
 
         let join_handle = tokio::spawn(async move {
-            if let Err(e) =
-                super::app::serve(router, &server_conf_clone, ssl_clone.as_ref(), shutdown_rx).await
+            if let Err(e) = super::app::serve(router, &server_conf, ssl.as_ref(), shutdown_rx).await
             {
                 tracing::error!("Server error: {e}");
             }

@@ -31,6 +31,7 @@ pub struct SecurityLayer {
 }
 
 impl SecurityLayer {
+    #[must_use]
     pub fn new(allow_iframe: bool) -> Self {
         Self { allow_iframe }
     }
@@ -58,10 +59,7 @@ pub struct SecurityService<S> {
 
 impl<S, E> Service<Request<Body>> for SecurityService<S>
 where
-    S: Service<Request<Body>, Response = Response<Body>, Error = E>
-        + Send
-        + Clone
-        + 'static,
+    S: Service<Request<Body>, Response = Response<Body>, Error = E> + Send + Clone + 'static,
     S::Future: Send + 'static,
     E: Send + 'static,
 {
@@ -79,8 +77,7 @@ where
             .headers()
             .get("x-forwarded-proto")
             .and_then(|v| v.to_str().ok())
-            .map(|s| s == "https")
-            .unwrap_or(false);
+            .is_some_and(|s| s == "https");
         let ws_scheme = if is_https { "wss://" } else { "ws://" };
 
         let host = req
@@ -113,10 +110,7 @@ where
 
             // X-Frame-Options
             if !allow_iframe {
-                headers.insert(
-                    "x-frame-options",
-                    HeaderValue::from_static("SAMEORIGIN"),
-                );
+                headers.insert("x-frame-options", HeaderValue::from_static("SAMEORIGIN"));
             }
 
             // Referrer-Policy
