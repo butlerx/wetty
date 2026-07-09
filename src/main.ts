@@ -149,15 +149,16 @@ if (!opts.help) {
   process.on('exit', cleanup);
   void loadConfigFile(opts.conf)
     .then((config) => mergeCliConf(opts, config))
-    .then((conf) => {
+    .then(async (conf) => {
       setLevel(conf.logLevel);
-      return start(
+      const handle = await start(
         conf.ssh,
         conf.server,
         conf.command,
         conf.forceSSH,
         conf.ssl,
       );
+      await handle.wait();
     })
     .catch((err: unknown) => {
       logger().error('error in server', { err });

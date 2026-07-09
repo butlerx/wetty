@@ -7,5 +7,5 @@
     "sourceMap": true
   },
   "include": ["src"],
-  "exclude": ["src/client"]
+  "exclude": ["src/client", "**/*.spec.ts"]
 }

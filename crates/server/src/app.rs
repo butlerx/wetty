@@ -43,8 +43,9 @@ use crate::socket::on_connect;
 const HTML_TEMPLATE: &str = include_str!("index.html");
 
 fn render_html(base: &str, title: &str) -> String {
+    let asset_base = if base == "/" { "" } else { base };
     HTML_TEMPLATE
-        .replace("{base}", base)
+        .replace("{base}", asset_base)
         .replace("{title}", title)
 }
 
@@ -130,7 +131,8 @@ pub fn build_router(
     // ── Socket.IO ─────────────────────────────────────────────────────────────
     // The socket.io client connects to `{base}/socket.io` so we configure
     // socketioxide with a matching req_path.
-    let socket_path = format!("{base}/socket.io");
+    let socket_prefix = if base == "/" { "" } else { base.as_str() };
+    let socket_path = format!("{socket_prefix}/socket.io");
     let (socket_layer, io) = SocketIo::builder()
         .req_path(socket_path)
         .build_layer();

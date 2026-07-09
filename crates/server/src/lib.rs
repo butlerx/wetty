@@ -37,7 +37,8 @@ mod napi_bindings {
     use std::path::PathBuf;
 
     use napi_derive::napi;
-    use tokio::sync::oneshot;
+    use tokio::sync::{oneshot, Mutex};
+    use tokio::task::JoinHandle;
 
     use super::config::{ServerConfig, SshConfig, SslConfig};
 
@@ -48,16 +49,26 @@ mod napi_bindings {
     /// Call `close()` to trigger graceful shutdown.
     #[napi]
     pub struct ServerHandle {
-        shutdown_tx: Option<oneshot::Sender<()>>,
+        shutdown_tx: Mutex<Option<oneshot::Sender<()>>>,
+        join_handle: Mutex<Option<JoinHandle<()>>>,
     }
 
     #[napi]
     impl ServerHandle {
         /// Gracefully shut down the server.
         #[napi]
-        pub fn close(&mut self) -> napi::Result<()> {
-            if let Some(tx) = self.shutdown_tx.take() {
+        pub fn close(&self) -> napi::Result<()> {
+            if let Some(tx) = self.shutdown_tx.blocking_lock().take() {
                 let _ = tx.send(());
+            }
+            Ok(())
+        }
+
+        /// Wait for the server to stop. Resolves when the server exits.
+        #[napi]
+        pub async fn wait(&self) -> napi::Result<()> {
+            if let Some(handle) = self.join_handle.lock().await.take() {
+                let _ = handle.await;
             }
             Ok(())
         }
@@ -90,7 +101,7 @@ mod napi_bindings {
         let server_conf_clone = server_conf.clone();
         let ssl_clone = ssl.clone();
 
-        tokio::spawn(async move {
+        let join_handle = tokio::spawn(async move {
             if let Err(e) =
                 super::app::serve(router, &server_conf_clone, ssl_clone.as_ref(), shutdown_rx).await
             {
@@ -99,7 +110,8 @@ mod napi_bindings {
         });
 
         Ok(ServerHandle {
-            shutdown_tx: Some(shutdown_tx),
+            shutdown_tx: Mutex::new(Some(shutdown_tx)),
+            join_handle: Mutex::new(Some(join_handle)),
         })
     }
 

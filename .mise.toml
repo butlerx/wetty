@@ -9,6 +9,9 @@ prek           = "latest"
 [settings]
 experimental = true
 
+[env]
+_.file = ".env"
+
 [tasks.start]
 description = "Start production server"
 run         = "NODE_ENV=production node ./build/main.js"
@@ -27,11 +30,13 @@ alias       = "b"
 [tasks."test:rust"]
 description = "Run Rust unit and integration tests"
 run         = "cargo test --workspace"
+sources     = ["Cargo.toml", "Cargo.lock", "crates/**/*.rs"]
 
 [tasks."test:ts"]
 description = "Run TypeScript/mocha tests"
 run         = "pnpm exec mocha"
 depends     = ["build"]
+sources     = ["src/**/*.ts", "src/**/*.spec.ts"]
 
 [tasks.test]
 description = "Run all tests (Rust + TypeScript)"
@@ -46,18 +51,22 @@ alias       = "l"
 [tasks."lint:ts"]
 description = "Lint TypeScript sources with ESLint"
 run         = "pnpm exec eslint src"
+sources     = ["src/**/*.ts", "eslint.config.mjs"]
 
 [tasks."lint:ts:fix"]
 description = "Auto-fix ESLint issues"
 run         = "pnpm exec eslint --fix src"
+sources     = ["src/**/*.ts", "eslint.config.mjs"]
 
 [tasks."lint:rust"]
 description = "Run cargo clippy"
 run         = "cargo clippy --workspace -- -D warnings"
+sources     = ["Cargo.toml", "Cargo.lock", "crates/**/*.rs"]
 
 [tasks."lint:rust:fix"]
 description = "Auto-fix clippy warnings"
 run         = "cargo clippy --workspace --fix --allow-dirty -- -D warnings"
+sources     = ["Cargo.toml", "Cargo.lock", "crates/**/*.rs"]
 
 [tasks.check]
 description = "Type-check all sources"
@@ -67,10 +76,12 @@ alias       = "c"
 [tasks."check:ts"]
 description = "Type-check TypeScript sources"
 run         = "pnpm exec tsc --noEmit"
+sources     = ["src/**/*.ts", "tsconfig.json", "tsconfig.node.json", "tsconfig.browser.json"]
 
 [tasks."check:rust"]
 description = "Check Rust sources compile"
 run         = "cargo check --workspace"
+sources     = ["Cargo.toml", "Cargo.lock", "crates/**/*.rs"]
 
 [tasks.fmt]
 description = "Format all sources"
@@ -80,7 +91,9 @@ alias       = "f"
 [tasks."fmt:ts"]
 description = "Format TypeScript sources with Prettier"
 run         = "pnpm exec prettier --write src"
+sources     = ["src/**/*.ts"]
 
 [tasks."fmt:rust"]
 description = "Format Rust sources"
 run         = "cargo fmt --all"
+sources     = ["crates/**/*.rs"]

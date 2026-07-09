@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 //MISE description="Build TypeScript client + server"
+//MISE sources=["src/**/*.ts", "src/**/*.scss", "src/assets/**", "tsconfig.json", "tsconfig.node.json", "tsconfig.browser.json", "package.json"]
+//MISE outputs=["build/client/**", "build/main.js", "build/server.js"]
 import { resolve } from 'node:path';
 import { spawn } from 'node:child_process';
 import * as esbuild from 'esbuild';

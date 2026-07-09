@@ -194,7 +194,11 @@ pub fn get_command(
         String::new()
     };
 
-    let ssh_host = format!("{}@{}", escape_shell(&username), ssh.host);
+    let ssh_host = if username.is_empty() {
+        ssh.host.clone()
+    } else {
+        format!("{}@{}", escape_shell(&username), ssh.host)
+    };
 
     let url_params = url_args(
         info.referer.as_deref(),
