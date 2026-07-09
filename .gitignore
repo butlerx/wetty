@@ -156,3 +156,6 @@ target/
 *.pdb
 
 # End of https://www.toptal.com/developers/gitignore/api/node,rust
+
+# prek generates hooks here but they're machine-local
+.husky/

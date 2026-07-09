@@ -100,7 +100,8 @@ mod napi_bindings {
         let (router, _io) = super::app::build_router(&server_conf, ssh, command, forcessh, &build);
 
         let join_handle = tokio::spawn(async move {
-            if let Err(e) = super::serve::serve(router, &server_conf, ssl.as_ref(), shutdown_rx).await
+            if let Err(e) =
+                super::serve::serve(router, &server_conf, ssl.as_ref(), shutdown_rx).await
             {
                 tracing::error!("Server error: {e}");
             }

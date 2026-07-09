@@ -18,7 +18,7 @@ impl Default for FlowControlServer {
     fn default() -> Self {
         Self {
             counter: 0,
-            low: 524_288,   // 2^19
+            low: 524_288,    // 2^19
             high: 2_097_152, // 2^21
         }
     }

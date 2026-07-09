@@ -1,4 +1,3 @@
----
 name: Pull Request
 on:
   pull_request:
@@ -16,7 +15,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up mise (Node, pnpm)
-        uses: jdx/mise-action@v2
+        uses: jdx/mise-action@c37c93293d6b742fc901e1406b8f764f6fb19dac # v2
         with:
           install: true
           cache: true

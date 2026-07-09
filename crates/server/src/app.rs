@@ -174,5 +174,3 @@ pub fn build_router(
 
     (router, io)
 }
-
-

@@ -11,9 +11,6 @@
     "build/",
     "conf/"
   ],
-  "scripts": {
-    "prepare": "prek install"
-  },
   "publishConfig": {
     "provenance": true,
     "access": "public"
@@ -46,7 +43,6 @@
     "@commitlint/cli": "^21.0.1",
     "@commitlint/config-conventional": "^21.0.1",
     "@eslint/js": "^10.0.1",
-    "@j178/prek": "^0.4.8",
     "@types/chai": "^5.2.3",
     "@types/jsdom": "^28.0.3",
     "@types/mocha": "^10.0.10",
