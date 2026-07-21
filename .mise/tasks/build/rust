@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#MISE description="Build Rust native addon and copy .node file into build/"
+#MISE sources=["Cargo.toml", "Cargo.lock", "crates/**/*.rs"]
+#MISE outputs=["build/wetty_server.node"]
+#USAGE flag "--release" help="Build in release mode"
+
+set -e
+
+cargo_args=(--features node-binding -p server)
+target_dir="debug"
+
+if [[ "${usage_release}" == "true" ]]; then
+  cargo_args+=(--release)
+  target_dir="release"
+fi
+
+cargo build "${cargo_args[@]}"
+mkdir -p build
+find "target/$target_dir" -maxdepth 1 \( -name 'libserver.so' -o -name 'libserver.dylib' -o -name 'server.dll' \) \
+  -exec cp {} build/wetty_server.node \;

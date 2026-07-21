@@ -12,16 +12,7 @@
     "conf/"
   ],
   "scripts": {
-    "build": "node build.js",
-    "clean": "rm -rf build",
-    "contributor": "all-contributors",
-    "dev": "NODE_ENV=development concurrently --kill-others --raw --success first \"pnpm build --watch\" \"nodemon -w build -i build/client -w conf/config.json5 --delay 200ms ./build/main.js -- --conf conf/config.json5\"",
-    "docker-compose-entrypoint": "ssh-keyscan -H wetty-ssh >> ~/.ssh/known_hosts; pnpm start",
-    "lint": "eslint src",
-    "lint:fix": "eslint --fix src",
-    "start": "NODE_ENV=production node ./build/main.js",
-    "test": "mocha",
-    "prepare": "husky"
+    "prepare": "prek install"
   },
   "publishConfig": {
     "provenance": true,
@@ -31,14 +22,6 @@
   "author": "Cian Butler <butlerx@notthe.cloud> (cianbutler.ie)",
   "bugs": {
     "url": "https://github.com/butlerx/wetty/issues"
-  },
-  "lint-staged": {
-    "*.{js,ts}": [
-      "eslint --fix"
-    ],
-    "*.{json,scss,md}": [
-      "prettier --write"
-    ]
   },
   "engines": {
     "node": ">=20.0.0"
@@ -51,25 +34,11 @@
     "@xterm/addon-web-links": "^0.12.0",
     "@xterm/addon-webgl": "^0.19.0",
     "@xterm/xterm": "^6.0.0",
-    "compression": "^1.8.1",
-    "etag": "^1.8.1",
-    "express": "^5.2.1",
-    "express-winston": "^4.2.0",
     "file-type": "^22.0.1",
-    "find-up": "^8.0.0",
-    "fresh": "^0.5.2",
-    "helmet": "^8.2.0",
     "json5": "^2.2.3",
-    "node-pty": "^1.1.0",
-    "parseurl": "^1.3.3",
-    "prom-client": "^15.1.3",
-    "response-time": "^2.3.4",
     "sass": "^1.100.0",
-    "serve-static": "^2.2.1",
-    "socket.io": "^4.8.3",
     "socket.io-client": "^4.8.3",
     "toastify-js": "^1.12.0",
-    "url-value-parser": "^2.2.0",
     "winston": "^3.19.0",
     "yargs": "^18.0.0"
   },
@@ -77,17 +46,11 @@
     "@commitlint/cli": "^21.0.1",
     "@commitlint/config-conventional": "^21.0.1",
     "@eslint/js": "^10.0.1",
+    "@j178/prek": "^0.4.8",
     "@types/chai": "^5.2.3",
-    "@types/compression": "^1.8.1",
-    "@types/etag": "^1.8.4",
-    "@types/express": "^5.0.6",
-    "@types/fresh": "^0.5.3",
     "@types/jsdom": "^28.0.3",
     "@types/mocha": "^10.0.10",
     "@types/node": "^25.9.0",
-    "@types/parseurl": "^1.3.3",
-    "@types/response-time": "^2.3.9",
-    "@types/serve-static": "^2.2.0",
     "@types/sinon": "^21.0.1",
     "@types/toastify-js": "^1.12.4",
     "@types/yargs": "^17.0.35",
@@ -106,9 +69,7 @@
     "eslint-plugin-prettier": "^5.5.5",
     "git-authors-cli": "^1.0.53",
     "globals": "^17.6.0",
-    "husky": "^9.1.7",
     "jsdom": "^29.1.1",
-    "lint-staged": "^17.0.5",
     "mocha": "12.0.0-beta-10",
     "nodemon": "^3.1.14",
     "prettier": "^3.8.3",

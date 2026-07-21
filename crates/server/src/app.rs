@@ -1,0 +1,178 @@
+//! Axum HTTP router – replaces `src/server/socketServer.ts`.
+//!
+//! Builds the full `axum::Router` with:
+//! - Security-header middleware (`SecurityLayer`)
+//! - HTTP compression (`tower_http::CompressionLayer`)
+//! - Request tracing (`tower_http::TraceLayer`)
+//! - Static-file serving for the compiled browser client
+//! - HTML template routes (`GET /`, `GET /ssh/:user`)
+//! - Prometheus metrics route
+//! - Service-worker helper route
+//! - Socket.IO upgrade layer (socketioxide)
+
+use std::path::{Path, PathBuf};
+use std::sync::Arc;
+
+use axum::{
+    extract::{Path as AxumPath, State},
+    http::StatusCode,
+    response::{Html, IntoResponse, Response},
+    routing::get,
+    Router,
+};
+use socketioxide::{extract::SocketRef, SocketIo};
+use tokio::fs;
+use tower_http::{compression::CompressionLayer, services::ServeDir, trace::TraceLayer};
+
+use crate::config::{ServerConfig, SshConfig};
+use crate::metrics::metrics_handler;
+use crate::security::SecurityLayer;
+use crate::socket::on_connect;
+
+// ── HTML template ─────────────────────────────────────────────────────────────
+
+/// The HTML template is loaded from `index.html` at compile time.
+/// The placeholders `{base}` and `{title}` are substituted at runtime.
+const HTML_TEMPLATE: &str = include_str!("index.html");
+
+fn render_html(base: &str, title: &str) -> String {
+    let asset_base = if base == "/" { "" } else { base };
+    HTML_TEMPLATE
+        .replace("{base}", asset_base)
+        .replace("{title}", title)
+}
+
+// ── Shared app state ──────────────────────────────────────────────────────────
+
+#[derive(Clone)]
+struct AppState {
+    base: String,
+    title: String,
+    build_dir: PathBuf,
+}
+
+// ── Route handlers ────────────────────────────────────────────────────────────
+
+async fn index_handler(State(state): State<Arc<AppState>>) -> Html<String> {
+    Html(render_html(&state.base, &state.title))
+}
+
+async fn ssh_user_handler(
+    State(state): State<Arc<AppState>>,
+    AxumPath(_user): AxumPath<String>,
+) -> Html<String> {
+    Html(render_html(&state.base, &state.title))
+}
+
+async fn sw_handler(State(state): State<Arc<AppState>>) -> Response {
+    let path = state.build_dir.join("sw.js");
+    match fs::read(&path).await {
+        Ok(bytes) => (
+            StatusCode::OK,
+            [(axum::http::header::CONTENT_TYPE, "application/javascript")],
+            bytes,
+        )
+            .into_response(),
+        Err(_) => StatusCode::NOT_FOUND.into_response(),
+    }
+}
+
+/// Redirect trailing-slash requests to the canonical path.
+async fn redirect_trailing_slash(
+    axum::extract::OriginalUri(uri): axum::extract::OriginalUri,
+) -> Response {
+    let path = uri.path();
+    if path.len() > 1 && path.ends_with('/') {
+        let trimmed = path.trim_end_matches('/');
+        axum::response::Redirect::permanent(trimmed).into_response()
+    } else {
+        StatusCode::NOT_FOUND.into_response()
+    }
+}
+
+// ── Router builder ────────────────────────────────────────────────────────────
+
+/// Normalise the base path: always starts with `/`, never ends with `/`.
+#[must_use]
+pub fn trim_base(base: &str) -> String {
+    let b = base.trim_end_matches('/');
+    if b.is_empty() {
+        "/".into()
+    } else {
+        b.into()
+    }
+}
+
+/// Build the full axum `Router` for the given configuration.
+///
+/// The `build_dir` argument should point to the compiled client assets
+/// directory (i.e. `<repo>/build`).
+pub fn build_router(
+    server: &ServerConfig,
+    ssh: SshConfig,
+    command: String,
+    forcessh: bool,
+    build_dir: &Path,
+) -> (Router, SocketIo) {
+    crate::metrics::init();
+
+    let base = trim_base(&server.base);
+    let title = server.title.clone();
+    let allow_iframe = server.allow_iframe;
+
+    let state = Arc::new(AppState {
+        base: base.clone(),
+        title,
+        build_dir: build_dir.to_path_buf(),
+    });
+
+    // ── Socket.IO ─────────────────────────────────────────────────────────────
+    // The socket.io client connects to `{base}/socket.io` so we configure
+    // socketioxide with a matching req_path.
+    let socket_prefix = if base == "/" { "" } else { base.as_str() };
+    let socket_path = format!("{socket_prefix}/socket.io");
+    let (socket_layer, io) = SocketIo::builder().req_path(socket_path).build_layer();
+
+    // Register the connection handler on the root namespace.
+    let ssh = Arc::new(ssh);
+    let command = Arc::new(command);
+    io.ns("/", move |socket: SocketRef| {
+        on_connect(socket, &ssh, &command, forcessh);
+    });
+
+    // ── Static client files ───────────────────────────────────────────────────
+    let client_dir = build_dir.join("client");
+    let serve_client = ServeDir::new(&client_dir);
+
+    // ── Route table ───────────────────────────────────────────────────────────
+    // Build a nested path: if base == "/", mount at root; otherwise nest.
+    let app = if base == "/" {
+        Router::new()
+            .route("/metrics", get(metrics_handler))
+            .route("/", get(index_handler))
+            .route("/ssh/{user}", get(ssh_user_handler))
+            .route("/sw.js", get(sw_handler))
+            .nest_service("/client", serve_client)
+    } else {
+        Router::new()
+            .route(&format!("{base}/metrics"), get(metrics_handler))
+            .route(&base, get(index_handler))
+            .route(&format!("{base}/ssh/{{user}}"), get(ssh_user_handler))
+            .route(&format!("{base}/sw.js"), get(sw_handler))
+            .nest_service(&format!("{base}/client"), serve_client)
+    };
+
+    let router = app
+        // Catch-all for trailing-slash redirects
+        .fallback(redirect_trailing_slash)
+        .with_state(state)
+        // Socket.IO upgrade middleware (must come before compression)
+        .layer(socket_layer)
+        .layer(CompressionLayer::new())
+        .layer(TraceLayer::new_for_http())
+        .layer(SecurityLayer::new(allow_iframe));
+
+    (router, io)
+}
+
+

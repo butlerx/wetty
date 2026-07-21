@@ -1,0 +1,12 @@
+toml-version = "v1.0.0"
+
+[files]
+exclude = ["**/*.lock"]
+
+[format.rules]
+group-blank-lines-limit         = 2
+key-value-equals-sign-alignment = true
+trailing-comment-alignment      = true
+
+[schema]
+enabled = true
