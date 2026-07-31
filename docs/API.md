@@ -14,7 +14,8 @@ Create WeTTY server
 
 Starts WeTTY Server
 
-**Kind**: inner property of [`WeTTy`](#module_WeTTy)  
+**Kind**: inner property of [`WeTTy`](#module_WeTTy)
+
 **Returns**: `Promise` - Promise resolves once server is running
 
 | Param                    | Type      | Default                               | Description                                                                                                            |
@@ -45,7 +46,8 @@ Starts WeTTY Server
 
 ### "connection"
 
-**Kind**: event emitted by [`WeTTy`](#module_WeTTy)  
+**Kind**: event emitted by [`WeTTy`](#module_WeTTy)
+
 **Properties**
 
 | Name | Type     | Description                 |
@@ -57,7 +59,8 @@ Starts WeTTY Server
 
 Terminal process spawned
 
-**Kind**: event emitted by [`WeTTy`](#module_WeTTy)  
+**Kind**: event emitted by [`WeTTy`](#module_WeTTy)
+
 **Properties**
 
 | Name    | Type     | Description                            |
@@ -70,7 +73,8 @@ Terminal process spawned
 
 Terminal process exits
 
-**Kind**: event emitted by [`WeTTy`](#module_WeTTy)  
+**Kind**: event emitted by [`WeTTy`](#module_WeTTy)
+
 **Properties**
 
 | Name | Type     | Description                            |
@@ -84,7 +88,8 @@ Terminal process exits
 
 ### "server"
 
-**Kind**: event emitted by [`WeTTy`](#module_WeTTy)  
+**Kind**: event emitted by [`WeTTy`](#module_WeTTy)
+
 **Properties**
 
 | Name       | Type     | Description                     |

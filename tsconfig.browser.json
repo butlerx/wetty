@@ -5,5 +5,6 @@
     "noEmit": true,
     "incremental": true
   },
-  "include": ["src/client"]
+  "include": ["src/client"],
+  "exclude": ["**/*.spec.ts"]
 }

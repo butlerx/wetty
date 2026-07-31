@@ -101,8 +101,8 @@ the URL [http://localhost:3000](http://localhost:3000).
 It is recommended to drive WeTTY behind a reverse proxy to have HTTPS security
 and possibly Let’s Encrypt support. Popular containers to achieve this are
 [nginx-proxy](https://github.com/nginx-proxy/nginx-proxy) and
-[traefik](https://traefik.io/traefik/). For traefik there is an example
-docker-compose file in the containers directory.
+[traefik](https://traefik.io/traefik/). For traefik there is an example docker
+compose file in the containers directory.
 
 ## FAQ
 

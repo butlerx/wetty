@@ -49,7 +49,7 @@ server {
 
     # Authenticate user via other services (e.g., oauth2 end-points)
     #
-    # Configuration : 
+    # Configuration :
     #    - Configure a 'auth_request' directive for this server block
     #    - Capture the authenticated username using 'auth_request_set'
     #    - Set the 'remote-user' request header accordingly
@@ -63,7 +63,7 @@ server {
     #    Add to /wetty location block
     #      proxy_set_header remote-user $auth_user;
     #
-    #    And configure a '/lasso-validate' location. See this blog for further 
+    #    And configure a '/lasso-validate' location. See this blog for further
     #    guidance: https://developer.okta.com/blog/2018/08/28/nginx-auth-request
   }
 

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#MISE description="Start dev server with auto-rebuild"
+set -e
+export NODE_ENV=development
+
+copy_addon() {
+  mkdir -p build
+  find target/debug -maxdepth 1 \( -name 'libwetty_server.so' -o -name 'libwetty_server.dylib' -o -name 'wetty_server.dll' \) \
+    -exec cp {} build/wetty_server.node \;
+}
+export -f copy_addon
+
+# Initial Rust build so the server can start immediately
+cargo build --features node-binding -p server
+copy_addon
+
+pnpm exec concurrently \
+  --kill-others --raw \
+  'cargo watch -w crates -s "cargo build --features node-binding -p server && copy_addon"' \
+  'node .mise/tasks/build/ts.js --watch' \
+  'nodemon -w build -i build/client -w conf/config.json5 --delay 500ms ./build/main.js -- --conf conf/config.json5'
