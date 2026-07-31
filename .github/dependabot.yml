@@ -9,6 +9,34 @@ updates:
       prefix: 'chore(deps)'
     cooldown:
       default-days: 7
+    groups:
+      xterm:
+        patterns:
+          - '@xterm/*'
+      fontawesome:
+        patterns:
+          - '@fortawesome/*'
+      socket-io:
+        patterns:
+          - 'socket.io'
+          - 'socket.io-client'
+      types:
+        patterns:
+          - '@types/*'
+      eslint:
+        patterns:
+          - 'eslint*'
+          - '@eslint/*'
+      commitlint:
+        patterns:
+          - '@commitlint/*'
+      esbuild:
+        patterns:
+          - 'esbuild*'
+      typescript:
+        patterns:
+          - 'typescript*'
+          - '@typescript-eslint/*'
   - package-ecosystem: github-actions
     directory: '/'
     schedule:
@@ -17,6 +45,16 @@ updates:
       prefix: 'ci(deps)'
     cooldown:
       default-days: 7
+    groups:
+      github-actions:
+        patterns:
+          - 'actions/*'
+      docker:
+        patterns:
+          - 'docker/*'
+      codeql:
+        patterns:
+          - 'github/codeql-action/*'
   - package-ecosystem: docker
     directory: '/containers'
     schedule:
