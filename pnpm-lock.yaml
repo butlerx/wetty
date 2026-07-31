@@ -9,11 +9,11 @@ importers:
   .:
     dependencies:
       '@fortawesome/fontawesome-svg-core':
-        specifier: ^6.7.2
-        version: 6.7.2
+        specifier: ^7.3.1
+        version: 7.3.1
       '@fortawesome/free-solid-svg-icons':
-        specifier: ^6.7.2
-        version: 6.7.2
+        specifier: ^7.3.1
+        version: 7.3.1
       '@xterm/addon-fit':
         specifier: ^0.11.0
         version: 0.11.0
@@ -271,8 +271,8 @@ packages:
     resolution: {integrity: sha512-ctxtJ/eA+t+6q2++vj5j7FYX3nRu311q1wfYH3xjlLOsczhlhxAg2FWNUXhpGvAw3BWo1xBcvOV6/YLc2r5FJw==}
     hasBin: true
 
-  '@bufbuild/protobuf@2.12.0':
-    resolution: {integrity: sha512-B/XlCaFIP8LOwzo+bz5uFzATYokcwCKQcghqnlfwSmM5eX/qTkvDBnDPs+gXtX/RyjxJ4DRikECcPJbyALA8FA==}
+  '@bufbuild/protobuf@2.13.0':
+    resolution: {integrity: sha512-acq7c49vxfm1ggJ95P70TX7ABDM0vxr1SYD3BB0o0jnBLB4OAqeHyKuN+cD3w80gXEDQ2zxHpR6CUeA+O/aU9g==}
 
   '@colors/colors@1.5.0':
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
@@ -615,16 +615,16 @@ packages:
       '@noble/hashes':
         optional: true
 
-  '@fortawesome/fontawesome-common-types@6.7.2':
-    resolution: {integrity: sha512-Zs+YeHUC5fkt7Mg1l6XTniei3k4bwG/yo3iFUtZWd/pMx9g3fdvkSK9E0FOC+++phXOka78uJcYb8JaFkW52Xg==}
+  '@fortawesome/fontawesome-common-types@7.3.1':
+    resolution: {integrity: sha512-k0C0sdHmZtAo6dRDtd1Z/qcpyHbL0CKsjV8seMY/21xGhY5Wsv0XRmiI/xEEH4y2c9b1+jvgNs/3EqhV27yUEA==}
     engines: {node: '>=6'}
 
-  '@fortawesome/fontawesome-svg-core@6.7.2':
-    resolution: {integrity: sha512-yxtOBWDrdi5DD5o1pmVdq3WMCvnobT0LU6R8RyyVXPvFRd2o79/0NCuQoCjNTeZz9EzA9xS3JxNWfv54RIHFEA==}
+  '@fortawesome/fontawesome-svg-core@7.3.1':
+    resolution: {integrity: sha512-BoxVN3PKnMbgStHhjoaky/oWdxHomDqmBVA24IA3KEmssFGeI7u9YT/BJceOjIum/t6TpPa/vcMKaVYQeIQ/3Q==}
     engines: {node: '>=6'}
 
-  '@fortawesome/free-solid-svg-icons@6.7.2':
-    resolution: {integrity: sha512-GsBrnOzU8uj0LECDfD5zomZJIjrPhIlWU82AHwa2s40FKH+kcxQaBvBo3Z4TxyZHIyX8XTDxsyA33/Vx9eFuQA==}
+  '@fortawesome/free-solid-svg-icons@7.3.1':
+    resolution: {integrity: sha512-v0BLa0eqg7ubvVWeNSHVBs8fWH/GJicERZoJaxJ3FE/lj67VSqzoMg9pzfZVOfLMX10y0pGwQAuxoRVVH2patg==}
     engines: {node: '>=6'}
 
   '@humanfs/core@0.19.2':
@@ -2082,6 +2082,7 @@ packages:
   git-raw-commits@5.0.1:
     resolution: {integrity: sha512-Y+csSm2GD/PCSh6Isd/WiMjNAydu0VBiG9J7EdQsNA5P9uXvLayqjmTsNlK5Gs9IhblFZqOU0yid5Il5JPoLiQ==}
     engines: {node: '>=18'}
+    deprecated: Deprecated and no longer maintained. Use @conventional-changelog/git-client instead.
     hasBin: true
 
   glob-parent@5.1.2:
@@ -2220,8 +2221,8 @@ packages:
   immutable@5.1.5:
     resolution: {integrity: sha512-t7xcm2siw+hlUM68I+UEOK+z84RzmN59as9DZ7P1l0994DKUWV7UXBMQZVxaoMSRQ+PBZbHCOoBt7a2wxOMt+A==}
 
-  immutable@5.1.6:
-    resolution: {integrity: sha512-q1swsS8K7L8usSHuOqF2TAoCCkonYz0SG38wLAggaa4Wml70zixIvt2ql4coQ2C2B3hTjltJry4r6bULwgAXLQ==}
+  immutable@5.1.9:
+    resolution: {integrity: sha512-m8nVez3rwrgmWxtLMt1ZYXB2Lv7OKYn/disyxAlSDYAlKSlFoPPfIAmAM/M5xqL4m4C/wAPw7S2/CNaUii1Hxg==}
 
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
@@ -4026,7 +4027,7 @@ snapshots:
     dependencies:
       css-tree: 3.2.1
 
-  '@bufbuild/protobuf@2.12.0': {}
+  '@bufbuild/protobuf@2.13.0': {}
 
   '@colors/colors@1.5.0':
     optional: true
@@ -4310,15 +4311,15 @@ snapshots:
 
   '@exodus/bytes@1.15.1': {}
 
-  '@fortawesome/fontawesome-common-types@6.7.2': {}
+  '@fortawesome/fontawesome-common-types@7.3.1': {}
 
-  '@fortawesome/fontawesome-svg-core@6.7.2':
+  '@fortawesome/fontawesome-svg-core@7.3.1':
     dependencies:
-      '@fortawesome/fontawesome-common-types': 6.7.2
+      '@fortawesome/fontawesome-common-types': 7.3.1
 
-  '@fortawesome/free-solid-svg-icons@6.7.2':
+  '@fortawesome/free-solid-svg-icons@7.3.1':
     dependencies:
-      '@fortawesome/fontawesome-common-types': 6.7.2
+      '@fortawesome/fontawesome-common-types': 7.3.1
 
   '@humanfs/core@0.19.2':
     dependencies:
@@ -6062,7 +6063,7 @@ snapshots:
 
   immutable@5.1.5: {}
 
-  immutable@5.1.6: {}
+  immutable@5.1.9: {}
 
   import-fresh@3.3.1:
     dependencies:
@@ -6948,9 +6949,9 @@ snapshots:
 
   sass-embedded@1.100.0:
     dependencies:
-      '@bufbuild/protobuf': 2.12.0
+      '@bufbuild/protobuf': 2.13.0
       colorjs.io: 0.5.2
-      immutable: 5.1.6
+      immutable: 5.1.9
       rxjs: 7.8.2
       supports-color: 8.1.1
       sync-child-process: 1.0.2
