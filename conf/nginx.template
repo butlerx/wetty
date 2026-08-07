@@ -1,3 +1,13 @@
+# If you use $connection_upgrade in a proxy_set_header directive, you must
+# define this map block in your http context (outside server blocks):
+#
+# map $http_upgrade $connection_upgrade {
+#   default upgrade;
+#   ''      close;
+# }
+#
+# Alternatively, use the literal string "upgrade" directly in the location block.
+
 server {
   listen ${NGINX_PORT};
   listen [::]:${NGINX_PORT};
