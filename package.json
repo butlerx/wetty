@@ -109,7 +109,7 @@
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
     "lint-staged": "^17.0.5",
-    "mocha": "12.0.0-beta-10",
+    "mocha": "12.0.0-rc.5",
     "nodemon": "^3.1.14",
     "prettier": "^3.8.3",
     "semantic-release": "^25.0.3",
