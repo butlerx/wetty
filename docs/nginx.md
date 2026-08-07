@@ -32,3 +32,22 @@ location ^~ /wetty {
   proxy_set_header X-NginX-Proxy true;
 }
 ```
+
+**Important:** Use `proxy_set_header Connection "upgrade";` (a literal string),
+**not** `proxy_set_header Connection $connection_upgrade;`. The variable form
+requires a `map` block in your `http` context. Without that map directive,
+nginx sends an empty `Connection` header which breaks WebSocket connections and
+prevents assets (CSS, JS) from loading correctly.
+
+If you prefer to use the variable form, add the following `map` block inside
+your `http` block (before your `server` blocks):
+
+```nginx
+map $http_upgrade $connection_upgrade {
+  default upgrade;
+  ''      close;
+}
+```
+
+Then you can use `proxy_set_header Connection $connection_upgrade;` in your
+location block.
