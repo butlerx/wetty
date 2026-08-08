@@ -2,11 +2,11 @@ import { editor } from '../../disconnect/elements';
 import type { Term } from '../../term';
 import type { Options } from '../options';
 
-export const onInput = (term: Term, updated: Options) => {
+export const onInput = async (term: Term, updated: Options) => {
   try {
     const updatedConf = JSON.stringify(updated, null, 2);
     if (localStorage.options === updatedConf) return;
-    term.options = updated.xterm;
+    await term.applyConfig(updated.xterm);
     if (
       !updated.wettyFitTerminal &&
       updated.xterm.cols != null &&

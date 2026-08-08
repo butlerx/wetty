@@ -1,18 +1,10 @@
 import { editor } from '../disconnect/elements';
-import { copySelected, copyShortcut } from './configuration/clipboard';
 import { onInput } from './configuration/editor';
 import { loadOptions } from './load';
 import type { Options } from './options';
 import type { Term } from '../term';
 
 export function configureTerm(term: Term): void {
-  const options = loadOptions();
-  try {
-    term.options = options.xterm;
-  } catch {
-    /* Do nothing */
-  }
-
   const toggle = document.querySelector('#options .toggler');
   const optionsElem = document.getElementById('options');
   if (editor == null || toggle == null || optionsElem == null) {
@@ -51,7 +43,7 @@ export function configureTerm(term: Term): void {
   window.addEventListener('message', (e: MessageEvent<unknown>) => {
     const data = e.data as WettyMessage | null;
     if (data?.type === 'wetty:save' && data.config !== undefined) {
-      onInput(term, data.config);
+      void onInput(term, data.config);
     } else if (data?.type === 'wetty:close') {
       optionsElem.classList.toggle('opened');
     }
@@ -68,13 +60,6 @@ export function configureTerm(term: Term): void {
     e.preventDefault();
   });
 
-  term.attachCustomKeyEventHandler(copyShortcut);
-
-  document.addEventListener(
-    'mouseup',
-    () => {
-      if (term.hasSelection()) copySelected(term.getSelection());
-    },
-    false,
-  );
+  // Copy-on-select and ctrl+shift+c are built into the engine's input
+  // handling, so no custom key handler or mouseup listener is needed.
 }

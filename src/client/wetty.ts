@@ -8,7 +8,6 @@ import { overlay } from './wetty/disconnect/elements';
 import { verifyPrompt } from './wetty/disconnect/verify';
 import { FileDownloader } from './wetty/download';
 import { FlowControlClient } from './wetty/flowcontrol';
-import { mobileKeyboard } from './wetty/mobile';
 import { socket } from './wetty/socket';
 import { terminal, Term } from './wetty/term';
 
@@ -35,49 +34,86 @@ function onResize(term: Term): () => void {
 }
 
 socket.on('connect', () => {
-  const term = terminal(socket);
-  if (term === undefined) return;
+  // The engine loads asynchronously (wasm). Handlers register
+  // synchronously and queue their work until the terminal is ready, so
+  // a fast first burst (or an instant logout) is never dropped.
+  let queue: (() => void)[] | null = [];
+  const whenReady = (action: () => void): void => {
+    if (queue === null) {
+      action();
+    } else {
+      queue.push(action);
+    }
+  };
 
-  if (overlay !== null) overlay.style.display = 'none';
-  window.addEventListener('beforeunload', verifyPrompt, false);
-  window.addEventListener('resize', onResize(term), false);
-
-  term.resizeTerm();
-  term.focus();
-  mobileKeyboard();
   const fileDownloader = new FileDownloader();
   const fcClient = new FlowControlClient();
+  let activeTerm: Term;
 
-  term.onData((data: string) => {
-    socket.emit('input', data);
-  });
-  term.onResize((size: { cols: number; rows: number }) => {
-    socket.emit('resize', size);
-  });
   socket
     .on('data', (data: string) => {
-      const remainingData = fileDownloader.buffer(data);
-      const downloadLength = data.length - remainingData.length;
-      if (downloadLength && fcClient.needsCommit(downloadLength)) {
-        socket.emit('commit', fcClient.ackBytes);
-      }
-      if (remainingData) {
-        if (fcClient.needsCommit(remainingData.length)) {
-          term.write(remainingData, () =>
-            socket.emit('commit', fcClient.ackBytes),
-          );
-        } else {
-          term.write(remainingData);
+      whenReady(() => {
+        const remainingData = fileDownloader.buffer(data);
+        const downloadLength = data.length - remainingData.length;
+        if (downloadLength && fcClient.needsCommit(downloadLength)) {
+          socket.emit('commit', fcClient.ackBytes);
         }
-      }
+        if (remainingData) {
+          if (fcClient.needsCommit(remainingData.length)) {
+            activeTerm.write(remainingData, () =>
+              socket.emit('commit', fcClient.ackBytes),
+            );
+          } else {
+            activeTerm.write(remainingData);
+          }
+        }
+      });
     })
     .on('login', () => {
-      term.writeln('');
-      term.resizeTerm();
+      whenReady(() => {
+        activeTerm.writeln('');
+        activeTerm.resizeTerm();
+      });
     })
-    .on('logout', disconnect)
-    .on('disconnect', disconnect)
+    .on('logout', () => {
+      whenReady(() => {
+        disconnect();
+      });
+    })
+    .on('disconnect', () => {
+      whenReady(() => {
+        disconnect();
+      });
+    })
     .on('error', (err: string | null) => {
-      if (err) disconnect(err);
+      whenReady(() => {
+        if (err) disconnect(err);
+      });
     });
+
+  void (async () => {
+    const term = await terminal(socket);
+    if (term === undefined) return;
+    activeTerm = term;
+
+    if (overlay !== null) overlay.style.display = 'none';
+    window.addEventListener('beforeunload', verifyPrompt, false);
+    window.addEventListener('resize', onResize(term), false);
+
+    term.resizeTerm();
+    term.focus();
+
+    term.onData((data: string) => {
+      socket.emit('input', data);
+    });
+    term.onResize((size: { cols: number; rows: number }) => {
+      socket.emit('resize', size);
+    });
+
+    const backlog = queue;
+    queue = null;
+    backlog.forEach((action) => {
+      action();
+    });
+  })();
 });

@@ -66,6 +66,10 @@ async function buildClient(watching) {
       copy({
         assets: [
           { from: './src/assets/xterm_config/*', to: 'xterm_config' },
+          {
+            from: './node_modules/rioterm/wasm/librio_wasm_bg.wasm',
+            to: 'librio_wasm_bg.wasm',
+          },
           { from: './src/assets/favicon.ico', to: 'favicon.ico' },
           { from: './src/assets/manifest.json', to: 'manifest.json' },
           { from: './src/assets/sw.js', to: '../sw.js' },

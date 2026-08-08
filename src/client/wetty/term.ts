@@ -1,52 +1,164 @@
-import { FitAddon } from '@xterm/addon-fit';
-import { ImageAddon } from '@xterm/addon-image';
-import { WebLinksAddon } from '@xterm/addon-web-links';
-import { WebglAddon } from '@xterm/addon-webgl';
-import { Terminal } from '@xterm/xterm';
+import { open, defaultTheme } from 'rioterm';
 
 import { terminal as termElement } from './disconnect/elements';
 import { configureTerm } from './term/configuration';
 import { loadOptions } from './term/load';
 import { setTitle } from './title';
-import type { Options } from './term/options';
+import type { Options, XTerm } from './term/options';
+import type { RioTermHandle, Theme, OpenOptions } from 'rioterm';
 import type { Socket } from 'socket.io-client';
 
-const isMobile =
-  /iPhone|iPad|iPod|Android|webOS|BlackBerry|Opera Mini|IEMobile/i.test(
-    navigator.userAgent,
-  );
-
-export class Term extends Terminal {
+/*
+ * Terminal backed by rioterm: Rio terminal's Rust VT engine compiled to
+ * WebAssembly. Config changes re-open the renderer and replay the buffer
+ * via serialize(), which keeps scrollback, styles, and links.
+ */
+export class Term {
   socket: Socket;
-  fitAddon: FitAddon;
   loadOptions: () => Options;
 
-  constructor(socket: Socket) {
-    super({ allowProposedApi: true });
+  private handle!: RioTermHandle;
+  private container: HTMLElement;
+  private conf: XTerm;
+  private dataCallback?: (data: string) => void;
+  private resizeCallback?: (size: { cols: number; rows: number }) => void;
+  private decoder = new TextDecoder();
+  private lastSize = { cols: 0, rows: 0 };
+  private reopening: Promise<void> = Promise.resolve();
+
+  private constructor(socket: Socket, container: HTMLElement) {
     this.socket = socket;
-    this.fitAddon = new FitAddon();
-    this.loadAddon(this.fitAddon);
-    this.loadAddon(new WebLinksAddon());
-    this.loadAddon(new ImageAddon());
+    this.container = container;
     this.loadOptions = loadOptions;
-    if (!isMobile) {
-      try {
-        this.loadAddon(new WebglAddon());
-      } catch {
-        // WebGL not available — DOM renderer will be used
-      }
+    this.conf = loadOptions().xterm;
+  }
+
+  static async create(socket: Socket, container: HTMLElement): Promise<Term> {
+    const term = new Term(socket, container);
+    await term.openTerminal();
+    return term;
+  }
+
+  private rioOptions(): OpenOptions {
+    const { conf } = this;
+    const options: OpenOptions = {
+      renderer: 'canvas',
+      // resizeTerm drives sizing so the socket learns about new dims
+      fit: false,
+      autoFocus: false,
+      theme: {
+        ...defaultTheme,
+        ...((conf.theme ?? {}) as Partial<Theme>),
+      },
+    };
+    if (typeof conf.fontSize === 'number') options.fontSize = conf.fontSize;
+    if (typeof conf.fontFamily === 'string') {
+      options.fontFamily = conf.fontFamily;
     }
-    this.onTitleChange(setTitle);
+    if (typeof conf.lineHeight === 'number') {
+      options.lineHeight = conf.lineHeight;
+    }
+    if (typeof conf.scrollback === 'number') {
+      options.scrollback = conf.scrollback;
+    }
+    if (
+      conf.cursorStyle === 'block' ||
+      conf.cursorStyle === 'underline' ||
+      conf.cursorStyle === 'bar'
+    ) {
+      options.cursorStyle = conf.cursorStyle;
+    }
+    if (typeof conf.cols === 'number' && typeof conf.rows === 'number') {
+      options.cols = conf.cols;
+      options.rows = conf.rows;
+    }
+    return options;
+  }
+
+  private async openTerminal(replay?: string): Promise<void> {
+    this.handle = await open(this.container, this.rioOptions());
+    this.handle.terminal.onTitleChange((title: string) => {
+      setTitle(title);
+    });
+    this.handle.terminal.onData((bytes: Uint8Array) => {
+      this.dataCallback?.(this.decoder.decode(bytes));
+    });
+    if (replay) this.handle.terminal.write(replay);
+  }
+
+  /*
+   * Merge config from the options editor and re-open the renderer with
+   * it. Re-opens are chained so rapid saves cannot race each other.
+   */
+  applyConfig(conf: XTerm): Promise<void> {
+    this.conf = { ...this.conf, ...conf };
+    this.reopening = this.reopening.then(async () => {
+      const replay = this.handle.terminal.serialize();
+      this.handle.dispose();
+      await this.openTerminal(replay);
+      this.focus();
+    });
+    return this.reopening;
   }
 
   resizeTerm(): void {
-    this.refresh(0, this.rows - 1);
-    if (this.shouldFitTerm) this.fitAddon.fit();
-    this.socket.emit('resize', { cols: this.cols, rows: this.rows });
+    if (this.shouldFitTerm) {
+      this.handle.renderer.fit(
+        this.container.clientWidth,
+        this.container.clientHeight,
+      );
+    }
+    const { cols, rows } = this.handle.terminal.options;
+    this.socket.emit('resize', { cols, rows });
+    if (cols !== this.lastSize.cols || rows !== this.lastSize.rows) {
+      this.lastSize = { cols, rows };
+      this.resizeCallback?.({ cols, rows });
+    }
   }
 
   get shouldFitTerm(): boolean {
     return this.loadOptions().wettyFitTerminal;
+  }
+
+  onData(callback: (data: string) => void): void {
+    this.dataCallback = callback;
+  }
+
+  onResize(callback: (size: { cols: number; rows: number }) => void): void {
+    this.resizeCallback = callback;
+  }
+
+  /*
+   * Flow control counts on a completion signal per write; rioterm writes
+   * parse synchronously, so the callback runs as soon as write returns.
+   */
+  write(data: string | Uint8Array, callback?: () => void): void {
+    this.handle.terminal.write(data);
+    callback?.();
+  }
+
+  writeln(data: string): void {
+    this.handle.terminal.write(`${data}\r\n`);
+  }
+
+  input(data: string, _wasUserInput = false): void {
+    this.handle.terminal.input(data);
+  }
+
+  resize(cols: number, rows: number): void {
+    this.handle.terminal.resize(cols, rows);
+  }
+
+  getSelection(): string {
+    return this.handle.terminal.getSelection() ?? '';
+  }
+
+  hasSelection(): boolean {
+    return this.getSelection() !== '';
+  }
+
+  focus(): void {
+    this.handle.focus();
   }
 }
 
@@ -231,11 +343,10 @@ declare global {
   }
 }
 
-export function terminal(socket: Socket): Term | undefined {
-  const term = new Term(socket);
+export async function terminal(socket: Socket): Promise<Term | undefined> {
   if (termElement === null) return undefined;
   termElement.innerHTML = '';
-  term.open(termElement);
+  const term = await Term.create(socket, termElement);
   configureTerm(term);
   window.onresize = function onResize() {
     term.resizeTerm();
