@@ -18,6 +18,8 @@
     title:        'WeTTY - The Web Terminal Emulator', // Page title
     // socket:    '/tmp/wetty.sock',                   // Unix socket to listen on (mutually exclusive with host/port)
     // allowIframe: false,                             // Allow WeTTY to be embedded in an iframe
+    // pingInterval: 3000,                             // Milliseconds between socket.io heartbeat pings
+    // pingTimeout:  7000,                             // Milliseconds to wait for a pong before dropping the connection
   },
 
   forceSSH: false,  // Force sshing to local machine over login if running as root
