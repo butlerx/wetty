@@ -179,7 +179,7 @@ importers:
         version: 4.17.1(@typescript-eslint/utils@8.61.0(eslint@10.8.0(jiti@2.6.1))(typescript@6.0.3))(eslint@10.8.0(jiti@2.6.1))
       eslint-plugin-mocha:
         specifier: ^12.0.1
-        version: 12.0.1(eslint@10.8.0(jiti@2.6.1))
+        version: 12.0.2(eslint@10.8.0(jiti@2.6.1))
       eslint-plugin-prettier:
         specifier: ^5.5.5
         version: 5.5.6(eslint-config-prettier@10.1.8(eslint@10.8.0(jiti@2.6.1)))(eslint@10.8.0(jiti@2.6.1))(prettier@3.8.3)
@@ -1800,8 +1800,8 @@ packages:
       eslint-import-resolver-node:
         optional: true
 
-  eslint-plugin-mocha@12.0.1:
-    resolution: {integrity: sha512-oBHxSHxkIKV4L+iFM6BSyVRUID5JiX85KV6omqRed6aGDa4jk2hkhgi9uDrdPjwu1qzJ4T/5WXucsJOES4aUEQ==}
+  eslint-plugin-mocha@12.0.2:
+    resolution: {integrity: sha512-RzjnzVBoidGFjVcvzQShLbfWug5pL/6d6LZFbBZk1b5duZ0ooq6dasmpu6qLyNowUZBqaWvQbnR5U1hsKX/+5g==}
     engines: {node: '>=22.0.0'}
     peerDependencies:
       eslint: '>=10.2.0'
@@ -2081,8 +2081,8 @@ packages:
     resolution: {integrity: sha512-sepffkT8stwnIYbsMBpoCHJuJM5l98FUF2AnE07hfvE0m/qp3R586hw4jF4uadbhvg1ooIdzuu7CsfD2jzCaNA==}
     engines: {node: '>=18'}
 
-  globals@17.7.0:
-    resolution: {integrity: sha512-Czmyns5dUsq4seFBR/Kdydhmo8y9kC79hiSkPn0YcGtNnYWnrgt0vjrSjx9tspoDGWm2CMarffRuLjM4xUz8xg==}
+  globals@17.8.0:
+    resolution: {integrity: sha512-Zz/LMDZScFmkakeL2cTHzf+PbWKdpU3uclqkZT7TjDG58j5WPt0PpA+n9uPI24fZtlw07q0OtEi84K+umsRzqQ==}
     engines: {node: '>=18'}
 
   globby@11.1.0:
@@ -2370,6 +2370,10 @@ packages:
 
   json-parse-even-better-errors@2.3.1:
     resolution: {integrity: sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w==}
+
+  json-schema-to-ts@3.1.1:
+    resolution: {integrity: sha512-+DWg8jCJG2TEnpy7kOm/7/AxaYoaRbjVB4LFZLySZlWn8exGs3A4OLJR966cVvU26N7X9TWxl+Jsw7dzAqKT6g==}
+    engines: {node: '>=16'}
 
   json-schema-traverse@0.4.1:
     resolution: {integrity: sha512-xbbCH5dCYU5T8LcEhhuh7HJ88HXuW3qsI3Y0zOZFKfZEHcpWiHU/Jxzk629Brsab/mMiHQti9wMP+845RPe3Vg==}
@@ -3628,6 +3632,9 @@ packages:
     resolution: {integrity: sha512-aZbgViZrg1QNcG+LULa7nhZpJTZSLm/mXnHXnbAbjmN5aSa0y7V+wvv6+4WaBtpISJzThKy+PIPxc1Nq1EJ9mg==}
     engines: {node: '>= 14.0.0'}
 
+  ts-algebra@2.0.0:
+    resolution: {integrity: sha512-FPAhNPFMrkwz76P7cdjdmiShwMynZYN6SgOujD1urY4oNm80Ou9oMdmbR45LotcKOXoy7wSmHkRFE6Mxbrhefw==}
+
   ts-api-utils@2.5.0:
     resolution: {integrity: sha512-OJ/ibxhPlqrMM0UiNHJ/0CKQkoKF243/AEmplt3qpRgkW8VG7IfOS41h7V8TjITqdByHzrjcS/2si+y4lIh8NA==}
     engines: {node: '>=18.12'}
@@ -3681,8 +3688,8 @@ packages:
     resolution: {integrity: sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA==}
     engines: {node: '>=16'}
 
-  type-fest@5.7.0:
-    resolution: {integrity: sha512-1URUxUqfHFM1c+zfSPsa3gnkO7Aq21qyH75SIduNYz4SzY964rn1X2vCMQaHSHhktiw+0kPa2iyb6PUpXqB6Vg==}
+  type-fest@5.8.0:
+    resolution: {integrity: sha512-YGYEVz3Fm5iy/AybuA0oyNFq7H4CgQNfRp/qfe8nurE1kuCeNm3/vfm9X4Mtl+qLyaKJUh5xrFZwogr41SMjYA==}
     engines: {node: '>=20'}
 
   type-is@2.1.0:
@@ -5548,12 +5555,15 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-mocha@12.0.1(eslint@10.8.0(jiti@2.6.1)):
+  eslint-plugin-mocha@12.0.2(eslint@10.8.0(jiti@2.6.1)):
     dependencies:
       '@eslint-community/eslint-utils': 4.10.1(eslint@10.8.0(jiti@2.6.1))
       '@eslint/core': 1.2.1
+      '@types/estree': 1.0.9
       eslint: 10.8.0(jiti@2.6.1)
-      globals: 17.7.0
+      globals: 17.8.0
+      json-schema-to-ts: 3.1.1
+      type-fest: 5.8.0
 
   eslint-plugin-prettier@5.5.6(eslint-config-prettier@10.1.8(eslint@10.8.0(jiti@2.6.1)))(eslint@10.8.0(jiti@2.6.1))(prettier@3.8.3):
     dependencies:
@@ -5907,7 +5917,7 @@ snapshots:
 
   globals@17.6.0: {}
 
-  globals@17.7.0: {}
+  globals@17.8.0: {}
 
   globby@11.1.0:
     dependencies:
@@ -6186,6 +6196,11 @@ snapshots:
   json-parse-better-errors@1.0.2: {}
 
   json-parse-even-better-errors@2.3.1: {}
+
+  json-schema-to-ts@3.1.1:
+    dependencies:
+      '@babel/runtime': 7.29.7
+      ts-algebra: 2.0.0
 
   json-schema-traverse@0.4.1: {}
 
@@ -6725,14 +6740,14 @@ snapshots:
     dependencies:
       find-up-simple: 1.0.1
       read-pkg: 10.1.0
-      type-fest: 5.7.0
+      type-fest: 5.8.0
 
   read-pkg@10.1.0:
     dependencies:
       '@types/normalize-package-data': 2.4.4
       normalize-package-data: 8.0.0
       parse-json: 8.3.0
-      type-fest: 5.7.0
+      type-fest: 5.8.0
       unicorn-magic: 0.4.0
 
   read-pkg@9.0.1:
@@ -7355,6 +7370,8 @@ snapshots:
 
   triple-beam@1.4.1: {}
 
+  ts-algebra@2.0.0: {}
+
   ts-api-utils@2.5.0(typescript@6.0.3):
     dependencies:
       typescript: 6.0.3
@@ -7389,7 +7406,7 @@ snapshots:
 
   type-fest@4.41.0: {}
 
-  type-fest@5.7.0:
+  type-fest@5.8.0:
     dependencies:
       tagged-tag: 1.0.0
 
