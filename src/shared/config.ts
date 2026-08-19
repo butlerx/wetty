@@ -153,6 +153,8 @@ export function mergeCliConf(opts: Arguments, config: Config): Config {
       port: opts.port,
       title: opts.title,
       allowIframe: opts['allow-iframe'],
+      pingInterval: opts['ping-interval'],
+      pingTimeout: opts['ping-timeout'],
     } as Record<string, confValue>) as Server,
     command:
       opts.command === undefined || typeof opts.command !== 'string'
