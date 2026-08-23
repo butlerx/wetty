@@ -7,6 +7,7 @@
 - [HTTPS Support](./https.md)
   - [Using NGINX](./nginx.md)
   - [Using Apache](./apache.md)
+- [Phone spectator (Build Remote Agent)](./gbr.md) — no inbound port; not a WeTTY replacement
 - [Automatic Login](./auto-login.md)
 - [Downloading Files](./downloading-files.md)
 - [Development Docs](./development.md)
