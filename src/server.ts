@@ -6,6 +6,7 @@ import express from 'express';
 import { Gauge, collectDefaultMetrics } from 'prom-client';
 import { getCommand } from './server/command.js';
 import { observeGC } from './server/metrics.js';
+import { logSafeArgs } from './server/shared/logsafe.js';
 import { server } from './server/socketServer.js';
 import { spawn } from './server/spawn.js';
 import {
@@ -76,7 +77,7 @@ export async function decorateServerWithSsh(
 
     try {
       const args = await getCommand(socket, ssh, command, forcessh);
-      logger.debug('Command Generated', { cmd: args.join(' ') });
+      logger.debug('Command Generated', { cmd: logSafeArgs(args).join(' ') });
       await spawn(socket, args);
     } catch (error) {
       logger.info('Disconnect signal sent', { err: error });
