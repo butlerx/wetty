@@ -3,6 +3,7 @@ import { logger as getLogger } from '../shared/logger.js';
 import { tinybuffer, FlowControlServer } from './flowcontrol.js';
 import { xterm } from './shared/xterm.js';
 import { envVersionOr } from './spawn/env.js';
+import { parseDimensions } from './spawn/resize.js';
 import type SocketIO from 'socket.io';
 
 export async function spawn(
@@ -35,8 +36,19 @@ export async function spawn(
     }
   });
   socket
-    .on('resize', ({ cols, rows }: { cols: number; rows: number }) => {
-      term.resize(cols, rows);
+    .on('resize', (payload: unknown) => {
+      // Socket.IO does not catch throws in listeners, so an invalid size would
+      // otherwise take down the process and every other session with it.
+      const dimensions = parseDimensions(payload);
+      if (dimensions === undefined) {
+        logger.debug('Ignoring invalid resize request', { pid });
+        return;
+      }
+      try {
+        term.resize(dimensions.cols, dimensions.rows);
+      } catch (error) {
+        logger.debug('Resize rejected by PTY', { pid, err: error });
+      }
     })
     .on('input', (input: string) => {
       term.write(input);
