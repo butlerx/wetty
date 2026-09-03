@@ -1,6 +1,7 @@
 import pty from 'node-pty';
 import { logger as getLogger } from '../shared/logger.js';
 import { tinybuffer, FlowControlServer } from './flowcontrol.js';
+import { logSafeArgs } from './shared/logsafe.js';
 import { xterm } from './shared/xterm.js';
 import { envVersionOr } from './spawn/env.js';
 import type SocketIO from 'socket.io';
@@ -12,7 +13,7 @@ export async function spawn(
   const logger = getLogger();
   const version = await envVersionOr(0);
   const cmd = version >= 9 ? ['-S', ...args] : args;
-  logger.debug('Spawning PTY', { cmd });
+  logger.debug('Spawning PTY', { cmd: logSafeArgs(cmd) });
   const term = pty.spawn('/usr/bin/env', cmd, xterm);
   const { pid } = term;
   const address = args[0] === 'ssh' ? args[1] : 'localhost';
