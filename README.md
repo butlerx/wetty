@@ -69,6 +69,11 @@ Options:
   --allow-remote-command  Allow wetty to use the command and path
                           params in a url as command and working
                           directory on ssh host                         [boolean]
+  --ping-interval         Milliseconds between Socket.IO heartbeat
+                          pings sent to the client                       [number]
+  --ping-timeout          Milliseconds to wait for a Socket.IO
+                          heartbeat pong before considering the
+                          connection dead                                [number]
   --log-level             set log level of wetty server                  [string]
 ```
 

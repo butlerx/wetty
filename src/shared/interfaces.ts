@@ -25,13 +25,15 @@ export interface SSLBuffer {
 }
 
 export interface Server {
-  [s: string]: string | number | boolean;
+  [s: string]: string | number | boolean | undefined;
   port: number;
   host: string;
   socket: string | boolean;
   title: string;
   base: string;
   allowIframe: boolean;
+  pingInterval?: number;
+  pingTimeout?: number;
 }
 
 export interface Config {
