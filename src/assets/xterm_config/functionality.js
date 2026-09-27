@@ -151,6 +151,7 @@ if (window.top === window) {
 
 function saveConfig() {
   const newConfig = {};
+  let hasInvalidJson = false;
   allOptions.forEach((option) => {
     let newValue = option.get();
     if (
@@ -161,10 +162,16 @@ function saveConfig() {
       return;
     }
     if (option.json === true && option.type === 'text') {
-      newValue = JSON.parse(newValue);
+      try {
+        newValue = JSON.parse(newValue);
+      } catch {
+        hasInvalidJson = true;
+        return;
+      }
     }
     setItem(newConfig, option.path, newValue);
   });
+  if (hasInvalidJson) return;
   window.parent.postMessage({ type: 'wetty:save', config: newConfig }, '*');
 }
 
@@ -172,9 +179,4 @@ function closeConfig() {
   window.parent.postMessage({ type: 'wetty:close' }, '*');
 }
 
-window.addEventListener('input', () => {
-  const els = document.querySelectorAll('input, select');
-  for (let i = 0; i < els.length; i += 1) {
-    els[i].addEventListener('input', saveConfig);
-  }
-});
+window.addEventListener('input', saveConfig);
