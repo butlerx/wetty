@@ -1,8 +1,10 @@
 import pty from 'node-pty';
 import { logger as getLogger } from '../shared/logger.js';
 import { tinybuffer, FlowControlServer } from './flowcontrol.js';
+import { logSafeArgs } from './shared/logsafe.js';
 import { xterm } from './shared/xterm.js';
 import { envVersionOr } from './spawn/env.js';
+import { parseDimensions } from './spawn/resize.js';
 import type SocketIO from 'socket.io';
 
 export async function spawn(
@@ -12,7 +14,7 @@ export async function spawn(
   const logger = getLogger();
   const version = await envVersionOr(0);
   const cmd = version >= 9 ? ['-S', ...args] : args;
-  logger.debug('Spawning PTY', { cmd });
+  logger.debug('Spawning PTY', { cmd: logSafeArgs(cmd) });
   const term = pty.spawn('/usr/bin/env', cmd, xterm);
   const { pid } = term;
   const address = args[0] === 'ssh' ? args[1] : 'localhost';
@@ -35,8 +37,19 @@ export async function spawn(
     }
   });
   socket
-    .on('resize', ({ cols, rows }: { cols: number; rows: number }) => {
-      term.resize(cols, rows);
+    .on('resize', (payload: unknown) => {
+      // Socket.IO does not catch throws in listeners, so an invalid size would
+      // otherwise take down the process and every other session with it.
+      const dimensions = parseDimensions(payload);
+      if (dimensions === undefined) {
+        logger.debug('Ignoring invalid resize request', { pid });
+        return;
+      }
+      try {
+        term.resize(dimensions.cols, dimensions.rows);
+      } catch (error) {
+        logger.debug('Resize rejected by PTY', { pid, err: error });
+      }
     })
     .on('input', (input: string) => {
       term.write(input);
