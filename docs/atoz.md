@@ -368,7 +368,9 @@ pass validation.
         "port": 3000, // Port to listen on
         "host": "0.0.0.0", // listen on all interfaces or can be 127.0.0.1 with nginx
         "title": "WeTTY - The Web Terminal Emulator", // Page title
-        "allowIframe": false // Allow WeTTY to be embedded in an iframe
+        "allowIframe": false, // Allow WeTTY to be embedded in an iframe
+        "pingInterval": 3000, // Milliseconds between Socket.IO heartbeat pings
+        "pingTimeout": 7000 // Milliseconds to wait for a pong before disconnecting
     },
     "forceSSH": false, // Force sshing to local machine over login if running as root
     "command": "login", // Command to run on server. Login will use ssh if connecting to different server
@@ -405,6 +407,8 @@ KNOWNHOSTS
 FORCESSH
 COMMAND
 ALLOWIFRAME
+PINGINTERVAL
+PINGTIMEOUT
 ```
 
 These can be used in the following way

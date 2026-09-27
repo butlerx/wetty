@@ -58,6 +58,23 @@ By default WeTTY does not allow the `command` and `path` URL parameters to
 specify the command and working directory on the SSH host. To enable this, use
 the `--allow-remote-command` flag.
 
+## Socket.IO Ping Interval / Timeout
+
+WeTTY's browser terminal rides on a Socket.IO connection, kept alive with a
+heartbeat: the server pings the client every `--ping-interval` milliseconds
+(default `3000`) and expects a pong back within `--ping-timeout` milliseconds
+(default `7000`), or it closes the transport (shown to the user as a "transport
+close" error requiring reconnect).
+
+These defaults are tight compared to Socket.IO's own defaults (25000/20000). On
+a high-latency or lossy network path, a single delayed pong can exceed the 7
+second timeout and force a reconnect even though the underlying connection is
+otherwise healthy. If you see frequent "transport close" errors, try raising
+both, e.g. `--ping-interval 25000 --ping-timeout 20000`.
+
+Both flags also accept the `PINGINTERVAL` and `PINGTIMEOUT` environment
+variables.
+
 ## Log Level
 
 You can set the log level of the WeTTY server using the `--log-level` flag.

@@ -107,6 +107,16 @@ const yargsInstance = yargs(hideBin(process.argv))
       'Allow WeTTY to be embedded in an iframe, defaults to allowing same origin',
     type: 'boolean',
   })
+  .option('ping-interval', {
+    description:
+      'Milliseconds between Socket.IO heartbeat pings sent to the client',
+    type: 'number',
+  })
+  .option('ping-timeout', {
+    description:
+      'Milliseconds to wait for a Socket.IO heartbeat pong before considering the connection dead. Raise this on high-latency or lossy links to avoid spurious "transport close" disconnects',
+    type: 'number',
+  })
   .option('allow-remote-hosts', {
     description:
       'Allow WeTTY to use the `host` and `port` params in a url as ssh destination',
