@@ -5,7 +5,7 @@ import * as sinon from 'sinon';
 
 import { FileDownloader } from './download';
 
-const noop = (): void => {};
+const noop = (): Promise<void> => Promise.resolve();
 
 describe('FileDownloader', () => {
   const FILE_BEGIN = 'BEGIN';
