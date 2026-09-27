@@ -47,6 +47,22 @@ If you'd prefer an HTTP base prefix other than `/`, you can specify that with
 **Do not set this to `/ssh/${something}`, as this will break username matching
 code.**
 
+## Allowed WebSocket Origins
+
+WeTTY only accepts Socket.IO connections from its own browser origin. Requests
+with a foreign, missing, malformed, or `null` Origin header are rejected.
+
+If a separate frontend needs to connect, add its complete origin with
+`--allowed-origin`, for example:
+
+```sh
+wetty --allowed-origin https://terminal.example.com
+```
+
+Repeat the flag to allow multiple origins. The `ALLOWEDORIGINS` environment
+variable accepts a comma-separated list. Reverse proxies should preserve the
+original `Host` header and set `X-Forwarded-Proto` to the browser-facing scheme.
+
 ## Allow Remote Hosts
 
 By default WeTTY does not allow the `host` and `port` URL parameters to be used

@@ -24,6 +24,7 @@ export async function server(
     socket,
     pingInterval,
     pingTimeout,
+    allowedOrigins,
   }: Server,
   ssl?: SSL,
 ): Promise<SocketIO.Server> {
@@ -60,14 +61,14 @@ export async function server(
 
   const sslBuffer: SSLBuffer = await loadSSL(ssl);
 
-  return listen(
-    app,
+  return listen(app, {
     host,
     port,
-    basePath,
-    sslBuffer,
+    path: basePath,
+    ssl: sslBuffer,
     socket,
     pingInterval,
     pingTimeout,
-  );
+    allowedOrigins,
+  });
 }

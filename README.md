@@ -74,6 +74,8 @@ Options:
   --ping-timeout          Milliseconds to wait for a Socket.IO
                           heartbeat pong before considering the
                           connection dead                                [number]
+  --allowed-origin        Additional browser origin allowed to connect
+                          to Socket.IO. Repeat for multiple origins       [array]
   --log-level             set log level of wetty server                  [string]
 ```
 

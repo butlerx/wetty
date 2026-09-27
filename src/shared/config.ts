@@ -12,7 +12,15 @@ import type { Config, SSH, Server, SSL } from './interfaces';
 import type winston from 'winston';
 import type { Arguments } from 'yargs';
 
-type confValue = boolean | string | number | undefined | SSH | Server | SSL;
+type confValue =
+  | boolean
+  | string
+  | number
+  | string[]
+  | undefined
+  | SSH
+  | Server
+  | SSL;
 
 /**
  * Cast given value to boolean
@@ -155,6 +163,7 @@ export function mergeCliConf(opts: Arguments, config: Config): Config {
       allowIframe: opts['allow-iframe'],
       pingInterval: opts['ping-interval'],
       pingTimeout: opts['ping-timeout'],
+      allowedOrigins: opts['allowed-origin'],
     } as Record<string, confValue>) as Server,
     command:
       opts.command === undefined || typeof opts.command !== 'string'

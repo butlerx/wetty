@@ -10,6 +10,7 @@ import {
 import { logger } from '../../shared/logger.js';
 import type { SSLBuffer } from '../../shared/interfaces.js';
 import type express from 'express';
+import type { IncomingMessage } from 'http';
 
 /**
  * Resolve a socket.io heartbeat value, warning when an unusable one is dropped
@@ -40,16 +41,94 @@ const heartbeat = (
   return resolved;
 };
 
+const parseOrigin = (value: string): string | undefined => {
+  try {
+    const parsed = new URL(value);
+    return ['http:', 'https:'].includes(parsed.protocol)
+      ? parsed.origin
+      : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
+const firstHeaderValue = (
+  value: string | string[] | undefined,
+): string | undefined => {
+  const first = Array.isArray(value) ? value[0] : value?.split(',')[0];
+  return first?.trim();
+};
+
+const expectedOrigin = (req: IncomingMessage): string | undefined => {
+  const host = firstHeaderValue(req.headers.host);
+  if (host === undefined) {
+    return undefined;
+  }
+
+  const encrypted = 'encrypted' in req.socket && req.socket.encrypted === true;
+  const forwardedProtocol = firstHeaderValue(req.headers['x-forwarded-proto']);
+  const protocol = (
+    encrypted ? 'https' : (forwardedProtocol ?? 'http')
+  ).toLowerCase();
+
+  return ['http', 'https'].includes(protocol)
+    ? parseOrigin(`${protocol}://${host}`)
+    : undefined;
+};
+
+const originAllowed = (
+  req: IncomingMessage,
+  allowedOrigins: ReadonlySet<string>,
+): boolean => {
+  const origin = firstHeaderValue(req.headers.origin);
+  if (origin === undefined || origin === 'null') {
+    return false;
+  }
+
+  const parsedOrigin = parseOrigin(origin);
+  return (
+    parsedOrigin !== undefined &&
+    (parsedOrigin === expectedOrigin(req) || allowedOrigins.has(parsedOrigin))
+  );
+};
+
+const originAllowlist = (origins: string[]): ReadonlySet<string> =>
+  new Set(
+    origins.map((origin) => {
+      const parsed = parseOrigin(origin);
+      if (parsed === undefined) {
+        throw new Error(`Invalid allowed origin: ${origin}`);
+      }
+      return parsed;
+    }),
+  );
+
+interface ListenOptions {
+  host: string;
+  port: number;
+  path: string;
+  ssl: SSLBuffer;
+  socket?: string | boolean;
+  pingInterval?: number;
+  pingTimeout?: number;
+  allowedOrigins?: string[];
+}
+
 export const listen = (
   app: express.Express,
-  host: string,
-  port: number,
-  path: string,
-  { key, cert }: SSLBuffer,
-  socket?: string | boolean,
-  pingInterval?: number,
-  pingTimeout?: number,
+  {
+    host,
+    port,
+    path,
+    ssl: { key, cert },
+    socket,
+    pingInterval,
+    pingTimeout,
+    allowedOrigins = [],
+  }: ListenOptions,
 ): Server => {
+  const allowed = originAllowlist(allowedOrigins);
+
   // Create the base HTTP/HTTPS server
   const server =
     key !== undefined && cert !== undefined
@@ -75,5 +154,9 @@ export const listen = (
     path: `${path}/socket.io`,
     pingInterval: heartbeat(pingInterval, defaultPingInterval, 'pingInterval'),
     pingTimeout: heartbeat(pingTimeout, defaultPingTimeout, 'pingTimeout'),
+    allowRequest: (req, callback) => {
+      const accepted = originAllowed(req, allowed);
+      callback(accepted ? null : 'Origin not allowed', accepted);
+    },
   });
 };

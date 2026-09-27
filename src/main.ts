@@ -117,6 +117,12 @@ const yargsInstance = yargs(hideBin(process.argv))
       'Milliseconds to wait for a Socket.IO heartbeat pong before considering the connection dead. Raise this on high-latency or lossy links to avoid spurious "transport close" disconnects',
     type: 'number',
   })
+  .option('allowed-origin', {
+    description:
+      'Additional browser origin allowed to connect to Socket.IO. Repeat for multiple origins',
+    type: 'string',
+    array: true,
+  })
   .option('allow-remote-hosts', {
     description:
       'Allow WeTTY to use the `host` and `port` params in a url as ssh destination',

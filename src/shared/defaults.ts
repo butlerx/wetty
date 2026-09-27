@@ -50,6 +50,10 @@ export const serverDefault: Server = {
   allowIframe: process.env.ALLOWIFRAME === 'true',
   pingInterval: defaultPingInterval,
   pingTimeout: defaultPingTimeout,
+  allowedOrigins: (process.env.ALLOWEDORIGINS ?? '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean),
 };
 
 export const forceSSHDefault = process.env.FORCESSH === 'true';

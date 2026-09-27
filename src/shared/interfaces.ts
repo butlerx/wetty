@@ -25,7 +25,7 @@ export interface SSLBuffer {
 }
 
 export interface Server {
-  [s: string]: string | number | boolean | undefined;
+  [s: string]: string | number | boolean | string[] | undefined;
   port: number;
   host: string;
   socket: string | boolean;
@@ -34,6 +34,7 @@ export interface Server {
   allowIframe: boolean;
   pingInterval?: number;
   pingTimeout?: number;
+  allowedOrigins?: string[];
 }
 
 export interface Config {

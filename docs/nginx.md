@@ -28,6 +28,7 @@ location ^~ /wetty {
 
   proxy_set_header X-Real-IP $remote_addr;
   proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  proxy_set_header X-Forwarded-Proto $scheme;
   proxy_set_header Host $http_host;
   proxy_set_header X-NginX-Proxy true;
 }
@@ -35,8 +36,8 @@ location ^~ /wetty {
 
 **Important:** Use `proxy_set_header Connection "upgrade";` (a literal string),
 **not** `proxy_set_header Connection $connection_upgrade;`. The variable form
-requires a `map` block in your `http` context. Without that map directive,
-nginx sends an empty `Connection` header which breaks WebSocket connections and
+requires a `map` block in your `http` context. Without that map directive, nginx
+sends an empty `Connection` header which breaks WebSocket connections and
 prevents assets (CSS, JS) from loading correctly.
 
 If you prefer to use the variable form, add the following `map` block inside
