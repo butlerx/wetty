@@ -37,9 +37,15 @@ export function sshOptions(
   ];
 }
 
+function quoteShellArgument(argument: string): string {
+  return `'${argument.replaceAll("'", "'\\''")}'`;
+}
+
 function parseCommand(command: string, path?: string): string {
   if (command === 'login' && path === undefined) return '';
-  return path !== undefined
-    ? `$SHELL -c "cd ${path};${command === 'login' ? '$SHELL' : command}"`
-    : command;
+  if (path === undefined) return command;
+
+  const script = `cd ${quoteShellArgument(path)};${command === 'login' ? '$SHELL' : command}`;
+  // SSH's remote shell parses this once before $SHELL parses the script.
+  return `$SHELL -c ${quoteShellArgument(script)}`;
 }
