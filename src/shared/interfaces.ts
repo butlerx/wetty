@@ -35,6 +35,7 @@ export interface Server {
   pingInterval?: number;
   pingTimeout?: number;
   allowedOrigins?: string[];
+  allowMissingOrigin?: boolean;
 }
 
 export interface Config {

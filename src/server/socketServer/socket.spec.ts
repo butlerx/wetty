@@ -15,6 +15,7 @@ interface ProbeOptions {
   allowedOrigins?: string[];
   transport?: 'polling' | 'websocket';
   secFetchSite?: string;
+  allowMissingOrigin?: boolean;
 }
 
 const probeHandshake = async ({
@@ -25,6 +26,7 @@ const probeHandshake = async ({
   allowedOrigins = [],
   transport = 'websocket',
   secFetchSite,
+  allowMissingOrigin = false,
 }: ProbeOptions): Promise<number> => {
   const io = listen(express(), {
     host: '127.0.0.1',
@@ -33,6 +35,7 @@ const probeHandshake = async ({
     ssl: {},
     socket: false,
     allowedOrigins,
+    allowMissingOrigin,
   });
   const server = io.httpServer;
 
@@ -138,9 +141,24 @@ describe('Socket.IO origin validation', () => {
     expect(status).to.equal(400);
   });
 
-  it('rejects missing and null origins', async () => {
-    expect(await probeHandshake({})).to.equal(400);
-    expect(await probeHandshake({ origin: 'null' })).to.equal(400);
+  it('rejects a missing origin by default', async () => {
+    expect(await probeHandshake({ transport: 'polling' })).to.equal(403);
+  });
+
+  it('accepts a request with no origin when allowMissingOrigin is true', async () => {
+    expect(
+      await probeHandshake({ transport: 'polling', allowMissingOrigin: true }),
+    ).to.equal(200);
+  });
+
+  it('allowMissingOrigin does not bypass the null-origin rejection', async () => {
+    expect(
+      await probeHandshake({
+        transport: 'polling',
+        origin: 'null',
+        allowMissingOrigin: true,
+      }),
+    ).to.equal(403);
   });
 
   it('uses the forwarded protocol for same-origin proxy requests', async () => {

@@ -25,6 +25,7 @@ export async function server(
     pingInterval,
     pingTimeout,
     allowedOrigins,
+    allowMissingOrigin,
   }: Server,
   ssl?: SSL,
 ): Promise<SocketIO.Server> {
@@ -70,5 +71,6 @@ export async function server(
     pingInterval,
     pingTimeout,
     allowedOrigins,
+    allowMissingOrigin,
   });
 }

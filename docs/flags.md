@@ -63,6 +63,22 @@ Repeat the flag to allow multiple origins. The `ALLOWEDORIGINS` environment
 variable accepts a comma-separated list. Reverse proxies should preserve the
 original `Host` header and set `X-Forwarded-Proto` to the browser-facing scheme.
 
+### Allow connections without an Origin header
+
+Non-browser clients such as CLI tools, scripts, and certain reverse proxies do
+not send an `Origin` header. By default WeTTY rejects these requests.
+
+To allow them, use `--allow-missing-origin`:
+
+```sh
+wetty --allow-missing-origin
+```
+
+The `ALLOWMISSINGORIGIN=true` environment variable has the same effect.
+
+> **Note:** `null` origins (sent by sandboxed iframes) are always rejected, even
+> when `--allow-missing-origin` is set.
+
 ## Allow Remote Hosts
 
 By default WeTTY does not allow the `host` and `port` URL parameters to be used

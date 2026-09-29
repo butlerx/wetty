@@ -123,6 +123,11 @@ const yargsInstance = yargs(hideBin(process.argv))
     type: 'string',
     array: true,
   })
+  .option('allow-missing-origin', {
+    description:
+      'Allow Socket.IO connections that have no Origin header (e.g. non-browser clients, CLI tools). Disabled by default. Also accepts the ALLOWMISSINGORIGIN environment variable',
+    type: 'boolean',
+  })
   .option('allow-remote-hosts', {
     description:
       'Allow WeTTY to use the `host` and `port` params in a url as ssh destination',
