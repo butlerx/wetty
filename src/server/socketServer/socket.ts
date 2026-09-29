@@ -82,6 +82,9 @@ const originAllowed = (
   allowMissingOrigin = false,
 ): boolean => {
   const origin = firstHeaderValue(req.headers.origin);
+  if (origin === undefined) {
+    return firstHeaderValue(req.headers['sec-fetch-site']) === 'same-origin';
+  }
   if (origin === 'null') {
     return false;
   }

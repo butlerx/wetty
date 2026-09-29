@@ -13,6 +13,8 @@ interface ProbeOptions {
   host?: string;
   forwardedProtocol?: string;
   allowedOrigins?: string[];
+  transport?: 'polling' | 'websocket';
+  secFetchSite?: string;
   allowMissingOrigin?: boolean;
 }
 
@@ -22,6 +24,8 @@ const probeHandshake = async ({
   host,
   forwardedProtocol,
   allowedOrigins = [],
+  transport = 'websocket',
+  secFetchSite,
   allowMissingOrigin = false,
 }: ProbeOptions): Promise<number> => {
   const io = listen(express(), {
@@ -41,13 +45,15 @@ const probeHandshake = async ({
 
   const { port } = server.address() as AddressInfo;
   const headers: http.OutgoingHttpHeaders = {
-    connection: 'Upgrade',
     host: host ?? `127.0.0.1:${String(port)}`,
-    'sec-websocket-key': randomBytes(16).toString('base64'),
-    'sec-websocket-version': '13',
-    upgrade: 'websocket',
   };
 
+  if (transport === 'websocket') {
+    headers.connection = 'Upgrade';
+    headers['sec-websocket-key'] = randomBytes(16).toString('base64');
+    headers['sec-websocket-version'] = '13';
+    headers.upgrade = 'websocket';
+  }
   if (sameOrigin) {
     headers.origin = `http://127.0.0.1:${String(port)}`;
   } else if (origin !== undefined) {
@@ -56,13 +62,16 @@ const probeHandshake = async ({
   if (forwardedProtocol !== undefined) {
     headers['x-forwarded-proto'] = forwardedProtocol;
   }
+  if (secFetchSite !== undefined) {
+    headers['sec-fetch-site'] = secFetchSite;
+  }
 
   try {
     return await new Promise<number>((resolve, reject) => {
       const request = http.request({
         host: '127.0.0.1',
         port,
-        path: '/socket.io/?EIO=4&transport=websocket',
+        path: `/socket.io/?EIO=4&transport=${transport}`,
         headers,
       });
 
@@ -89,6 +98,42 @@ describe('Socket.IO origin validation', () => {
   it('accepts the same browser origin', async () => {
     const status = await probeHandshake({ sameOrigin: true });
     expect(status).to.equal(101);
+  });
+
+  it('accepts same-origin polling when the browser omits Origin', async () => {
+    const status = await probeHandshake({
+      transport: 'polling',
+      secFetchSite: 'same-origin',
+    });
+    expect(status).to.equal(200);
+  });
+
+  it('rejects untrusted polling requests that omit Origin', async () => {
+    const statuses = await Promise.all(
+      [undefined, 'same-site', 'cross-site', 'none'].map((secFetchSite) =>
+        probeHandshake({ transport: 'polling', secFetchSite }),
+      ),
+    );
+
+    expect(statuses).to.deep.equal([403, 403, 403, 403]);
+    expect(
+      await probeHandshake({
+        transport: 'polling',
+        allowedOrigins: ['https://frontend.example'],
+      }),
+    ).to.equal(403);
+  });
+
+  it('does not let fetch metadata override an unsafe Origin', async () => {
+    const request = {
+      transport: 'polling' as const,
+      secFetchSite: 'same-origin',
+    };
+
+    expect(await probeHandshake({ ...request, origin: 'null' })).to.equal(403);
+    expect(
+      await probeHandshake({ ...request, origin: 'https://evil.example' }),
+    ).to.equal(403);
   });
 
   it('rejects a foreign browser origin', async () => {
