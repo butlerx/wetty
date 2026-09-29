@@ -142,17 +142,23 @@ describe('Socket.IO origin validation', () => {
   });
 
   it('rejects a missing origin by default', async () => {
-    expect(await probeHandshake({})).to.equal(400);
-  });
-
-  it('rejects a null origin even when allowMissingOrigin is true', async () => {
-    expect(
-      await probeHandshake({ origin: 'null', allowMissingOrigin: true }),
-    ).to.equal(400);
+    expect(await probeHandshake({ transport: 'polling' })).to.equal(403);
   });
 
   it('accepts a request with no origin when allowMissingOrigin is true', async () => {
-    expect(await probeHandshake({ allowMissingOrigin: true })).to.equal(101);
+    expect(
+      await probeHandshake({ transport: 'polling', allowMissingOrigin: true }),
+    ).to.equal(200);
+  });
+
+  it('allowMissingOrigin does not bypass the null-origin rejection', async () => {
+    expect(
+      await probeHandshake({
+        transport: 'polling',
+        origin: 'null',
+        allowMissingOrigin: true,
+      }),
+    ).to.equal(403);
   });
 
   it('uses the forwarded protocol for same-origin proxy requests', async () => {
