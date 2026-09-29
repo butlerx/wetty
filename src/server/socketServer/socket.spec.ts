@@ -13,6 +13,7 @@ interface ProbeOptions {
   host?: string;
   forwardedProtocol?: string;
   allowedOrigins?: string[];
+  allowMissingOrigin?: boolean;
 }
 
 const probeHandshake = async ({
@@ -21,6 +22,7 @@ const probeHandshake = async ({
   host,
   forwardedProtocol,
   allowedOrigins = [],
+  allowMissingOrigin = false,
 }: ProbeOptions): Promise<number> => {
   const io = listen(express(), {
     host: '127.0.0.1',
@@ -29,6 +31,7 @@ const probeHandshake = async ({
     ssl: {},
     socket: false,
     allowedOrigins,
+    allowMissingOrigin,
   });
   const server = io.httpServer;
 
@@ -93,9 +96,18 @@ describe('Socket.IO origin validation', () => {
     expect(status).to.equal(400);
   });
 
-  it('rejects missing and null origins', async () => {
+  it('rejects a missing origin by default', async () => {
     expect(await probeHandshake({})).to.equal(400);
-    expect(await probeHandshake({ origin: 'null' })).to.equal(400);
+  });
+
+  it('rejects a null origin even when allowMissingOrigin is true', async () => {
+    expect(
+      await probeHandshake({ origin: 'null', allowMissingOrigin: true }),
+    ).to.equal(400);
+  });
+
+  it('accepts a request with no origin when allowMissingOrigin is true', async () => {
+    expect(await probeHandshake({ allowMissingOrigin: true })).to.equal(101);
   });
 
   it('uses the forwarded protocol for same-origin proxy requests', async () => {

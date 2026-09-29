@@ -79,10 +79,14 @@ const expectedOrigin = (req: IncomingMessage): string | undefined => {
 const originAllowed = (
   req: IncomingMessage,
   allowedOrigins: ReadonlySet<string>,
+  allowMissingOrigin = false,
 ): boolean => {
   const origin = firstHeaderValue(req.headers.origin);
-  if (origin === undefined || origin === 'null') {
+  if (origin === 'null') {
     return false;
+  }
+  if (origin === undefined) {
+    return allowMissingOrigin;
   }
 
   const parsedOrigin = parseOrigin(origin);
@@ -112,6 +116,7 @@ interface ListenOptions {
   pingInterval?: number;
   pingTimeout?: number;
   allowedOrigins?: string[];
+  allowMissingOrigin?: boolean;
 }
 
 export const listen = (
@@ -125,6 +130,7 @@ export const listen = (
     pingInterval,
     pingTimeout,
     allowedOrigins = [],
+    allowMissingOrigin = false,
   }: ListenOptions,
 ): Server => {
   const allowed = originAllowlist(allowedOrigins);
@@ -155,7 +161,7 @@ export const listen = (
     pingInterval: heartbeat(pingInterval, defaultPingInterval, 'pingInterval'),
     pingTimeout: heartbeat(pingTimeout, defaultPingTimeout, 'pingTimeout'),
     allowRequest: (req, callback) => {
-      const accepted = originAllowed(req, allowed);
+      const accepted = originAllowed(req, allowed, allowMissingOrigin);
       callback(accepted ? null : 'Origin not allowed', accepted);
     },
   });

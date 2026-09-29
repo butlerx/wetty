@@ -54,6 +54,7 @@ export const serverDefault: Server = {
     .split(',')
     .map((origin) => origin.trim())
     .filter(Boolean),
+  allowMissingOrigin: process.env.ALLOWMISSINGORIGIN === 'true',
 };
 
 export const forceSSHDefault = process.env.FORCESSH === 'true';
