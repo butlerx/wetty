@@ -81,7 +81,10 @@ const originAllowed = (
   allowedOrigins: ReadonlySet<string>,
 ): boolean => {
   const origin = firstHeaderValue(req.headers.origin);
-  if (origin === undefined || origin === 'null') {
+  if (origin === undefined) {
+    return firstHeaderValue(req.headers['sec-fetch-site']) === 'same-origin';
+  }
+  if (origin === 'null') {
     return false;
   }
 
