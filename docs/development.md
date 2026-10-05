@@ -18,7 +18,12 @@ To run WeTTY in dev mode you can run `pnpm dev`.
 WeTTY will then be served from `http://localhost:3000` on your machine.
 
 The server will be using the [`conf/config.json5`](../conf/config.json5) config
-file and be pointing at `localhost` on port `22` .
+file and be pointing at `localhost` on port `22`.
+
+The sample config explicitly allows `http://localhost:3000`. Update
+`server.allowedOrigins` if you access the development server through another
+hostname or port. Production deployments must configure their browser-facing
+origins explicitly; the listen address and request Host are not trusted.
 
 The Dev server will rebuild WeTTY when ever a file is edited and restart the
 server with the new build. Any current ssh session in WeTTY will be killed and

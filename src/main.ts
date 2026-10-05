@@ -119,7 +119,7 @@ const yargsInstance = yargs(hideBin(process.argv))
   })
   .option('allowed-origin', {
     description:
-      'Additional browser origin allowed to connect to Socket.IO. Repeat for multiple origins',
+      'Required trusted browser origin allowed to connect to Socket.IO. Repeat for multiple origins; also accepts ALLOWEDORIGINS',
     type: 'string',
     array: true,
   })
@@ -181,7 +181,9 @@ if (!opts.help) {
       );
     })
     .catch((err: unknown) => {
-      logger().error('error in server', { err });
+      logger().error('error in server', {
+        err: err instanceof Error ? err.message : String(err),
+      });
       process.exitCode = 1;
     });
 } else {

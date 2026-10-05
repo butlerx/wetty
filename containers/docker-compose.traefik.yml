@@ -12,9 +12,11 @@ services:
     command:
       - --base=/
       - --ssh-host=ssh.example.com
+      - --allowed-origin=http://wetty.example.com
+      # For TLS, use --allowed-origin=https://wetty.example.com instead.
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.wetty.rule=Host(`wetty.example.com`)"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.wetty.rule=Host(`wetty.example.com`)'
       # - "traefik.http.routers.wetty.tls.certResolver=default"
       # - "traefik.http.routers.wetty.tls=true"
 
@@ -28,7 +30,7 @@ services:
       # - --certificatesResolvers.default.acme.storage=acme.json
       # - --certificatesResolvers.default.acme.httpChallenge.entryPoint=web
     ports:
-      - "80:80"
+      - '80:80'
       # - "443:443"
 
     volumes:

@@ -15,7 +15,7 @@
     "allowIframe": false,
     "pingInterval": 3000,
     "pingTimeout": 7000,
-    "allowedOrigins": []
+    "allowedOrigins": ["http://localhost:3000"]
   },
   "forceSSH": false,
   "command": "login"

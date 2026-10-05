@@ -74,13 +74,24 @@ Options:
   --ping-timeout          Milliseconds to wait for a Socket.IO
                           heartbeat pong before considering the
                           connection dead                                [number]
-  --allowed-origin        Additional browser origin allowed to connect
-                          to Socket.IO. Repeat for multiple origins       [array]
+  --allowed-origin        Required trusted browser origin allowed to
+                          connect to Socket.IO. Repeat for multiple
+                          origins; also accepts ALLOWEDORIGINS            [array]
   --log-level             set log level of wetty server                  [string]
 ```
 
-Open your browser on `http://yourserver:3000` and you will prompted to login. Or
-go to `http://yourserver:3000/ssh/<username>` to specify the user beforehand.
+Start WeTTY with an explicit trusted browser origin (required):
+
+```sh
+wetty --allowed-origin http://yourserver:3000
+```
+
+Open your browser on `http://yourserver:3000` and you will be prompted to login.
+Or go to `http://yourserver:3000/ssh/<username>` to specify the user beforehand.
+For local use, configure `http://localhost:3000` instead. Behind a reverse
+proxy, configure the public HTTPS origin, not the internal backend address.
+Origins never include the base path. Repeat `--allowed-origin` or set a
+comma-separated `ALLOWEDORIGINS` list to allow multiple origins.
 
 If you run it as root it will launch `/bin/login` (where you can specify the
 user name), else it will launch `ssh` and connect by default to `localhost`. The
@@ -99,7 +110,7 @@ To use WeTTY as a docker container, a docker image is available on
 [docker hub](https://hub.docker.com/r/wettyoss/wetty). To run this image, use
 
 ```sh
-docker run --rm -p 3000:3000 wettyoss/wetty --ssh-host=<YOUR-IP>
+docker run --rm -p 3000:3000 -e ALLOWEDORIGINS=http://localhost:3000 wettyoss/wetty --ssh-host=<YOUR-IP>
 ```
 
 and you will be able to open a ssh session to the host given by `YOUR-IP` under

@@ -17,13 +17,20 @@ For WeTTY options and event details please refer to the [api docs](./API.md)
 
 ### Getting started
 
-WeTTY is event driven. To Spawn a new server call `wetty.start()` with no
-arguments.
+WeTTY is event driven. Configure at least one trusted browser origin before
+starting a server: set `ALLOWEDORIGINS` before importing WeTTY, or pass
+`serverConf.allowedOrigins` to `start()` (see [API options](./API.md)).
+
+For the example below, save the program as `app.js` and run:
+
+```sh
+ALLOWEDORIGINS=http://localhost:3000 node app.js
+```
 
 ```javascript
 import { start } from 'wetty';
 
-start(/* server settings, see Options */)
+start()
   .then((wetty) => {
     console.log('server running');
     wetty

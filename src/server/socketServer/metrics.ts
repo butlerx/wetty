@@ -1,9 +1,18 @@
+import parseUrl from 'parseurl';
 import { register, Counter, Histogram } from 'prom-client';
 import ResponseTime from 'response-time';
-import UrlValueParser from 'url-value-parser';
 import type { Request, Response, RequestHandler } from 'express';
 
 const requestLabels = ['route', 'method', 'status'];
+const requestMethods = new Set([
+  'GET',
+  'HEAD',
+  'POST',
+  'PUT',
+  'DELETE',
+  'PATCH',
+  'OPTIONS',
+]);
 
 const requestCount = new Counter({
   name: 'http_requests_total',
@@ -33,25 +42,17 @@ const responseLength = new Histogram({
 });
 
 /**
- * Normalizes urls paths.
- *
- * This function replaces route params like ids, with a placeholder, so we can
- * set the metrics label, correctly. E.g., both routes
- *
- * - /api/v1/user/1
- * - /api/v1/user/2
- *
- * represents the same logical route, and we want to group them together,
- * hence the need for the normalization.
- *
- * @param {!string} path - url path.
- * @param {string} [placeholder='#val'] - the placeholder that will replace id like params in the url path.
- * @returns {string} a normalized path, withoud ids.
+ * Use a fixed set of route families. Never retain attacker-controlled paths,
+ * usernames, asset names or query strings as Prometheus labels.
  */
-function normalizePath(originalUrl: string, placeholder = '#val'): string {
-  const { pathname } = new URL(originalUrl, 'http://localhost');
-  const urlParser = new UrlValueParser();
-  return urlParser.replacePathValues(pathname, placeholder);
+function normalizePath(path: string, basePath: string): string {
+  if (path === basePath || path === `${basePath}/`) return basePath || '/';
+  if (path.startsWith(`${basePath}/ssh/`)) return `${basePath}/ssh/:user`;
+  if (path === `${basePath}/client` || path.startsWith(`${basePath}/client/`)) {
+    return `${basePath}/client/*`;
+  }
+  if (path === `${basePath}/sw.js`) return `${basePath}/sw.js`;
+  return 'unmatched';
 }
 
 /**
@@ -83,16 +84,13 @@ export function metricMiddleware(basePath: string): RequestHandler {
    * of the RED metrics.
    */
   return ResponseTime((req: Request, res: Response, time: number): void => {
-    const { originalUrl, method } = req;
-    // will replace ids from the route with `#val` placeholder this serves to
-    // measure the same routes, e.g., /image/id1, and /image/id2, will be
-    // treated as the same route
-    const route = normalizePath(originalUrl);
-
-    if (route !== metricsPath) {
+    const { method } = req;
+    // Mounted middleware changes req.url/req.path while handling the response.
+    const path = parseUrl.original(req)?.pathname ?? '';
+    if (path !== metricsPath && !path.startsWith(`${metricsPath}/`)) {
       const labels = {
-        route,
-        method,
+        route: normalizePath(path, basePath),
+        method: requestMethods.has(method) ? method : 'OTHER',
         status: normalizeStatusCode(res.statusCode),
       };
 

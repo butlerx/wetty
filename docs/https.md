@@ -10,7 +10,7 @@ To run WeTTY directly with SSL use both the `--ssl-key` and `--ssl-cert` flags
 and pass them the path too your cert and key as follows:
 
 ```bash
-wetty --ssl-key key.pem --ssl-cert cert.pem
+wetty --ssl-key key.pem --ssl-cert cert.pem --allowed-origin https://yourserver:3000
 ```
 
 If you don't have SSL certificates from a CA you can create a self signed
