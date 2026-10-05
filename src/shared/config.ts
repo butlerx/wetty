@@ -13,14 +13,7 @@ import type winston from 'winston';
 import type { Arguments } from 'yargs';
 
 type confValue =
-  | boolean
-  | string
-  | number
-  | string[]
-  | undefined
-  | SSH
-  | Server
-  | SSL;
+  boolean | string | number | string[] | undefined | SSH | Server | SSL;
 
 /**
  * Cast given value to boolean
