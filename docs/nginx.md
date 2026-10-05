@@ -9,8 +9,9 @@ If you configure nginx to use a base path other than `/`, then specify that path
 with the `--base` flag, or the `BASE` environment variable.
 
 The following confs assume you want to serve WeTTY on the url
-`example.com/wetty` and are running WeTTY with `--base /wetty` on the same
-server.
+`https://example.com/wetty` and are running WeTTY with
+`--base /wetty --allowed-origin https://example.com` on the same server. The
+allowed origin is required and does not include `/wetty`.
 
 For a more detailed look see the
 [nginx.conf](https://github.com/butlerx/wetty/blob/main/conf/nginx.template)

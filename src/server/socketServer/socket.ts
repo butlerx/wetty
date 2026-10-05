@@ -42,65 +42,47 @@ const heartbeat = (
 };
 
 const parseOrigin = (value: string): string | undefined => {
+  // Accept only HTTP(S) origins, not URLs with credentials, paths or lists.
+  // Check the raw value before URL normalization can discard unsafe parts.
+  if (!/^https?:\/\/[^/?#\s\\,@*]+\/?$/i.test(value)) return undefined;
   try {
-    const parsed = new URL(value);
-    return ['http:', 'https:'].includes(parsed.protocol)
-      ? parsed.origin
-      : undefined;
+    return new URL(value).origin;
   } catch {
     return undefined;
   }
 };
 
-const firstHeaderValue = (
-  value: string | string[] | undefined,
-): string | undefined => {
-  const first = Array.isArray(value) ? value[0] : value?.split(',')[0];
-  return first?.trim();
-};
-
-const expectedOrigin = (req: IncomingMessage): string | undefined => {
-  const host = firstHeaderValue(req.headers.host);
-  if (host === undefined) {
-    return undefined;
-  }
-
-  const encrypted = 'encrypted' in req.socket && req.socket.encrypted === true;
-  const forwardedProtocol = firstHeaderValue(req.headers['x-forwarded-proto']);
-  const protocol = (
-    encrypted ? 'https' : (forwardedProtocol ?? 'http')
-  ).toLowerCase();
-
-  return ['http', 'https'].includes(protocol)
-    ? parseOrigin(`${protocol}://${host}`)
-    : undefined;
-};
-
 const originAllowed = (
   req: IncomingMessage,
   allowedOrigins: ReadonlySet<string>,
-  allowMissingOrigin = false,
+  allowedHosts: ReadonlySet<string>,
+  allowMissingOrigin: boolean,
 ): boolean => {
-  const origin = firstHeaderValue(req.headers.origin);
+  const { origin } = req.headers;
   if (origin === undefined) {
+    if (allowMissingOrigin) return true;
+    // Browsers can omit Origin on same-origin polling. DNS rebinding is also
+    // same-origin, so Fetch Metadata alone is insufficient: pin the Host to
+    // the explicitly configured origins instead of trusting an arbitrary Host.
     return (
-      firstHeaderValue(req.headers['sec-fetch-site']) === 'same-origin' ||
-      allowMissingOrigin
+      req.headers['sec-fetch-site'] === 'same-origin' &&
+      req.headers.host !== undefined &&
+      allowedHosts.has(req.headers.host.toLowerCase())
     );
   }
-  if (origin === 'null') {
-    return false;
-  }
 
-  const parsedOrigin = parseOrigin(origin);
-  return (
-    parsedOrigin !== undefined &&
-    (parsedOrigin === expectedOrigin(req) || allowedOrigins.has(parsedOrigin))
-  );
+  const parsedOrigin =
+    typeof origin === 'string' ? parseOrigin(origin) : undefined;
+  return parsedOrigin !== undefined && allowedOrigins.has(parsedOrigin);
 };
 
-const originAllowlist = (origins: string[]): ReadonlySet<string> =>
-  new Set(
+const originAllowlist = (origins: string[]): ReadonlySet<string> => {
+  if (origins.length === 0) {
+    throw new Error(
+      'Configure at least one allowed origin with --allowed-origin, ALLOWEDORIGINS, or server.allowedOrigins',
+    );
+  }
+  return new Set(
     origins.map((origin) => {
       const parsed = parseOrigin(origin);
       if (parsed === undefined) {
@@ -109,6 +91,7 @@ const originAllowlist = (origins: string[]): ReadonlySet<string> =>
       return parsed;
     }),
   );
+};
 
 interface ListenOptions {
   host: string;
@@ -137,6 +120,10 @@ export const listen = (
   }: ListenOptions,
 ): Server => {
   const allowed = originAllowlist(allowedOrigins);
+  // Canonical origins contain only the scheme and authority.
+  const allowedHosts = new Set(
+    [...allowed].map((origin) => origin.slice(origin.indexOf('://') + 3)),
+  );
 
   // Create the base HTTP/HTTPS server
   const server =
@@ -164,7 +151,12 @@ export const listen = (
     pingInterval: heartbeat(pingInterval, defaultPingInterval, 'pingInterval'),
     pingTimeout: heartbeat(pingTimeout, defaultPingTimeout, 'pingTimeout'),
     allowRequest: (req, callback) => {
-      const accepted = originAllowed(req, allowed, allowMissingOrigin);
+      const accepted = originAllowed(
+        req,
+        allowed,
+        allowedHosts,
+        allowMissingOrigin,
+      );
       callback(accepted ? null : 'Origin not allowed', accepted);
     },
   });

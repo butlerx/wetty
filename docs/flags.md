@@ -49,35 +49,47 @@ code.**
 
 ## Allowed WebSocket Origins
 
-WeTTY only accepts Socket.IO connections from its own browser origin. Requests
-with a foreign, missing, malformed, or `null` Origin header are rejected.
-
-If a separate frontend needs to connect, add its complete origin with
-`--allowed-origin`, for example:
+Configure every trusted browser origin explicitly with `--allowed-origin`,
+`ALLOWEDORIGINS`, or `server.allowedOrigins` in the config file. WeTTY refuses
+to start without at least one origin, including for local development.
 
 ```sh
+wetty --allowed-origin http://localhost:3000
+# Behind an HTTPS reverse proxy:
 wetty --allowed-origin https://terminal.example.com
 ```
 
 Repeat the flag to allow multiple origins. The `ALLOWEDORIGINS` environment
-variable accepts a comma-separated list. Reverse proxies should preserve the
-original `Host` header and set `X-Forwarded-Proto` to the browser-facing scheme.
+variable accepts a comma-separated list. Each entry must be a complete HTTP(S)
+origin (scheme, hostname and optional port), without credentials, paths, query
+strings, fragments or wildcards. The base path is not part of the origin.
+
+Only configured origins are trusted. Matching request `Host` and `Origin`
+headers does not grant access, and forwarded headers never add trusted origins.
+Reverse proxies should preserve the browser-facing `Host` header. A browser may
+omit `Origin` on same-origin polling requests; these require both
+`Sec-Fetch-Site: same-origin` and a Host matching a configured origin's host and
+port. Rewriting Host to an internal backend name will prevent this
+missing-Origin polling fallback from working.
 
 ### Allow connections without an Origin header
 
-Non-browser clients such as CLI tools, scripts, and certain reverse proxies do
-not send an `Origin` header. By default WeTTY rejects these requests.
+Non-browser clients such as CLI tools and scripts may not send an `Origin`
+header or browser Fetch Metadata. By default WeTTY rejects these requests.
 
 To allow them, use `--allow-missing-origin`:
 
 ```sh
-wetty --allow-missing-origin
+wetty --allowed-origin http://localhost:3000 --allow-missing-origin
 ```
 
 The `ALLOWMISSINGORIGIN=true` environment variable has the same effect.
 
-> **Note:** `null` origins (sent by sandboxed iframes) are always rejected, even
-> when `--allow-missing-origin` is set.
+> **Warning:** This opt-in bypasses origin protection for requests that omit
+> `Origin`, including the missing-Origin DNS-rebinding defense. Use it only
+> behind an independently authenticated, host-validating proxy. An explicit
+> origin allowlist is still required at startup. Supplied untrusted, malformed
+> or `null` origins remain rejected.
 
 ## Allow Remote Hosts
 
@@ -106,6 +118,19 @@ both, e.g. `--ping-interval 25000 --ping-timeout 20000`.
 
 Both flags also accept the `PINGINTERVAL` and `PINGTIMEOUT` environment
 variables.
+
+## Prometheus Metrics
+
+The unauthenticated metrics endpoint is `${base}/metrics` (`/metrics` with the
+default base). Restrict access at your reverse proxy if it exposes operational
+data you do not want to make public.
+
+HTTP metrics use five fixed route families: the terminal page, `/ssh/:user`,
+`/client/*`, `/sw.js`, and `unmatched`, prefixed by the configured base where
+applicable. Usernames, asset names, unknown paths and query strings are never
+retained as labels. Methods use the seven common HTTP methods or `OTHER`, and
+statuses are grouped into `2XX`, `3XX`, `4XX`, or `5XX`. Scrapes are not
+counted.
 
 ## Log Level
 

@@ -15,6 +15,7 @@ services:
       SSHHOST: 'wetty-ssh'
       SSHPORT: 22
       NODE_ENV: 'development'
+      ALLOWEDORIGINS: 'http://localhost:3000,http://wetty.com'
 
   web:
     image: nginx

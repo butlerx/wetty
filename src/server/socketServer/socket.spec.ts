@@ -23,7 +23,7 @@ const probeHandshake = async ({
   sameOrigin = false,
   host,
   forwardedProtocol,
-  allowedOrigins = [],
+  allowedOrigins = ['http://terminal.example'],
   transport = 'websocket',
   secFetchSite,
   allowMissingOrigin = false,
@@ -45,7 +45,7 @@ const probeHandshake = async ({
 
   const { port } = server.address() as AddressInfo;
   const headers: http.OutgoingHttpHeaders = {
-    host: host ?? `127.0.0.1:${String(port)}`,
+    host: host ?? 'terminal.example',
   };
 
   if (transport === 'websocket') {
@@ -55,7 +55,7 @@ const probeHandshake = async ({
     headers.upgrade = 'websocket';
   }
   if (sameOrigin) {
-    headers.origin = `http://127.0.0.1:${String(port)}`;
+    headers.origin = 'http://terminal.example';
   } else if (origin !== undefined) {
     headers.origin = origin;
   }
@@ -141,8 +141,19 @@ describe('Socket.IO origin validation', () => {
     expect(status).to.equal(400);
   });
 
-  it('rejects a missing origin by default', async () => {
-    expect(await probeHandshake({ transport: 'polling' })).to.equal(403);
+  it('rejects missing and null origins on both transports by default', async () => {
+    const statuses = await Promise.all(
+      (['polling', 'websocket'] as const).map((transport) =>
+        Promise.all([
+          probeHandshake({ transport }),
+          probeHandshake({ transport, origin: 'null' }),
+        ]),
+      ),
+    );
+    expect(statuses).to.deep.equal([
+      [403, 403],
+      [400, 400],
+    ]);
   });
 
   it('accepts a request with no origin when allowMissingOrigin is true', async () => {
@@ -161,10 +172,11 @@ describe('Socket.IO origin validation', () => {
     ).to.equal(403);
   });
 
-  it('uses the forwarded protocol for same-origin proxy requests', async () => {
+  it('uses configured origins rather than proxy headers', async () => {
     const request = {
-      host: 'terminal.example',
-      forwardedProtocol: 'https',
+      host: 'internal-backend.example',
+      forwardedProtocol: 'http',
+      allowedOrigins: ['https://terminal.example'],
     };
 
     expect(
@@ -181,7 +193,152 @@ describe('Socket.IO origin validation', () => {
     ).to.equal(400);
   });
 
-  it('accepts an explicitly allowed additional origin', async () => {
+  it('rejects matching attacker Host and Origin headers on both transports', async () => {
+    const statuses = await Promise.all(
+      (['polling', 'websocket'] as const).map((transport) =>
+        probeHandshake({
+          transport,
+          host: 'rebind.attacker.test',
+          origin: 'http://rebind.attacker.test',
+        }),
+      ),
+    );
+    expect(statuses).to.deep.equal([403, 400]);
+  });
+
+  it('rejects rebinding with no Origin despite same-origin fetch metadata', async () => {
+    const statuses = await Promise.all(
+      (['polling', 'websocket'] as const).map((transport) =>
+        probeHandshake({
+          transport,
+          host: 'rebind.attacker.test',
+          secFetchSite: 'same-origin',
+        }),
+      ),
+    );
+    expect(statuses).to.deep.equal([403, 400]);
+  });
+
+  it('does not implicitly trust localhost or the listen address', async () => {
+    expect(
+      await probeHandshake({
+        host: '127.0.0.1',
+        origin: 'http://127.0.0.1',
+        transport: 'polling',
+      }),
+    ).to.equal(403);
+  });
+
+  it('requires a nonempty configured origin allowlist before listening', () => {
+    expect(() =>
+      listen(express(), {
+        host: '127.0.0.1',
+        port: 0,
+        path: '',
+        ssl: {},
+        allowedOrigins: [],
+      }),
+    ).to.throw('Configure at least one allowed origin');
+  });
+
+  it('matches the complete configured scheme, host and port', async () => {
+    const statuses = await Promise.all(
+      [
+        'https://terminal.example:8443',
+        'http://terminal.example:8443',
+        'https://terminal.example',
+        'https://terminal.example:8444',
+        'https://terminal.example.attacker.test:8443',
+      ].map((origin) =>
+        probeHandshake({
+          origin,
+          transport: 'polling',
+          allowedOrigins: ['https://terminal.example:8443'],
+        }),
+      ),
+    );
+    expect(statuses).to.deep.equal([200, 403, 403, 403, 403]);
+  });
+
+  it('rejects malformed Origin values instead of accepting their first value', async () => {
+    const statuses = await Promise.all(
+      [
+        'null',
+        'not-an-origin',
+        'http://terminal.example, http://evil.example',
+        'http://terminal.example http://evil.example',
+        'http://user@terminal.example',
+        'http://terminal.example/path',
+        'http://terminal.example?query',
+        'http://terminal.example#fragment',
+        'http://terminal.example\\\\path',
+      ].map((origin) => probeHandshake({ origin, transport: 'polling' })),
+    );
+    expect(statuses).to.deep.equal(Array<number>(9).fill(403));
+  });
+
+  it('rejects unsafe allowlist configuration before opening a listener', () => {
+    for (const origin of [
+      '*',
+      'null',
+      'ftp://terminal.example',
+      'https://*.terminal.example',
+      'https://user@terminal.example',
+      'https://terminal.example/path',
+      'https://terminal.example?query',
+      'https://terminal.example#fragment',
+    ]) {
+      expect(() =>
+        listen(express(), {
+          host: '127.0.0.1',
+          port: 0,
+          path: '',
+          ssl: {},
+          allowedOrigins: [origin],
+        }),
+      ).to.throw('Invalid allowed origin');
+    }
+  });
+
+  it('allowMissingOrigin never permits a supplied untrusted Origin', async () => {
+    expect(
+      await probeHandshake({
+        transport: 'polling',
+        host: 'rebind.attacker.test',
+        origin: 'http://rebind.attacker.test',
+        allowMissingOrigin: true,
+      }),
+    ).to.equal(403);
+  });
+
+  it('accepts canonical origins including IPv6 and default ports', async () => {
+    const statuses = await Promise.all(
+      [
+        {
+          origin: 'https://terminal.example',
+          allowedOrigins: ['https://TERMINAL.example:443/'],
+        },
+        { origin: 'http://[::1]:3000', allowedOrigins: ['http://[::1]:3000'] },
+      ].map((options) => probeHandshake({ ...options, transport: 'polling' })),
+    );
+    expect(statuses).to.deep.equal([200, 200]);
+  });
+
+  it('pins the Host port for missing-Origin polling', async () => {
+    const request = {
+      transport: 'polling' as const,
+      secFetchSite: 'same-origin',
+      allowedOrigins: ['https://terminal.example:8443'],
+    };
+    expect(
+      await probeHandshake({ ...request, host: 'terminal.example:8443' }),
+    ).to.equal(200);
+    expect(
+      await probeHandshake({ ...request, host: 'terminal.example:8444' }),
+    ).to.equal(403);
+  });
+
+  it('accepts an explicitly configured origin', async () => {
     const status = await probeHandshake({
       origin: 'https://frontend.example',
       allowedOrigins: ['https://frontend.example'],
