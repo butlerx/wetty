@@ -15,6 +15,7 @@ const isMobile =
   /iPhone|iPad|iPod|Android|webOS|BlackBerry|Opera Mini|IEMobile/i.test(
     navigator.userAgent,
   );
+const isWindows = /Windows/i.test(navigator.userAgent);
 
 export class Term extends Terminal {
   socket: Socket;
@@ -29,7 +30,8 @@ export class Term extends Terminal {
     this.loadAddon(new WebLinksAddon());
     this.loadAddon(new ImageAddon());
     this.loadOptions = loadOptions;
-    if (!isMobile) {
+    // Use xterm's DOM renderer on Windows to avoid mis-scaled TUI rendering.
+    if (!isMobile && !isWindows) {
       try {
         this.loadAddon(new WebglAddon());
       } catch {
