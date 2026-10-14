@@ -51,6 +51,9 @@ socket.on('connect', () => {
   term.onData((data: string) => {
     socket.emit('input', data);
   });
+  term.onBinary((data: string) => {
+    socket.emit('input', data, true);
+  });
   term.onResize((size: { cols: number; rows: number }) => {
     socket.emit('resize', size);
   });

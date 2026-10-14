@@ -1,6 +1,7 @@
 import { dirname, resolve as resolvePath } from 'path';
 import { fileURLToPath } from 'url';
 import pty from 'node-pty';
+import { writePtyInput } from './shared/input.js';
 import { xterm } from './shared/xterm.js';
 import type SocketIO from 'socket.io';
 
@@ -25,8 +26,10 @@ export function login(socket: SocketIO.Socket): Promise<string> {
       socket.emit('data', data);
     });
     socket
-      .on('input', (input: string) => {
-        term.write(input);
+      .on('input', (input: string, binary?: unknown) => {
+        const isBinary = binary === true;
+        writePtyInput(term, input, isBinary);
+        if (isBinary) return;
         // eslint-disable-next-line no-control-regex
         buf = /\x0177/.exec(input) ? buf.slice(0, -1) : buf + input;
       })

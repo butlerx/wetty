@@ -1,6 +1,7 @@
 import pty from 'node-pty';
 import { logger as getLogger } from '../shared/logger.js';
 import { tinybuffer, FlowControlServer } from './flowcontrol.js';
+import { writePtyInput } from './shared/input.js';
 import { logSafeArgs } from './shared/logsafe.js';
 import { xterm } from './shared/xterm.js';
 import { envVersionOr } from './spawn/env.js';
@@ -51,8 +52,8 @@ export async function spawn(
         logger.debug('Resize rejected by PTY', { pid, err: error });
       }
     })
-    .on('input', (input: string) => {
-      term.write(input);
+    .on('input', (input: string, binary?: unknown) => {
+      writePtyInput(term, input, binary === true);
     })
     .on('disconnect', () => {
       term.kill();
