@@ -82,5 +82,4 @@ jobs:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
     with:
-      platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
       push: true
