@@ -293,7 +293,7 @@ behavior.
 
 ---
 
-- [ ] U4. **Give the browser session deterministic cleanup**
+- [x] U4. **Give the browser session deterministic cleanup**
 
 **Goal:** Keep exactly one active terminal and one set of socket/DOM handlers
 across reconnects.
@@ -844,6 +844,13 @@ clear client feature directory.
   now own fresh SSH, server, and allowed-origin state. Verified with three new
   isolation regressions, 81 passing tests, clean lint/type checks, and a
   successful production build.
+- 2026-10-24: U4 completed. Browser reconnects now replace one disposable
+  terminal session, remove owned socket/DOM/configuration handlers, keep stale
+  callbacks inert, preserve editor state, and expose deterministic disconnect
+  and initialization-failure states. Disconnected sessions cannot queue input,
+  terminal resize has one owner, and partial subscription failures clean up.
+  Verified with six new lifecycle tests, 87 passing tests, clean lint/type
+  checks, and a successful production build.
 
 ---
 

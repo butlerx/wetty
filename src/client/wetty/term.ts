@@ -22,6 +22,8 @@ export class Term extends Terminal {
   socket: Socket;
   fitAddon: FitAddon;
   loadOptions: () => Options;
+  private configurationDisposer?: () => void;
+  private sessionDisposed = false;
 
   constructor(socket: Socket, notifier: Notifier) {
     super({ allowProposedApi: true });
@@ -53,6 +55,18 @@ export class Term extends Terminal {
   get shouldFitTerm(): boolean {
     return this.loadOptions().wettyFitTerminal;
   }
+
+  setConfigurationDisposer(disposer: () => void): void {
+    this.configurationDisposer = disposer;
+  }
+
+  override dispose(): void {
+    if (this.sessionDisposed) return;
+    this.sessionDisposed = true;
+    this.configurationDisposer?.();
+    this.configurationDisposer = undefined;
+    super.dispose();
+  }
 }
 
 const ctrlButton = document.getElementById('onscreen-ctrl');
@@ -77,55 +91,27 @@ const toggleCTRL = (): void => {
 };
 
 /**
- * Simulates a backspace key press by sending the backspace character
- * (ASCII code 127) to the terminal. This function is intended to be used
- * in conjunction with the `simulateCTRLAndKey` function to handle
- * keyboard shortcuts.
+ * Handles the keyup event for the CTRL key. Delayed work remains bound to the
+ * terminal that scheduled it so a reconnect cannot redirect it to a new term.
  *
+ * @param event - the keyboard event object.
  */
-const simulateBackspace = (): void => {
-  window.wetty_term?.input('\x7F', true);
-};
-
-/**
- * Simulates a CTRL + key press by sending the corresponding character
- * (converted from the key's ASCII code) to the terminal. This function
- * is intended to be used in conjunction with the `toggleCTRL` function
- * to handle keyboard shortcuts.
- *
- * @param key - The key that was pressed, which will be converted to
- *              its corresponding character code.
- */
-const simulateCTRLAndKey = (key: string): void => {
-  window.wetty_term?.input(
-    String.fromCharCode(key.toUpperCase().charCodeAt(0) - 64),
-    false,
-  );
-};
-
-/**
- * Handles the keydown event for the CTRL key. When the CTRL key is pressed,
- * it sets the `ctrlFlag` variable to true and updates the visual state of
- * the `ctrlButton` element. If the CTRL key is released, it sets `ctrlFlag`
- * to false and updates the visual state of the `ctrlButton` element.
- *
- * @param e - The keyboard event object.
- */
-document.addEventListener('keyup', (e) => {
-  if (ctrlFlag) {
-    // if key is a character
-    if (e.key.length === 1 && /^[a-zA-Z0-9]$/.exec(e.key)) {
-      simulateCTRLAndKey(e.key);
-      // delayed backspace is needed to remove the character added to the terminal
-      // when CTRL + key is pressed.
-      // this is a workaround because e.preventDefault() cannot be used.
-      setTimeout(() => {
-        simulateBackspace();
-      }, 100);
-    }
-    toggleCTRL();
+function handleControlKeyUp(event: KeyboardEvent): void {
+  if (!ctrlFlag) return;
+  const targetTerm = window.wetty_term;
+  if (event.key.length === 1 && /^[a-zA-Z0-9]$/.exec(event.key)) {
+    targetTerm?.input(
+      String.fromCharCode(event.key.toUpperCase().charCodeAt(0) - 64),
+      false,
+    );
+    setTimeout(() => {
+      if (window.wetty_term === targetTerm) targetTerm?.input('\x7F', true);
+    }, 100);
   }
-});
+  toggleCTRL();
+}
+
+document.addEventListener('keyup', handleControlKeyUp);
 
 /**
  * Simulates pressing the ESC key by sending the ESC character (ASCII code 27)
@@ -236,24 +222,29 @@ declare global {
   }
 }
 
+window.toggleFunctions = toggleFunctions;
+window.toggleCTRL = toggleCTRL;
+window.pressESC = pressESC;
+window.pressUP = pressUP;
+window.pressDOWN = pressDOWN;
+window.pressTAB = pressTAB;
+window.pressLEFT = pressLEFT;
+window.pressRIGHT = pressRIGHT;
+
 export function terminal(socket: Socket, notifier: Notifier): Term | undefined {
   const term = new Term(socket, notifier);
-  if (termElement === null) return undefined;
-  termElement.innerHTML = '';
-  term.open(termElement);
-  configureTerm(term);
-  Notifier.requestPermissionOnClick(termElement);
-  window.onresize = function onResize() {
-    term.resizeTerm();
-  };
-  window.wetty_term = term;
-  window.toggleFunctions = toggleFunctions;
-  window.toggleCTRL = toggleCTRL;
-  window.pressESC = pressESC;
-  window.pressUP = pressUP;
-  window.pressDOWN = pressDOWN;
-  window.pressTAB = pressTAB;
-  window.pressLEFT = pressLEFT;
-  window.pressRIGHT = pressRIGHT;
-  return term;
+  if (termElement === null) {
+    term.dispose();
+    return undefined;
+  }
+  try {
+    termElement.innerHTML = '';
+    term.open(termElement);
+    term.setConfigurationDisposer(configureTerm(term));
+    Notifier.requestPermissionOnClick(termElement);
+    return term;
+  } catch (error) {
+    term.dispose();
+    throw error;
+  }
 }
