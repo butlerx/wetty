@@ -588,7 +588,7 @@ TypeScript conversion and bundling.
 
 ---
 
-- [ ] U11. **Convert the configuration editor to a typed bundle**
+- [x] U11. **Convert the configuration editor to a typed bundle**
 
 **Goal:** Type-check the editor and replace implicit classic-script globals with
 one ordered client entrypoint.
@@ -874,6 +874,13 @@ clear client feature directory.
   editor plus service worker are lint-owned. Verified with repeatable
   clean-build inventory/path tests, 129 passing tests, clean lint/type checks,
   and a clean production build.
+- 2026-10-24: U11 completed after rebasing onto `origin/main`. All editor source
+  is strict TypeScript behind one ordered entrypoint and one generated ESM
+  bundle; implicit initialization globals are removed while close compatibility,
+  messaging, sparse nullable options, and the original bell payload remain
+  stable. Verified with 11 direct bundle tests, repeatable clean-build
+  inventory, upstream notification coverage, 135 passing tests, clean lint/type
+  checks, and a clean production build.
 
 ---
 

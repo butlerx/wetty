@@ -45,7 +45,11 @@ const typechecker = {
 async function buildClient(watching) {
   /** @type {esbuild.BuildOptions} */
   const esConf = {
-    entryPoints: ['src/client/wetty.ts', 'src/client/dev.ts'],
+    entryPoints: {
+      wetty: 'src/client/wetty.ts',
+      dev: 'src/client/dev.ts',
+      'xterm_config/functionality': 'src/client/config-editor/index.ts',
+    },
     outdir: 'build/client',
     bundle: true,
     platform: 'browser',
@@ -62,10 +66,6 @@ async function buildClient(watching) {
       copy({
         assets: [
           { from: './src/assets/xterm_config/*', to: 'xterm_config' },
-          {
-            from: './src/client/config-editor/*.js',
-            to: 'xterm_config',
-          },
           { from: './src/assets/favicon.svg', to: 'favicon.svg' },
           { from: './src/assets/favicon-alert.svg', to: 'favicon-alert.svg' },
           { from: './src/assets/manifest.json', to: 'manifest.json' },

@@ -1,10 +1,12 @@
-const selectionColorOption = {
+import type { OptionDefinition, RegisteredOption } from './functionality';
+
+const selectionColorOption: OptionDefinition = {
   type: 'color',
   name: 'Selection Color',
   description: 'Background color for selected text. Can be transparent.',
   path: ['xterm', 'theme', 'selection'],
 };
-const selectionColorOpacityOption = {
+const selectionColorOpacityOption: OptionDefinition = {
   type: 'number',
   name: 'Selection Color Opacity',
   description:
@@ -15,7 +17,7 @@ const selectionColorOpacityOption = {
   max: 1,
 };
 
-window.inflateOptions([
+export const colorThemeOptions: OptionDefinition[] = [
   {
     type: 'color',
     name: 'Foreground Color',
@@ -133,20 +135,38 @@ window.inflateOptions([
     description: 'Color for ANSI Bright White text.',
     path: ['xterm', 'theme', 'brightWhite'],
   },
-]);
+];
 
-selectionColorOption.get = function getInput() {
-  return (
-    this.el.querySelector('input').value +
-    Math.round(
-      selectionColorOpacityOption.el.querySelector('input').value * 255,
-    ).toString(16)
-  );
-};
-selectionColorOption.set = function setInput(value) {
-  this.el.querySelector('input').value = value.substring(0, 7);
-  selectionColorOpacityOption.el.querySelector('input').value =
-    Math.round((parseInt(value.substring(7), 16) / 255) * 100) / 100;
-};
-selectionColorOpacityOption.get = () => 0;
-selectionColorOpacityOption.set = () => 0;
+function asRegisteredOption(option: OptionDefinition): RegisteredOption {
+  if (option.el == null || option.get == null || option.set == null) {
+    throw new Error(`Option was not registered: ${option.name}`);
+  }
+  return option as RegisteredOption;
+}
+
+function requireInput(option: RegisteredOption): HTMLInputElement {
+  const input = option.el.querySelector<HTMLInputElement>('input');
+  if (input == null) {
+    throw new Error(`Option input was not rendered: ${option.name}`);
+  }
+  return input;
+}
+
+export function configureColorThemeOptions(): void {
+  const selectionColor = asRegisteredOption(selectionColorOption);
+  const selectionOpacity = asRegisteredOption(selectionColorOpacityOption);
+  selectionColor.get = () => {
+    const color = requireInput(selectionColor).value;
+    const opacity = Number(requireInput(selectionOpacity).value);
+    return color + Math.round(opacity * 255).toString(16);
+  };
+  selectionColor.set = (value) => {
+    const color = String(value);
+    requireInput(selectionColor).value = color.substring(0, 7);
+    requireInput(selectionOpacity).value = String(
+      Math.round((parseInt(color.substring(7), 16) / 255) * 100) / 100,
+    );
+  };
+  selectionOpacity.get = () => 0;
+  selectionOpacity.set = () => undefined;
+}

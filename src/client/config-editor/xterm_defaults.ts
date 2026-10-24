@@ -1,16 +1,18 @@
-const DEFAULT_BELL_SOUND =
+import type { Options } from '../wetty/term/options';
+
+const defaultBellSound =
   'data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjMyLjEwNAAAAAAAAAAAAAAA//tQxAADB8AhSmxhIIEVCSiJrDCQBTcu3UrAIwUdkRgQbFAZC1CQEwTJ9mjRvBA4UOLD8nKVOWfh+UlK3z/177OXrfOdKl7pyn3Xf//WreyTRUoAWgBgkOAGbZHBgG1OF6zM82DWbZaUmMBptgQhGjsyYqc9ae9XFz280948NMBWInljyzsNRFLPWdnZGWrddDsjK1unuSrVN9jJsK8KuQtQCtMBjCEtImISdNKJOopIpBFpNSMbIHCSRpRR5iakjTiyzLhchUUBwCgyKiweBv/7UsQbg8isVNoMPMjAAAA0gAAABEVFGmgqK////9bP/6XCykxBTUUzLjEwMKqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq';
-window.loadOptions({
+
+export const defaultOptions: Options = {
   wettyFitTerminal: true,
   wettyVoid: 0,
-
   xterm: {
     cols: 80,
     rows: 24,
     cursorBlink: false,
     cursorStyle: 'block',
     cursorWidth: 1,
-    bellSound: DEFAULT_BELL_SOUND,
+    bellSound: defaultBellSound,
     bellStyle: 'none',
     drawBoldTextInBrightColors: true,
     fastScrollSensitivity: 5,
@@ -37,14 +39,12 @@ window.loadOptions({
     convertEol: false,
     termName: 'xterm',
     cancelEvents: false,
-
     theme: {
       foreground: '#ffffff',
       background: '#000000',
       cursor: '#ffffff',
       cursorAccent: '#000000',
       selection: '#FFFFFF4D',
-
       black: '#2e3436',
       red: '#cc0000',
       green: '#4e9a06',
@@ -63,4 +63,4 @@ window.loadOptions({
       brightWhite: '#eeeeec',
     },
   },
-});
+};

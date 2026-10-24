@@ -1,4 +1,6 @@
-window.inflateOptions([
+import type { OptionDefinition } from './functionality';
+
+export const generalOptions: OptionDefinition[] = [
   {
     type: 'text',
     name: 'Font Family',
@@ -133,4 +135,4 @@ window.inflateOptions([
     description: 'The size of tab stops in the terminal.',
     path: ['xterm', 'tabStopWidth'],
   },
-]);
+];

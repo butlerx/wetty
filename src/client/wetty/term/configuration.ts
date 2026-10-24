@@ -1,8 +1,8 @@
+import { decodeEditorMessage } from '../../config-editor/messages';
 import { editor } from '../disconnect/elements';
 import { copySelected, copyShortcut } from './configuration/clipboard';
 import { onInput } from './configuration/editor';
 import { loadOptions } from './load';
-import type { Options } from './options';
 import type { Term } from '../term';
 
 export function configureTerm(term: Term): () => void {
@@ -35,39 +35,6 @@ export function configureTerm(term: Term): () => void {
 
   function editorOnLoad(): void {
     sendOptionsToEditor();
-  }
-
-  interface WettySaveMessage {
-    type: 'wetty:save';
-    config: Options;
-  }
-
-  interface WettyCloseMessage {
-    type: 'wetty:close';
-  }
-
-  function isRecord(value: unknown): value is Record<string, unknown> {
-    return typeof value === 'object' && value !== null && !Array.isArray(value);
-  }
-
-  function isOptions(value: unknown): value is Options {
-    if (!isRecord(value) || !isRecord(value.xterm)) return false;
-    return (
-      typeof value.wettyFitTerminal === 'boolean' &&
-      typeof value.wettyVoid === 'number' &&
-      Number.isFinite(value.wettyVoid)
-    );
-  }
-
-  function decodeEditorMessage(
-    value: unknown,
-  ): WettySaveMessage | WettyCloseMessage | null {
-    if (!isRecord(value) || typeof value.type !== 'string') return null;
-    if (value.type === 'wetty:close') return { type: 'wetty:close' };
-    if (value.type === 'wetty:save' && isOptions(value.config)) {
-      return { type: 'wetty:save', config: value.config };
-    }
-    return null;
   }
 
   function editorOnMessage(event: MessageEvent<unknown>): void {

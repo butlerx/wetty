@@ -513,18 +513,6 @@ export default tseslint.config(
     },
   },
   {
-    files: ['src/client/config-editor/*.js'],
-    languageOptions: {
-      globals: {
-        ...globals.browser,
-      },
-    },
-    rules: {
-      // The legacy editor intentionally alerts when a JSON option is invalid.
-      'no-alert': 'off',
-    },
-  },
-  {
     files: ['src/assets/sw.js'],
     languageOptions: {
       globals: {

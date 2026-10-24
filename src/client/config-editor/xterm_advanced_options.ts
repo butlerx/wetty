@@ -1,4 +1,6 @@
-window.inflateOptions([
+import type { OptionDefinition } from './functionality';
+
+export const advancedOptions: OptionDefinition[] = [
   {
     type: 'boolean',
     name: 'Allow Proposed XTerm APIs',
@@ -82,7 +84,6 @@ window.inflateOptions([
     path: ['xterm', 'minimumContrastRatio'],
     float: true,
   },
-
   {
     type: 'boolean',
     name: 'Right Click Selects Words',
@@ -102,7 +103,6 @@ window.inflateOptions([
     description: 'The size of tab stops in the terminal.',
     path: ['xterm', 'tabStopWidth'],
   },
-
   {
     type: 'text',
     name: 'Word Separator',
@@ -111,4 +111,4 @@ window.inflateOptions([
     path: ['xterm', 'wordSeparator'],
     json: true,
   },
-]);
+];
