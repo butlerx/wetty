@@ -5,6 +5,7 @@ import { WebglAddon } from '@xterm/addon-webgl';
 import { Terminal } from '@xterm/xterm';
 
 import { terminal as termElement } from './disconnect/elements';
+import { Notifier } from './notifications';
 import { configureTerm } from './term/configuration';
 import { loadOptions } from './term/load';
 import { setTitle } from './title';
@@ -22,7 +23,7 @@ export class Term extends Terminal {
   fitAddon: FitAddon;
   loadOptions: () => Options;
 
-  constructor(socket: Socket) {
+  constructor(socket: Socket, notifier: Notifier) {
     super({ allowProposedApi: true });
     this.socket = socket;
     this.fitAddon = new FitAddon();
@@ -38,6 +39,8 @@ export class Term extends Terminal {
         // WebGL not available — DOM renderer will be used
       }
     }
+    this.parser.registerOscHandler(9, (data) => notifier.osc9(data));
+    this.parser.registerOscHandler(777, (data) => notifier.osc777(data));
     this.onTitleChange(setTitle);
   }
 
@@ -233,12 +236,13 @@ declare global {
   }
 }
 
-export function terminal(socket: Socket): Term | undefined {
-  const term = new Term(socket);
+export function terminal(socket: Socket, notifier: Notifier): Term | undefined {
+  const term = new Term(socket, notifier);
   if (termElement === null) return undefined;
   termElement.innerHTML = '';
   term.open(termElement);
   configureTerm(term);
+  Notifier.requestPermissionOnClick(termElement);
   window.onresize = function onResize() {
     term.resizeTerm();
   };

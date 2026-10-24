@@ -4,7 +4,7 @@ import { logger } from '../shared/logger.js';
 import { serveStatic, trim } from './socketServer/assets.js';
 import { html } from './socketServer/html.js';
 import { metricMiddleware, metricRoute } from './socketServer/metrics.js';
-import { favicon, redirect } from './socketServer/middleware.js';
+import { redirect } from './socketServer/middleware.js';
 import { policies } from './socketServer/security.js';
 import { assetsPath } from './socketServer/shared/path.js';
 import { listen } from './socketServer/socket.js';
@@ -54,7 +54,6 @@ export async function server(
       }),
     )
     .use(compression())
-    .use(await favicon(basePath))
     .use(redirect)
     .use(policies(allowIframe))
     .get(basePath, client)

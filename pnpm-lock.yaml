@@ -32,9 +32,6 @@ importers:
       compression:
         specifier: ^1.8.1
         version: 1.8.2
-      etag:
-        specifier: ^1.8.1
-        version: 1.8.1
       express:
         specifier: ^5.2.1
         version: 5.2.1
@@ -47,9 +44,6 @@ importers:
       find-up:
         specifier: ^8.0.0
         version: 8.0.0
-      fresh:
-        specifier: ^0.5.2
-        version: 0.5.2
       helmet:
         specifier: ^8.2.0
         version: 8.2.0
@@ -108,15 +102,9 @@ importers:
       '@types/compression':
         specifier: ^1.8.1
         version: 1.8.1
-      '@types/etag':
-        specifier: ^1.8.4
-        version: 1.8.4
       '@types/express':
         specifier: ^5.0.6
         version: 5.0.6
-      '@types/fresh':
-        specifier: ^0.5.3
-        version: 0.5.3
       '@types/jsdom':
         specifier: ^30.0.0
         version: 30.0.0
@@ -925,17 +913,11 @@ packages:
   '@types/estree@1.0.9':
     resolution: {integrity: sha512-GhdPgy1el4/ImP05X05Uw4cw2/M93BCUmnEvWZNStlCzEKME4Fkk+YpoA5OiHNQmoS7Cafb8Xa3Pya8m1Qrzeg==}
 
-  '@types/etag@1.8.4':
-    resolution: {integrity: sha512-f1z/UMth8gQ6636NBqhFmJ3zES7EuDcUnV6K1gl1osHp+85KPKX+VixYWUpqLkw1fftCagyHJjJOZjZkEi2rHw==}
-
   '@types/express-serve-static-core@5.1.1':
     resolution: {integrity: sha512-v4zIMr/cX7/d2BpAEX3KNKL/JrT1s43s96lLvvdTmza1oEvDudCqK9aF/djc/SWgy8Yh0h30TZx5VpzqFCxk5A==}
 
   '@types/express@5.0.6':
     resolution: {integrity: sha512-sKYVuV7Sv9fbPIt/442koC7+IIwK5olP1KWeD88e/idgoJqDm3JV/YUiPwkoKK92ylff2MGxSz1CSjsXelx0YA==}
-
-  '@types/fresh@0.5.3':
-    resolution: {integrity: sha512-eZBbataAbl5t/G/klkfp/dyjOD8LlEC5L1zBrSerj500xJZS2SRxG2dsdlaWMADTm4pT7e0CxAU+8S3PfMuZpw==}
 
   '@types/http-errors@2.0.5':
     resolution: {integrity: sha512-r8Tayk8HJnX0FztbZN7oVqGccWgw98T/0neJphO91KkmOzug1KkofZURD4UaD5uH8AqcFLfdPErnBod0u71/qg==}
@@ -2007,10 +1989,6 @@ packages:
 
   forwarded@0.2.0:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
-    engines: {node: '>= 0.6'}
-
-  fresh@0.5.2:
-    resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}
     engines: {node: '>= 0.6'}
 
   fresh@2.0.0:
@@ -4677,10 +4655,6 @@ snapshots:
 
   '@types/estree@1.0.9': {}
 
-  '@types/etag@1.8.4':
-    dependencies:
-      '@types/node': 26.6.5
-
   '@types/express-serve-static-core@5.1.1':
     dependencies:
       '@types/node': 26.6.5
@@ -4693,8 +4667,6 @@ snapshots:
       '@types/body-parser': 1.19.6
       '@types/express-serve-static-core': 5.1.1
       '@types/serve-static': 2.2.0
-
-  '@types/fresh@0.5.3': {}
 
   '@types/http-errors@2.0.5': {}
 
@@ -5885,8 +5857,6 @@ snapshots:
   fn.name@1.1.0: {}
 
   forwarded@0.2.0: {}
-
-  fresh@0.5.2: {}
 
   fresh@2.0.0: {}
 

@@ -9,19 +9,10 @@ import { verifyPrompt } from './wetty/disconnect/verify';
 import { FileDownloader } from './wetty/download';
 import { FlowControlClient } from './wetty/flowcontrol';
 import { mobileKeyboard } from './wetty/mobile';
+import { Notifier } from './wetty/notifications';
+import './wetty/serviceWorker';
 import { socket } from './wetty/socket';
 import { terminal, Term } from './wetty/term';
-
-if ('serviceWorker' in navigator) {
-  const scripts = Array.from(document.getElementsByTagName('script'));
-  const own = scripts.find((s) => s.src.endsWith('/wetty.js'));
-  if (own) {
-    const base = own.src.replace(/\/client\/wetty\.js$/, '');
-    void navigator.serviceWorker.register(`${base}/sw.js`, {
-      scope: `${base}/`,
-    });
-  }
-}
 
 // Setup for fontawesome
 library.add(faCogs);
@@ -34,8 +25,12 @@ function onResize(term: Term): () => void {
   };
 }
 
+// Shared across reconnects, so listeners and the AudioContext are not
+// recreated for every new terminal.
+const notifier = new Notifier();
+
 socket.on('connect', () => {
-  const term = terminal(socket);
+  const term = terminal(socket, notifier);
   if (term === undefined) return;
 
   if (overlay !== null) overlay.style.display = 'none';
