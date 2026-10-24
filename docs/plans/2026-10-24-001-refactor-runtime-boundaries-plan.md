@@ -361,7 +361,7 @@ listener ownership.
 
 ---
 
-- [ ] U5. **Centralize server connection lifecycle**
+- [x] U5. **Centralize server connection lifecycle**
 
 **Goal:** Ensure PTYs, temporary login listeners, session listeners, timers, and
 metrics are acquired and released exactly once.
@@ -851,6 +851,12 @@ clear client feature directory.
   terminal resize has one owner, and partial subscription failures clean up.
   Verified with six new lifecycle tests, 87 passing tests, clean lint/type
   checks, and a successful production build.
+- 2026-10-24: U5 completed. Each server connection now owns abortable command,
+  login, PTY, listener, timer, and metric cleanup with one completion path.
+  Disconnect races settle promptly, late work is inert, cleanup failures are
+  contained and reported, and unrelated listeners remain installed. Verified
+  with 13 server lifecycle tests, 100 passing tests, clean lint/type checks, and
+  a successful production build.
 
 ---
 

@@ -6,30 +6,51 @@ import { Socket } from 'socket.io';
  * If the accumulated data exceeds `maxSize` the message will be sent
  * immediately.
  */
-export function tinybuffer(socket: Socket, timeout: number, maxSize: number) {
-  const s: string[] = [];
+export interface BufferedSender {
+  (data: string): void;
+  cancel(): void;
+}
+
+export function tinybuffer(
+  socket: Socket,
+  timeout: number,
+  maxSize: number,
+): BufferedSender {
+  const chunks: string[] = [];
+  let active = true;
   let length = 0;
-  let sender: NodeJS.Timeout | null = null;
-  return (data: string) => {
-    s.push(data);
-    length += data.length;
-    if (length > maxSize) {
-      socket.emit('data', s.join(''));
-      s.length = 0;
-      length = 0;
-      if (sender) {
-        clearTimeout(sender);
-        sender = null;
-      }
-    } else {
-      sender ??= setTimeout(() => {
-        socket.emit('data', s.join(''));
-        s.length = 0;
-        length = 0;
-        sender = null;
-      }, timeout);
+  let sender: NodeJS.Timeout | undefined;
+
+  function clear(): void {
+    chunks.length = 0;
+    length = 0;
+    if (sender !== undefined) {
+      clearTimeout(sender);
+      sender = undefined;
     }
+  }
+
+  function emit(): void {
+    if (!active) return;
+    socket.emit('data', chunks.join(''));
+    clear();
+  }
+
+  const send = ((data: string): void => {
+    if (!active) return;
+    chunks.push(data);
+    length += data.length;
+    if (length > maxSize) emit();
+    else sender ??= setTimeout(emit, timeout);
+  }) as BufferedSender;
+
+  send.cancel = (): void => {
+    if (!active) return;
+    active = false;
+    clear();
   };
+
+  return send;
 }
 
 /**

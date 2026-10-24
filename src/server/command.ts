@@ -2,6 +2,7 @@ import process from 'node:process';
 import { address } from './command/address.js';
 import { loginOptions } from './command/login.js';
 import { sshOptions } from './command/ssh.js';
+import type { ServerSession } from './session.js';
 import type { SSH } from '../shared/interfaces';
 import type { Socket } from 'socket.io';
 
@@ -50,6 +51,7 @@ export async function getCommand(
   }: SSH,
   command: string,
   forcessh: boolean,
+  session: ServerSession,
 ): Promise<string[]> {
   const {
     request: {
@@ -64,7 +66,7 @@ export async function getCommand(
     return loginOptions(command, remoteAddress);
   }
 
-  const sshAddress = await address(socket, user, host);
+  const sshAddress = await address(socket, user, host, session);
   const args = {
     host: sshAddress,
     port: String(port),

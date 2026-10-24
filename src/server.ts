@@ -6,6 +6,7 @@ import express from 'express';
 import { Gauge, collectDefaultMetrics } from 'prom-client';
 import { getCommand } from './server/command.js';
 import { observeGC } from './server/metrics.js';
+import { runServerSession } from './server/session.js';
 import { logSafeArgs } from './server/shared/logsafe.js';
 import { server } from './server/socketServer.js';
 import { spawn } from './server/spawn.js';
@@ -73,16 +74,23 @@ export async function decorateServerWithSsh(
      * @name connection
      */
     logger.info('Connection accepted.');
-    wettyConnections.inc();
-
-    try {
-      const args = await getCommand(socket, ssh, command, forcessh);
-      logger.debug('Command Generated', { cmd: logSafeArgs(args).join(' ') });
-      await spawn(socket, args);
-    } catch (error) {
-      logger.info('Disconnect signal sent', { err: error });
-      wettyConnections.dec();
-    }
+    await runServerSession(socket, {
+      connections: wettyConnections,
+      getCommand: (session) =>
+        getCommand(socket, ssh, command, forcessh, session),
+      spawn: (args, session) => spawn(socket, args, session),
+      onCommand: (args) => {
+        logger.debug('Command Generated', {
+          cmd: logSafeArgs(args).join(' '),
+        });
+      },
+      onError: (error) => {
+        logger.info('Disconnect signal sent', { err: error });
+      },
+      onCleanupError: (error) => {
+        logger.warn('Session cleanup failed', { err: error });
+      },
+    });
   });
   return io;
 }
