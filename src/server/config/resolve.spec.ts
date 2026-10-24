@@ -3,7 +3,6 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import 'mocha';
 import { expect } from 'chai';
-import { loadConfigFile, mergeCliConf } from './config';
 import {
   defaultCommand,
   defaultLogLevel,
@@ -11,7 +10,8 @@ import {
   serverDefault,
   sshDefault,
 } from './defaults';
-import type { Config } from './interfaces';
+import { loadConfigFile, mergeCliConf } from './resolve';
+import type { Config } from './types';
 import type { Arguments } from 'yargs';
 
 const originalSshDefault = { ...sshDefault };

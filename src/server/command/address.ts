@@ -1,5 +1,5 @@
 import { login } from '../login.js';
-import { escapeShell } from '../shared/shell.js';
+import { escapeShell } from './shell.js';
 import type {
   ClientToServerEvents,
   ServerToClientEvents,

@@ -7,7 +7,7 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../protocol/socket-events.js';
-import type { SSH } from '../shared/interfaces';
+import type { SSH } from './config/types.js';
 import type { Socket } from 'socket.io';
 
 const localhost = (host: string): boolean =>

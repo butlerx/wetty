@@ -1,6 +1,6 @@
 import winston from 'winston';
-import { defaultLogLevel } from './defaults.js';
-import { isDev } from './env.js';
+import { defaultLogLevel } from '../config/defaults.js';
+import { isDev } from '../config/environment.js';
 
 const { combine, timestamp, label, simple, json, colorize } = winston.format;
 

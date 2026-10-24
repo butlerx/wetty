@@ -5,12 +5,12 @@ import {
   type ClientToServerEvents,
   type ServerToClientEvents,
 } from '../protocol/socket-events.js';
-import { logger as getLogger } from '../shared/logger.js';
 import { tinybuffer, FlowControlServer } from './flowcontrol.js';
-import { writePtyInput } from './shared/input.js';
-import { logSafeArgs } from './shared/logsafe.js';
-import { xterm } from './shared/xterm.js';
+import { logger as getLogger } from './observability/logger.js';
+import { writePtyInput } from './pty/input.js';
+import { xterm } from './pty/options.js';
 import { envVersionOr } from './spawn/env.js';
+import { logSafeArgs } from './spawn/log-safety.js';
 import { parseDimensions } from './spawn/resize.js';
 import type { ServerSession } from './session.js';
 import type { Socket } from 'socket.io';

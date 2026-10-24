@@ -635,7 +635,7 @@ one ordered client entrypoint.
 
 ---
 
-- [ ] U8. **Move server-only modules out of generic shared ownership**
+- [x] U8. **Move server-only modules out of generic shared ownership**
 
 **Goal:** Reserve cross-runtime ownership for protocol contracts and place
 config, defaults, environment, and logging under server-owned modules.
@@ -881,6 +881,12 @@ clear client feature directory.
   stable. Verified with 11 direct bundle tests, repeatable clean-build
   inventory, upstream notification coverage, 135 passing tests, clean lint/type
   checks, and a clean production build.
+- 2026-10-24: U8 completed. Generic shared trees are removed; configuration,
+  observability, PTY, command, and spawn helpers now live with their server
+  owners while `src/server.ts` preserves runtime/type exports. Transitive zone
+  checks include dynamic imports, and the development guide records ownership.
+  Verified with seven boundary/facade tests, 142 passing tests, clean lint/type
+  checks, a clean build, public API import, and CLI help smoke tests.
 
 ---
 

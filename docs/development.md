@@ -28,3 +28,16 @@ origins explicitly; the listen address and request Host are not trusted.
 The Dev server will rebuild WeTTY when ever a file is edited and restart the
 server with the new build. Any current ssh session in WeTTY will be killed and
 the user logged out.
+
+## Source Ownership
+
+- `src/client/` contains browser-only implementation, including the typed
+  configuration editor.
+- `src/server/` contains Node-only configuration, observability, PTY, command,
+  spawn, and socket-server implementation.
+- `src/protocol/` is the runtime-neutral client/server contract boundary and
+  must not import either implementation tree.
+- `src/server.ts` is the public package compatibility facade for
+  `build/server.js`.
+- The remaining `command.ts`, `spawn.ts`, `socketServer.ts`, and `term.ts`
+  file/directory collisions are intentionally handled by later plan units.

@@ -10,9 +10,9 @@ import { unlinkSync, existsSync, lstatSync } from 'fs';
 import { createRequire } from 'module';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
+import { loadConfigFile, mergeCliConf } from './server/config/resolve.js';
+import { setLevel, logger } from './server/observability/logger.js';
 import { start } from './server.js';
-import { loadConfigFile, mergeCliConf } from './shared/config.js';
-import { setLevel, logger } from './shared/logger.js';
 
 const require = createRequire(import.meta.url);
 const packageJson = require('../package.json') as {

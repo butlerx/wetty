@@ -1,4 +1,4 @@
-import { logger } from '../../shared/logger.js';
+import { logger } from '../observability/logger.js';
 
 export function sshOptions(
   {

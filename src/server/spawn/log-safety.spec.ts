@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { logSafeArgs } from './logsafe';
+import { logSafeArgs } from './log-safety';
 
 const sshArgs = (...extra: string[]): string[] => [
   'ssh',

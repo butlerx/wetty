@@ -1,4 +1,4 @@
-import { isDev } from '../../shared/env.js';
+import { isDev } from '../config/environment.js';
 import type { Request, Response, RequestHandler } from 'express';
 
 const jsFiles = isDev ? ['dev.js', 'wetty.js'] : ['wetty.js'];

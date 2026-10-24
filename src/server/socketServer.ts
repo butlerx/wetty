@@ -1,6 +1,6 @@
 import compression from 'compression';
 import winston from 'express-winston';
-import { logger } from '../shared/logger.js';
+import { logger } from './observability/logger.js';
 import { serveStatic, trim } from './socketServer/assets.js';
 import { html } from './socketServer/html.js';
 import { metricMiddleware, metricRoute } from './socketServer/metrics.js';
@@ -13,7 +13,7 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../protocol/socket-events.js';
-import type { SSL, SSLBuffer, Server } from '../shared/interfaces.js';
+import type { SSL, SSLBuffer, Server } from './config/types.js';
 import type { Express } from 'express';
 import type { Server as SocketServer } from 'socket.io';
 

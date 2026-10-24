@@ -6,10 +6,10 @@ import {
   type ClientToServerEvents,
   type ServerToClientEvents,
 } from '../protocol/socket-events.js';
-import { logger as getLogger } from '../shared/logger.js';
+import { logger as getLogger } from './observability/logger.js';
+import { writePtyInput } from './pty/input.js';
+import { xterm } from './pty/options.js';
 import { SessionEndError } from './session.js';
-import { writePtyInput } from './shared/input.js';
-import { xterm } from './shared/xterm.js';
 import type { ServerSession } from './session.js';
 import type { Socket } from 'socket.io';
 

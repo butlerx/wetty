@@ -6,13 +6,13 @@ import {
   defaultPingInterval,
   defaultPingTimeout,
   positiveIntOr,
-} from '../../shared/defaults.js';
-import { logger } from '../../shared/logger.js';
+} from '../config/defaults.js';
+import { logger } from '../observability/logger.js';
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../../protocol/socket-events.js';
-import type { SSLBuffer } from '../../shared/interfaces.js';
+import type { SSLBuffer } from '../config/types.js';
 import type express from 'express';
 import type { IncomingMessage } from 'http';
 

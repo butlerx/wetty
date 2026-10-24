@@ -5,29 +5,29 @@
 import express from 'express';
 import { Gauge, collectDefaultMetrics } from 'prom-client';
 import { getCommand } from './server/command.js';
-import { observeGC } from './server/metrics.js';
-import { runServerSession } from './server/session.js';
-import { logSafeArgs } from './server/shared/logsafe.js';
-import { server } from './server/socketServer.js';
-import { spawn } from './server/spawn.js';
 import {
   sshDefault,
   serverDefault,
   forceSSHDefault,
   defaultCommand,
-} from './shared/defaults.js';
-import { logger as getLogger } from './shared/logger.js';
+} from './server/config/defaults.js';
+import { observeGC } from './server/metrics.js';
+import { logger as getLogger } from './server/observability/logger.js';
+import { runServerSession } from './server/session.js';
+import { server } from './server/socketServer.js';
+import { logSafeArgs } from './server/spawn/log-safety.js';
+import { spawn } from './server/spawn.js';
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from './protocol/socket-events.js';
-import type { SSH, SSL, Server } from './shared/interfaces.js';
+import type { SSH, SSL, Server } from './server/config/types.js';
 import type { Express } from 'express';
 import type SocketIO from 'socket.io';
 import type { Socket as ServerSocket } from 'socket.io';
 
-export * from './shared/interfaces.js';
-export { logger as getLogger } from './shared/logger.js';
+export * from './server/config/types.js';
+export { logger as getLogger } from './server/observability/logger.js';
 
 const wettyConnections = new Gauge({
   name: 'wetty_connections',

@@ -8,7 +8,7 @@ import {
   defaultCommand,
   defaultLogLevel,
 } from './defaults.js';
-import type { Config, SSH, Server, SSL } from './interfaces';
+import type { Config, SSH, Server, SSL } from './types.js';
 import type winston from 'winston';
 import type { Arguments } from 'yargs';
 
