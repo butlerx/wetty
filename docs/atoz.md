@@ -14,8 +14,8 @@ to use them but they are not required to use WeTTY in general.
 
 ## Required dependencies
 
-`Node` - WeTTY requires node v20 or greater. We will install this locally for a
-non root user later in the guide.
+`Node` - WeTTY requires node 22.23.4+, 24.22.1+ or 26.12.1+ (see the README). We
+will install this locally for a non root user later in the guide.
 
 `python` - This should be installed by default but we will include it in our
 `apt-get` command to be safe.
@@ -79,11 +79,11 @@ This command will download and install `nvm` and reload our shell.
 curl -sL https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash && source ~/.profile
 ```
 
-This command will install the latest version of the v20 branch, which is the
-minimum required version for WeTTY.
+This command will install the latest version of the v22 branch, which is a
+supported version line for WeTTY.
 
 ```bash
-nvm install 20
+nvm install 22
 ```
 
 You can now call `node` to check it works using this command.
@@ -95,7 +95,7 @@ node -v
 Your result should look something like this.
 
 ```bash
-v20.2.0
+v22.23.4
 ```
 
 **Note:** There is an important consideration with the `nvm` method. `node` is
@@ -107,11 +107,11 @@ unavailable. The way we over come this issue for the needs of this guide is by
 using this command substitution to provide the full path, where applicable:
 
 ```bash
-$(source ~/.nvm/nvm.sh && nvm which 20)
+$(source ~/.nvm/nvm.sh && nvm which 22)
 ```
 
 **Why?** This command will always provide us with the path to the most current
-version of `node 20` installed via `nvm` regardless of other versions of `node`
+version of `node 22` installed via `nvm` regardless of other versions of `node`
 installed with `nvm`.
 
 ## Generate OpenSSL certificates
@@ -453,7 +453,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/bin/bash -c "$$(source /home/$$(whoami)/.nvm/nvm.sh && nvm which 20) /home/$$(whoami)/bin/wetty --host 0.0.0.0 -p 3000 --title wetty --base / --ssh-key /home/$$(whoami)/.ssh/wetty --ssh-host localhost --ssh-user $$(whoami) --ssh-port 22 --ssh-auth publickey --ssl-key /home/$$(whoami)/.ssl/wetty.key --ssl-cert /home/$$(whoami)/.ssl/wetty.crt"
+ExecStart=/bin/bash -c "$$(source /home/$$(whoami)/.nvm/nvm.sh && nvm which 22) /home/$$(whoami)/bin/wetty --host 0.0.0.0 -p 3000 --title wetty --base / --ssh-key /home/$$(whoami)/.ssh/wetty --ssh-host localhost --ssh-user $$(whoami) --ssh-port 22 --ssh-auth publickey --ssl-key /home/$$(whoami)/.ssl/wetty.key --ssl-cert /home/$$(whoami)/.ssl/wetty.crt"
 Restart=always
 RestartSec=2
 TimeoutStopSec=5
@@ -491,7 +491,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-ExecStart=/bin/bash -c "$$(source /home/$$(whoami)/.nvm/nvm.sh && nvm which 20) /home/$$(whoami)/bin/wetty --conf /home/$$(whoami)/.config/wetty/config.json"
+ExecStart=/bin/bash -c "$$(source /home/$$(whoami)/.nvm/nvm.sh && nvm which 22) /home/$$(whoami)/bin/wetty --conf /home/$$(whoami)/.config/wetty/config.json"
 Restart=always
 RestartSec=2
 TimeoutStopSec=5
@@ -691,5 +691,5 @@ source ~/.nvm/nvm.sh
 You can use the same command you used to install it with `nvm`
 
 ```bash
-nvm install 20
+nvm install 22
 ```
