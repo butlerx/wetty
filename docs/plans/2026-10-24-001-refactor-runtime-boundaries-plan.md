@@ -246,7 +246,7 @@ probes.
 
 ---
 
-- [ ] U2. **Make configuration merging immutable**
+- [x] U2. **Make configuration merging immutable**
 
 **Goal:** Prevent one config load or caller mutation from changing defaults used
 by future loads.
@@ -840,6 +840,10 @@ clear client feature directory.
   build entrypoint is safe to import for tests. Verified with 78 passing tests,
   clean lint/type checks, successful production and watch builds, and isolated
   browser/server type-error probes that both exit non-zero.
+- 2026-10-24: U2 completed. Config-file, default-only, and CLI-merged results
+  now own fresh SSH, server, and allowed-origin state. Verified with three new
+  isolation regressions, 81 passing tests, clean lint/type checks, and a
+  successful production build.
 
 ---
 

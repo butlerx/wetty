@@ -15,6 +15,15 @@ import type { Arguments } from 'yargs';
 type confValue =
   boolean | string | number | string[] | undefined | SSH | Server | SSL;
 
+const cloneSSH = (ssh: SSH): SSH => ({ ...ssh });
+const cloneServer = (server: Server): Server => ({
+  ...server,
+  allowedOrigins:
+    server.allowedOrigins === undefined
+      ? undefined
+      : [...server.allowedOrigins],
+});
+
 /**
  * Cast given value to boolean
  *
@@ -61,13 +70,13 @@ function parseLogLevel(
  * If no path is provided the default config is returned
  *
  * @param filepath - path to config to load
- * @returns variable cast to boolean
+ * @returns loaded configuration
  */
 export async function loadConfigFile(filepath?: string): Promise<Config> {
   if (filepath === undefined) {
     return {
-      ssh: sshDefault,
-      server: serverDefault,
+      ssh: cloneSSH(sshDefault),
+      server: cloneServer(serverDefault),
       command: defaultCommand,
       forceSSH: forceSSHDefault,
       logLevel: defaultLogLevel,
@@ -83,14 +92,8 @@ export async function loadConfigFile(filepath?: string): Promise<Config> {
     logLevel: unknown;
   }> = JSON5.parse(content.toString());
   return {
-    ssh:
-      parsed.ssh === undefined
-        ? sshDefault
-        : Object.assign(sshDefault, parsed.ssh),
-    server:
-      parsed.server === undefined
-        ? serverDefault
-        : Object.assign(serverDefault, parsed.server),
+    ssh: cloneSSH({ ...sshDefault, ...parsed.ssh }),
+    server: cloneServer({ ...serverDefault, ...parsed.server }),
     command: parsed.command ?? defaultCommand,
     forceSSH:
       parsed.forceSSH === undefined
@@ -121,7 +124,7 @@ const objectAssign = (
   ) as SSH | Server;
 
 /**
- * Merge cli arguemens with config object
+ * Merge CLI arguments with config object
  *
  * @param opts - Object containing cli args
  * @param config - Config object
@@ -134,20 +137,20 @@ export function mergeCliConf(opts: Arguments, config: Config): Config {
     cert: opts['ssl-cert'] as string | undefined,
     ...config.ssl,
   };
-  return {
-    ssh: objectAssign(config.ssh, {
-      user: opts['ssh-user'],
-      host: opts['ssh-host'],
-      auth: opts['ssh-auth'],
-      port: opts['ssh-port'],
-      pass: opts['ssh-pass'],
-      key: opts['ssh-key'],
-      allowRemoteHosts: opts['allow-remote-hosts'],
-      allowRemoteCommand: opts['allow-remote-command'],
-      config: opts['ssh-config'],
-      knownHosts: opts['known-hosts'],
-    } as Record<string, confValue>) as SSH,
-    server: objectAssign(config.server, {
+  const ssh = objectAssign(config.ssh, {
+    user: opts['ssh-user'],
+    host: opts['ssh-host'],
+    auth: opts['ssh-auth'],
+    port: opts['ssh-port'],
+    pass: opts['ssh-pass'],
+    key: opts['ssh-key'],
+    allowRemoteHosts: opts['allow-remote-hosts'],
+    allowRemoteCommand: opts['allow-remote-command'],
+    config: opts['ssh-config'],
+    knownHosts: opts['known-hosts'],
+  } as Record<string, confValue>) as SSH;
+  const server = cloneServer(
+    objectAssign(config.server, {
       base: opts.base,
       host: opts.host,
       socket: opts.socket,
@@ -159,6 +162,10 @@ export function mergeCliConf(opts: Arguments, config: Config): Config {
       allowedOrigins: opts['allowed-origin'],
       allowMissingOrigin: opts['allow-missing-origin'],
     } as Record<string, confValue>) as Server,
+  );
+  return {
+    ssh,
+    server,
     command:
       opts.command === undefined || typeof opts.command !== 'string'
         ? config.command
