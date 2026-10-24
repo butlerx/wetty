@@ -1,9 +1,12 @@
 import 'mocha';
-import { expect } from 'chai';
 import { readFileSync } from 'node:fs';
+import { expect } from 'chai';
 import { JSDOM } from 'jsdom';
 
-const indexHtml = readFileSync(new URL('./index.html', import.meta.url), 'utf8');
+const indexHtml = readFileSync(
+  new URL('../../assets/xterm_config/index.html', import.meta.url),
+  'utf8',
+);
 const functionality = readFileSync(
   new URL('./functionality.js', import.meta.url),
   'utf8',
@@ -30,9 +33,10 @@ function createOptionsDocument(
       path: ['xterm', 'testOption'],
     },
   ],
+  base = '/wetty',
 ): EditorHarness {
   const html = indexHtml
-    .replaceAll(/\s*<script src="[^"]+"><\/script>/g, '')
+    .replace(/\s*<script src="[^"]+"><\/script>/g, '')
     .replace(
       '</body>',
       `<script>
@@ -48,7 +52,7 @@ inflateOptions(${JSON.stringify(optionsSchema)});
     },
   } as unknown as Window;
   const dom = new JSDOM(html, {
-    url: `${applicationOrigin}/wetty/client/xterm_config/index.html`,
+    url: `${applicationOrigin}${base}/client/xterm_config/index.html`,
     runScripts: 'dangerously',
     beforeParse(window) {
       window.alert = () => undefined;
@@ -78,6 +82,38 @@ function dispatchParentMessage(
 }
 
 describe('xterm configuration options', () => {
+  it('round-trips options at root and non-root editor paths', () => {
+    for (const base of ['', '/wetty']) {
+      const harness = createOptionsDocument(undefined, base);
+      const input = harness.dom.window.document.querySelector<HTMLInputElement>(
+        'body > .boolean_option input',
+      );
+      if (input == null) throw new Error('Test option was not rendered');
+
+      dispatchParentMessage(harness, {
+        type: 'wetty:load',
+        config: {
+          wettyFitTerminal: true,
+          wettyVoid: 0,
+          xterm: { testOption: true },
+        },
+      });
+      input.checked = false;
+      input.dispatchEvent(
+        new harness.dom.window.Event('input', { bubbles: true }),
+      );
+
+      expect(harness.dom.window.location.pathname).to.equal(
+        `${base}/client/xterm_config/index.html`,
+      );
+      expect(harness.parentMessages).to.have.length(1);
+      expect(harness.parentMessages[0]?.targetOrigin).to.equal(
+        applicationOrigin,
+      );
+      harness.dom.window.close();
+    }
+  });
+
   it('loads options only from the same-origin parent window', () => {
     const harness = createOptionsDocument();
     const input = harness.dom.window.document.querySelector<HTMLInputElement>(
@@ -95,8 +131,9 @@ describe('xterm configuration options', () => {
     });
 
     expect(input.checked).to.equal(true);
-    expect(input.closest('.boolean_option')?.classList.contains('unbounded')).to
-      .equal(false);
+    expect(
+      input.closest('.boolean_option')?.classList.contains('unbounded'),
+    ).to.equal(false);
     harness.dom.window.close();
   });
 
@@ -123,8 +160,9 @@ describe('xterm configuration options', () => {
     );
 
     expect(input.checked).to.equal(false);
-    expect(input.closest('.boolean_option')?.classList.contains('unbounded')).to
-      .equal(true);
+    expect(
+      input.closest('.boolean_option')?.classList.contains('unbounded'),
+    ).to.equal(true);
     otherWindow.close();
     harness.dom.window.close();
   });
@@ -150,8 +188,9 @@ describe('xterm configuration options', () => {
     );
 
     expect(input.checked).to.equal(false);
-    expect(input.closest('.boolean_option')?.classList.contains('unbounded')).to
-      .equal(true);
+    expect(
+      input.closest('.boolean_option')?.classList.contains('unbounded'),
+    ).to.equal(true);
     harness.dom.window.close();
   });
 
@@ -178,8 +217,9 @@ describe('xterm configuration options', () => {
     );
 
     expect(input.checked).to.equal(false);
-    expect(input.closest('.boolean_option')?.classList.contains('unbounded')).to
-      .equal(true);
+    expect(
+      input.closest('.boolean_option')?.classList.contains('unbounded'),
+    ).to.equal(true);
 
     dispatchParentMessage(harness, {
       type: 'wetty:load',
@@ -218,8 +258,9 @@ describe('xterm configuration options', () => {
     }
 
     expect(input.checked).to.equal(false);
-    expect(input.closest('.boolean_option')?.classList.contains('unbounded')).to
-      .equal(true);
+    expect(
+      input.closest('.boolean_option')?.classList.contains('unbounded'),
+    ).to.equal(true);
     expect(harness.parentMessages).to.deep.equal([]);
     harness.dom.window.close();
   });

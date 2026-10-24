@@ -6,7 +6,12 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['dist/**', 'build/**', 'node_modules/**', 'src/assets/**'],
+    ignores: [
+      'dist/**',
+      'build/**',
+      'node_modules/**',
+      'src/assets/**/*.{css,html,ico,json,svg}',
+    ],
   },
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
@@ -491,14 +496,43 @@ export default tseslint.config(
     files: ['**/*.js', '**/*.jsx', '**/*.mjs'],
     ...tseslint.configs.disableTypeChecked,
     languageOptions: {
-      globals: {
-        ...globals.node,
-      },
+      ...tseslint.configs.disableTypeChecked.languageOptions,
     },
     rules: {
       ...tseslint.configs.disableTypeChecked.rules,
       '@typescript-eslint/no-var-requires': 'off',
       'import-x/no-unresolved': 'off',
+    },
+  },
+  {
+    files: ['*.js', '*.mjs'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
+    files: ['src/client/config-editor/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+      },
+    },
+    rules: {
+      // The legacy editor intentionally alerts when a JSON option is invalid.
+      'no-alert': 'off',
+    },
+  },
+  {
+    files: ['src/assets/sw.js'],
+    languageOptions: {
+      globals: {
+        ...globals.serviceworker,
+      },
+    },
+    rules: {
+      'no-restricted-globals': 'off',
     },
   },
   {

@@ -532,7 +532,7 @@ parent/iframe pair while preserving supported WeTTY embedding.
 
 ---
 
-- [ ] U7. **Relocate executable editor code without behavior changes**
+- [x] U7. **Relocate executable editor code without behavior changes**
 
 **Goal:** Move configuration-editor application code under explicit client
 ownership while preserving its classic-script behavior and served paths.
@@ -868,6 +868,12 @@ clear client feature directory.
   Malformed messages are inert and load/save/error-recovery/persistence/close
   behavior is preserved. Verified with 17 messaging tests, 124 passing tests,
   clean lint/type checks, and a successful production build.
+- 2026-10-24: U7 completed. Executable editor sources now live under client
+  ownership, static HTML/CSS retain their base-prefixed served path, clean
+  builds remove stale output without breaking incremental watch mode, and the
+  editor plus service worker are lint-owned. Verified with repeatable
+  clean-build inventory/path tests, 129 passing tests, clean lint/type checks,
+  and a clean production build.
 
 ---
 

@@ -1,4 +1,5 @@
 import { spawn } from 'node:child_process';
+import { rm } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import * as esbuild from 'esbuild';
 import { copy } from 'esbuild-plugin-copy';
@@ -61,6 +62,10 @@ async function buildClient(watching) {
       copy({
         assets: [
           { from: './src/assets/xterm_config/*', to: 'xterm_config' },
+          {
+            from: './src/client/config-editor/*.js',
+            to: 'xterm_config',
+          },
           { from: './src/assets/favicon.svg', to: 'favicon.svg' },
           { from: './src/assets/favicon-alert.svg', to: 'favicon-alert.svg' },
           { from: './src/assets/manifest.json', to: 'manifest.json' },
@@ -85,13 +90,23 @@ async function buildClient(watching) {
  */
 async function buildServer(watching) {
   const tscArgs = ['tsc', '-p', 'tsconfig.node.json'];
-  if (watching) tscArgs.push('--watch', '--preserveWatchOutput');
+  if (watching) {
+    tscArgs.push('--watch', '--preserveWatchOutput');
+  } else {
+    tscArgs.push('--incremental', 'false');
+  }
   const tscDone = cmd('pnpm', tscArgs);
   if (!watching) await tscDone;
 }
 
 export async function main() {
   const watching = process.argv.includes('--watch');
+  if (!watching) {
+    await rm(new URL('./build', import.meta.url), {
+      recursive: true,
+      force: true,
+    });
+  }
   await buildClient(watching);
   await buildServer(watching);
 }

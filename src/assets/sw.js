@@ -1,28 +1,30 @@
 const CACHE = 'wetty-v1';
 
-self.addEventListener('install', (event) => {
+globalThis.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE).then((cache) =>
-      cache.addAll([
-        './',
-        './client/wetty.js',
-        './client/wetty.css',
-      ]),
-    ),
+    caches
+      .open(CACHE)
+      .then((cache) =>
+        cache.addAll(['./', './client/wetty.js', './client/wetty.css']),
+      ),
   );
-  event.waitUntil(self.skipWaiting());
+  event.waitUntil(globalThis.skipWaiting());
 });
 
-self.addEventListener('activate', (event) => {
+globalThis.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))),
-    ),
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)),
+        ),
+      ),
   );
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(globalThis.clients.claim());
 });
 
-self.addEventListener('fetch', (event) => {
+globalThis.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request)
       .then((response) => {
@@ -35,9 +37,9 @@ self.addEventListener('fetch', (event) => {
         return response;
       })
       .catch(() =>
-        caches.match(event.request).then(
-          (cached) => cached ?? new Response('Offline', { status: 503 }),
-        ),
+        caches
+          .match(event.request)
+          .then((cached) => cached ?? new Response('Offline', { status: 503 })),
       ),
   );
 });

@@ -1,10 +1,13 @@
 import 'mocha';
 import { spawnSync } from 'node:child_process';
+import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { expect } from 'chai';
+import { ESLint } from 'eslint';
 
 const buildModule = pathToFileURL(resolve('build.js')).href;
+const editorOutput = resolve('build/client/xterm_config');
 
 function runCommand(body: string) {
   return spawnSync(
@@ -65,5 +68,40 @@ describe('build process execution', () => {
     expect(result.error).to.equal(undefined);
     expect(result.status).to.equal(0);
     expect(result.stderr).to.include('ENOENT');
+  });
+
+  it('creates the complete editor inventory from a clean build', () => {
+    mkdirSync(editorOutput, { recursive: true });
+    writeFileSync(resolve(editorOutput, 'stale.js'), 'stale');
+
+    const result = spawnSync(process.execPath, ['build.js'], {
+      encoding: 'utf8',
+      timeout: 60_000,
+    });
+
+    expect(result.error).to.equal(undefined);
+    expect(result.status, `${result.stdout}\n${result.stderr}`).to.equal(0);
+    expect(readdirSync(editorOutput).sort()).to.deep.equal([
+      'functionality.js',
+      'index.html',
+      'style.css',
+      'xterm_advanced_options.js',
+      'xterm_color_theme.js',
+      'xterm_defaults.js',
+      'xterm_general_options.js',
+    ]);
+    expect(existsSync(resolve('build/server.js'))).to.equal(true);
+  }).timeout(60_000);
+
+  it('keeps executable editor and service worker sources under ESLint', async () => {
+    const eslint = new ESLint();
+
+    expect(
+      await eslint.isPathIgnored('src/client/config-editor/functionality.js'),
+    ).to.equal(false);
+    expect(await eslint.isPathIgnored('src/assets/sw.js')).to.equal(false);
+    expect(
+      await eslint.isPathIgnored('src/assets/xterm_config/index.html'),
+    ).to.equal(true);
   });
 });
