@@ -8,6 +8,10 @@ import {
   positiveIntOr,
 } from '../../shared/defaults.js';
 import { logger } from '../../shared/logger.js';
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from '../../protocol/socket-events.js';
 import type { SSLBuffer } from '../../shared/interfaces.js';
 import type express from 'express';
 import type { IncomingMessage } from 'http';
@@ -118,7 +122,7 @@ export const listen = (
     allowedOrigins = [],
     allowMissingOrigin = false,
   }: ListenOptions,
-): Server => {
+): Server<ClientToServerEvents, ServerToClientEvents> => {
   const allowed = originAllowlist(allowedOrigins);
   // Canonical origins contain only the scheme and authority.
   const allowedHosts = new Set(
@@ -146,7 +150,7 @@ export const listen = (
   }
 
   // Create Socket.IO server
-  return new Server(server, {
+  return new Server<ClientToServerEvents, ServerToClientEvents>(server, {
     path: `${path}/socket.io`,
     pingInterval: heartbeat(pingInterval, defaultPingInterval, 'pingInterval'),
     pingTimeout: heartbeat(pingTimeout, defaultPingTimeout, 'pingTimeout'),

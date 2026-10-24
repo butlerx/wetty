@@ -1,4 +1,9 @@
-import { Socket } from 'socket.io';
+import {
+  MAX_FLOW_CONTROL_COMMIT,
+  type ClientToServerEvents,
+  type ServerToClientEvents,
+} from '../protocol/socket-events.js';
+import type { Socket } from 'socket.io';
 
 /**
  * tinybuffer to lower message pressure on the websocket.
@@ -12,7 +17,7 @@ export interface BufferedSender {
 }
 
 export function tinybuffer(
-  socket: Socket,
+  socket: Socket<ClientToServerEvents, ServerToClientEvents>,
   timeout: number,
   maxSize: number,
 ): BufferedSender {
@@ -76,7 +81,7 @@ export function tinybuffer(
 export class FlowControlServer {
   public counter = 0;
   public low = 524288; // 2^19 --> 2x ackBytes from frontend
-  public high = 2097152; // 2^21 --> 8x ackBytes from frontend
+  public high = MAX_FLOW_CONTROL_COMMIT; // 2^21 --> 8x ackBytes from frontend
 
   constructor(low?: number, high?: number) {
     if (low != null) {

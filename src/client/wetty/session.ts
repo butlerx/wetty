@@ -1,3 +1,7 @@
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from '../../protocol/socket-events.js';
 import type { Socket } from 'socket.io-client';
 
 interface Disposable {
@@ -37,7 +41,7 @@ interface SessionWindowTarget {
 }
 
 export interface BrowserSessionDependencies {
-  socket: Socket;
+  socket: Socket<ServerToClientEvents, ClientToServerEvents>;
   windowTarget: SessionWindowTarget;
   beforeUnloadHandler: EventListener;
   createTerminal: () => SessionTerminal | undefined;

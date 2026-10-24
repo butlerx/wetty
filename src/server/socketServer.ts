@@ -9,9 +9,13 @@ import { policies } from './socketServer/security.js';
 import { assetsPath } from './socketServer/shared/path.js';
 import { listen } from './socketServer/socket.js';
 import { loadSSL } from './socketServer/ssl.js';
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from '../protocol/socket-events.js';
 import type { SSL, SSLBuffer, Server } from '../shared/interfaces.js';
 import type { Express } from 'express';
-import type SocketIO from 'socket.io';
+import type { Server as SocketServer } from 'socket.io';
 
 export async function server(
   app: Express,
@@ -28,7 +32,7 @@ export async function server(
     allowMissingOrigin,
   }: Server,
   ssl?: SSL,
-): Promise<SocketIO.Server> {
+): Promise<SocketServer<ClientToServerEvents, ServerToClientEvents>> {
   const basePath = trim(base);
   logger().info('Starting server', {
     ssl,

@@ -3,6 +3,10 @@ import { address } from './command/address.js';
 import { loginOptions } from './command/login.js';
 import { sshOptions } from './command/ssh.js';
 import type { ServerSession } from './session.js';
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from '../protocol/socket-events.js';
 import type { SSH } from '../shared/interfaces';
 import type { Socket } from 'socket.io';
 
@@ -36,7 +40,7 @@ const urlArgs = (
 };
 
 export async function getCommand(
-  socket: Socket,
+  socket: Socket<ClientToServerEvents, ServerToClientEvents>,
   {
     user,
     host,

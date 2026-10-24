@@ -322,6 +322,28 @@ describe('server socket session lifecycle', () => {
     ).to.have.lengthOf(1);
   });
 
+  it('ignores malformed login input before temporary PTY and buffer access', async () => {
+    const socket = createSocketHarness();
+    const session = createServerSession(socket.socket);
+    const pty = createPtyHarness();
+    const username = login(socket.socket, session, {
+      spawnPty: () => pty.pty,
+    });
+
+    socket.trigger('input');
+    socket.trigger('input', 42);
+    socket.trigger('input', 'wrong binary flag', 'true');
+    socket.trigger('input', 'x'.repeat(1_000_001));
+
+    expect(pty.writes).to.have.lengthOf(0);
+
+    socket.trigger('input', 'alice');
+    pty.triggerExit();
+
+    expect(await username).to.equal('alice');
+    expect(pty.writes).to.deep.equal(['alice']);
+  });
+
   it('rejects login disconnect and removes temporary listener authority', async () => {
     const socket = createSocketHarness();
     const session = createServerSession(socket.socket);
@@ -356,6 +378,66 @@ describe('server socket session lifecycle', () => {
     expect(pty.writes).to.have.lengthOf(0);
     expect(socket.emissions).to.have.lengthOf(emissionsAfterDisconnect);
     expect(unrelatedInputCount).to.equal(1);
+  });
+
+  it('ignores malformed main-session input before PTY access', async () => {
+    const socket = createSocketHarness();
+    const session = createServerSession(socket.socket);
+    const pty = createPtyHarness();
+
+    await spawn(socket.socket, ['login'], session, {
+      envVersion: () => Promise.resolve(9),
+      spawnPty: () => pty.pty,
+    });
+
+    socket.trigger('input');
+    socket.trigger('input', 42);
+    socket.trigger('input', 'wrong binary flag', 'true');
+    socket.trigger('input', 'x'.repeat(1_000_001));
+
+    expect(pty.writes).to.have.lengthOf(0);
+
+    socket.trigger('input', 'whoami');
+    socket.trigger('input', 'text', false);
+    socket.trigger('input', '\u0000', true);
+
+    expect(pty.writes.slice(0, 2)).to.deep.equal(['whoami', 'text']);
+    expect(pty.writes[2]).to.deep.equal(Buffer.from('\u0000', 'binary'));
+  });
+
+  it('ignores invalid commits without changing flow-control state', async () => {
+    const socket = createSocketHarness();
+    const session = createServerSession(socket.socket);
+    const pty = createPtyHarness();
+
+    await spawn(socket.socket, ['login'], session, {
+      envVersion: () => Promise.resolve(9),
+      spawnPty: () => pty.pty,
+    });
+    socket.trigger('commit', 1);
+    pty.triggerData('x'.repeat(2_097_153));
+    expect(pty.pauseCount).to.equal(1);
+
+    for (const invalid of [
+      undefined,
+      '262144',
+      -1,
+      Number.NaN,
+      Number.POSITIVE_INFINITY,
+      2_097_153,
+    ]) {
+      socket.trigger('commit', invalid);
+    }
+    expect(pty.resumeCount).to.equal(0);
+
+    for (let index = 0; index < 8; index += 1) {
+      socket.trigger('commit', 262_144);
+    }
+    expect(pty.resumeCount).to.equal(1);
+
+    socket.trigger('commit', 262_144);
+    pty.triggerData('x'.repeat(2_097_152));
+    expect(pty.pauseCount).to.equal(2);
   });
 
   it('cancels PTY startup and late events when disconnect wins acquisition', async () => {

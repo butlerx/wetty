@@ -427,7 +427,7 @@ and normal disconnect before moving cleanup responsibilities.
 
 ---
 
-- [ ] U3. **Define and validate the Socket.IO protocol boundary**
+- [x] U3. **Define and validate the Socket.IO protocol boundary**
 
 **Goal:** Give browser and server code one compile-time source of truth for
 events while rejecting malformed client-originated payloads before they reach
@@ -857,6 +857,12 @@ clear client feature directory.
   contained and reported, and unrelated listeners remain installed. Verified
   with 13 server lifecycle tests, 100 passing tests, clean lint/type checks, and
   a successful production build.
+- 2026-10-24: U3 completed. Browser and server now share a typed Socket.IO event
+  contract while the public server return type remains extensible. Literal wire
+  names are locked, malformed raw-client payloads are rejected, large pastes
+  retain the existing Socket.IO ceiling, and commits cannot underflow flow
+  control. Verified with protocol fixtures/decoder regressions, 109 passing
+  tests, clean lint/type checks, and a successful production build.
 
 ---
 

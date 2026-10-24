@@ -1,3 +1,5 @@
+import type { TerminalDimensions } from '../../protocol/socket-events.js';
+
 /**
  * Upper bound on the terminal size a client may request. Well above any real
  * display, but low enough that a hostile value cannot be used to make node-pty
@@ -5,10 +7,7 @@
  */
 const maxDimension = 9999;
 
-export interface Dimensions {
-  cols: number;
-  rows: number;
-}
+export type Dimensions = TerminalDimensions;
 
 const isPositiveDimension = (value: unknown): value is number =>
   typeof value === 'number' &&

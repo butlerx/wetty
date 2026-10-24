@@ -1,11 +1,17 @@
 import { dirname, resolve as resolvePath } from 'path';
 import { fileURLToPath } from 'url';
 import pty from 'node-pty';
+import {
+  parseInputPayload,
+  type ClientToServerEvents,
+  type ServerToClientEvents,
+} from '../protocol/socket-events.js';
+import { logger as getLogger } from '../shared/logger.js';
 import { SessionEndError } from './session.js';
 import { writePtyInput } from './shared/input.js';
 import { xterm } from './shared/xterm.js';
 import type { ServerSession } from './session.js';
-import type SocketIO from 'socket.io';
+import type { Socket } from 'socket.io';
 
 interface Disposable {
   dispose(): void;
@@ -33,12 +39,13 @@ function isSessionActive(session: ServerSession): boolean {
 }
 
 export function login(
-  socket: SocketIO.Socket,
+  socket: Socket<ClientToServerEvents, ServerToClientEvents>,
   session: ServerSession,
   dependencies: LoginDependencies = {
     spawnPty: () => pty.spawn('/usr/bin/env', ['node', executable], xterm),
   },
 ): Promise<string> {
+  const logger = getLogger();
   if (!isSessionActive(session)) {
     return Promise.reject(
       new SessionEndError(
@@ -129,13 +136,19 @@ export function login(
       reject(new SessionEndError(endReason, reason));
     }
 
-    function onInput(input: string, binary?: unknown): void {
+    function onInput(input: string, binary?: boolean): void {
       if (settled || !session.active) return;
-      const isBinary = binary === true;
-      writePtyInput(term, input, isBinary);
-      if (isBinary) return;
+      const payload = parseInputPayload(input, binary);
+      if (payload === undefined) {
+        logger.debug('Ignoring invalid interactive login input');
+        return;
+      }
+      writePtyInput(term, payload.input, payload.binary);
+      if (payload.binary) return;
       // eslint-disable-next-line no-control-regex
-      buffer = /\x0177/.exec(input) ? buffer.slice(0, -1) : buffer + input;
+      buffer = /\x0177/.exec(payload.input)
+        ? buffer.slice(0, -1)
+        : buffer + payload.input;
     }
 
     function onDisconnect(): void {

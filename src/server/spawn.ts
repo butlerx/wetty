@@ -1,4 +1,10 @@
 import pty from 'node-pty';
+import {
+  parseCommitPayload,
+  parseInputPayload,
+  type ClientToServerEvents,
+  type ServerToClientEvents,
+} from '../protocol/socket-events.js';
 import { logger as getLogger } from '../shared/logger.js';
 import { tinybuffer, FlowControlServer } from './flowcontrol.js';
 import { writePtyInput } from './shared/input.js';
@@ -7,7 +13,7 @@ import { xterm } from './shared/xterm.js';
 import { envVersionOr } from './spawn/env.js';
 import { parseDimensions } from './spawn/resize.js';
 import type { ServerSession } from './session.js';
-import type SocketIO from 'socket.io';
+import type { Socket } from 'socket.io';
 
 interface Disposable {
   dispose(): void;
@@ -34,7 +40,7 @@ function isSessionActive(session: ServerSession): boolean {
 }
 
 export async function spawn(
-  socket: SocketIO.Socket,
+  socket: Socket<ClientToServerEvents, ServerToClientEvents>,
   args: string[],
   session: ServerSession,
   dependencies: SpawnDependencies = {
@@ -94,12 +100,24 @@ export async function spawn(
     }
   }
 
-  function onInput(input: string, binary?: unknown): void {
-    if (session.active) writePtyInput(term, input, binary === true);
+  function onInput(input: string, binary?: boolean): void {
+    if (!session.active) return;
+    const payload = parseInputPayload(input, binary);
+    if (payload === undefined) {
+      logger.debug('Ignoring invalid terminal input', { pid });
+      return;
+    }
+    writePtyInput(term, payload.input, payload.binary);
   }
 
   function onCommit(size: number): void {
-    if (session.active && fcServer.commit(size)) term.resume();
+    if (!session.active) return;
+    const commit = parseCommitPayload(size);
+    if (commit === undefined || commit > fcServer.counter) {
+      logger.debug('Ignoring invalid flow-control commit', { pid });
+      return;
+    }
+    if (fcServer.commit(commit)) term.resume();
   }
 
   function removeSessionListeners(): void {

@@ -1,3 +1,7 @@
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from '../protocol/socket-events.js';
 import type { Socket } from 'socket.io';
 
 export type SessionEndReason =
@@ -31,7 +35,7 @@ export class SessionEndError extends Error {
 }
 
 export function createServerSession(
-  socket: Socket,
+  socket: Socket<ClientToServerEvents, ServerToClientEvents>,
   onCleanupError: (error: unknown) => void = () => undefined,
 ): ServerSession {
   const abortController = new AbortController();
@@ -144,7 +148,7 @@ async function raceSessionStage<T>(
 }
 
 export async function runServerSession(
-  socket: Socket,
+  socket: Socket<ClientToServerEvents, ServerToClientEvents>,
   dependencies: ServerSessionRunnerDependencies,
 ): Promise<SessionEndReason> {
   const session = createServerSession(socket, (error) => {

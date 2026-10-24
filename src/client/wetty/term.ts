@@ -10,6 +10,10 @@ import { configureTerm } from './term/configuration';
 import { loadOptions } from './term/load';
 import { setTitle } from './title';
 import type { Options } from './term/options';
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from '../../protocol/socket-events.js';
 import type { Socket } from 'socket.io-client';
 
 const isMobile =
@@ -19,13 +23,16 @@ const isMobile =
 const isWindows = /Windows/i.test(navigator.userAgent);
 
 export class Term extends Terminal {
-  socket: Socket;
+  socket: Socket<ServerToClientEvents, ClientToServerEvents>;
   fitAddon: FitAddon;
   loadOptions: () => Options;
   private configurationDisposer?: () => void;
   private sessionDisposed = false;
 
-  constructor(socket: Socket, notifier: Notifier) {
+  constructor(
+    socket: Socket<ServerToClientEvents, ClientToServerEvents>,
+    notifier: Notifier,
+  ) {
     super({ allowProposedApi: true });
     this.socket = socket;
     this.fitAddon = new FitAddon();
@@ -231,7 +238,10 @@ window.pressTAB = pressTAB;
 window.pressLEFT = pressLEFT;
 window.pressRIGHT = pressRIGHT;
 
-export function terminal(socket: Socket, notifier: Notifier): Term | undefined {
+export function terminal(
+  socket: Socket<ServerToClientEvents, ClientToServerEvents>,
+  notifier: Notifier,
+): Term | undefined {
   const term = new Term(socket, notifier);
   if (termElement === null) {
     term.dispose();

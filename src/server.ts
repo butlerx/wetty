@@ -17,9 +17,14 @@ import {
   defaultCommand,
 } from './shared/defaults.js';
 import { logger as getLogger } from './shared/logger.js';
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from './protocol/socket-events.js';
 import type { SSH, SSL, Server } from './shared/interfaces.js';
 import type { Express } from 'express';
 import type SocketIO from 'socket.io';
+import type { Socket as ServerSocket } from 'socket.io';
 
 export * from './shared/interfaces.js';
 export { logger as getLogger } from './shared/logger.js';
@@ -68,29 +73,34 @@ export async function decorateServerWithSsh(
    * Wetty server connected too
    * @fires WeTTy#connnection
    */
-  io.on('connection', async (socket: SocketIO.Socket) => {
-    /**
-     * @event wetty#connection
-     * @name connection
-     */
-    logger.info('Connection accepted.');
-    await runServerSession(socket, {
-      connections: wettyConnections,
-      getCommand: (session) =>
-        getCommand(socket, ssh, command, forcessh, session),
-      spawn: (args, session) => spawn(socket, args, session),
-      onCommand: (args) => {
-        logger.debug('Command Generated', {
-          cmd: logSafeArgs(args).join(' '),
-        });
-      },
-      onError: (error) => {
-        logger.info('Disconnect signal sent', { err: error });
-      },
-      onCleanupError: (error) => {
-        logger.warn('Session cleanup failed', { err: error });
-      },
-    });
-  });
+  io.on(
+    'connection',
+    async (
+      socket: ServerSocket<ClientToServerEvents, ServerToClientEvents>,
+    ) => {
+      /**
+       * @event wetty#connection
+       * @name connection
+       */
+      logger.info('Connection accepted.');
+      await runServerSession(socket, {
+        connections: wettyConnections,
+        getCommand: (session) =>
+          getCommand(socket, ssh, command, forcessh, session),
+        spawn: (args, session) => spawn(socket, args, session),
+        onCommand: (args) => {
+          logger.debug('Command Generated', {
+            cmd: logSafeArgs(args).join(' '),
+          });
+        },
+        onError: (error) => {
+          logger.info('Disconnect signal sent', { err: error });
+        },
+        onCleanupError: (error) => {
+          logger.warn('Session cleanup failed', { err: error });
+        },
+      });
+    },
+  );
   return io;
 }
