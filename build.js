@@ -1,24 +1,31 @@
 import { spawn } from 'node:child_process';
+import { pathToFileURL } from 'node:url';
 import * as esbuild from 'esbuild';
 import { copy } from 'esbuild-plugin-copy';
 import { sassPlugin } from 'esbuild-sass-plugin';
 
 /** @param {string} prog
  * @param {string[]} [args=[]]
- * @returns {[ChildProcess, Promise<{ret: number, sig: NodeJS.Signals}>]}
+ * @returns {Promise<void>}
  */
-function cmd(prog, args = []) {
+export function cmd(prog, args = []) {
   const proc = spawn(prog, args, {
     cwd: import.meta.dirname,
     stdio: 'inherit',
     env: process.env,
   });
-  const done = new Promise((resolve, _reject) => {
-    proc.addListener('exit', (ret, sig) => {
-      resolve({ ret, sig });
+  return new Promise((resolve, reject) => {
+    proc.once('error', reject);
+    proc.once('exit', (ret, sig) => {
+      if (ret === 0) {
+        resolve();
+        return;
+      }
+      const reason =
+        ret === null ? `signal ${String(sig)}` : `exit code ${String(ret)}`;
+      reject(new Error(`${prog} failed with ${reason}`));
     });
   });
-  return [proc, done];
 }
 
 /** @type import('esbuild').Plugin */
@@ -26,19 +33,7 @@ const typechecker = {
   name: 'typechecker',
   setup(build) {
     build.onStart(async () => {
-      const [_tsc, tscDone] = cmd('pnpm', [
-        'tsc',
-        '-p',
-        'tsconfig.browser.json',
-      ]);
-      const { ret } = await tscDone;
-      if (ret !== 0) {
-        return {
-          warnings: [
-            { text: `Type checking failed: tsc exited with code ${ret}` },
-          ],
-        };
-      }
+      await cmd('pnpm', ['tsc', '-p', 'tsconfig.browser.json']);
       return {};
     });
   },
@@ -82,7 +77,7 @@ async function buildClient(watching) {
     const buildCtx = await esbuild.context(esConf);
     await buildCtx.watch();
   } else {
-    esbuild.build(esConf);
+    await esbuild.build(esConf);
   }
 }
 
@@ -91,10 +86,19 @@ async function buildClient(watching) {
 async function buildServer(watching) {
   const tscArgs = ['tsc', '-p', 'tsconfig.node.json'];
   if (watching) tscArgs.push('--watch', '--preserveWatchOutput');
-  const [_tsc, tscDone] = cmd('pnpm', tscArgs);
+  const tscDone = cmd('pnpm', tscArgs);
   if (!watching) await tscDone;
 }
 
-const watching = process.argv.includes('--watch');
-await buildClient(watching);
-await buildServer(watching);
+export async function main() {
+  const watching = process.argv.includes('--watch');
+  await buildClient(watching);
+  await buildServer(watching);
+}
+
+if (
+  process.argv[1] !== undefined &&
+  import.meta.url === pathToFileURL(process.argv[1]).href
+) {
+  await main();
+}
