@@ -137,8 +137,27 @@ window.loadOptions = (config) => {
   });
 };
 
+function isRecord(value) {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isOptions(value) {
+  return (
+    isRecord(value) &&
+    isRecord(value.xterm) &&
+    typeof value.wettyFitTerminal === 'boolean' &&
+    typeof value.wettyVoid === 'number' &&
+    Number.isFinite(value.wettyVoid)
+  );
+}
+
 window.addEventListener('message', (e) => {
-  if (e.data?.type === 'wetty:load') {
+  if (e.origin !== window.location.origin || e.source !== window.parent) return;
+  if (
+    isRecord(e.data) &&
+    e.data.type === 'wetty:load' &&
+    isOptions(e.data.config)
+  ) {
     window.loadOptions(e.data.config);
   }
 });
@@ -172,11 +191,14 @@ function saveConfig() {
     setItem(newConfig, option.path, newValue);
   });
   if (hasInvalidJson) return;
-  window.parent.postMessage({ type: 'wetty:save', config: newConfig }, '*');
+  window.parent.postMessage(
+    { type: 'wetty:save', config: newConfig },
+    window.location.origin,
+  );
 }
 
 function closeConfig() {
-  window.parent.postMessage({ type: 'wetty:close' }, '*');
+  window.parent.postMessage({ type: 'wetty:close' }, window.location.origin);
 }
 
 window.addEventListener('input', saveConfig);

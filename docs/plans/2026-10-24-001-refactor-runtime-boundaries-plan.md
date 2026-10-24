@@ -485,7 +485,7 @@ PTY or flow-control state.
 
 ---
 
-- [ ] U6. **Validate configuration-editor messaging**
+- [x] U6. **Validate configuration-editor messaging**
 
 **Goal:** Restrict editor communication to the expected same-origin
 parent/iframe pair while preserving supported WeTTY embedding.
@@ -863,6 +863,11 @@ clear client feature directory.
   retain the existing Socket.IO ceiling, and commits cannot underflow flow
   control. Verified with protocol fixtures/decoder regressions, 109 passing
   tests, clean lint/type checks, and a successful production build.
+- 2026-10-24: U6 completed. Parent/editor messages now require the exact
+  same-origin window pair while foreign outer embedding remains supported.
+  Malformed messages are inert and load/save/error-recovery/persistence/close
+  behavior is preserved. Verified with 17 messaging tests, 124 passing tests,
+  clean lint/type checks, and a successful production build.
 
 ---
 

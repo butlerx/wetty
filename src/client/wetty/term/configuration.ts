@@ -22,13 +22,14 @@ export function configureTerm(term: Term): () => void {
   const editorElem = editor;
   const toggle: Element = foundToggle;
   const optionsElem: HTMLElement = foundOptions;
+  const applicationOrigin = window.location.origin;
   let active = true;
 
   function sendOptionsToEditor(): void {
     if (!active) return;
     editorElem.contentWindow?.postMessage(
       { type: 'wetty:load', config: loadOptions() },
-      '*',
+      applicationOrigin,
     );
   }
 
@@ -36,17 +37,51 @@ export function configureTerm(term: Term): () => void {
     sendOptionsToEditor();
   }
 
-  interface WettyMessage {
-    type: string;
-    config?: Options;
+  interface WettySaveMessage {
+    type: 'wetty:save';
+    config: Options;
+  }
+
+  interface WettyCloseMessage {
+    type: 'wetty:close';
+  }
+
+  function isRecord(value: unknown): value is Record<string, unknown> {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
+  }
+
+  function isOptions(value: unknown): value is Options {
+    if (!isRecord(value) || !isRecord(value.xterm)) return false;
+    return (
+      typeof value.wettyFitTerminal === 'boolean' &&
+      typeof value.wettyVoid === 'number' &&
+      Number.isFinite(value.wettyVoid)
+    );
+  }
+
+  function decodeEditorMessage(
+    value: unknown,
+  ): WettySaveMessage | WettyCloseMessage | null {
+    if (!isRecord(value) || typeof value.type !== 'string') return null;
+    if (value.type === 'wetty:close') return { type: 'wetty:close' };
+    if (value.type === 'wetty:save' && isOptions(value.config)) {
+      return { type: 'wetty:save', config: value.config };
+    }
+    return null;
   }
 
   function editorOnMessage(event: MessageEvent<unknown>): void {
-    if (!active) return;
-    const data = event.data as WettyMessage | null;
-    if (data?.type === 'wetty:save' && data.config !== undefined) {
-      onInput(term, data.config);
-    } else if (data?.type === 'wetty:close') {
+    if (
+      !active ||
+      event.origin !== applicationOrigin ||
+      event.source !== editorElem.contentWindow
+    ) {
+      return;
+    }
+    const message = decodeEditorMessage(event.data);
+    if (message?.type === 'wetty:save') {
+      onInput(term, message.config);
+    } else if (message?.type === 'wetty:close') {
       optionsElem.classList.toggle('opened');
     }
   }
