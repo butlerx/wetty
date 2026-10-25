@@ -122,46 +122,62 @@ export const listen = (
     allowedOrigins = [],
     allowMissingOrigin = false,
   }: ListenOptions,
-): Server<ClientToServerEvents, ServerToClientEvents> => {
+): Promise<Server<ClientToServerEvents, ServerToClientEvents>> => {
   const allowed = originAllowlist(allowedOrigins);
   // Canonical origins contain only the scheme and authority.
   const allowedHosts = new Set(
     [...allowed].map((origin) => origin.slice(origin.indexOf('://') + 3)),
   );
 
-  // Create the base HTTP/HTTPS server
-  const server =
+  const httpServer =
     key !== undefined && cert !== undefined
       ? https.createServer({ key, cert }, app)
       : http.createServer(app);
-
-  // Start listening on either Unix socket or TCP
-  if (socket) {
-    server.listen(socket, () => {
-      logger().info('Server listening on Unix socket', { socket });
-    });
-  } else {
-    server.listen(port, host, () => {
-      logger().info('Server started', {
-        port,
-        connection: key !== undefined && cert !== undefined ? 'https' : 'http',
-      });
-    });
-  }
-
-  // Create Socket.IO server
-  return new Server<ClientToServerEvents, ServerToClientEvents>(server, {
-    path: `${path}/socket.io`,
-    pingInterval: heartbeat(pingInterval, defaultPingInterval, 'pingInterval'),
-    pingTimeout: heartbeat(pingTimeout, defaultPingTimeout, 'pingTimeout'),
-    allowRequest: (req, callback) => {
-      const accepted = originAllowed(
-        req,
-        allowed,
-        allowedHosts,
-        allowMissingOrigin,
-      );
-      callback(accepted ? null : 'Origin not allowed', accepted);
+  const io = new Server<ClientToServerEvents, ServerToClientEvents>(
+    httpServer,
+    {
+      path: `${path}/socket.io`,
+      pingInterval: heartbeat(
+        pingInterval,
+        defaultPingInterval,
+        'pingInterval',
+      ),
+      pingTimeout: heartbeat(pingTimeout, defaultPingTimeout, 'pingTimeout'),
+      allowRequest: (req, callback) => {
+        const accepted = originAllowed(
+          req,
+          allowed,
+          allowedHosts,
+          allowMissingOrigin,
+        );
+        callback(accepted ? null : 'Origin not allowed', accepted);
+      },
     },
+  );
+
+  return new Promise((resolve, reject) => {
+    function onError(error: Error): void {
+      httpServer.removeListener('listening', onListening);
+      reject(error);
+    }
+
+    function onListening(): void {
+      httpServer.removeListener('error', onError);
+      if (socket) {
+        logger().info('Server listening on Unix socket', { socket });
+      } else {
+        logger().info('Server started', {
+          port,
+          connection:
+            key !== undefined && cert !== undefined ? 'https' : 'http',
+        });
+      }
+      resolve(io);
+    }
+
+    httpServer.once('error', onError);
+    httpServer.once('listening', onListening);
+    if (socket) httpServer.listen(socket);
+    else httpServer.listen(port, host);
   });
 };

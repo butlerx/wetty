@@ -9,6 +9,7 @@ import { tinybuffer, FlowControlServer } from '../flowcontrol.js';
 import { logger as getLogger } from '../observability/logger.js';
 import { writePtyInput } from '../pty/input.js';
 import { xterm } from '../pty/options.js';
+import { terminatePty } from '../pty/terminate.js';
 import { envVersionOr } from './env.js';
 import { logSafeArgs } from './log-safety.js';
 import { parseDimensions } from './resize.js';
@@ -21,7 +22,7 @@ interface Disposable {
 
 export interface SpawnPty {
   readonly pid: number;
-  kill(): void;
+  kill(signal?: string): void;
   onData(listener: (data: string) => void): Disposable;
   onExit(listener: (event: { exitCode: number }) => void): Disposable;
   pause(): void;
@@ -55,12 +56,11 @@ export async function spawn(
   const cmd = version >= 9 ? ['-S', ...args] : args;
   logger.debug('Spawning PTY', { cmd: logSafeArgs(cmd) });
   const term = dependencies.spawnPty(cmd);
-  let exited = false;
-  let terminated = false;
+  let ptyStatus: 'running' | 'exited' | 'terminated' = 'running';
   function terminate(): void {
-    if (exited || terminated) return;
-    terminated = true;
-    term.kill();
+    if (ptyStatus !== 'running') return;
+    terminatePty(term);
+    ptyStatus = 'terminated';
   }
 
   const releaseTerm = session.own(terminate);
@@ -145,7 +145,7 @@ export async function spawn(
   try {
     exitListener = term.onExit(({ exitCode }) => {
       if (!session.active) return;
-      exited = true;
+      ptyStatus = 'exited';
       logger.info('Process exited', { exitCode, pid });
       socket.emit('logout');
       session.end('pty-exit');

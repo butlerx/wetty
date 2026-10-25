@@ -64,7 +64,7 @@ function createPtyHarness() {
   let pauseCount = 0;
   let resumeCount = 0;
   const pty: LoginPty & SpawnPty = {
-    pid: 123,
+    pid: -1,
     kill() {
       killCount += 1;
     },
@@ -342,6 +342,63 @@ describe('server socket session lifecycle', () => {
 
     expect(await username).to.equal('alice');
     expect(pty.writes).to.deep.equal(['alice']);
+  });
+
+  it('accepts the exact interactive login username limit', async () => {
+    const socket = createSocketHarness();
+    const session = createServerSession(socket.socket);
+    const pty = createPtyHarness();
+    const pendingLogin = login(socket.socket, session, {
+      spawnPty: () => pty.pty,
+    });
+
+    socket.trigger('input', 'ignored binary', true);
+    socket.trigger('input', 'a'.repeat(128));
+    socket.trigger('input', 'b'.repeat(128));
+    pty.triggerExit();
+
+    expect(await pendingLogin).to.equal(`${'a'.repeat(128)}${'b'.repeat(128)}`);
+    expect(pty.writes).to.deep.equal(['a'.repeat(128), 'b'.repeat(128)]);
+  });
+
+  it('accounts for delete characters in interactive login input', async () => {
+    const socket = createSocketHarness();
+    const session = createServerSession(socket.socket);
+    const pty = createPtyHarness();
+    const pendingLogin = login(socket.socket, session, {
+      spawnPty: () => pty.pty,
+    });
+
+    socket.trigger('input', 'abc');
+    socket.trigger('input', '\x7F');
+    pty.triggerExit();
+
+    expect(await pendingLogin).to.equal('ab');
+  });
+
+  it('rejects aggregate interactive login input above the username limit', async () => {
+    const socket = createSocketHarness();
+    const session = createServerSession(socket.socket);
+    const pty = createPtyHarness();
+    const pendingLogin = login(socket.socket, session, {
+      spawnPty: () => pty.pty,
+    });
+
+    socket.trigger('input', 'a'.repeat(128));
+    socket.trigger('input', 'b'.repeat(129));
+    let rejection: unknown;
+    try {
+      await pendingLogin;
+    } catch (error) {
+      rejection = error;
+    }
+
+    expect(rejection).to.be.instanceOf(SessionEndError);
+    expect((rejection as SessionEndError).reason).to.equal('login-rejected');
+    expect(await session.completion).to.equal('login-rejected');
+    expect(pty.writes).to.deep.equal(['a'.repeat(128)]);
+    expect(pty.killCount).to.equal(1);
+    expect(socket.listenerCount('input')).to.equal(0);
   });
 
   it('rejects login disconnect and removes temporary listener authority', async () => {

@@ -217,6 +217,14 @@ describe('terminal configuration lifecycle', () => {
         type: 'wetty:save',
         config: { wettyFitTerminal: 'yes', wettyVoid: 0, xterm: {} },
       },
+      {
+        type: 'wetty:save',
+        config: {
+          wettyFitTerminal: true,
+          wettyVoid: 0,
+          xterm: { fontSize: 'large' },
+        },
+      },
     ]) {
       dispatchEditorMessage(data);
     }

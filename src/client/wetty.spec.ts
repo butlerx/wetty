@@ -308,6 +308,34 @@ describe('browser terminal session lifecycle', () => {
     expect(harness.state.terminalReference).to.equal(undefined);
   });
 
+  it('continues cleanup when an owned disposer throws', () => {
+    const secondListenerDispose = sinon.spy();
+    const term = {
+      dispose: sinon.spy(),
+      focus: sinon.spy(),
+      input: sinon.spy(),
+      onBinary: () => ({ dispose: secondListenerDispose }),
+      onData: () => ({
+        dispose: () => {
+          throw new Error('listener cleanup failed');
+        },
+      }),
+      resizeTerm: sinon.spy(),
+      write: sinon.spy(),
+      writeln: sinon.spy(),
+    } satisfies SessionTerminal;
+    const harness = createSessionHarness([term]);
+    createBrowserSession(harness.dependencies);
+
+    harness.socket.trigger('disconnect', 'transport closed');
+
+    expect(secondListenerDispose.calledOnce).to.equal(true);
+    expect(term.dispose.calledOnce).to.equal(true);
+    expect(harness.state.terminalReference).to.equal(undefined);
+    expect(harness.state.overlayVisible).to.equal(true);
+    expect(harness.state.disconnectedReason).to.equal('transport closed');
+  });
+
   it('allows repeated disposal without clearing a replacement reference', () => {
     const first = createTerminalHarness();
     const replacement = createTerminalHarness();

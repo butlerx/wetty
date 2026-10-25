@@ -4,6 +4,9 @@ import type {
 } from '../../../protocol/socket-events.js';
 import type { Socket } from 'socket.io-client';
 
+type BrowserSessionState = { status: 'active' } | { status: 'disposed' };
+type SessionControllerState = { status: 'active' } | { status: 'disposed' };
+
 interface Disposable {
   dispose(): void;
 }
@@ -82,7 +85,7 @@ export function createBrowserSession(
   const fileDownloader = createFileDownloader();
   const flowControl = createFlowControl();
   const terminalListeners: Disposable[] = [];
-  let active = true;
+  let state: BrowserSessionState = { status: 'active' };
   let beforeUnloadAttached = false;
 
   function removeBeforeUnloadListener(): void {
@@ -96,19 +99,19 @@ export function createBrowserSession(
   }
 
   function onWindowResize(): void {
-    if (active) term.resizeTerm();
+    if (state.status === 'active') term.resizeTerm();
   }
 
   function onTerminalData(data: string): void {
-    if (active) socket.emit('input', data);
+    if (state.status === 'active') socket.emit('input', data);
   }
 
   function onTerminalBinary(data: string): void {
-    if (active) socket.emit('input', data, true);
+    if (state.status === 'active') socket.emit('input', data, true);
   }
 
   function onSocketData(data: string): void {
-    if (!active) return;
+    if (state.status === 'disposed') return;
     const remainingData = fileDownloader.buffer(data);
     const downloadLength = data.length - remainingData.length;
     if (downloadLength && flowControl.needsCommit(downloadLength)) {
@@ -117,7 +120,9 @@ export function createBrowserSession(
     if (!remainingData) return;
     if (flowControl.needsCommit(remainingData.length)) {
       term.write(remainingData, () => {
-        if (active) socket.emit('commit', flowControl.ackBytes);
+        if (state.status === 'active') {
+          socket.emit('commit', flowControl.ackBytes);
+        }
       });
       return;
     }
@@ -125,34 +130,65 @@ export function createBrowserSession(
   }
 
   function onLogin(): void {
-    if (!active) return;
+    if (state.status === 'disposed') return;
     term.writeln('');
     term.resizeTerm();
   }
 
   function onDisconnect(reason?: string): void {
-    if (!active) return;
-    dispose();
-    showDisconnected(reason);
+    if (state.status === 'disposed') return;
+    try {
+      dispose();
+    } finally {
+      showDisconnected(reason);
+    }
   }
 
   function onError(error: string | null): void {
-    if (active && error) onDisconnect(error);
+    if (state.status === 'active' && error) onDisconnect(error);
+  }
+
+  function cleanup(action: () => void): void {
+    try {
+      action();
+    } catch {
+      // Continue releasing the remaining resources for this dead session.
+    }
   }
 
   function dispose(): void {
-    if (!active) return;
-    active = false;
-    removeBeforeUnloadListener();
-    windowTarget.removeEventListener('resize', onWindowResize, false);
-    socket.off('data', onSocketData);
-    socket.off('login', onLogin);
-    socket.off('logout', onDisconnect);
-    socket.off('disconnect', onDisconnect);
-    socket.off('error', onError);
-    for (const listener of terminalListeners) listener.dispose();
-    clearTerminalReference(term);
-    term.dispose();
+    if (state.status === 'disposed') return;
+    state = { status: 'disposed' };
+    cleanup(removeBeforeUnloadListener);
+    cleanup(() => {
+      windowTarget.removeEventListener('resize', onWindowResize, false);
+    });
+    cleanup(() => {
+      socket.off('data', onSocketData);
+    });
+    cleanup(() => {
+      socket.off('login', onLogin);
+    });
+    cleanup(() => {
+      socket.off('logout', onDisconnect);
+    });
+    cleanup(() => {
+      socket.off('disconnect', onDisconnect);
+    });
+    cleanup(() => {
+      socket.off('error', onError);
+    });
+    for (const listener of terminalListeners) {
+      cleanup(() => {
+        listener.dispose();
+      });
+    }
+    cleanup(() => {
+      clearTerminalReference(term);
+    });
+    cleanup(() => {
+      term.dispose();
+    });
   }
 
   try {
@@ -183,10 +219,10 @@ export function createSessionController(
   dependencies: BrowserSessionDependencies,
 ): BrowserSession {
   let activeSession: BrowserSession | undefined;
-  let disposed = false;
+  let state: SessionControllerState = { status: 'active' };
 
   function onConnect(): void {
-    if (disposed) return;
+    if (state.status === 'disposed') return;
     activeSession?.dispose();
     activeSession = undefined;
     try {
@@ -204,8 +240,8 @@ export function createSessionController(
 
   return {
     dispose(): void {
-      if (disposed) return;
-      disposed = true;
+      if (state.status === 'disposed') return;
+      state = { status: 'disposed' };
       dependencies.socket.off('connect', onConnect);
       activeSession?.dispose();
       activeSession = undefined;

@@ -9,6 +9,7 @@ import {
 import { logger as getLogger } from './observability/logger.js';
 import { writePtyInput } from './pty/input.js';
 import { xterm } from './pty/options.js';
+import { terminatePty } from './pty/terminate.js';
 import { SessionEndError } from './session.js';
 import type { ServerSession } from './session.js';
 import type { Socket } from 'socket.io';
@@ -18,7 +19,8 @@ interface Disposable {
 }
 
 export interface LoginPty {
-  kill(): void;
+  readonly pid: number;
+  kill(signal?: string): void;
   onData(listener: (data: string) => void): Disposable;
   onExit(listener: (event: { exitCode: number }) => void): Disposable;
   write(data: string | Buffer): void;
@@ -33,6 +35,7 @@ const executable = resolvePath(
   '..',
   'buffer.js',
 );
+const MAX_INTERACTIVE_LOGIN_LENGTH = 256;
 
 function isSessionActive(session: ServerSession): boolean {
   return session.active;
@@ -57,11 +60,11 @@ export function login(
 
   // Request carries no username information, so create a temporary terminal.
   const term = dependencies.spawnPty();
-  let killed = false;
+  let ptyStatus: 'running' | 'exited' | 'terminated' = 'running';
   function terminate(): void {
-    if (killed) return;
-    killed = true;
-    term.kill();
+    if (ptyStatus !== 'running') return;
+    terminatePty(term);
+    ptyStatus = 'terminated';
   }
 
   if (!isSessionActive(session)) {
@@ -76,7 +79,6 @@ export function login(
 
   return new Promise<string>((resolve, reject) => {
     let buffer = '';
-    let exited = false;
     let released = false;
     let settled = false;
     let dataListener: Disposable | undefined;
@@ -113,7 +115,7 @@ export function login(
       cleanup(() => {
         exitListener?.dispose();
       });
-      if (!exited) cleanup(terminate);
+      if (ptyStatus === 'running') cleanup(terminate);
     }
 
     function release(): void {
@@ -143,12 +145,24 @@ export function login(
         logger.debug('Ignoring invalid interactive login input');
         return;
       }
-      writePtyInput(term, payload.input, payload.binary);
-      if (payload.binary) return;
-      // eslint-disable-next-line no-control-regex
-      buffer = /\x0177/.exec(payload.input)
-        ? buffer.slice(0, -1)
-        : buffer + payload.input;
+      if (payload.binary) {
+        logger.debug('Ignoring binary interactive login input');
+        return;
+      }
+      let updatedBuffer = buffer;
+      for (const character of payload.input) {
+        updatedBuffer =
+          character === '\x7F'
+            ? updatedBuffer.slice(0, -1)
+            : updatedBuffer + character;
+        if (updatedBuffer.length > MAX_INTERACTIVE_LOGIN_LENGTH) {
+          logger.warn('Interactive login input exceeded the username limit');
+          session.end('login-rejected');
+          return;
+        }
+      }
+      writePtyInput(term, payload.input, false);
+      buffer = updatedBuffer;
     }
 
     function onDisconnect(): void {
@@ -175,7 +189,7 @@ export function login(
       }
       exitListener = term.onExit(({ exitCode }) => {
         if (settled || !session.active) return;
-        exited = true;
+        ptyStatus = 'exited';
         // eslint-disable-next-line no-console
         console.error(`Process exited with code: ${String(exitCode)}`);
         resolveLogin();

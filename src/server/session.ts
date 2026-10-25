@@ -13,6 +13,8 @@ export type SessionEndReason =
   | 'disposed';
 
 type Cleanup = () => void;
+type ServerSessionState =
+  { status: 'active' } | { status: 'ended'; reason: SessionEndReason };
 
 export interface ServerSession {
   readonly active: boolean;
@@ -40,8 +42,7 @@ export function createServerSession(
 ): ServerSession {
   const abortController = new AbortController();
   const cleanups: Cleanup[] = [];
-  let active = true;
-  let endReason: SessionEndReason | undefined;
+  let state: ServerSessionState = { status: 'active' };
   let resolveCompletion: (reason: SessionEndReason) => void = () => undefined;
   const completion = new Promise<SessionEndReason>((resolve) => {
     resolveCompletion = resolve;
@@ -69,15 +70,14 @@ export function createServerSession(
       }
     }
 
-    if (active) cleanups.push(release);
+    if (state.status === 'active') cleanups.push(release);
     else release();
     return release;
   }
 
   function end(reason: SessionEndReason): void {
-    if (!active) return;
-    active = false;
-    endReason = reason;
+    if (state.status === 'ended') return;
+    state = { status: 'ended', reason };
     try {
       socket.off('disconnect', onDisconnect);
     } catch (error) {
@@ -98,11 +98,11 @@ export function createServerSession(
 
   const session: ServerSession = {
     get active() {
-      return active;
+      return state.status === 'active';
     },
     completion,
     get reason() {
-      return endReason;
+      return state.status === 'ended' ? state.reason : undefined;
     },
     signal: abortController.signal,
     end,

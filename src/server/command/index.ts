@@ -25,7 +25,6 @@ const urlArgs = (
   },
 ): Record<string, string> => {
   const allowedKeys = new Set([
-    'pass',
     ...(allowRemoteCommand ? ['command', 'path'] : []),
     ...(allowRemoteHosts ? ['port', 'host'] : []),
   ]);

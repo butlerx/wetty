@@ -37,12 +37,6 @@ export interface RegisteredOption extends OptionDefinition {
   set: (value: unknown) => void;
 }
 
-declare global {
-  interface Window {
-    closeConfig: () => void;
-  }
-}
-
 const allOptions: RegisteredOption[] = [];
 
 function requireElement(parent: ParentNode, selector: string): HTMLElement {
@@ -142,7 +136,7 @@ export function inflateOptions(
         const select = requireElement(wrapper, 'select') as HTMLSelectElement;
         option.enum?.forEach((variant) => {
           const optionElement = document.createElement('option');
-          optionElement.innerText = variant;
+          optionElement.textContent = variant;
           optionElement.value = variant;
           select.appendChild(optionElement);
         });
@@ -181,8 +175,8 @@ export function inflateOptions(
     }
 
     option.el = requireElement(wrapper, ':scope > div');
-    requireElement(option.el, '.title').innerText = option.name;
-    requireElement(option.el, '.desc').innerText = option.description;
+    requireElement(option.el, '.title').textContent = option.name;
+    requireElement(option.el, '.desc').textContent = option.description;
     option.el.dataset.optionName = option.name;
     copyChildren(wrapper, target);
     allOptions.push(option as RegisteredOption);

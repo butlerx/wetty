@@ -8,7 +8,7 @@ import { terminal as termElement } from '../disconnect/elements';
 import { Notifier } from '../notifications';
 import { setTitle } from '../title';
 import { configureTerm } from './configuration';
-import './controls';
+import { createTerminalControls } from './controls';
 import { loadOptions } from './load';
 import type { Options } from './options';
 import type {
@@ -22,6 +22,8 @@ const isMobile =
     navigator.userAgent,
   );
 const isWindows = /Windows/i.test(navigator.userAgent);
+const controls = createTerminalControls();
+controls.install();
 
 export class Term extends Terminal {
   socket: Socket<ServerToClientEvents, ClientToServerEvents>;
@@ -71,9 +73,17 @@ export class Term extends Terminal {
   override dispose(): void {
     if (this.sessionDisposed) return;
     this.sessionDisposed = true;
-    this.configurationDisposer?.();
+    const disposeConfiguration = this.configurationDisposer;
     this.configurationDisposer = undefined;
-    super.dispose();
+    try {
+      disposeConfiguration?.();
+    } finally {
+      try {
+        controls.reset();
+      } finally {
+        super.dispose();
+      }
+    }
   }
 }
 

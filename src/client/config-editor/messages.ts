@@ -21,12 +21,17 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 export function isOptions(value: unknown): value is Options {
+  if (!isRecord(value) || !isRecord(value.xterm)) return false;
+  const { cols, fontSize, rows } = value.xterm;
   return (
-    isRecord(value) &&
-    isRecord(value.xterm) &&
     typeof value.wettyFitTerminal === 'boolean' &&
     typeof value.wettyVoid === 'number' &&
-    Number.isFinite(value.wettyVoid)
+    Number.isFinite(value.wettyVoid) &&
+    typeof fontSize === 'number' &&
+    Number.isFinite(fontSize) &&
+    (cols === undefined ||
+      (typeof cols === 'number' && Number.isFinite(cols))) &&
+    (rows === undefined || (typeof rows === 'number' && Number.isFinite(rows)))
   );
 }
 

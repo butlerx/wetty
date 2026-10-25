@@ -304,6 +304,14 @@ describe('bundled xterm configuration editor', () => {
         type: 'wetty:load',
         config: { wettyFitTerminal: 'yes', wettyVoid: 0, xterm: {} },
       },
+      {
+        type: 'wetty:load',
+        config: {
+          wettyFitTerminal: true,
+          wettyVoid: 0,
+          xterm: { fontSize: 'large' },
+        },
+      },
     ]) {
       dispatchParentMessage(harness, data);
     }

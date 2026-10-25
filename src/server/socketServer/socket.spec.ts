@@ -28,7 +28,7 @@ const probeHandshake = async ({
   secFetchSite,
   allowMissingOrigin = false,
 }: ProbeOptions): Promise<number> => {
-  const io = listen(express(), {
+  const io = await listen(express(), {
     host: '127.0.0.1',
     port: 0,
     path: '',
@@ -227,6 +227,33 @@ describe('Socket.IO origin validation', () => {
         transport: 'polling',
       }),
     ).to.equal(403);
+  });
+
+  it('rejects when the HTTP server cannot bind', async () => {
+    const occupied = http.createServer();
+    occupied.listen(0, '127.0.0.1');
+    await once(occupied, 'listening');
+    const { port } = occupied.address() as AddressInfo;
+
+    try {
+      let failure: unknown;
+      try {
+        await listen(express(), {
+          host: '127.0.0.1',
+          port,
+          path: '',
+          ssl: {},
+          allowedOrigins: ['http://terminal.example'],
+        });
+      } catch (error) {
+        failure = error;
+      }
+      expect(failure).to.be.instanceOf(Error);
+      expect((failure as NodeJS.ErrnoException).code).to.equal('EADDRINUSE');
+    } finally {
+      occupied.close();
+      await once(occupied, 'close');
+    }
   });
 
   it('requires a nonempty configured origin allowlist before listening', () => {

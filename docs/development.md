@@ -39,5 +39,11 @@ the user logged out.
   must not import either implementation tree.
 - `src/server.ts` is the public package compatibility facade for
   `build/server.js`.
-- The remaining `command.ts`, `spawn.ts`, `socketServer.ts`, and `term.ts`
-  file/directory collisions are intentionally handled by later plan units.
+- Feature entrypoints are explicit: `src/server/command/index.ts`,
+  `src/server/spawn/index.ts`, `src/server/socketServer/index.ts`, and
+  `src/client/wetty/term/index.ts`.
+
+Lifecycle state should follow the same pattern across runtimes: keep a small
+discriminated state inside a functional closure, expose named transitions, and
+make disposal idempotent. Use string-literal `status` unions instead of runtime
+enums, and avoid mutable module globals for per-session state.

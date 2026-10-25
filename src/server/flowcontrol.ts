@@ -95,12 +95,12 @@ export class FlowControlServer {
   public account(length: number): boolean {
     const old = this.counter;
     this.counter += length;
-    return old < this.high && this.counter > this.high;
+    return old < this.high && this.counter >= this.high;
   }
 
   public commit(length: number): boolean {
     const old = this.counter;
     this.counter -= length;
-    return old > this.low && this.counter < this.low;
+    return old > this.low && this.counter <= this.low;
   }
 }

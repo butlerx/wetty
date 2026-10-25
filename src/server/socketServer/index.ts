@@ -53,8 +53,11 @@ export async function server(
     .use(
       winston.logger({
         winstonInstance: logger(),
-        expressFormat: true,
+        expressFormat: false,
         level: 'http',
+        msg: 'HTTP {{req.method}} {{res.statusCode}} {{res.responseTime}}ms',
+        requestWhitelist: ['method', 'httpVersion'],
+        responseWhitelist: ['statusCode', 'responseTime'],
       }),
     )
     .use(compression())
