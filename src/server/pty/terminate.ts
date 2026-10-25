@@ -1,9 +1,20 @@
+interface Disposable {
+  dispose(): void;
+}
+
 export interface KillablePty {
   readonly pid?: number;
   kill(signal?: string): void;
+  onExit(listener: (event: { exitCode: number }) => void): Disposable;
 }
 
 type SignalProcess = (pid: number, signal: NodeJS.Signals | 0) => void;
+
+interface TerminationOptions {
+  graceMs?: number;
+  reportError?: (error: unknown) => void;
+  signalProcess?: SignalProcess;
+}
 
 function processIsGone(error: unknown): boolean {
   return (
@@ -15,10 +26,20 @@ function processIsGone(error: unknown): boolean {
 
 export function terminatePty(
   term: KillablePty,
-  signalProcess: SignalProcess = (pid, signal) => {
-    process.kill(pid, signal);
-  },
+  {
+    graceMs = 250,
+    reportError = () => undefined,
+    signalProcess = (pid, signal) => {
+      process.kill(pid, signal);
+    },
+  }: TerminationOptions = {},
 ): void {
+  let escalation: NodeJS.Timeout | undefined;
+  const exitListener = term.onExit(() => {
+    if (escalation !== undefined) clearTimeout(escalation);
+    exitListener.dispose();
+  });
+
   let gracefulError: unknown;
   try {
     term.kill();
@@ -27,29 +48,34 @@ export function terminatePty(
   }
 
   if (process.platform === 'win32' || term.pid === undefined || term.pid <= 0) {
-    if (gracefulError !== undefined) {
-      throw gracefulError instanceof Error
-        ? gracefulError
-        : new Error('PTY termination failed', { cause: gracefulError });
-    }
+    exitListener.dispose();
+    if (gracefulError !== undefined) reportError(gracefulError);
     return;
   }
 
-  try {
-    signalProcess(term.pid, 0);
-  } catch (error) {
-    if (processIsGone(error)) return;
-    gracefulError ??= error;
-  }
+  escalation = setTimeout(() => {
+    try {
+      signalProcess(term.pid ?? 0, 0);
+    } catch (error) {
+      exitListener.dispose();
+      if (!processIsGone(error)) reportError(gracefulError ?? error);
+      return;
+    }
 
-  try {
-    signalProcess(term.pid, 'SIGKILL');
-  } catch (forcedError) {
-    throw new AggregateError(
-      gracefulError === undefined
-        ? [forcedError]
-        : [gracefulError, forcedError],
-      'Unable to terminate PTY',
-    );
-  }
+    try {
+      signalProcess(term.pid ?? 0, 'SIGKILL');
+    } catch (forcedError) {
+      reportError(
+        new AggregateError(
+          gracefulError === undefined
+            ? [forcedError]
+            : [gracefulError, forcedError],
+          'Unable to terminate PTY',
+        ),
+      );
+    } finally {
+      exitListener.dispose();
+    }
+  }, graceMs);
+  escalation.unref();
 }

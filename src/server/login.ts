@@ -63,7 +63,11 @@ export function login(
   let ptyStatus: 'running' | 'exited' | 'terminated' = 'running';
   function terminate(): void {
     if (ptyStatus !== 'running') return;
-    terminatePty(term);
+    terminatePty(term, {
+      reportError: (error) => {
+        session.reportCleanupError(error);
+      },
+    });
     ptyStatus = 'terminated';
   }
 
