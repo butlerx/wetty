@@ -170,6 +170,24 @@ function runtimeCycle(): string[] | undefined {
 }
 
 describe('runtime ownership boundaries', () => {
+  it('keeps server feature directories free of same-named sibling files', () => {
+    const entries = readdirSync(serverRoot, { withFileTypes: true });
+    const directories = new Set(
+      entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name),
+    );
+    const collisions = entries
+      .filter(
+        (entry) =>
+          entry.isFile() &&
+          entry.name.endsWith('.ts') &&
+          directories.has(entry.name.slice(0, -3)),
+      )
+      .map((entry) => entry.name.slice(0, -3))
+      .sort();
+
+    expect(collisions).to.deep.equal([]);
+  });
+
   it('keeps server production modules out of generic shared directories', () => {
     expect(existsSync(resolve(sourceRoot, 'shared'))).to.equal(false);
     expect(existsSync(resolve(serverRoot, 'shared'))).to.equal(false);

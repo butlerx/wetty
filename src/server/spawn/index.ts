@@ -4,15 +4,15 @@ import {
   parseInputPayload,
   type ClientToServerEvents,
   type ServerToClientEvents,
-} from '../protocol/socket-events.js';
-import { tinybuffer, FlowControlServer } from './flowcontrol.js';
-import { logger as getLogger } from './observability/logger.js';
-import { writePtyInput } from './pty/input.js';
-import { xterm } from './pty/options.js';
-import { envVersionOr } from './spawn/env.js';
-import { logSafeArgs } from './spawn/log-safety.js';
-import { parseDimensions } from './spawn/resize.js';
-import type { ServerSession } from './session.js';
+} from '../../protocol/socket-events.js';
+import { tinybuffer, FlowControlServer } from '../flowcontrol.js';
+import { logger as getLogger } from '../observability/logger.js';
+import { writePtyInput } from '../pty/input.js';
+import { xterm } from '../pty/options.js';
+import { envVersionOr } from './env.js';
+import { logSafeArgs } from './log-safety.js';
+import { parseDimensions } from './resize.js';
+import type { ServerSession } from '../session.js';
 import type { Socket } from 'socket.io';
 
 interface Disposable {

@@ -1,13 +1,13 @@
 import process from 'node:process';
-import { address } from './command/address.js';
-import { loginOptions } from './command/login.js';
-import { sshOptions } from './command/ssh.js';
-import type { ServerSession } from './session.js';
+import { address } from './address.js';
+import { loginOptions } from './login.js';
+import { sshOptions } from './ssh.js';
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
-} from '../protocol/socket-events.js';
-import type { SSH } from './config/types.js';
+} from '../../protocol/socket-events.js';
+import type { SSH } from '../config/types.js';
+import type { ServerSession } from '../session.js';
 import type { Socket } from 'socket.io';
 
 const localhost = (host: string): boolean =>

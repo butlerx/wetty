@@ -1,19 +1,19 @@
 import compression from 'compression';
 import winston from 'express-winston';
-import { logger } from './observability/logger.js';
-import { serveStatic, trim } from './socketServer/assets.js';
-import { html } from './socketServer/html.js';
-import { metricMiddleware, metricRoute } from './socketServer/metrics.js';
-import { redirect } from './socketServer/middleware.js';
-import { policies } from './socketServer/security.js';
-import { assetsPath } from './socketServer/shared/path.js';
-import { listen } from './socketServer/socket.js';
-import { loadSSL } from './socketServer/ssl.js';
+import { logger } from '../observability/logger.js';
+import { serveStatic, trim } from './assets.js';
+import { html } from './html.js';
+import { metricMiddleware, metricRoute } from './metrics.js';
+import { redirect } from './middleware.js';
+import { policies } from './security.js';
+import { assetsPath } from './shared/path.js';
+import { listen } from './socket.js';
+import { loadSSL } from './ssl.js';
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
-} from '../protocol/socket-events.js';
-import type { SSL, SSLBuffer, Server } from './config/types.js';
+} from '../../protocol/socket-events.js';
+import type { SSL, SSLBuffer, Server } from '../config/types.js';
 import type { Express } from 'express';
 import type { Server as SocketServer } from 'socket.io';
 

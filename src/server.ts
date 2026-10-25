@@ -4,7 +4,7 @@
  */
 import express from 'express';
 import { Gauge, collectDefaultMetrics } from 'prom-client';
-import { getCommand } from './server/command.js';
+import { getCommand } from './server/command/index.js';
 import {
   sshDefault,
   serverDefault,
@@ -14,9 +14,9 @@ import {
 import { observeGC } from './server/metrics.js';
 import { logger as getLogger } from './server/observability/logger.js';
 import { runServerSession } from './server/session.js';
-import { server } from './server/socketServer.js';
+import { server } from './server/socketServer/index.js';
+import { spawn } from './server/spawn/index.js';
 import { logSafeArgs } from './server/spawn/log-safety.js';
-import { spawn } from './server/spawn.js';
 import type {
   ClientToServerEvents,
   ServerToClientEvents,

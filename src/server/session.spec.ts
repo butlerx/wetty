@@ -9,7 +9,7 @@ import {
   runServerSession,
   SessionEndError,
 } from './session';
-import { spawn, type SpawnPty } from './spawn';
+import { spawn, type SpawnPty } from './spawn/index.js';
 import type { Socket } from 'socket.io';
 
 type Listener = (...args: unknown[]) => void;

@@ -678,7 +678,7 @@ config, defaults, environment, and logging under server-owned modules.
 
 ---
 
-- [ ] U9. **Resolve server file-and-directory collisions**
+- [x] U9. **Resolve server file-and-directory collisions**
 
 **Goal:** Make command, spawn, and socket-server features navigable without
 changing their public behavior or package output.
@@ -887,6 +887,12 @@ clear client feature directory.
   checks include dynamic imports, and the development guide records ownership.
   Verified with seven boundary/facade tests, 142 passing tests, clean lint/type
   checks, a clean build, public API import, and CLI help smoke tests.
+- 2026-10-24: U9 completed. Command, spawn, and socket-server implementations
+  now use explicit feature-directory entry modules with no same-named sibling
+  files. Clean package installation preserves public API/CLI contracts, editor
+  artifacts, notification icons, and service worker output. Verified with 143
+  passing tests, clean lint/type checks, clean build/package smoke tests, and a
+  cycle-free runtime graph.
 
 ---
 
