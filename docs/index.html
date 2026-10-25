@@ -30,17 +30,31 @@
     <link rel="manifest" href="assets/img/site.webmanifest" />
 
     <!-- Theme -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable/dist/css/theme-simple.css"> -->
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/docsify-themeable/dist/css/theme-simple.css"
+      href="https://cdn.jsdelivr.net/npm/docsify@5/dist/themes/core.min.css"
+    />
+    <link
+      id="docsify-dark-mode"
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/docsify@5/dist/themes/addons/core-dark.min.css"
+      media="(prefers-color-scheme: dark)"
     />
     <link rel="stylesheet" href="assets/css/main.css" />
+    <script>
+      (function () {
+        const saved = localStorage.getItem('docsify-dark-mode');
+        const darkSheet = document.getElementById('docsify-dark-mode');
+        if (darkSheet && (saved === 'dark' || saved === 'light')) {
+          darkSheet.media = saved === 'dark' ? 'all' : 'not all';
+        }
+      })();
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/docsify-edit-on-github"></script>
   </head>
 
-  <body>
+  <body class="loading sidebar-chevron-right sidebar-group-box">
     <div id="app">Please wait...</div>
     <script>
       window.$docsify = {
@@ -49,7 +63,6 @@
         name: 'WeTTY = Web + TTY',
         repo: 'https://github.com/butlerx/wetty',
         homepage: 'README.md',
-        loadSidebar: true,
         loadSidebar: 'sidebar.md',
         auto2top: true,
         executeScript: true,
@@ -62,7 +75,56 @@
           EditOnGithubPlugin.create(
             'https://github.com/butlerx/wetty/tree/master/docs/',
           ),
+          function (hook) {
+            hook.mounted(function () {
+              const darkSheet = document.getElementById('docsify-dark-mode');
+              if (!darkSheet) return;
+
+              const sunIcon =
+                '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+              const moonIcon =
+                '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+
+              function isDarkActive() {
+                if (darkSheet.media === 'all') return true;
+                if (darkSheet.media === 'not all') return false;
+                return window.matchMedia('(prefers-color-scheme: dark)').matches;
+              }
+
+              const btn = document.createElement('button');
+              btn.className = 'dark-mode-toggle';
+
+              function renderButton() {
+                const dark = isDarkActive();
+                btn.innerHTML = dark ? sunIcon : moonIcon;
+                const label = dark
+                  ? 'Switch to light mode'
+                  : 'Switch to dark mode';
+                btn.setAttribute('aria-label', label);
+                btn.setAttribute('title', label);
+              }
+
+              btn.addEventListener('click', function () {
+                const nextDark = !isDarkActive();
+                darkSheet.media = nextDark ? 'all' : 'not all';
+                localStorage.setItem(
+                  'docsify-dark-mode',
+                  nextDark ? 'dark' : 'light',
+                );
+                renderButton();
+              });
+
+              renderButton();
+              document.body.appendChild(btn);
+            });
+          },
         ],
+        pagination: {
+          previousText: 'Previous',
+          nextText: 'Next',
+          crossChapter: true,
+          crossChapterText: true,
+        },
         search: {
           noData: {
             '/': 'No results!',
@@ -79,18 +141,18 @@
           tabComments: true, // default
           tabHeadings: true, // default
         },
-        themeable: {
-          readyTransition: true, // default
-          responsiveTables: true, // default
-        },
       };
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/docsify"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docsify@5/dist/docsify.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docsify@5/dist/plugins/search.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docsify@5/dist/plugins/zoom-image.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/docsify-tabs"></script>
     <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code"></script>
-    <script src="https://cdn.jsdelivr.net/npm/docsify-themeable"></script>
-    <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/docsify-prism"></script>
-    <script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-apacheconf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-nginx.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-systemd.min.js"></script>
   </body>
 </html>

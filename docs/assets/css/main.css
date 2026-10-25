@@ -1,3 +1,48 @@
 :root {
   --content-max-width: 100%;
 }
+
+button.dark-mode-toggle {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--color-mono-3);
+  border-radius: 9999px;
+  background: var(--color-mono-1);
+  color: var(--color-text);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+button.dark-mode-toggle:hover {
+  background: var(--color-mono-2);
+  border-color: var(--theme-color);
+  transform: translateY(-1px);
+}
+
+button.dark-mode-toggle svg {
+  flex-shrink: 0;
+  width: 1.2rem;
+  height: 1.2rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.docsify-pagination-container {
+  border-top-color: var(--color-mono-2) !important;
+}

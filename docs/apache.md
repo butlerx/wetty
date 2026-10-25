@@ -14,7 +14,7 @@ server.
 
 Put the following configuration in apache's conf:
 
-```apache
+```apacheconf
 RewriteCond %{REQUEST_URI}  ^/wetty/socket.io [NC]
 RewriteCond %{QUERY_STRING} transport=websocket [NC]
 RewriteRule /wetty/socket.io/(.*) ws://localhost:3000/wetty/socket.io/$1 [P,L]
@@ -57,7 +57,7 @@ here `idp.xml` and exchange you foo.xml with it.
 
 ### Apache2 conf
 
-```apache
+```apacheconf
 <VirtualHost *:443>
         ServerName foo.bar.tld
         ServerAdmin admin@bar.tld
