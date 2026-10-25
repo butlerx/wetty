@@ -26,6 +26,7 @@ export function parseOsc777(
  *   OSC 777 ; notify ; <title> ; <body> ST  (urxvt, with a beep)
  */
 export class Notifier {
+  private static readonly permissionTargets = new WeakSet<HTMLElement>();
   private readonly beeper = new Beeper();
   private readonly blinker = new FaviconBlinker();
 
@@ -50,9 +51,12 @@ export class Notifier {
   public static requestPermissionOnClick(element: HTMLElement): void {
     if (typeof Notification === 'undefined') return;
     if (Notification.permission !== 'default') return;
+    if (Notifier.permissionTargets.has(element)) return;
+    Notifier.permissionTargets.add(element);
     element.addEventListener(
       'click',
       () => {
+        Notifier.permissionTargets.delete(element);
         if (Notification.permission === 'default') {
           void Notification.requestPermission();
         }

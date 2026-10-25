@@ -134,6 +134,29 @@ function displayPath(path: string): string {
   return relative(sourceRoot, path);
 }
 
+function siblingModuleCollisions(directory: string): string[] {
+  const entries = readdirSync(directory, { withFileTypes: true });
+  const directories = new Set(
+    entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name),
+  );
+  const localCollisions = entries
+    .filter(
+      (entry) =>
+        entry.isFile() &&
+        entry.name.endsWith('.ts') &&
+        !entry.name.endsWith('.spec.ts') &&
+        directories.has(entry.name.slice(0, -3)),
+    )
+    .map((entry) => displayPath(resolve(directory, entry.name.slice(0, -3))));
+  const nestedCollisions = entries
+    .filter((entry) => entry.isDirectory())
+    .flatMap((entry) =>
+      siblingModuleCollisions(resolve(directory, entry.name)),
+    );
+
+  return [...localCollisions, ...nestedCollisions].sort();
+}
+
 function runtimeCycle(): string[] | undefined {
   const visited = new Set<string>();
   const visiting = new Set<string>();
@@ -171,21 +194,14 @@ function runtimeCycle(): string[] | undefined {
 
 describe('runtime ownership boundaries', () => {
   it('keeps server feature directories free of same-named sibling files', () => {
-    const entries = readdirSync(serverRoot, { withFileTypes: true });
-    const directories = new Set(
-      entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name),
-    );
-    const collisions = entries
-      .filter(
-        (entry) =>
-          entry.isFile() &&
-          entry.name.endsWith('.ts') &&
-          directories.has(entry.name.slice(0, -3)),
-      )
-      .map((entry) => entry.name.slice(0, -3))
-      .sort();
+    expect(siblingModuleCollisions(serverRoot)).to.deep.equal([]);
+  });
 
-    expect(collisions).to.deep.equal([]);
+  it('gives the terminal feature one explicit entry module', () => {
+    expect(existsSync(resolve(clientRoot, 'wetty/term.ts'))).to.equal(false);
+    expect(existsSync(resolve(clientRoot, 'wetty/term/index.ts'))).to.equal(
+      true,
+    );
   });
 
   it('keeps server production modules out of generic shared directories', () => {

@@ -3,7 +3,7 @@ import { editor } from '../disconnect/elements';
 import { copySelected, copyShortcut } from './configuration/clipboard';
 import { onInput } from './configuration/editor';
 import { loadOptions } from './load';
-import type { Term } from '../term';
+import type { Term } from './index';
 
 export function configureTerm(term: Term): () => void {
   const options = loadOptions();

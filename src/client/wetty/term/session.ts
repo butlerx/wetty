@@ -1,7 +1,7 @@
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
-} from '../../protocol/socket-events.js';
+} from '../../../protocol/socket-events.js';
 import type { Socket } from 'socket.io-client';
 
 interface Disposable {
@@ -20,6 +20,7 @@ interface FlowControl {
 export interface SessionTerminal {
   dispose(): void;
   focus(): void;
+  input(data: string, wasUserInput?: boolean): void;
   onBinary(callback: (data: string) => void): Disposable;
   onData(callback: (data: string) => void): Disposable;
   resizeTerm(): void;

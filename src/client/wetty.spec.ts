@@ -7,7 +7,7 @@ import {
   createSessionController,
   type BrowserSessionDependencies,
   type SessionTerminal,
-} from './wetty/session';
+} from './wetty/term/session';
 import type { Socket } from 'socket.io-client';
 
 type Listener = (...args: unknown[]) => void;
@@ -97,6 +97,7 @@ function createTerminalHarness() {
   const term = {
     dispose: sinon.spy(),
     focus: sinon.spy(),
+    input: sinon.spy(),
     resizeTerm: sinon.spy(),
     write(data: string, callback?: () => void) {
       writes.push({ data, callback });
@@ -287,6 +288,7 @@ describe('browser terminal session lifecycle', () => {
     const term = {
       dispose: sinon.spy(),
       focus: sinon.spy(),
+      input: sinon.spy(),
       onBinary: () => {
         throw new Error('binary subscription failed');
       },

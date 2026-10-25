@@ -721,7 +721,7 @@ changing their public behavior or package output.
 
 ---
 
-- [ ] U10. **Resolve the client terminal file-and-directory collision**
+- [x] U10. **Resolve the client terminal file-and-directory collision**
 
 **Goal:** Place terminal session, controls, and configuration modules under one
 clear client feature directory.
@@ -893,6 +893,12 @@ clear client feature directory.
   artifacts, notification icons, and service worker output. Verified with 143
   passing tests, clean lint/type checks, clean build/package smoke tests, and a
   cycle-free runtime graph.
+- 2026-10-25: U10 completed. Terminal entry, reconnect session, controls, and
+  configuration now live under one explicit feature directory. Global control
+  compatibility, stale-callback protection, notification OSC handling, and
+  permission prompts remain stable across reconnects. Verified with targeted
+  client coverage, seven ownership/graph tests, 145 passing tests, clean
+  lint/type checks, and a clean production build.
 
 ---
 

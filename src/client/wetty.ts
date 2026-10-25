@@ -11,9 +11,9 @@ import { FlowControlClient } from './wetty/flowcontrol';
 import { mobileKeyboard } from './wetty/mobile';
 import { Notifier } from './wetty/notifications';
 import './wetty/serviceWorker';
-import { createSessionController } from './wetty/session';
 import { socket } from './wetty/socket';
-import { terminal, Term } from './wetty/term';
+import { terminal } from './wetty/term/index';
+import { createSessionController } from './wetty/term/session';
 
 // Setup for fontawesome
 library.add(faCogs);
@@ -41,7 +41,7 @@ createSessionController({
   },
   showDisconnected: disconnect,
   setTerminalReference: (term) => {
-    window.wetty_term = term as Term;
+    window.wetty_term = term;
   },
   clearTerminalReference: (term) => {
     if (window.wetty_term === term) window.wetty_term = undefined;

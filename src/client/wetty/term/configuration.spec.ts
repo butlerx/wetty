@@ -3,7 +3,7 @@ import 'mocha';
 import { JSDOM } from 'jsdom';
 import * as sinon from 'sinon';
 
-import type { Term } from '../term';
+import type { Term } from './index';
 import type { Options } from './options';
 
 type ConfigureTerm = (term: Term) => () => void;

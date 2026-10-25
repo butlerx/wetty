@@ -1,83 +1,13 @@
-import { FitAddon } from '@xterm/addon-fit';
-import { ImageAddon } from '@xterm/addon-image';
-import { WebLinksAddon } from '@xterm/addon-web-links';
-import { WebglAddon } from '@xterm/addon-webgl';
-import { Terminal } from '@xterm/xterm';
-
-import { terminal as termElement } from './disconnect/elements';
-import { Notifier } from './notifications';
-import { configureTerm } from './term/configuration';
-import { loadOptions } from './term/load';
-import { setTitle } from './title';
-import type { Options } from './term/options';
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from '../../protocol/socket-events.js';
-import type { Socket } from 'socket.io-client';
-
-const isMobile =
-  /iPhone|iPad|iPod|Android|webOS|BlackBerry|Opera Mini|IEMobile/i.test(
-    navigator.userAgent,
-  );
-const isWindows = /Windows/i.test(navigator.userAgent);
-
-export class Term extends Terminal {
-  socket: Socket<ServerToClientEvents, ClientToServerEvents>;
-  fitAddon: FitAddon;
-  loadOptions: () => Options;
-  private configurationDisposer?: () => void;
-  private sessionDisposed = false;
-
-  constructor(
-    socket: Socket<ServerToClientEvents, ClientToServerEvents>,
-    notifier: Notifier,
-  ) {
-    super({ allowProposedApi: true });
-    this.socket = socket;
-    this.fitAddon = new FitAddon();
-    this.loadAddon(this.fitAddon);
-    this.loadAddon(new WebLinksAddon());
-    this.loadAddon(new ImageAddon());
-    this.loadOptions = loadOptions;
-    // Use xterm's DOM renderer on Windows to avoid mis-scaled TUI rendering.
-    if (!isMobile && !isWindows) {
-      try {
-        this.loadAddon(new WebglAddon());
-      } catch {
-        // WebGL not available — DOM renderer will be used
-      }
-    }
-    this.parser.registerOscHandler(9, (data) => notifier.osc9(data));
-    this.parser.registerOscHandler(777, (data) => notifier.osc777(data));
-    this.onTitleChange(setTitle);
-  }
-
-  resizeTerm(): void {
-    this.refresh(0, this.rows - 1);
-    if (this.shouldFitTerm) this.fitAddon.fit();
-    this.socket.emit('resize', { cols: this.cols, rows: this.rows });
-  }
-
-  get shouldFitTerm(): boolean {
-    return this.loadOptions().wettyFitTerminal;
-  }
-
-  setConfigurationDisposer(disposer: () => void): void {
-    this.configurationDisposer = disposer;
-  }
-
-  override dispose(): void {
-    if (this.sessionDisposed) return;
-    this.sessionDisposed = true;
-    this.configurationDisposer?.();
-    this.configurationDisposer = undefined;
-    super.dispose();
-  }
+interface ControlTerminal {
+  focus(): void;
+  input(data: string, wasUserInput?: boolean): void;
 }
 
-const ctrlButton = document.getElementById('onscreen-ctrl');
 let ctrlFlag = false; // This indicates whether the CTRL key is pressed or not
+
+function controlButton(): HTMLElement | null {
+  return document.querySelector<HTMLElement>('#onscreen-ctrl');
+}
 
 /**
  * Toggles the state of the `ctrlFlag` variable and updates the visual state
@@ -85,13 +15,14 @@ let ctrlFlag = false; // This indicates whether the CTRL key is pressed or not
  * the `active` class is added to the `ctrlButton`; otherwise, it is removed.
  * After toggling, the terminal (`wetty_term`) is focused if it exists.
  */
-const toggleCTRL = (): void => {
+export const toggleCTRL = (): void => {
   ctrlFlag = !ctrlFlag;
-  if (ctrlButton) {
+  const button = controlButton();
+  if (button) {
     if (ctrlFlag) {
-      ctrlButton.classList.add('active');
+      button.classList.add('active');
     } else {
-      ctrlButton.classList.remove('active');
+      button.classList.remove('active');
     }
   }
   window.wetty_term?.focus();
@@ -103,7 +34,7 @@ const toggleCTRL = (): void => {
  *
  * @param event - the keyboard event object.
  */
-function handleControlKeyUp(event: KeyboardEvent): void {
+export function handleControlKeyUp(event: KeyboardEvent): void {
   if (!ctrlFlag) return;
   const targetTerm = window.wetty_term;
   if (event.key.length === 1 && /^[a-zA-Z0-9]$/.exec(event.key)) {
@@ -125,10 +56,8 @@ document.addEventListener('keyup', handleControlKeyUp);
  * to the terminal. If the CTRL key is active, it toggles the CTRL state off.
  * After sending the ESC character, the terminal is focused.
  */
-const pressESC = (): void => {
-  if (ctrlFlag) {
-    toggleCTRL();
-  }
+export const pressESC = (): void => {
+  if (ctrlFlag) toggleCTRL();
   window.wetty_term?.input('\x1B', false);
   window.wetty_term?.focus();
 };
@@ -138,10 +67,8 @@ const pressESC = (): void => {
  * to the terminal. If the CTRL key is active, it toggles the CTRL state off.
  * After sending the UP character, the terminal is focused.
  */
-const pressUP = (): void => {
-  if (ctrlFlag) {
-    toggleCTRL();
-  }
+export const pressUP = (): void => {
+  if (ctrlFlag) toggleCTRL();
   window.wetty_term?.input('\x1B[A', false);
   window.wetty_term?.focus();
 };
@@ -151,10 +78,8 @@ const pressUP = (): void => {
  * to the terminal. If the CTRL key is active, it toggles the CTRL state off.
  * After sending the DOWN character, the terminal is focused.
  */
-const pressDOWN = (): void => {
-  if (ctrlFlag) {
-    toggleCTRL();
-  }
+export const pressDOWN = (): void => {
+  if (ctrlFlag) toggleCTRL();
   window.wetty_term?.input('\x1B[B', false);
   window.wetty_term?.focus();
 };
@@ -164,10 +89,8 @@ const pressDOWN = (): void => {
  * to the terminal. If the CTRL key is active, it toggles the CTRL state off.
  * After sending the TAB character, the terminal is focused.
  */
-const pressTAB = (): void => {
-  if (ctrlFlag) {
-    toggleCTRL();
-  }
+export const pressTAB = (): void => {
+  if (ctrlFlag) toggleCTRL();
   window.wetty_term?.input('\x09', false);
   window.wetty_term?.focus();
 };
@@ -177,10 +100,8 @@ const pressTAB = (): void => {
  * to the terminal. If the CTRL key is active, it toggles the CTRL state off.
  * After sending the LEFT character, the terminal is focused.
  */
-const pressLEFT = (): void => {
-  if (ctrlFlag) {
-    toggleCTRL();
-  }
+export const pressLEFT = (): void => {
+  if (ctrlFlag) toggleCTRL();
   window.wetty_term?.input('\x1B[D', false);
   window.wetty_term?.focus();
 };
@@ -190,10 +111,8 @@ const pressLEFT = (): void => {
  * to the terminal. If the CTRL key is active, it toggles the CTRL state off.
  * After sending the RIGHT character, the terminal is focused.
  */
-const pressRIGHT = (): void => {
-  if (ctrlFlag) {
-    toggleCTRL();
-  }
+export const pressRIGHT = (): void => {
+  if (ctrlFlag) toggleCTRL();
   window.wetty_term?.input('\x1B[C', false);
   window.wetty_term?.focus();
 };
@@ -202,7 +121,7 @@ const pressRIGHT = (): void => {
  * Toggles the visibility of the onscreen buttons by adding or removing
  * the 'active' class to the element with the ID 'onscreen-buttons'.
  */
-const toggleFunctions = (): void => {
+export const toggleFunctions = (): void => {
   const element = document.querySelector(
     'div#functions > div.onscreen-buttons',
   );
@@ -216,7 +135,7 @@ const toggleFunctions = (): void => {
 
 declare global {
   interface Window {
-    wetty_term?: Term;
+    wetty_term?: ControlTerminal;
     clipboardData: DataTransfer;
     toggleFunctions?: () => void;
     toggleCTRL?: () => void;
@@ -237,24 +156,3 @@ window.pressDOWN = pressDOWN;
 window.pressTAB = pressTAB;
 window.pressLEFT = pressLEFT;
 window.pressRIGHT = pressRIGHT;
-
-export function terminal(
-  socket: Socket<ServerToClientEvents, ClientToServerEvents>,
-  notifier: Notifier,
-): Term | undefined {
-  const term = new Term(socket, notifier);
-  if (termElement === null) {
-    term.dispose();
-    return undefined;
-  }
-  try {
-    termElement.innerHTML = '';
-    term.open(termElement);
-    term.setConfigurationDisposer(configureTerm(term));
-    Notifier.requestPermissionOnClick(termElement);
-    return term;
-  } catch (error) {
-    term.dispose();
-    throw error;
-  }
-}
