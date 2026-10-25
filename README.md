@@ -20,7 +20,9 @@ websockets rather than Ajax and hence better response time.
 
 ## Prerequisites
 
-- node >=20
+- node `^22.23.4 || ^24.22.1 || >=26.12.1` — only the Node lines that carry the
+  fix for the Brotli decoder RCE (CVE-2026-111497); 18, 20, 23 and 25 are EOL
+  and never get it
 - make
 - python
 - build-essential
