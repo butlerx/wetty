@@ -84,7 +84,7 @@
     "@types/parseurl": "^1.3.3",
     "@types/response-time": "^2.3.9",
     "@types/serve-static": "^2.2.0",
-    "@types/sinon": "^21.0.1",
+    "@types/sinon": "^22.0.1",
     "@types/toastify-js": "^1.12.4",
     "@types/yargs": "^17.0.35",
     "@typescript-eslint/parser": "^8.72.0",
