@@ -111,7 +111,7 @@
     "semantic-release": "^25.0.9",
     "sinon": "^22.1.0",
     "tsx": "^4.23.15",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "typescript-eslint": "^8.72.0"
   },
   "pnpm": {
