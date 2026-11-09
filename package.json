@@ -88,6 +88,7 @@
     "@types/toastify-js": "^1.12.4",
     "@types/yargs": "^17.0.35",
     "@typescript-eslint/parser": "^8.72.0",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "all-contributors-cli": "^7.0.0",
     "chai": "^6.3.0",
     "concurrently": "^10.0.6",
@@ -111,7 +112,7 @@
     "semantic-release": "^25.0.9",
     "sinon": "^22.1.0",
     "tsx": "^4.23.15",
-    "typescript": "^7.0.2",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "typescript-eslint": "^8.72.0"
   },
   "pnpm": {
