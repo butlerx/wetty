@@ -29,6 +29,9 @@ websockets rather than Ajax and hence better response time.
 
 ## Install
 
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/template/wetty)
+
+
 ```sh
 npm -g i wetty
 ```
