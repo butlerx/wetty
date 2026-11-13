@@ -179,7 +179,7 @@ importers:
         version: 1.0.54
       globals:
         specifier: ^17.13.0
-        version: 17.13.0
+        version: 17.14.0
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -2264,8 +2264,8 @@ packages:
     resolution: {integrity: sha512-1pgFdhK3J2LeM+dVf2Pd424yHx2ou338lC0ErNP2hPx4j8eW1Sp0XqSjNxtk6Tc4Kr5wlWtSvz8cn2yb7/SG/w==}
     engines: {node: '>=20'}
 
-  globals@17.13.0:
-    resolution: {integrity: sha512-RwMTC61u7hrG3ZJMkZQOK4JLJrKS8QtoTii63EmWvFXHqycY9FObBJQCbsLxSO8kjKhWE5kV1GC+Vb1g3RI0Zg==}
+  globals@17.14.0:
+    resolution: {integrity: sha512-UtdkTVyAJePQv0J2M9Xe4L0ruNSDV314XiIJsADI2Zf40bcdAonE/D/OhAU8AT99oij9mhLByb+NvA3QWZYgCg==}
     engines: {node: '>=18'}
 
   globals@17.8.0:
@@ -2385,6 +2385,9 @@ packages:
 
   immutable@5.1.9:
     resolution: {integrity: sha512-m8nVez3rwrgmWxtLMt1ZYXB2Lv7OKYn/disyxAlSDYAlKSlFoPPfIAmAM/M5xqL4m4C/wAPw7S2/CNaUii1Hxg==}
+
+  immutable@5.2.1:
+    resolution: {integrity: sha512-CgXNM1BhKqpMjFHTyqQSk09OWqzHNJ/U4BdeBgXoBdR2DdgBdOSv131cO1/YMgzopqnka3B/i949UaMLEKUxOA==}
 
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
@@ -6077,7 +6080,7 @@ snapshots:
     dependencies:
       ini: 6.0.0
 
-  globals@17.13.0: {}
+  globals@17.14.0: {}
 
   globals@17.8.0: {}
 
@@ -6188,6 +6191,8 @@ snapshots:
   ignore@7.0.14: {}
 
   immutable@5.1.9: {}
+
+  immutable@5.2.1: {}
 
   import-fresh@3.3.1:
     dependencies:
@@ -6998,7 +7003,7 @@ snapshots:
     dependencies:
       '@bufbuild/protobuf': 2.17.0
       colorjs.io: 0.5.2
-      immutable: 5.1.9
+      immutable: 5.2.1
       rxjs: 7.8.2
       supports-color: 8.1.1
       sync-child-process: 1.1.1
@@ -7026,7 +7031,7 @@ snapshots:
   sass@1.100.0:
     dependencies:
       chokidar: 5.0.0
-      immutable: 5.1.9
+      immutable: 5.2.1
       source-map-js: 1.2.2
     optionalDependencies:
       '@parcel/watcher': 2.6.0
