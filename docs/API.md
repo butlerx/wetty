@@ -14,8 +14,8 @@ Create WeTTY server
 
 Starts WeTTY Server
 
-**Kind**: inner property of [`WeTTy`](#module_WeTTy)  
-**Returns**: `Promise` - Promise resolves once server is running
+**Kind**: inner property of [`WeTTy`](#module_WeTTy) **Returns**: `Promise` -
+Promise resolves once server is running
 
 | Param                     | Type       | Default                               | Description                                                                                                            |
 | :------------------------ | ---------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
@@ -54,8 +54,7 @@ listen-address or request-Host trust.
 
 ### "connection"
 
-**Kind**: event emitted by [`WeTTy`](#module_WeTTy)  
-**Properties**
+**Kind**: event emitted by [`WeTTy`](#module_WeTTy) **Properties**
 
 | Name | Type     | Description                 |
 | ---- | -------- | --------------------------- |
@@ -66,8 +65,7 @@ listen-address or request-Host trust.
 
 Terminal process spawned
 
-**Kind**: event emitted by [`WeTTy`](#module_WeTTy)  
-**Properties**
+**Kind**: event emitted by [`WeTTy`](#module_WeTTy) **Properties**
 
 | Name    | Type     | Description                            |
 | ------- | -------- | -------------------------------------- |
@@ -79,8 +77,7 @@ Terminal process spawned
 
 Terminal process exits
 
-**Kind**: event emitted by [`WeTTy`](#module_WeTTy)  
-**Properties**
+**Kind**: event emitted by [`WeTTy`](#module_WeTTy) **Properties**
 
 | Name | Type     | Description                            |
 | ---- | -------- | -------------------------------------- |
@@ -93,8 +90,7 @@ Terminal process exits
 
 ### "server"
 
-**Kind**: event emitted by [`WeTTy`](#module_WeTTy)  
-**Properties**
+**Kind**: event emitted by [`WeTTy`](#module_WeTTy) **Properties**
 
 | Name       | Type     | Description                     |
 | ---------- | -------- | ------------------------------- |

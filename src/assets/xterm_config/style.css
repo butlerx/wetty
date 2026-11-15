@@ -8,7 +8,11 @@ body {
 body {
   display: flex;
   flex-flow: column nowrap;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   font-size: 0.85rem;
   color: #e0e0e0;
   padding: 0 1em 1em;
@@ -134,7 +138,9 @@ header button:hover {
   height: 16px;
   background: #aaa;
   border-radius: 50%;
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 .boolean_option input[type='checkbox']:checked {
   background: rgba(60, 130, 220, 0.8);

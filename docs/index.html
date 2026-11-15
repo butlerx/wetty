@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -88,7 +88,8 @@
               function isDarkActive() {
                 if (darkSheet.media === 'all') return true;
                 if (darkSheet.media === 'not all') return false;
-                return window.matchMedia('(prefers-color-scheme: dark)').matches;
+                return window.matchMedia('(prefers-color-scheme: dark)')
+                  .matches;
               }
 
               const btn = document.createElement('button');
