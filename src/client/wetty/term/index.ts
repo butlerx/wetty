@@ -10,8 +10,8 @@ import { setTitle } from '../title';
 import { configureTerm } from './configuration';
 import { createTerminalControls } from './controls';
 import { loadOptions } from './load';
-import type { Options } from './options';
 import type { ClientToServerEvents, ServerToClientEvents } from '../../../protocol/socket-events.js';
+import type { Options } from './options';
 import type { Socket } from 'socket.io-client';
 
 const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|Opera Mini|IEMobile/i.test(navigator.userAgent);
