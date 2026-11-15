@@ -5,18 +5,11 @@
 [[repos]]
 repo  = "https://github.com/pre-commit/pre-commit-hooks"
 rev   = "3e8a8703264a2f4a69428a0aa4dcb512790b2c8c"
-hooks = [
-  { id = "trailing-whitespace" },
-  { id = "end-of-file-fixer" },
-  { id = "check-yaml" },
-  { id = "check-json" },
-  { id = "check-merge-conflict" },
-  { id = "check-added-large-files", exclude = "(?x).png" }
-]
+hooks = [{ id = "trailing-whitespace" }, { id = "end-of-file-fixer" }, { id = "check-yaml" }, { id = "check-json" }, { id = "check-merge-conflict" }, { id = "check-added-large-files", exclude = "(?x).png" }]
 
 [[repos]]
 repo  = "https://github.com/tombi-toml/tombi-pre-commit"
-rev   = "5421ca8ca3d6a659b6c097512b486395676a6af1"
+rev   = "6f428aba5ced98b5a579ff23cab6b39822b4347d"        # v1.11.2
 hooks = [{ id = "tombi-format" }, { id = "tombi-lint" }]
 
 [[repos]]
@@ -27,18 +20,13 @@ hooks = [{ id = "actionlint" }]
 [[repos]]
 repo  = "https://github.com/google/yamlfmt"
 rev   = "21ca5323a9c87ee37a434e0ca908efc0a89daa07"
-hooks = [{ id = "yamlfmt" }]
+# pnpm-lock.yaml is written by pnpm (flow sequences like `cpu: [arm64]`); yamlfmt would rewrite it
+hooks = [{ id = "yamlfmt", exclude = "^pnpm-lock\\.yaml$" }]
 
 [[repos]]
 repo  = "https://github.com/zizmorcore/zizmor-pre-commit"
 rev   = "067260dc5fe6ea86b7551bfd6f8b3ba4e6c93129"
-hooks = [
-  {
-    id             = "zizmor",
-    pass_filenames = false,
-    args           = ["--no-progress", ".github"]
-  }
-]
+hooks = [{ id = "zizmor", pass_filenames = false, args = ["--no-progress", ".github"] }]
 
 [[repos]]
 repo  = "https://github.com/compilerla/conventional-pre-commit"
@@ -47,20 +35,4 @@ hooks = [{ id = "conventional-pre-commit", stages = ["commit-msg"] }]
 
 [[repos]]
 repo  = "local"
-hooks = [
-  {
-    id       = "eslint",
-    name     = "eslint",
-    entry    = "pnpm exec eslint --fix",
-    language = "system",
-    files    = "^src/",
-    types_or = ["ts", "javascript"]
-  },
-  {
-    id       = "prettier",
-    name     = "prettier",
-    entry    = "pnpm exec prettier --write --ignore-unknown",
-    language = "system",
-    types_or = ["json", "markdown", "scss"]
-  }
-]
+hooks = [{ id = "eslint", name = "eslint", entry = "pnpm exec eslint --fix", language = "system", files = "^src/", types_or = ["ts", "javascript"] }, { id = "prettier", name = "prettier", entry = "pnpm exec prettier --write --ignore-unknown", language = "system", types_or = ["json", "markdown", "scss"] }]

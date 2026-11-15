@@ -2,7 +2,7 @@
 node       = "lts"
 pnpm       = "9.4.0"
 prek       = "latest"
-tombi      = "1.2.5"
+tombi      = "1.11.2"
 zizmor     = "latest"
 shellcheck = "latest"
 
