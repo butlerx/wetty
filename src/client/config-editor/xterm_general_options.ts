@@ -19,59 +19,32 @@ export const generalOptions: OptionDefinition[] = [
     name: 'Regular Font Weight',
     description: 'The font weight for non-bold text.',
     path: ['xterm', 'fontWeight'],
-    enum: [
-      'normal',
-      'bold',
-      '100',
-      '200',
-      '300',
-      '400',
-      '500',
-      '600',
-      '700',
-      '800',
-      '900',
-    ],
+    enum: ['normal', 'bold', '100', '200', '300', '400', '500', '600', '700', '800', '900'],
   },
   {
     type: 'enum',
     name: 'Bold Font Weight',
     description: 'The font weight for bold text.',
     path: ['xterm', 'fontWeightBold'],
-    enum: [
-      'normal',
-      'bold',
-      '100',
-      '200',
-      '300',
-      '400',
-      '500',
-      '600',
-      '700',
-      '800',
-      '900',
-    ],
+    enum: ['normal', 'bold', '100', '200', '300', '400', '500', '600', '700', '800', '900'],
   },
   {
     type: 'boolean',
     name: 'Fit Terminal',
-    description:
-      'Automatically fits the terminal to the page, overriding terminal columns and rows.',
+    description: 'Automatically fits the terminal to the page, overriding terminal columns and rows.',
     path: ['wettyFitTerminal'],
   },
   {
     type: 'number',
     name: 'Terminal Columns',
-    description:
-      'The number of columns in the terminal. Overridden by the Fit Terminal option.',
+    description: 'The number of columns in the terminal. Overridden by the Fit Terminal option.',
     path: ['xterm', 'cols'],
     nullable: true,
   },
   {
     type: 'number',
     name: 'Terminal Rows',
-    description:
-      'The number of rows in the terminal. Overridden by the Fit Terminal option.',
+    description: 'The number of rows in the terminal. Overridden by the Fit Terminal option.',
     path: ['xterm', 'rows'],
     nullable: true,
   },
@@ -91,8 +64,7 @@ export const generalOptions: OptionDefinition[] = [
   {
     type: 'number',
     name: 'Bar Cursor Width',
-    description:
-      "The width of the cursor in CSS pixels. Only applies when Cursor Style is set to 'bar'.",
+    description: "The width of the cursor in CSS pixels. Only applies when Cursor Style is set to 'bar'.",
     path: ['xterm', 'cursorWidth'],
   },
   {
@@ -125,8 +97,7 @@ export const generalOptions: OptionDefinition[] = [
   {
     type: 'number',
     name: 'Scrollback Rows',
-    description:
-      'The amount of scrollback rows, rows you can scroll up to after they leave the viewport, to keep.',
+    description: 'The amount of scrollback rows, rows you can scroll up to after they leave the viewport, to keep.',
     path: ['xterm', 'scrollback'],
   },
   {

@@ -52,8 +52,7 @@ const yargsInstance = yargs(hideBin(process.argv))
     type: 'string',
   })
   .option('ssh-auth', {
-    description:
-      'defaults to "password", you can use "publickey,password" instead',
+    description: 'defaults to "password", you can use "publickey,password" instead',
     type: 'string',
   })
   .option('ssh-pass', {
@@ -62,13 +61,11 @@ const yargsInstance = yargs(hideBin(process.argv))
   })
   .option('ssh-key', {
     demand: false,
-    description:
-      'path to an optional client private key (connection will be password-less and insecure!)',
+    description: 'path to an optional client private key (connection will be password-less and insecure!)',
     type: 'string',
   })
   .option('ssh-config', {
-    description:
-      'Specifies an alternative ssh configuration file. For further details see "-F" option in ssh(1)',
+    description: 'Specifies an alternative ssh configuration file. For further details see "-F" option in ssh(1)',
     type: 'string',
   })
   .option('force-ssh', {
@@ -103,13 +100,11 @@ const yargsInstance = yargs(hideBin(process.argv))
     type: 'string',
   })
   .option('allow-iframe', {
-    description:
-      'Allow WeTTY to be embedded in an iframe, defaults to allowing same origin',
+    description: 'Allow WeTTY to be embedded in an iframe, defaults to allowing same origin',
     type: 'boolean',
   })
   .option('ping-interval', {
-    description:
-      'Milliseconds between Socket.IO heartbeat pings sent to the client',
+    description: 'Milliseconds between Socket.IO heartbeat pings sent to the client',
     type: 'number',
   })
   .option('ping-timeout', {
@@ -129,8 +124,7 @@ const yargsInstance = yargs(hideBin(process.argv))
     type: 'boolean',
   })
   .option('allow-remote-hosts', {
-    description:
-      'Allow WeTTY to use the `host` and `port` params in a url as ssh destination',
+    description: 'Allow WeTTY to use the `host` and `port` params in a url as ssh destination',
     type: 'boolean',
   })
   .option('allow-remote-command', {
@@ -172,13 +166,7 @@ if (!opts.help) {
     .then((config) => mergeCliConf(opts, config))
     .then((conf) => {
       setLevel(conf.logLevel);
-      return start(
-        conf.ssh,
-        conf.server,
-        conf.command,
-        conf.forceSSH,
-        conf.ssl,
-      );
+      return start(conf.ssh, conf.server, conf.command, conf.forceSSH, conf.ssl);
     })
     .catch((err: unknown) => {
       logger().error('error in server', {

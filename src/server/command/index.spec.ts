@@ -2,10 +2,7 @@ import { expect } from 'chai';
 import 'mocha';
 
 import { getCommand } from './index';
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from '../../protocol/socket-events';
+import type { ClientToServerEvents, ServerToClientEvents } from '../../protocol/socket-events';
 import type { SSH } from '../config/types';
 import type { ServerSession } from '../session';
 import type { Socket } from 'socket.io';
@@ -26,8 +23,7 @@ describe('remote command URL options', () => {
     const socket = {
       request: {
         headers: {
-          referer:
-            'https://terminal.example/?pass=url-secret&command=whoami&host=other.example',
+          referer: 'https://terminal.example/?pass=url-secret&command=whoami&host=other.example',
         },
       },
       client: { conn: { remoteAddress: '127.0.0.1' } },

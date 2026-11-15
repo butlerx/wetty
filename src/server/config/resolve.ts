@@ -1,27 +1,17 @@
 import { readFile } from 'node:fs/promises';
 import path from 'path';
 import JSON5 from 'json5';
-import {
-  sshDefault,
-  serverDefault,
-  forceSSHDefault,
-  defaultCommand,
-  defaultLogLevel,
-} from './defaults.js';
+import { sshDefault, serverDefault, forceSSHDefault, defaultCommand, defaultLogLevel } from './defaults.js';
 import type { Config, SSH, Server, SSL } from './types.js';
 import type winston from 'winston';
 import type { Arguments } from 'yargs';
 
-type confValue =
-  boolean | string | number | string[] | undefined | SSH | Server | SSL;
+type confValue = boolean | string | number | string[] | undefined | SSH | Server | SSL;
 
 const cloneSSH = (ssh: SSH): SSH => ({ ...ssh });
 const cloneServer = (server: Server): Server => ({
   ...server,
-  allowedOrigins:
-    server.allowedOrigins === undefined
-      ? undefined
-      : [...server.allowedOrigins],
+  allowedOrigins: server.allowedOrigins === undefined ? undefined : [...server.allowedOrigins],
 });
 
 /**
@@ -44,25 +34,9 @@ function ensureBoolean(value: confValue): boolean {
   }
 }
 
-function parseLogLevel(
-  confLevel: typeof winston.level,
-  optsLevel: unknown,
-): typeof winston.level {
-  const logLevel =
-    optsLevel === undefined || typeof optsLevel !== 'string'
-      ? confLevel
-      : optsLevel;
-  return [
-    'error',
-    'warn',
-    'info',
-    'http',
-    'verbose',
-    'debug',
-    'silly',
-  ].includes(logLevel)
-    ? logLevel
-    : defaultLogLevel;
+function parseLogLevel(confLevel: typeof winston.level, optsLevel: unknown): typeof winston.level {
+  const logLevel = optsLevel === undefined || typeof optsLevel !== 'string' ? confLevel : optsLevel;
+  return ['error', 'warn', 'info', 'http', 'verbose', 'debug', 'silly'].includes(logLevel) ? logLevel : defaultLogLevel;
 }
 
 /**
@@ -95,10 +69,7 @@ export async function loadConfigFile(filepath?: string): Promise<Config> {
     ssh: cloneSSH({ ...sshDefault, ...parsed.ssh }),
     server: cloneServer({ ...serverDefault, ...parsed.server }),
     command: parsed.command ?? defaultCommand,
-    forceSSH:
-      parsed.forceSSH === undefined
-        ? forceSSHDefault
-        : ensureBoolean(parsed.forceSSH),
+    forceSSH: parsed.forceSSH === undefined ? forceSSHDefault : ensureBoolean(parsed.forceSSH),
     ssl: parsed.ssl,
     logLevel: parseLogLevel(defaultLogLevel, parsed.logLevel),
   };
@@ -112,15 +83,9 @@ export async function loadConfigFile(filepath?: string): Promise<Config> {
  * @returns merged object
  *
  */
-const objectAssign = (
-  target: SSH | Server,
-  source: Record<string, confValue>,
-): SSH | Server =>
+const objectAssign = (target: SSH | Server, source: Record<string, confValue>): SSH | Server =>
   Object.fromEntries(
-    Object.entries(source).map(([key, value]) => [
-      key,
-      source[key] === undefined ? target[key] : value,
-    ]),
+    Object.entries(source).map(([key, value]) => [key, source[key] === undefined ? target[key] : value]),
   ) as SSH | Server;
 
 /**
@@ -166,18 +131,9 @@ export function mergeCliConf(opts: Arguments, config: Config): Config {
   return {
     ssh,
     server,
-    command:
-      opts.command === undefined || typeof opts.command !== 'string'
-        ? config.command
-        : opts.command,
-    forceSSH:
-      opts['force-ssh'] === undefined
-        ? config.forceSSH
-        : ensureBoolean(opts['force-ssh'] as confValue),
-    ssl:
-      ssl.key === undefined || ssl.cert === undefined
-        ? undefined
-        : (ssl as SSL),
+    command: opts.command === undefined || typeof opts.command !== 'string' ? config.command : opts.command,
+    forceSSH: opts['force-ssh'] === undefined ? config.forceSSH : ensureBoolean(opts['force-ssh'] as confValue),
+    ssl: ssl.key === undefined || ssl.cert === undefined ? undefined : (ssl as SSL),
     logLevel: parseLogLevel(config.logLevel, opts['log-level']),
   };
 }

@@ -1,8 +1,7 @@
 singleQuote   = true
 trailingComma = "all"
 proseWrap     = "always"
-# Canonical value is 100. Kept at 80 because the existing TypeScript, Markdown and JSON
-# are wrapped at 80 and moving to 100 rewraps ~60 source files.
-printWidth    = 80
+# Shared printWidth across repos is 120.
+printWidth    = 120
 endOfLine     = "lf"
 tabWidth      = 2

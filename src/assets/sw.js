@@ -12,18 +12,11 @@ const STATIC_ASSETS = [
   './client/xterm_config/index.html',
   './client/xterm_config/style.css',
 ];
-const STATIC_URLS = new Set(
-  STATIC_ASSETS.map(
-    (asset) => new URL(asset, globalThis.registration.scope).href,
-  ),
-);
+const STATIC_URLS = new Set(STATIC_ASSETS.map((asset) => new URL(asset, globalThis.registration.scope).href));
 
 globalThis.addEventListener('install', (event) => {
   event.waitUntil(
-    Promise.all([
-      caches.open(CACHE).then((cache) => cache.addAll(STATIC_ASSETS)),
-      globalThis.skipWaiting(),
-    ]),
+    Promise.all([caches.open(CACHE).then((cache) => cache.addAll(STATIC_ASSETS)), globalThis.skipWaiting()]),
   );
 });
 
@@ -34,9 +27,7 @@ globalThis.addEventListener('activate', (event) => {
         .keys()
         .then((keys) =>
           Promise.all(
-            keys
-              .filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE)
-              .map((key) => caches.delete(key)),
+            keys.filter((key) => key.startsWith(CACHE_PREFIX) && key !== CACHE).map((key) => caches.delete(key)),
           ),
         ),
       globalThis.clients.claim(),
@@ -51,11 +42,7 @@ globalThis.addEventListener('fetch', (event) => {
   } catch {
     return;
   }
-  if (
-    event.request.method !== 'GET' ||
-    requestUrl.search !== '' ||
-    !STATIC_URLS.has(requestUrl.href)
-  ) {
+  if (event.request.method !== 'GET' || requestUrl.search !== '' || !STATIC_URLS.has(requestUrl.href)) {
     return;
   }
 
@@ -64,9 +51,7 @@ globalThis.addEventListener('fetch', (event) => {
     response
       .then((networkResponse) => {
         if (!networkResponse.ok) return undefined;
-        return caches
-          .open(CACHE)
-          .then((cache) => cache.put(event.request, networkResponse.clone()));
+        return caches.open(CACHE).then((cache) => cache.put(event.request, networkResponse.clone()));
       })
       .catch(() => undefined),
   );

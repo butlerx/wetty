@@ -1,9 +1,6 @@
 import { inflateOptions, initializeEditor, loadOptions } from './functionality';
 import { advancedOptions } from './xterm_advanced_options';
-import {
-  colorThemeOptions,
-  configureColorThemeOptions,
-} from './xterm_color_theme';
+import { colorThemeOptions, configureColorThemeOptions } from './xterm_color_theme';
 import { defaultOptions } from './xterm_defaults';
 import { generalOptions } from './xterm_general_options';
 

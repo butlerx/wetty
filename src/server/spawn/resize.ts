@@ -10,10 +10,7 @@ const maxDimension = 9999;
 export type Dimensions = TerminalDimensions;
 
 const isPositiveDimension = (value: unknown): value is number =>
-  typeof value === 'number' &&
-  Number.isInteger(value) &&
-  value > 0 &&
-  value <= maxDimension;
+  typeof value === 'number' && Number.isInteger(value) && value > 0 && value <= maxDimension;
 
 /**
  * Validate a client supplied terminal size.

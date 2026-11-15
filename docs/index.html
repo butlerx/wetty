@@ -10,30 +10,13 @@
     <meta name="description" content="WeTTY" />
     <title>WeTTY = Web + TTY</title>
 
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="assets/img/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="assets/img/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="assets/img/favicon-16x16.png"
-    />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16x16.png" />
     <link rel="manifest" href="assets/img/site.webmanifest" />
 
     <!-- Theme -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/docsify@5/dist/themes/core.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@5/dist/themes/core.min.css" />
     <link
       id="docsify-dark-mode"
       rel="stylesheet"
@@ -72,9 +55,7 @@
         // PLUGINS
         // -----------------------------------------------------------------
         plugins: [
-          EditOnGithubPlugin.create(
-            'https://github.com/butlerx/wetty/tree/master/docs/',
-          ),
+          EditOnGithubPlugin.create('https://github.com/butlerx/wetty/tree/master/docs/'),
           function (hook) {
             hook.mounted(function () {
               const darkSheet = document.getElementById('docsify-dark-mode');
@@ -88,8 +69,7 @@
               function isDarkActive() {
                 if (darkSheet.media === 'all') return true;
                 if (darkSheet.media === 'not all') return false;
-                return window.matchMedia('(prefers-color-scheme: dark)')
-                  .matches;
+                return window.matchMedia('(prefers-color-scheme: dark)').matches;
               }
 
               const btn = document.createElement('button');
@@ -98,9 +78,7 @@
               function renderButton() {
                 const dark = isDarkActive();
                 btn.innerHTML = dark ? sunIcon : moonIcon;
-                const label = dark
-                  ? 'Switch to light mode'
-                  : 'Switch to dark mode';
+                const label = dark ? 'Switch to light mode' : 'Switch to dark mode';
                 btn.setAttribute('aria-label', label);
                 btn.setAttribute('title', label);
               }
@@ -108,10 +86,7 @@
               btn.addEventListener('click', function () {
                 const nextDark = !isDarkActive();
                 darkSheet.media = nextDark ? 'all' : 'not all';
-                localStorage.setItem(
-                  'docsify-dark-mode',
-                  nextDark ? 'dark' : 'light',
-                );
+                localStorage.setItem('docsify-dark-mode', nextDark ? 'dark' : 'light');
                 renderButton();
               });
 

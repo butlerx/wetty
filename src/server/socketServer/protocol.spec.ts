@@ -8,10 +8,7 @@ import { io as connect, type Socket as ClientSocket } from 'socket.io-client';
 import { runServerSession, type SessionEndReason } from '../session';
 import { spawn, type SpawnPty } from '../spawn/index';
 import { listen } from './socket';
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from '../../protocol/socket-events';
+import type { ClientToServerEvents, ServerToClientEvents } from '../../protocol/socket-events';
 import type { AddressInfo } from 'node:net';
 
 function deferred<T>() {
@@ -90,12 +87,14 @@ describe('Socket.IO terminal protocol integration', () => {
           }),
       });
     });
-    const client: ClientSocket<ServerToClientEvents, ClientToServerEvents> =
-      connect(`http://127.0.0.1:${String(port)}`, {
+    const client: ClientSocket<ServerToClientEvents, ClientToServerEvents> = connect(
+      `http://127.0.0.1:${String(port)}`,
+      {
         extraHeaders: { Origin: 'http://terminal.example' },
         path: '/socket.io',
         transports: ['websocket'],
-      });
+      },
+    );
 
     try {
       await new Promise<void>((resolveLogin) => {

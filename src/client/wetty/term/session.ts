@@ -1,7 +1,4 @@
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from '../../../protocol/socket-events.js';
+import type { ClientToServerEvents, ServerToClientEvents } from '../../../protocol/socket-events.js';
 import type { Socket } from 'socket.io-client';
 
 type BrowserSessionState = { status: 'active' } | { status: 'disposed' };
@@ -62,9 +59,7 @@ export interface BrowserSession {
   dispose(): void;
 }
 
-export function createBrowserSession(
-  dependencies: BrowserSessionDependencies,
-): BrowserSession | undefined {
+export function createBrowserSession(dependencies: BrowserSessionDependencies): BrowserSession | undefined {
   const {
     beforeUnloadHandler,
     clearTerminalReference,
@@ -90,11 +85,7 @@ export function createBrowserSession(
 
   function removeBeforeUnloadListener(): void {
     if (!beforeUnloadAttached) return;
-    windowTarget.removeEventListener(
-      'beforeunload',
-      beforeUnloadHandler,
-      false,
-    );
+    windowTarget.removeEventListener('beforeunload', beforeUnloadHandler, false);
     beforeUnloadAttached = false;
   }
 
@@ -215,9 +206,7 @@ export function createBrowserSession(
   return { dispose };
 }
 
-export function createSessionController(
-  dependencies: BrowserSessionDependencies,
-): BrowserSession {
+export function createSessionController(dependencies: BrowserSessionDependencies): BrowserSession {
   let activeSession: BrowserSession | undefined;
   let state: SessionControllerState = { status: 'active' };
 

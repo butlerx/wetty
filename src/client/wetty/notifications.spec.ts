@@ -5,10 +5,7 @@ import { Notifier, parseOsc777 } from './notifications';
 
 describe('notification permission', () => {
   it('installs one pending click listener across reconnects', async () => {
-    const originalNotification = Object.getOwnPropertyDescriptor(
-      globalThis,
-      'Notification',
-    );
+    const originalNotification = Object.getOwnPropertyDescriptor(globalThis, 'Notification');
     const listeners: EventListenerOrEventListenerObject[] = [];
     const options: AddEventListenerOptions[] = [];
     let permissionRequests = 0;
@@ -70,9 +67,7 @@ describe('parseOsc777', () => {
   });
 
   it('should keep semicolons in the body', () => {
-    expect(
-      parseOsc777('notify;Build;Build finished; tests passed'),
-    ).to.deep.equal({
+    expect(parseOsc777('notify;Build;Build finished; tests passed')).to.deep.equal({
       title: 'Build',
       body: 'Build finished; tests passed',
     });

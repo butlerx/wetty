@@ -6,8 +6,6 @@ export const xterm: IPtyForkOptions = {
   rows: 30,
   cwd: process.cwd(),
   env: Object.fromEntries(
-    Object.entries(process.env).filter(
-      (entry): entry is [string, string] => entry[1] !== undefined,
-    ),
+    Object.entries(process.env).filter((entry): entry is [string, string] => entry[1] !== undefined),
   ),
 };

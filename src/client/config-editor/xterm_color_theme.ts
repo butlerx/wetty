@@ -9,8 +9,7 @@ const selectionColorOption: OptionDefinition = {
 const selectionColorOpacityOption: OptionDefinition = {
   type: 'number',
   name: 'Selection Color Opacity',
-  description:
-    'Opacity of the selection highlight. A value between 1 (fully opaque) and 0 (fully transparent).',
+  description: 'Opacity of the selection highlight. A value between 1 (fully opaque) and 0 (fully transparent).',
   path: ['wettyVoid'],
   float: true,
   min: 0,
@@ -39,8 +38,7 @@ export const colorThemeOptions: OptionDefinition[] = [
   {
     type: 'color',
     name: 'Block Cursor Accent Color',
-    description:
-      'The accent color of the cursor, used as the foreground color for block cursors.',
+    description: 'The accent color of the cursor, used as the foreground color for block cursors.',
     path: ['xterm', 'theme', 'cursorAccent'],
   },
   selectionColorOption,
@@ -163,9 +161,7 @@ export function configureColorThemeOptions(): void {
   selectionColor.set = (value) => {
     const color = String(value);
     requireInput(selectionColor).value = color.substring(0, 7);
-    requireInput(selectionOpacity).value = String(
-      Math.round((parseInt(color.substring(7), 16) / 255) * 100) / 100,
-    );
+    requireInput(selectionOpacity).value = String(Math.round((parseInt(color.substring(7), 16) / 255) * 100) / 100);
   };
   selectionOpacity.get = () => 0;
   selectionOpacity.set = () => undefined;

@@ -17,33 +17,25 @@ To run WeTTY in dev mode you can run `pnpm dev`.
 
 WeTTY will then be served from `http://localhost:3000` on your machine.
 
-The server will be using the [`conf/config.json5`](../conf/config.json5) config
-file and be pointing at `localhost` on port `22`.
+The server will be using the [`conf/config.json5`](../conf/config.json5) config file and be pointing at `localhost` on
+port `22`.
 
-The sample config explicitly allows `http://localhost:3000`. Update
-`server.allowedOrigins` if you access the development server through another
-hostname or port. Production deployments must configure their browser-facing
-origins explicitly; the listen address and request Host are not trusted.
+The sample config explicitly allows `http://localhost:3000`. Update `server.allowedOrigins` if you access the
+development server through another hostname or port. Production deployments must configure their browser-facing origins
+explicitly; the listen address and request Host are not trusted.
 
-The Dev server will rebuild WeTTY when ever a file is edited and restart the
-server with the new build. Any current ssh session in WeTTY will be killed and
-the user logged out.
+The Dev server will rebuild WeTTY when ever a file is edited and restart the server with the new build. Any current ssh
+session in WeTTY will be killed and the user logged out.
 
 ## Source Ownership
 
-- `src/client/` contains browser-only implementation, including the typed
-  configuration editor.
-- `src/server/` contains Node-only configuration, observability, PTY, command,
-  spawn, and socket-server implementation.
-- `src/protocol/` is the runtime-neutral client/server contract boundary and
-  must not import either implementation tree.
-- `src/server.ts` is the public package compatibility facade for
-  `build/server.js`.
-- Feature entrypoints are explicit: `src/server/command/index.ts`,
-  `src/server/spawn/index.ts`, `src/server/socketServer/index.ts`, and
-  `src/client/wetty/term/index.ts`.
+- `src/client/` contains browser-only implementation, including the typed configuration editor.
+- `src/server/` contains Node-only configuration, observability, PTY, command, spawn, and socket-server implementation.
+- `src/protocol/` is the runtime-neutral client/server contract boundary and must not import either implementation tree.
+- `src/server.ts` is the public package compatibility facade for `build/server.js`.
+- Feature entrypoints are explicit: `src/server/command/index.ts`, `src/server/spawn/index.ts`,
+  `src/server/socketServer/index.ts`, and `src/client/wetty/term/index.ts`.
 
-Lifecycle state should follow the same pattern across runtimes: keep a small
-discriminated state inside a functional closure, expose named transitions, and
-make disposal idempotent. Use string-literal `status` unions instead of runtime
+Lifecycle state should follow the same pattern across runtimes: keep a small discriminated state inside a functional
+closure, expose named transitions, and make disposal idempotent. Use string-literal `status` unions instead of runtime
 enums, and avoid mutable module globals for per-session state.

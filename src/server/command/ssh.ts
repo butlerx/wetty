@@ -1,16 +1,7 @@
 import { logger } from '../observability/logger.js';
 
 export function sshOptions(
-  {
-    pass,
-    path,
-    command,
-    host,
-    port,
-    auth,
-    knownHosts,
-    config,
-  }: Record<string, string>,
+  { pass, path, command, host, port, auth, knownHosts, config }: Record<string, string>,
   key?: string,
 ): string[] {
   const cmd = parseCommand(command, path);

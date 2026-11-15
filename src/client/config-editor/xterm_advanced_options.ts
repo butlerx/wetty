@@ -4,8 +4,7 @@ export const advancedOptions: OptionDefinition[] = [
   {
     type: 'boolean',
     name: 'Allow Proposed XTerm APIs',
-    description:
-      'When set to false, any experimental/proposed APIs will throw errors.',
+    description: 'When set to false, any experimental/proposed APIs will throw errors.',
     path: ['xterm', 'allowProposedApi'],
   },
   {
@@ -50,8 +49,7 @@ export const advancedOptions: OptionDefinition[] = [
   {
     type: 'number',
     name: 'Line Height',
-    description:
-      'Line height, multiplied by the font size to get the height of terminal rows.',
+    description: 'Line height, multiplied by the font size to get the height of terminal rows.',
     path: ['xterm', 'lineHeight'],
     float: true,
   },
@@ -65,8 +63,7 @@ export const advancedOptions: OptionDefinition[] = [
   {
     type: 'boolean',
     name: 'Macintosh Option Key as Meta Key',
-    description:
-      'When enabled, the Option key on Macs will be interpreted as the Meta key.',
+    description: 'When enabled, the Option key on Macs will be interpreted as the Meta key.',
     path: ['xterm', 'macOptionIsMeta'],
   },
   {

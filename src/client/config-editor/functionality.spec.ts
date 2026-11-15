@@ -6,10 +6,7 @@ import { buildSync } from 'esbuild';
 import { JSDOM } from 'jsdom';
 import { defaultOptions } from './xterm_defaults';
 
-const indexHtml = readFileSync(
-  new URL('../../assets/xterm_config/index.html', import.meta.url),
-  'utf8',
-);
+const indexHtml = readFileSync(new URL('../../assets/xterm_config/index.html', import.meta.url), 'utf8');
 const buildResult = buildSync({
   entryPoints: [fileURLToPath(new URL('./index.ts', import.meta.url))],
   bundle: true,
@@ -73,28 +70,20 @@ function dispatchParentMessage(
 }
 
 function findOption(harness: EditorHarness, name: string): HTMLElement {
-  const options =
-    harness.dom.window.document.querySelectorAll<HTMLElement>(
-      '[data-option-name]',
-    );
-  const option = [...options].find(
-    (candidate) => candidate.dataset.optionName === name,
-  );
+  const options = harness.dom.window.document.querySelectorAll<HTMLElement>('[data-option-name]');
+  const option = [...options].find((candidate) => candidate.dataset.optionName === name);
   if (option == null) throw new Error(`Option was not rendered: ${name}`);
   return option;
 }
 
 function optionInput(harness: EditorHarness, name: string): HTMLInputElement {
-  const input = findOption(harness, name).querySelector<HTMLInputElement>(
-    'input',
-  );
+  const input = findOption(harness, name).querySelector<HTMLInputElement>('input');
   if (input == null) throw new Error(`Option input was not rendered: ${name}`);
   return input;
 }
 
 function savedConfig(harness: EditorHarness): Record<string, unknown> {
-  const posted =
-    harness.parentMessages[harness.parentMessages.length - 1]?.message;
+  const posted = harness.parentMessages[harness.parentMessages.length - 1]?.message;
   if (
     typeof posted !== 'object' ||
     posted === null ||
@@ -111,9 +100,7 @@ describe('bundled xterm configuration editor', () => {
   it('loads one generated script at the existing static paths', () => {
     const dom = new JSDOM(indexHtml);
     const scripts = dom.window.document.querySelectorAll('script');
-    const style = dom.window.document.querySelector<HTMLLinkElement>(
-      'link[rel="stylesheet"]',
-    );
+    const style = dom.window.document.querySelector<HTMLLinkElement>('link[rel="stylesheet"]');
 
     expect(scripts).to.have.length(1);
     expect(scripts[0].getAttribute('type')).to.equal('module');
@@ -124,35 +111,18 @@ describe('bundled xterm configuration editor', () => {
 
   it('registers every option group before applying defaults', () => {
     const harness = createEditorDocument();
-    const groupSizes = [
-      'general_options',
-      'color_theme',
-      'advanced_options',
-    ].map(
-      (id) =>
-        harness.dom.window.document
-          .getElementById(id)
-          ?.querySelectorAll('[data-option-name]').length,
+    const groupSizes = ['general_options', 'color_theme', 'advanced_options'].map(
+      (id) => harness.dom.window.document.getElementById(id)?.querySelectorAll('[data-option-name]').length,
     );
 
     expect(groupSizes).to.deep.equal([16, 21, 16]);
     expect(optionInput(harness, 'Font Size').value).to.equal('15');
     expect(optionInput(harness, 'Fit Terminal').checked).to.equal(true);
     expect(optionInput(harness, 'Selection Color').value).to.equal('#ffffff');
-    expect(optionInput(harness, 'Selection Color Opacity').value).to.equal(
-      '0.3',
-    );
-    expect(optionInput(harness, 'Allow Proposed XTerm APIs').checked).to.equal(
-      true,
-    );
-    expect(
-      findOption(harness, 'Font Size').classList.contains('unbounded'),
-    ).to.equal(false);
-    expect(
-      findOption(harness, 'Allow Proposed XTerm APIs').classList.contains(
-        'unbounded',
-      ),
-    ).to.equal(false);
+    expect(optionInput(harness, 'Selection Color Opacity').value).to.equal('0.3');
+    expect(optionInput(harness, 'Allow Proposed XTerm APIs').checked).to.equal(true);
+    expect(findOption(harness, 'Font Size').classList.contains('unbounded')).to.equal(false);
+    expect(findOption(harness, 'Allow Proposed XTerm APIs').classList.contains('unbounded')).to.equal(false);
     harness.dom.window.close();
   });
 
@@ -179,17 +149,11 @@ describe('bundled xterm configuration editor', () => {
       expect(optionInput(harness, 'Font Size').value).to.equal('22');
 
       fitTerminal.checked = false;
-      fitTerminal.dispatchEvent(
-        new harness.dom.window.Event('input', { bubbles: true }),
-      );
+      fitTerminal.dispatchEvent(new harness.dom.window.Event('input', { bubbles: true }));
 
-      expect(harness.dom.window.location.pathname).to.equal(
-        `${base}/client/xterm_config/index.html`,
-      );
+      expect(harness.dom.window.location.pathname).to.equal(`${base}/client/xterm_config/index.html`);
       expect(harness.parentMessages).to.have.length(1);
-      expect(harness.parentMessages[0]?.targetOrigin).to.equal(
-        applicationOrigin,
-      );
+      expect(harness.parentMessages[0]?.targetOrigin).to.equal(applicationOrigin);
       const config = savedConfig(harness);
       expect(config.wettyFitTerminal).to.equal(false);
       expect(config.xterm).not.to.have.property('bellSound');
@@ -326,15 +290,11 @@ describe('bundled xterm configuration editor', () => {
     const wordSeparator = optionInput(harness, 'Word Separator');
 
     wordSeparator.value = '{invalid';
-    wordSeparator.dispatchEvent(
-      new harness.dom.window.Event('input', { bubbles: true }),
-    );
+    wordSeparator.dispatchEvent(new harness.dom.window.Event('input', { bubbles: true }));
     expect(harness.parentMessages).to.deep.equal([]);
 
     wordSeparator.value = '"separators"';
-    wordSeparator.dispatchEvent(
-      new harness.dom.window.Event('input', { bubbles: true }),
-    );
+    wordSeparator.dispatchEvent(new harness.dom.window.Event('input', { bubbles: true }));
 
     expect(harness.parentMessages).to.have.length(1);
     const xterm = savedConfig(harness).xterm as Record<string, unknown>;

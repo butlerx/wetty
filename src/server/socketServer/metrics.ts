@@ -4,15 +4,7 @@ import ResponseTime from 'response-time';
 import type { Request, Response, RequestHandler } from 'express';
 
 const requestLabels = ['route', 'method', 'status'];
-const requestMethods = new Set([
-  'GET',
-  'HEAD',
-  'POST',
-  'PUT',
-  'DELETE',
-  'PATCH',
-  'OPTIONS',
-]);
+const requestMethods = new Set(['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS']);
 
 const requestCount = new Counter({
   name: 'http_requests_total',

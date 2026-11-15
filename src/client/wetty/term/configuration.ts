@@ -27,10 +27,7 @@ export function configureTerm(term: Term): () => void {
 
   function sendOptionsToEditor(): void {
     if (!active) return;
-    editorElem.contentWindow?.postMessage(
-      { type: 'wetty:load', config: loadOptions() },
-      applicationOrigin,
-    );
+    editorElem.contentWindow?.postMessage({ type: 'wetty:load', config: loadOptions() }, applicationOrigin);
   }
 
   function editorOnLoad(): void {
@@ -38,11 +35,7 @@ export function configureTerm(term: Term): () => void {
   }
 
   function editorOnMessage(event: MessageEvent<unknown>): void {
-    if (
-      !active ||
-      event.origin !== applicationOrigin ||
-      event.source !== editorElem.contentWindow
-    ) {
+    if (!active || event.origin !== applicationOrigin || event.source !== editorElem.contentWindow) {
       return;
     }
     const message = decodeEditorMessage(event.data);
@@ -58,9 +51,7 @@ export function configureTerm(term: Term): () => void {
     sendOptionsToEditor();
     optionsElem.classList.toggle('opened');
     if (optionsElem.classList.contains('opened')) {
-      document
-        .querySelector('div#functions > div.onscreen-buttons')
-        ?.classList.remove('active');
+      document.querySelector('div#functions > div.onscreen-buttons')?.classList.remove('active');
     }
     event.preventDefault();
   }

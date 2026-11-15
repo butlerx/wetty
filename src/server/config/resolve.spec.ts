@@ -3,13 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import 'mocha';
 import { expect } from 'chai';
-import {
-  defaultCommand,
-  defaultLogLevel,
-  forceSSHDefault,
-  serverDefault,
-  sshDefault,
-} from './defaults';
+import { defaultCommand, defaultLogLevel, forceSSHDefault, serverDefault, sshDefault } from './defaults';
 import { loadConfigFile, mergeCliConf } from './resolve';
 import type { Config } from './types';
 import type { Arguments } from 'yargs';
@@ -59,11 +53,7 @@ afterEach(async () => {
   Object.assign(serverDefault, originalServerDefault, {
     allowedOrigins: [...originalServerDefault.allowedOrigins],
   });
-  await Promise.all(
-    temporaryDirectories
-      .splice(0)
-      .map((directory) => rm(directory, { recursive: true, force: true })),
-  );
+  await Promise.all(temporaryDirectories.splice(0).map((directory) => rm(directory, { recursive: true, force: true })));
 });
 
 describe('configuration isolation', () => {
@@ -87,12 +77,8 @@ describe('configuration isolation', () => {
     const second = await loadConfigFile();
 
     expect(second.ssh.port).to.equal(originalSshDefault.port);
-    expect(second.server.allowedOrigins).to.deep.equal(
-      originalServerDefault.allowedOrigins,
-    );
-    expect(serverDefault.allowedOrigins).to.deep.equal(
-      originalServerDefault.allowedOrigins,
-    );
+    expect(second.server.allowedOrigins).to.deep.equal(originalServerDefault.allowedOrigins);
+    expect(serverDefault.allowedOrigins).to.deep.equal(originalServerDefault.allowedOrigins);
   });
 
   it('keeps merged origins independent of the source config', () => {
@@ -101,28 +87,18 @@ describe('configuration isolation', () => {
 
     getAllowedOrigins(merged).push('https://mutated.example');
 
-    expect(source.server.allowedOrigins).to.deep.equal([
-      'https://configured.example',
-    ]);
+    expect(source.server.allowedOrigins).to.deep.equal(['https://configured.example']);
   });
 });
 
 describe('allowed Origin configuration', () => {
   it('keeps origins loaded from configuration when the CLI option is absent', () => {
     const config = mergeCliConf(args(), configWithOrigins());
-    expect(config.server.allowedOrigins).to.deep.equal([
-      'https://configured.example',
-    ]);
+    expect(config.server.allowedOrigins).to.deep.equal(['https://configured.example']);
   });
 
   it('uses repeated CLI origin values instead of configured origins', () => {
-    const config = mergeCliConf(
-      args(['https://one.example', 'https://two.example']),
-      configWithOrigins(),
-    );
-    expect(config.server.allowedOrigins).to.deep.equal([
-      'https://one.example',
-      'https://two.example',
-    ]);
+    const config = mergeCliConf(args(['https://one.example', 'https://two.example']), configWithOrigins());
+    expect(config.server.allowedOrigins).to.deep.equal(['https://one.example', 'https://two.example']);
   });
 });

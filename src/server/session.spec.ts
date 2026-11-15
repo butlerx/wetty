@@ -4,11 +4,7 @@ import * as sinon from 'sinon';
 
 import { tinybuffer } from './flowcontrol';
 import { login, type LoginPty } from './login';
-import {
-  createServerSession,
-  runServerSession,
-  SessionEndError,
-} from './session';
+import { createServerSession, runServerSession, SessionEndError } from './session';
 import { spawn, type SpawnPty } from './spawn/index.js';
 import type { Socket } from 'socket.io';
 
@@ -105,8 +101,7 @@ function createPtyHarness() {
       return resumeCount;
     },
     retainedData: (): ((data: string) => void) | undefined => retainedData[0],
-    retainedExit: (): ((event: { exitCode: number }) => void) | undefined =>
-      retainedExit[0],
+    retainedExit: (): ((event: { exitCode: number }) => void) | undefined => retainedExit[0],
     triggerData(data: string) {
       for (const listener of [...activeData]) listener(data);
     },
@@ -317,9 +312,7 @@ describe('server socket session lifecycle', () => {
     expect(loginPty.writes).to.deep.equal(['alice']);
     expect(mainPty.writes).to.deep.equal(['whoami']);
     expect(unrelatedInputCount).to.equal(2);
-    expect(
-      socket.emissions.filter(({ event }) => event === 'login'),
-    ).to.have.lengthOf(1);
+    expect(socket.emissions.filter(({ event }) => event === 'login')).to.have.lengthOf(1);
   });
 
   it('ignores malformed login input before temporary PTY and buffer access', async () => {
@@ -475,14 +468,7 @@ describe('server socket session lifecycle', () => {
     pty.triggerData('x'.repeat(2_097_153));
     expect(pty.pauseCount).to.equal(1);
 
-    for (const invalid of [
-      undefined,
-      '262144',
-      -1,
-      Number.NaN,
-      Number.POSITIVE_INFINITY,
-      2_097_153,
-    ]) {
+    for (const invalid of [undefined, '262144', -1, Number.NaN, Number.POSITIVE_INFINITY, 2_097_153]) {
       socket.trigger('commit', invalid);
     }
     expect(pty.resumeCount).to.equal(0);
@@ -633,9 +619,7 @@ describe('server socket session lifecycle', () => {
 
     expect(await session.completion).to.equal('socket-disconnect');
     expect(pty.killCount).to.equal(1);
-    expect(
-      socket.emissions.filter(({ event }) => event === 'logout'),
-    ).to.have.lengthOf(0);
+    expect(socket.emissions.filter(({ event }) => event === 'logout')).to.have.lengthOf(0);
   });
 
   it('cancels buffered sends so timers cannot emit after disposal', () => {
