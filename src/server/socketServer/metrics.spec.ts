@@ -97,24 +97,20 @@ describe('HTTP metrics cardinality', () => {
     await sendUniquePaths('second');
     const after = await Promise.all(metricNames.map(metricValues));
 
-    expect(after.map((values) => values.length)).to.deep.equal(
-      before.map((values) => values.length),
-    );
+    expect(after.map((values) => values.length)).to.deep.equal(before.map((values) => values.length));
     for (const values of after) {
-      expect(
-        [...new Set(values.map((value) => value.labels.route))].sort(),
-      ).to.deep.equal(['/wetty/client/*', '/wetty/ssh/:user', 'unmatched']);
+      expect([...new Set(values.map((value) => value.labels.route))].sort()).to.deep.equal([
+        '/wetty/client/*',
+        '/wetty/ssh/:user',
+        'unmatched',
+      ]);
     }
     const counts = await metricValues('http_requests_total');
     expect(counts.map((value) => value.value)).to.deep.equal([100, 100, 100]);
   });
 
   it('keeps fixed route labels and does not count metrics scrapes', async () => {
-    await Promise.all([
-      request('/wetty'),
-      request('/wetty/sw.js'),
-      request('/wetty/ssh/user%20name'),
-    ]);
+    await Promise.all([request('/wetty'), request('/wetty/sw.js'), request('/wetty/ssh/user%20name')]);
     const before = await Promise.all(metricNames.map(metricValues));
     const scrape = await request('/wetty/metrics?cache=unique');
     await request('/wetty/metrics/extra');
@@ -131,10 +127,7 @@ describe('HTTP metrics cardinality', () => {
   });
 
   it('uses a bounded label for extension HTTP methods', async () => {
-    await Promise.all([
-      request('/unknown/one', 'PROPFIND'),
-      request('/unknown/two', 'MKCOL'),
-    ]);
+    await Promise.all([request('/unknown/one', 'PROPFIND'), request('/unknown/two', 'MKCOL')]);
     const counts = await metricValues('http_requests_total');
     expect(counts).to.have.lengthOf(1);
     expect(counts[0].labels).to.deep.equal({

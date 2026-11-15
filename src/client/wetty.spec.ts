@@ -55,19 +55,12 @@ function createSocketHarness() {
 function createEventTargetHarness() {
   const listeners = new Map<string, Set<EventListenerOrEventListenerObject>>();
   const target = {
-    addEventListener(
-      event: string,
-      listener: EventListenerOrEventListenerObject,
-    ) {
-      const eventListeners =
-        listeners.get(event) ?? new Set<EventListenerOrEventListenerObject>();
+    addEventListener(event: string, listener: EventListenerOrEventListenerObject) {
+      const eventListeners = listeners.get(event) ?? new Set<EventListenerOrEventListenerObject>();
       eventListeners.add(listener);
       listeners.set(event, eventListeners);
     },
-    removeEventListener(
-      event: string,
-      listener: EventListenerOrEventListenerObject,
-    ) {
+    removeEventListener(event: string, listener: EventListenerOrEventListenerObject) {
       listeners.get(event)?.delete(listener);
     },
   };
@@ -203,15 +196,9 @@ describe('browser terminal session lifecycle', () => {
 
     expect(first.writes).to.have.length(0);
     expect(second.writes).to.have.length(0);
-    expect(third.writes.map(({ data }) => data)).to.deep.equal([
-      'server output',
-    ]);
-    expect(
-      harness.socket.emissions.filter(({ event }) => event === 'input'),
-    ).to.have.length(2);
-    expect(
-      harness.socket.emissions.filter(({ event }) => event === 'resize'),
-    ).to.have.length(0);
+    expect(third.writes.map(({ data }) => data)).to.deep.equal(['server output']);
+    expect(harness.socket.emissions.filter(({ event }) => event === 'input')).to.have.length(2);
+    expect(harness.socket.emissions.filter(({ event }) => event === 'resize')).to.have.length(0);
     expect(third.term.resizeTerm.calledTwice).to.equal(true);
 
     controller.dispose();
@@ -237,9 +224,7 @@ describe('browser terminal session lifecycle', () => {
 
     expect(first.writes).to.have.length(1);
     expect(second.writes).to.have.length(0);
-    expect(harness.socket.emissions).to.have.length(
-      emissionsBeforeStaleCallbacks,
-    );
+    expect(harness.socket.emissions).to.have.length(emissionsBeforeStaleCallbacks);
 
     controller.dispose();
   });
@@ -247,11 +232,7 @@ describe('browser terminal session lifecycle', () => {
   it('preserves visible disconnect, reconnect, and creation-failure states', () => {
     const first = createTerminalHarness();
     const replacement = createTerminalHarness();
-    const harness = createSessionHarness([
-      first.term,
-      replacement.term,
-      undefined,
-    ]);
+    const harness = createSessionHarness([first.term, replacement.term, undefined]);
     const controller = createSessionController(harness.dependencies);
 
     harness.socket.trigger('connect');
@@ -275,9 +256,7 @@ describe('browser terminal session lifecycle', () => {
     harness.socket.trigger('connect');
     expect(replacement.term.dispose.calledOnce).to.equal(true);
     expect(harness.state.overlayVisible).to.equal(true);
-    expect(harness.state.disconnectedReason).to.equal(
-      'Terminal initialization failed',
-    );
+    expect(harness.state.disconnectedReason).to.equal('Terminal initialization failed');
     expect(harness.state.terminalReference).to.equal(undefined);
 
     controller.dispose();
@@ -299,9 +278,7 @@ describe('browser terminal session lifecycle', () => {
     } satisfies SessionTerminal;
     const harness = createSessionHarness([term]);
 
-    expect(() => createBrowserSession(harness.dependencies)).to.throw(
-      'binary subscription failed',
-    );
+    expect(() => createBrowserSession(harness.dependencies)).to.throw('binary subscription failed');
 
     expect(firstListenerDispose.calledOnce).to.equal(true);
     expect(term.dispose.calledOnce).to.equal(true);

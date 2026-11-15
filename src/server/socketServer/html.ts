@@ -48,12 +48,7 @@ const render = (title: string, base: string): string => `<!doctype html>
       <iframe class="editor" src="${base}/client/xterm_config/index.html"></iframe>
     </div>
     <div id="terminal"></div>
-    ${jsFiles
-      .map(
-        (file) =>
-          `    <script type="module" src="${base}/client/${file}"></script>`,
-      )
-      .join('\n')}
+    ${jsFiles.map((file) => `    <script type="module" src="${base}/client/${file}"></script>`).join('\n')}
   </body>
 </html>`;
 

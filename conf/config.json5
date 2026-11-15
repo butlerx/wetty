@@ -1,22 +1,22 @@
 {
-  "ssh": {
-    "host": "localhost",
-    "auth": "password",
-    "port": 22,
-    "knownHosts": "/dev/null",
-    "allowRemoteHosts": false,
-    "allowRemoteCommand": false
+  ssh: {
+    host: 'localhost',
+    auth: 'password',
+    port: 22,
+    knownHosts: '/dev/null',
+    allowRemoteHosts: false,
+    allowRemoteCommand: false,
   },
-  "server": {
-    "base": "/",
-    "port": 3000,
-    "host": "0.0.0.0",
-    "title": "WeTTY - The Web Terminal Emulator",
-    "allowIframe": false,
-    "pingInterval": 3000,
-    "pingTimeout": 7000,
-    "allowedOrigins": ["http://localhost:3000"]
+  server: {
+    base: '/',
+    port: 3000,
+    host: '0.0.0.0',
+    title: 'WeTTY - The Web Terminal Emulator',
+    allowIframe: false,
+    pingInterval: 3000,
+    pingTimeout: 7000,
+    allowedOrigins: ['http://localhost:3000'],
   },
-  "forceSSH": false,
-  "command": "login"
+  forceSSH: false,
+  command: 'login',
 }

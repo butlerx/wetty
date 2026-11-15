@@ -24,8 +24,7 @@ const gcTimeCount = new Counter({
 export function observeGC(): void {
   const obs = new PerformanceObserver((list) => {
     for (const entry of list.getEntries()) {
-      const kind =
-        (entry as unknown as { detail?: { kind?: number } }).detail?.kind ?? 0;
+      const kind = (entry as unknown as { detail?: { kind?: number } }).detail?.kind ?? 0;
       const gcType = gcTypes[kind] ?? 'Unknown';
       gcCount.labels(gcType).inc();
       gcTimeCount.labels(gcType).inc(entry.duration / 1000);

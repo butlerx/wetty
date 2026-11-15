@@ -2,17 +2,13 @@ import process from 'node:process';
 import { address } from './address.js';
 import { loginOptions } from './login.js';
 import { sshOptions } from './ssh.js';
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from '../../protocol/socket-events.js';
+import type { ClientToServerEvents, ServerToClientEvents } from '../../protocol/socket-events.js';
 import type { SSH } from '../config/types.js';
 import type { ServerSession } from '../session.js';
 import type { Socket } from 'socket.io';
 
 const localhost = (host: string): boolean =>
-  process.getuid?.() === 0 &&
-  (host === 'localhost' || host === '0.0.0.0' || host === '127.0.0.1');
+  process.getuid?.() === 0 && (host === 'localhost' || host === '0.0.0.0' || host === '127.0.0.1');
 
 const urlArgs = (
   referer: string | undefined,
@@ -40,18 +36,7 @@ const urlArgs = (
 
 export async function getCommand(
   socket: Socket<ClientToServerEvents, ServerToClientEvents>,
-  {
-    user,
-    host,
-    port,
-    auth,
-    pass,
-    key,
-    knownHosts,
-    config,
-    allowRemoteHosts,
-    allowRemoteCommand,
-  }: SSH,
+  { user, host, port, auth, pass, key, knownHosts, config, allowRemoteHosts, allowRemoteCommand }: SSH,
   command: string,
   forcessh: boolean,
   session: ServerSession,

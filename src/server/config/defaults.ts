@@ -25,20 +25,12 @@ export const sshDefault: SSH = {
  * @returns a positive integer
  *
  */
-export const positiveIntOr = (
-  value: string | number | undefined,
-  fallback: number,
-): number => {
+export const positiveIntOr = (value: string | number | undefined, fallback: number): number => {
   const parsed = typeof value === 'string' ? parseInt(value, 10) : value;
-  return parsed !== undefined && Number.isFinite(parsed) && parsed > 0
-    ? parsed
-    : fallback;
+  return parsed !== undefined && Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 };
 
-export const defaultPingInterval = positiveIntOr(
-  process.env.PINGINTERVAL,
-  3000,
-);
+export const defaultPingInterval = positiveIntOr(process.env.PINGINTERVAL, 3000);
 export const defaultPingTimeout = positiveIntOr(process.env.PINGTIMEOUT, 7000);
 
 export const serverDefault: Server = {

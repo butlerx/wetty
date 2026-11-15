@@ -131,9 +131,7 @@ describe('Socket.IO origin validation', () => {
     };
 
     expect(await probeHandshake({ ...request, origin: 'null' })).to.equal(403);
-    expect(
-      await probeHandshake({ ...request, origin: 'https://evil.example' }),
-    ).to.equal(403);
+    expect(await probeHandshake({ ...request, origin: 'https://evil.example' })).to.equal(403);
   });
 
   it('rejects a foreign browser origin', async () => {
@@ -144,10 +142,7 @@ describe('Socket.IO origin validation', () => {
   it('rejects missing and null origins on both transports by default', async () => {
     const statuses = await Promise.all(
       (['polling', 'websocket'] as const).map((transport) =>
-        Promise.all([
-          probeHandshake({ transport }),
-          probeHandshake({ transport, origin: 'null' }),
-        ]),
+        Promise.all([probeHandshake({ transport }), probeHandshake({ transport, origin: 'null' })]),
       ),
     );
     expect(statuses).to.deep.equal([
@@ -157,9 +152,7 @@ describe('Socket.IO origin validation', () => {
   });
 
   it('accepts a request with no origin when allowMissingOrigin is true', async () => {
-    expect(
-      await probeHandshake({ transport: 'polling', allowMissingOrigin: true }),
-    ).to.equal(200);
+    expect(await probeHandshake({ transport: 'polling', allowMissingOrigin: true })).to.equal(200);
   });
 
   it('allowMissingOrigin does not bypass the null-origin rejection', async () => {
@@ -357,12 +350,8 @@ describe('Socket.IO origin validation', () => {
       secFetchSite: 'same-origin',
       allowedOrigins: ['https://terminal.example:8443'],
     };
-    expect(
-      await probeHandshake({ ...request, host: 'terminal.example:8443' }),
-    ).to.equal(200);
-    expect(
-      await probeHandshake({ ...request, host: 'terminal.example:8444' }),
-    ).to.equal(403);
+    expect(await probeHandshake({ ...request, host: 'terminal.example:8443' })).to.equal(200);
+    expect(await probeHandshake({ ...request, host: 'terminal.example:8444' })).to.equal(403);
   });
 
   it('accepts an explicitly configured origin', async () => {

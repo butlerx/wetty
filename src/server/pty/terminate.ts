@@ -17,11 +17,7 @@ interface TerminationOptions {
 }
 
 function processIsGone(error: unknown): boolean {
-  return (
-    error instanceof Error &&
-    'code' in error &&
-    (error as NodeJS.ErrnoException).code === 'ESRCH'
-  );
+  return error instanceof Error && 'code' in error && (error as NodeJS.ErrnoException).code === 'ESRCH';
 }
 
 export function terminatePty(
@@ -67,9 +63,7 @@ export function terminatePty(
     } catch (forcedError) {
       reportError(
         new AggregateError(
-          gracefulError === undefined
-            ? [forcedError]
-            : [gracefulError, forcedError],
+          gracefulError === undefined ? [forcedError] : [gracefulError, forcedError],
           'Unable to terminate PTY',
         ),
       );

@@ -4,7 +4,5 @@ function getRemoteAddress(remoteAddress: string): string {
 }
 
 export function loginOptions(command: string, remoteAddress: string): string[] {
-  return command === 'login'
-    ? [command, '-h', getRemoteAddress(remoteAddress)]
-    : [command];
+  return command === 'login' ? [command, '-h', getRemoteAddress(remoteAddress)] : [command];
 }

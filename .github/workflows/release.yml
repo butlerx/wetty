@@ -1,34 +1,45 @@
----
 name: Release
 on:
   push:
     branches:
       - main
-permissions: {}
+permissions:
+  contents: read
 jobs:
   test:
     name: Build & Test
-    uses: ./.github/workflows/build-and-test.workflow.yml
+    uses: ./.github/workflows/build-and-test.workflow.yml # zizmor: ignore[self-repository]
     permissions:
       contents: read
 
-  release:
-    name: Release
+  release-please:
+    name: Release Please
     needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      issues: write
       pull-requests: write
-      id-token: write
     outputs:
-      new_release_published: ${{ steps.check.outputs.new_release_published }}
-      new_release_version: ${{ steps.check.outputs.new_release_version }}
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        id: release
+        with:
+          token: ${{ github.token }}
+
+  publish:
+    name: Publish to npm
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          fetch-depth: 0
           persist-credentials: false
 
       - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
@@ -46,35 +57,14 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Get latest tag before release
-        id: before
-        run: echo "tag=$(git describe --tags --abbrev=0 2>/dev/null || echo 'none')" >> $GITHUB_OUTPUT
-
-      - name: Release
-        id: semantic
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm exec semantic-release
-
-      - name: Check if new release was created
-        id: check
-        run: |
-          git fetch --tags
-          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo 'none')
-          if [ "$LATEST_TAG" != "${STEPS_BEFORE_OUTPUTS_TAG}" ]; then
-            echo "new_release_published=true" >> $GITHUB_OUTPUT
-            echo "new_release_version=${LATEST_TAG#v}" >> $GITHUB_OUTPUT
-          else
-            echo "new_release_published=false" >> $GITHUB_OUTPUT
-          fi
-        env:
-          STEPS_BEFORE_OUTPUTS_TAG: ${{ steps.before.outputs.tag }}
+      - name: Publish to npm
+        run: npm publish --provenance --access public
 
   docker:
     name: Docker Publish
-    needs: release
-    if: needs.release.outputs.new_release_published == 'true'
-    uses: ./.github/workflows/docker.workflow.yml
+    needs: release-please
+    if: needs.release-please.outputs.release_created == 'true'
+    uses: ./.github/workflows/docker.workflow.yml # zizmor: ignore[self-repository]
     permissions:
       contents: read
       packages: write
@@ -83,3 +73,4 @@ jobs:
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
     with:
       push: true
+      tag: ${{ needs.release-please.outputs.tag_name }}

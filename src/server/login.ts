@@ -1,11 +1,7 @@
 import { dirname, resolve as resolvePath } from 'path';
 import { fileURLToPath } from 'url';
 import pty from 'node-pty';
-import {
-  parseInputPayload,
-  type ClientToServerEvents,
-  type ServerToClientEvents,
-} from '../protocol/socket-events.js';
+import { parseInputPayload, type ClientToServerEvents, type ServerToClientEvents } from '../protocol/socket-events.js';
 import { logger as getLogger } from './observability/logger.js';
 import { writePtyInput } from './pty/input.js';
 import { xterm } from './pty/options.js';
@@ -30,11 +26,7 @@ interface LoginDependencies {
   spawnPty(): LoginPty;
 }
 
-const executable = resolvePath(
-  dirname(fileURLToPath(import.meta.url)),
-  '..',
-  'buffer.js',
-);
+const executable = resolvePath(dirname(fileURLToPath(import.meta.url)), '..', 'buffer.js');
 const MAX_INTERACTIVE_LOGIN_LENGTH = 256;
 
 function isSessionActive(session: ServerSession): boolean {
@@ -51,10 +43,7 @@ export function login(
   const logger = getLogger();
   if (!isSessionActive(session)) {
     return Promise.reject(
-      new SessionEndError(
-        session.reason ?? 'login-rejected',
-        'Session ended before interactive login',
-      ),
+      new SessionEndError(session.reason ?? 'login-rejected', 'Session ended before interactive login'),
     );
   }
 
@@ -74,10 +63,7 @@ export function login(
   if (!isSessionActive(session)) {
     terminate();
     return Promise.reject(
-      new SessionEndError(
-        session.reason ?? 'login-rejected',
-        'Session ended during interactive login startup',
-      ),
+      new SessionEndError(session.reason ?? 'login-rejected', 'Session ended during interactive login startup'),
     );
   }
 
@@ -155,10 +141,7 @@ export function login(
       }
       let updatedBuffer = buffer;
       for (const character of payload.input) {
-        updatedBuffer =
-          character === '\x7F'
-            ? updatedBuffer.slice(0, -1)
-            : updatedBuffer + character;
+        updatedBuffer = character === '\x7F' ? updatedBuffer.slice(0, -1) : updatedBuffer + character;
         if (updatedBuffer.length > MAX_INTERACTIVE_LOGIN_LENGTH) {
           logger.warn('Interactive login input exceeded the username limit');
           session.end('login-rejected');

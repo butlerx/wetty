@@ -1,0 +1,4 @@
+# yamlfmt owns YAML (see .yamlfmt.yaml); pnpm owns the lockfile
+**/*.yml
+**/*.yaml
+pnpm-lock.yaml

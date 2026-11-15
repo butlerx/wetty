@@ -1,10 +1,7 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import {
-  clientToServerPayloads,
-  serverToClientPayloads,
-} from './fixtures/socket-events';
+import { clientToServerPayloads, serverToClientPayloads } from './fixtures/socket-events';
 import {
   MAX_FLOW_CONTROL_COMMIT,
   MAX_TERMINAL_INPUT_BYTES,
@@ -15,11 +12,7 @@ import {
 
 describe('Socket.IO protocol compatibility', () => {
   it('locks the client-to-server event names and representative payloads', () => {
-    expect(Object.keys(clientToServerPayloads)).to.deep.equal([
-      'input',
-      'resize',
-      'commit',
-    ]);
+    expect(Object.keys(clientToServerPayloads)).to.deep.equal(['input', 'resize', 'commit']);
     expect(clientToServerPayloads).to.deep.equal({
       input: ['whoami', true],
       resize: [{ cols: 80, rows: 24 }],
@@ -28,12 +21,7 @@ describe('Socket.IO protocol compatibility', () => {
   });
 
   it('locks the server-to-client event names and representative payloads', () => {
-    expect(Object.keys(serverToClientPayloads)).to.deep.equal([
-      'data',
-      'login',
-      'logout',
-      'error',
-    ]);
+    expect(Object.keys(serverToClientPayloads)).to.deep.equal(['data', 'login', 'logout', 'error']);
     expect(serverToClientPayloads).to.deep.equal({
       data: ['terminal output'],
       login: [],
@@ -61,9 +49,7 @@ describe('client payload decoders', () => {
       input: largePaste,
       binary: false,
     });
-    expect(
-      parseInputPayload('x'.repeat(MAX_TERMINAL_INPUT_BYTES), false),
-    ).to.deep.equal({
+    expect(parseInputPayload('x'.repeat(MAX_TERMINAL_INPUT_BYTES), false)).to.deep.equal({
       input: 'x'.repeat(MAX_TERMINAL_INPUT_BYTES),
       binary: false,
     });
@@ -73,9 +59,7 @@ describe('client payload decoders', () => {
     for (const value of [undefined, null, 42, {}, ['whoami']]) {
       expect(parseInputPayload(value)).to.equal(undefined);
     }
-    expect(
-      parseInputPayload('x'.repeat(MAX_TERMINAL_INPUT_BYTES + 1)),
-    ).to.equal(undefined);
+    expect(parseInputPayload('x'.repeat(MAX_TERMINAL_INPUT_BYTES + 1))).to.equal(undefined);
     expect(parseInputPayload('whoami', 'true')).to.equal(undefined);
     expect(parseInputPayload('whoami', 1)).to.equal(undefined);
     expect(parseInputPayload('whoami', null)).to.equal(undefined);
@@ -84,9 +68,7 @@ describe('client payload decoders', () => {
   it('accepts finite nonnegative commit payloads within the bound', () => {
     expect(parseCommitPayload(0)).to.equal(0);
     expect(parseCommitPayload(262144)).to.equal(262144);
-    expect(parseCommitPayload(MAX_FLOW_CONTROL_COMMIT)).to.equal(
-      MAX_FLOW_CONTROL_COMMIT,
-    );
+    expect(parseCommitPayload(MAX_FLOW_CONTROL_COMMIT)).to.equal(MAX_FLOW_CONTROL_COMMIT);
   });
 
   it('rejects missing, wrong-type, negative, nonfinite, and oversized commits', () => {

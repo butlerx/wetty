@@ -13,10 +13,7 @@ export const policies =
           scriptSrcAttr: ["'unsafe-inline'"],
           styleSrc: ["'self'", "'unsafe-inline'"],
           fontSrc: ["'self'", 'data:'],
-          connectSrc: [
-            "'self'",
-            `${req.protocol === 'http' ? 'ws://' : 'wss://'}${req.get('host') ?? ''}`,
-          ],
+          connectSrc: ["'self'", `${req.protocol === 'http' ? 'ws://' : 'wss://'}${req.get('host') ?? ''}`],
         },
       },
       xFrameOptions: allowIframe ? false : { action: 'sameorigin' },

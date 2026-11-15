@@ -44,10 +44,7 @@ export interface TerminalInputPayload {
 }
 
 /** Validate one client-originated terminal input event. */
-export function parseInputPayload(
-  input: unknown,
-  binary?: unknown,
-): TerminalInputPayload | undefined {
+export function parseInputPayload(input: unknown, binary?: unknown): TerminalInputPayload | undefined {
   if (
     typeof input !== 'string' ||
     new TextEncoder().encode(input).byteLength > MAX_TERMINAL_INPUT_BYTES ||

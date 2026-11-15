@@ -1,12 +1,11 @@
 # File Downloading
 
-WeTTY supports file downloads by printing terminal escape sequences between a
-base64 encoded file. The name of the downloaded file can optionally be provided,
-also base64 encoded, before the encoded file contents with a `:` separating them.
+WeTTY supports file downloads by printing terminal escape sequences between a base64 encoded file. The name of the
+downloaded file can optionally be provided, also base64 encoded, before the encoded file contents with a `:` separating
+them.
 
-The terminal escape sequences used are `^[[5i` and `^[[4i` (VT100 for "enter
-auto print" and "exit auto print" respectively -
-https://vt100.net/docs/tp83/appendixc.html).
+The terminal escape sequences used are `^[[5i` and `^[[4i` (VT100 for "enter auto print" and "exit auto print"
+respectively - https://vt100.net/docs/tp83/appendixc.html).
 
 To take advantage add the following bash function to your `.bashrc`
 
@@ -40,5 +39,5 @@ or you can still use the classic style:
 $ cat my-pdf-file.pdf | wetty-download
 ```
 
-WeTTY will then issue a popup like the following that links to a local file
-blob: `Download ready: file-20191015233654.pdf`
+WeTTY will then issue a popup like the following that links to a local file blob:
+`Download ready: file-20191015233654.pdf`

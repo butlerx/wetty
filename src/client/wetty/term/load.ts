@@ -9,8 +9,7 @@ export const defaultOptions: Options = {
 export function loadOptions(): Options {
   try {
     const raw = localStorage.options as string | undefined;
-    let options: Options =
-      raw === undefined ? defaultOptions : (JSON.parse(raw) as Options);
+    let options: Options = raw === undefined ? defaultOptions : (JSON.parse(raw) as Options);
     if (!('xterm' in options)) {
       const { xterm } = options;
       options = defaultOptions;

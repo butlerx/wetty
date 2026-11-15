@@ -1,0 +1,52 @@
+[tools]
+node       = "lts"
+pnpm       = "9.4.0"
+prek       = "latest"
+tombi      = "1.11.2"
+zizmor     = "latest"
+shellcheck = "latest"
+
+[settings]
+experimental = true
+lockfile     = true
+
+[tasks.build]
+description = "Compile TypeScript with esbuild"
+run         = "pnpm build"
+sources     = ["src/**/*", "build.js", "package.json", "tsconfig*.json"]
+outputs     = ["build/"]
+
+[tasks.test]
+description = "Run tests"
+depends     = ["build"]
+run         = "pnpm test"
+alias       = "t"
+
+[tasks.lint]
+description = "Lint code with ESLint"
+run         = "pnpm lint"
+
+[tasks."lint:fix"]
+description = "Fix lint issues"
+run         = "pnpm lint:fix"
+
+[tasks.format]
+description = "Format Markdown, JSON, SCSS and TOML"
+run         = ["pnpm exec prettier --write .", "tombi format"]
+alias       = "f"
+
+[tasks."format:check"]
+description = "Check formatting"
+run         = ["pnpm exec prettier --check .", "tombi format --check"]
+
+[tasks."check:actions"]
+description = "Lint GitHub Actions workflows"
+run         = "zizmor --no-progress .github"
+
+[tasks.check]
+description = "Run all checks (format, lint, build, test)"
+depends     = ["format:check", "lint", "build", "test"]
+
+[tasks.hooks]
+description = "Install the prek git hooks"
+run         = "prek install --install-hooks --hook-type pre-commit --hook-type commit-msg"

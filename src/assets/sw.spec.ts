@@ -127,9 +127,7 @@ describe('service worker cache boundary', () => {
     if (fetchListener === undefined) throw new Error('Missing fetch listener');
 
     fetchListener({
-      request: new Request(
-        'https://wetty.example/wetty/client/xterm_config/functionality.js',
-      ),
+      request: new Request('https://wetty.example/wetty/client/xterm_config/functionality.js'),
       respondWith: () => undefined,
       waitUntil(promise) {
         cachePromise = promise;
@@ -173,9 +171,7 @@ describe('service worker cache boundary', () => {
     if (fetchListener === undefined) throw new Error('Missing fetch listener');
 
     fetchListener({
-      request: new Request(
-        'https://wetty.example/wetty/client/xterm_config/functionality.js',
-      ),
+      request: new Request('https://wetty.example/wetty/client/xterm_config/functionality.js'),
       respondWith(response) {
         responsePromise = response;
       },

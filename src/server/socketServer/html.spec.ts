@@ -11,11 +11,7 @@ function render(base: string): string {
     },
   };
 
-  html(base, 'WeTTY')(
-    {} as Request,
-    response as unknown as Response,
-    () => undefined,
-  );
+  html(base, 'WeTTY')({} as Request, response as unknown as Response, () => undefined);
   if (body === undefined) throw new Error('HTML response was not rendered');
   return body;
 }
@@ -26,8 +22,6 @@ describe('configuration editor asset path', () => {
   });
 
   it('prefixes the existing served path for a non-root base', () => {
-    expect(render('/wetty')).to.include(
-      'src="/wetty/client/xterm_config/index.html"',
-    );
+    expect(render('/wetty')).to.include('src="/wetty/client/xterm_config/index.html"');
   });
 });
