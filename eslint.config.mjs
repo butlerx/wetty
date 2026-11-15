@@ -352,12 +352,13 @@ export default tseslint.config(
       'import-x/no-amd': 'error',
       'import-x/first': 'error',
       'import-x/no-duplicates': 'error',
+      // Relative specifiers point at compiled .js output (Node ESM needs the extension), so `.js` is required.
       'import-x/extensions': [
         'error',
         'ignorePackages',
         {
           ts: 'never',
-          js: 'never',
+          js: 'always',
           mjs: 'never',
           jsx: 'never',
           tsx: 'never',
