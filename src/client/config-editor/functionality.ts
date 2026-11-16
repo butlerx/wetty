@@ -1,19 +1,8 @@
-import {
-  decodeEditorLoadMessage,
-  isOptions,
-  type EditorCloseMessage,
-  type EditorSaveMessage,
-} from './messages';
+import { decodeEditorLoadMessage, isOptions, type EditorCloseMessage, type EditorSaveMessage } from './messages';
 import type { Options } from '../wetty/term/options';
 
 export type OptionType = 'boolean' | 'color' | 'enum' | 'number' | 'text';
-export type OptionValue =
-  | boolean
-  | number
-  | string
-  | null
-  | OptionValue[]
-  | { [key: string]: OptionValue };
+export type OptionValue = boolean | number | string | null | OptionValue[] | { [key: string]: OptionValue };
 
 export interface OptionDefinition {
   type: OptionType;
@@ -92,8 +81,7 @@ function optionBoolSet(option: OptionDefinition, value: unknown): void {
 
 function optionNumberGet(option: OptionDefinition): number {
   const inputValue = optionInput(option).value;
-  let value =
-    option.float === true ? parseFloat(inputValue) : parseInt(inputValue, 10);
+  let value = option.float === true ? parseFloat(inputValue) : parseInt(inputValue, 10);
   if (Number.isNaN(value)) value = 0;
   if (option.min !== undefined) value = Math.max(value, option.min);
   if (option.max !== undefined) value = Math.min(value, option.max);
@@ -112,10 +100,7 @@ function copyChildren(source: HTMLElement, target: HTMLElement): void {
   while (source.children.length > 0) target.append(source.children[0]);
 }
 
-export function inflateOptions(
-  optionsSchema: OptionDefinition[],
-  target: HTMLElement,
-): void {
+export function inflateOptions(optionsSchema: OptionDefinition[], target: HTMLElement): void {
   optionsSchema.forEach((option) => {
     let wrapper: HTMLElement;
     option.get = () => optionGenericGet(option);
@@ -184,12 +169,7 @@ export function inflateOptions(
 }
 
 function isOptionValue(value: unknown): value is OptionValue {
-  if (
-    value === null ||
-    typeof value === 'boolean' ||
-    typeof value === 'number' ||
-    typeof value === 'string'
-  ) {
+  if (value === null || typeof value === 'boolean' || typeof value === 'number' || typeof value === 'string') {
     return true;
   }
   if (Array.isArray(value)) return value.every(isOptionValue);
@@ -197,10 +177,7 @@ function isOptionValue(value: unknown): value is OptionValue {
   return Object.values(value).every(isOptionValue);
 }
 
-function getItem(
-  value: unknown,
-  path: readonly string[],
-): OptionValue | undefined {
+function getItem(value: unknown, path: readonly string[]): OptionValue | undefined {
   if (path.length === 0) return isOptionValue(value) ? value : undefined;
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
     return undefined;
@@ -209,11 +186,7 @@ function getItem(
   return getItem((value as Record<string, unknown>)[key], remainingPath);
 }
 
-function setItem(
-  value: Record<string, unknown>,
-  path: readonly string[],
-  item: OptionValue,
-): void {
+function setItem(value: Record<string, unknown>, path: readonly string[], item: OptionValue): void {
   const [key, ...remainingPath] = path;
   if (remainingPath.length === 0) {
     value[key] = item;
@@ -231,11 +204,7 @@ export function loadOptions(config: Options): void {
     let value = getItem(config, option.path);
     if (option.nullable === true && option.type === 'text' && value == null) {
       value = null;
-    } else if (
-      option.nullable === true &&
-      option.type === 'number' &&
-      value == null
-    ) {
+    } else if (option.nullable === true && option.type === 'number' && value == null) {
       value = -1;
     } else if (value == null) {
       return;
@@ -255,9 +224,7 @@ export function saveConfig(): void {
     if (
       option.nullable === true &&
       ((option.type === 'text' && newValue === '') ||
-        (option.type === 'number' &&
-          typeof newValue === 'number' &&
-          newValue < 0))
+        (option.type === 'number' && typeof newValue === 'number' && newValue < 0))
     ) {
       return false;
     }
@@ -286,10 +253,7 @@ export function closeConfig(): void {
 
 export function initializeEditor(): void {
   window.addEventListener('message', (event: MessageEvent<unknown>) => {
-    if (
-      event.origin !== window.location.origin ||
-      event.source !== window.parent
-    ) {
+    if (event.origin !== window.location.origin || event.source !== window.parent) {
       return;
     }
     const message = decodeEditorLoadMessage(event.data);
@@ -300,8 +264,6 @@ export function initializeEditor(): void {
 
   if (window.top === window) {
     // eslint-disable-next-line no-alert -- Preserve the existing iframe-only warning.
-    alert(
-      'Error: Page is top level. This page is supposed to be accessed from inside WeTTY.',
-    );
+    alert('Error: Page is top level. This page is supposed to be accessed from inside WeTTY.');
   }
 }

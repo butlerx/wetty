@@ -1,20 +1,11 @@
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from '../protocol/socket-events.js';
+import type { ClientToServerEvents, ServerToClientEvents } from '../protocol/socket-events.js';
 import type { Socket } from 'socket.io';
 
 export type SessionEndReason =
-  | 'socket-disconnect'
-  | 'pty-exit'
-  | 'login-rejected'
-  | 'command-failure'
-  | 'spawn-failure'
-  | 'disposed';
+  'socket-disconnect' | 'pty-exit' | 'login-rejected' | 'command-failure' | 'spawn-failure' | 'disposed';
 
 type Cleanup = () => void;
-type ServerSessionState =
-  { status: 'active' } | { status: 'ended'; reason: SessionEndReason };
+type ServerSessionState = { status: 'active' } | { status: 'ended'; reason: SessionEndReason };
 
 export interface ServerSession {
   readonly active: boolean;
@@ -130,18 +121,12 @@ export interface ServerSessionRunnerDependencies {
 
 const sessionEnded: unique symbol = Symbol('session-ended');
 
-async function raceSessionStage<T>(
-  session: ServerSession,
-  operation: Promise<T>,
-): Promise<T | typeof sessionEnded> {
+async function raceSessionStage<T>(session: ServerSession, operation: Promise<T>): Promise<T | typeof sessionEnded> {
   const settled = operation.then(
     (value) => ({ status: 'fulfilled' as const, value }),
     (error: unknown) => ({ status: 'rejected' as const, error }),
   );
-  const outcome = await Promise.race([
-    settled,
-    session.completion.then(() => ({ status: 'ended' as const })),
-  ]);
+  const outcome = await Promise.race([settled, session.completion.then(() => ({ status: 'ended' as const }))]);
   if (outcome.status === 'ended') return sessionEnded;
   if (outcome.status === 'rejected') throw outcome.error;
   return outcome.value;
@@ -158,10 +143,7 @@ export async function runServerSession(
   dependencies.connections.inc();
 
   try {
-    const args = await raceSessionStage(
-      session,
-      dependencies.getCommand(session),
-    );
+    const args = await raceSessionStage(session, dependencies.getCommand(session));
     if (args !== sessionEnded && session.active) {
       dependencies.onCommand?.(args);
       stage = 'spawn';

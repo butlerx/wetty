@@ -11,9 +11,7 @@ describe('Client supplied terminal dimensions should be validated before resizin
   });
 
   it('should ignore extra properties', () => {
-    expect(
-      parseDimensions({ cols: 120, rows: 40, extra: 'ignored' }),
-    ).to.deep.equal({ cols: 120, rows: 40 });
+    expect(parseDimensions({ cols: 120, rows: 40, extra: 'ignored' })).to.deep.equal({ cols: 120, rows: 40 });
   });
 
   it('should reject payloads that are not objects', () => {
@@ -38,9 +36,7 @@ describe('Client supplied terminal dimensions should be validated before resizin
 
   it('should reject non integer and non finite dimensions', () => {
     expect(parseDimensions({ cols: Number.NaN, rows: 30 })).to.equal(undefined);
-    expect(
-      parseDimensions({ cols: 80, rows: Number.POSITIVE_INFINITY }),
-    ).to.equal(undefined);
+    expect(parseDimensions({ cols: 80, rows: Number.POSITIVE_INFINITY })).to.equal(undefined);
     expect(parseDimensions({ cols: 80.5, rows: 30 })).to.equal(undefined);
     expect(parseDimensions({ cols: '80', rows: '30' })).to.equal(undefined);
   });

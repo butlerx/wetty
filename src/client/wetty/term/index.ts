@@ -10,17 +10,11 @@ import { setTitle } from '../title';
 import { configureTerm } from './configuration';
 import { createTerminalControls } from './controls';
 import { loadOptions } from './load';
+import type { ClientToServerEvents, ServerToClientEvents } from '../../../protocol/socket-events.js';
 import type { Options } from './options';
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from '../../../protocol/socket-events.js';
 import type { Socket } from 'socket.io-client';
 
-const isMobile =
-  /iPhone|iPad|iPod|Android|webOS|BlackBerry|Opera Mini|IEMobile/i.test(
-    navigator.userAgent,
-  );
+const isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|Opera Mini|IEMobile/i.test(navigator.userAgent);
 const isWindows = /Windows/i.test(navigator.userAgent);
 const controls = createTerminalControls();
 controls.install();
@@ -32,10 +26,7 @@ export class Term extends Terminal {
   private configurationDisposer?: () => void;
   private sessionDisposed = false;
 
-  constructor(
-    socket: Socket<ServerToClientEvents, ClientToServerEvents>,
-    notifier: Notifier,
-  ) {
+  constructor(socket: Socket<ServerToClientEvents, ClientToServerEvents>, notifier: Notifier) {
     super({ allowProposedApi: true });
     this.socket = socket;
     this.fitAddon = new FitAddon();

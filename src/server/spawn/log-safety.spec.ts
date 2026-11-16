@@ -2,21 +2,16 @@ import 'mocha';
 import { expect } from 'chai';
 import { logSafeArgs } from './log-safety';
 
-const sshArgs = (...extra: string[]): string[] => [
-  'ssh',
-  '-t',
-  '-p',
-  '22',
-  ...extra,
-  '--',
-  'bob@example.com',
-];
+const sshArgs = (...extra: string[]): string[] => ['ssh', '-t', '-p', '22', ...extra, '--', 'bob@example.com'];
 
 describe('Arguments written to the log should carry no secrets or forged records', () => {
   it('should redact the password sshpass is given', () => {
-    expect(
-      logSafeArgs(['sshpass', '-p', 'hunter2', ...sshArgs()]),
-    ).to.deep.equal(['sshpass', '-p', '[redacted]', ...sshArgs()]);
+    expect(logSafeArgs(['sshpass', '-p', 'hunter2', ...sshArgs()])).to.deep.equal([
+      'sshpass',
+      '-p',
+      '[redacted]',
+      ...sshArgs(),
+    ]);
   });
 
   it('should redact the password when the vector is prefixed by env flags', () => {
@@ -39,16 +34,14 @@ describe('Arguments written to the log should carry no secrets or forged records
   });
 
   it('should strip newlines that would forge log records', () => {
-    expect(
-      logSafeArgs(['ssh', 'host\nWetty info: Process Started']),
-    ).to.deep.equal(['ssh', 'hostWetty info: Process Started']);
+    expect(logSafeArgs(['ssh', 'host\nWetty info: Process Started'])).to.deep.equal([
+      'ssh',
+      'hostWetty info: Process Started',
+    ]);
   });
 
   it('should strip carriage returns and other control characters', () => {
-    expect(logSafeArgs(['ssh', 'ho\rst\x00\x7f'])).to.deep.equal([
-      'ssh',
-      'host',
-    ]);
+    expect(logSafeArgs(['ssh', 'ho\rst\x00\x7f'])).to.deep.equal(['ssh', 'host']);
   });
 
   it('should leave ordinary arguments untouched', () => {

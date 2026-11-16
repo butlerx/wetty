@@ -18,9 +18,7 @@ function sourceFiles(directory: string): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const path = resolve(directory, entry.name);
     if (entry.isDirectory()) return sourceFiles(path);
-    return entry.name.endsWith('.ts') && !entry.name.endsWith('.spec.ts')
-      ? [path]
-      : [];
+    return entry.name.endsWith('.ts') && !entry.name.endsWith('.spec.ts') ? [path] : [];
   });
 }
 
@@ -28,20 +26,11 @@ const productionFiles = sourceFiles(sourceRoot);
 const productionFileSet = new Set(productionFiles);
 
 function sourceImports(path: string): SourceImport[] {
-  const source = ts.createSourceFile(
-    path,
-    readFileSync(path, 'utf8'),
-    ts.ScriptTarget.Latest,
-    true,
-    ts.ScriptKind.TS,
-  );
+  const source = ts.createSourceFile(path, readFileSync(path, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
   const imports: SourceImport[] = [];
 
   function visit(node: ts.Node): void {
-    if (
-      ts.isImportDeclaration(node) &&
-      ts.isStringLiteral(node.moduleSpecifier)
-    ) {
+    if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier)) {
       const clause = node.importClause;
       const namedBindings = clause?.namedBindings;
       const typeOnlyNamedImports =
@@ -51,8 +40,7 @@ function sourceImports(path: string): SourceImport[] {
       imports.push({
         runtime:
           clause === undefined ||
-          (clause.phaseModifier !== ts.SyntaxKind.TypeKeyword &&
-            (clause.name !== undefined || !typeOnlyNamedImports)),
+          (clause.phaseModifier !== ts.SyntaxKind.TypeKeyword && (clause.name !== undefined || !typeOnlyNamedImports)),
         specifier: node.moduleSpecifier.text,
       });
     }
@@ -85,15 +73,10 @@ function sourceImports(path: string): SourceImport[] {
   return imports;
 }
 
-function resolveSourceImport(
-  importer: string,
-  specifier: string,
-): string | undefined {
+function resolveSourceImport(importer: string, specifier: string): string | undefined {
   if (!specifier.startsWith('.')) return undefined;
 
-  const sourcePath = specifier.endsWith('.js')
-    ? `${specifier.slice(0, -3)}.ts`
-    : `${specifier}.ts`;
+  const sourcePath = specifier.endsWith('.js') ? `${specifier.slice(0, -3)}.ts` : `${specifier}.ts`;
   const candidate = resolve(dirname(importer), sourcePath);
   if (productionFileSet.has(candidate)) return candidate;
 
@@ -101,9 +84,7 @@ function resolveSourceImport(
   return productionFileSet.has(indexCandidate) ? indexCandidate : undefined;
 }
 
-const importsByFile = new Map(
-  productionFiles.map((path) => [path, sourceImports(path)]),
-);
+const importsByFile = new Map(productionFiles.map((path) => [path, sourceImports(path)]));
 
 function resolvedImports(path: string, runtimeOnly = false): string[] {
   return (importsByFile.get(path) ?? [])
@@ -136,9 +117,7 @@ function displayPath(path: string): string {
 
 function siblingModuleCollisions(directory: string): string[] {
   const entries = readdirSync(directory, { withFileTypes: true });
-  const directories = new Set(
-    entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name),
-  );
+  const directories = new Set(entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name));
   const localCollisions = entries
     .filter(
       (entry) =>
@@ -150,9 +129,7 @@ function siblingModuleCollisions(directory: string): string[] {
     .map((entry) => displayPath(resolve(directory, entry.name.slice(0, -3))));
   const nestedCollisions = entries
     .filter((entry) => entry.isDirectory())
-    .flatMap((entry) =>
-      siblingModuleCollisions(resolve(directory, entry.name)),
-    );
+    .flatMap((entry) => siblingModuleCollisions(resolve(directory, entry.name)));
 
   return [...localCollisions, ...nestedCollisions].sort();
 }
@@ -199,9 +176,7 @@ describe('runtime ownership boundaries', () => {
 
   it('gives the terminal feature one explicit entry module', () => {
     expect(existsSync(resolve(clientRoot, 'wetty/term.ts'))).to.equal(false);
-    expect(existsSync(resolve(clientRoot, 'wetty/term/index.ts'))).to.equal(
-      true,
-    );
+    expect(existsSync(resolve(clientRoot, 'wetty/term/index.ts'))).to.equal(true);
   });
 
   it('keeps server production modules out of generic shared directories', () => {

@@ -27,10 +27,7 @@ describe('terminal configuration lifecycle', () => {
   let editorElement: HTMLIFrameElement;
   let editorWindow: Window;
 
-  function dispatchEditorMessage(
-    data: unknown,
-    origin = applicationOrigin,
-  ): void {
+  function dispatchEditorMessage(data: unknown, origin = applicationOrigin): void {
     window.dispatchEvent(
       new window.MessageEvent('message', {
         data,
@@ -52,8 +49,7 @@ describe('terminal configuration lifecycle', () => {
     global.window = dom.window as unknown as Window & typeof globalThis;
     global.document = dom.window.document;
     global.localStorage = dom.window.localStorage;
-    const foundEditor =
-      document.querySelector<HTMLIFrameElement>('#options .editor');
+    const foundEditor = document.querySelector<HTMLIFrameElement>('#options .editor');
     if (foundEditor == null) throw new Error('Editor iframe was not rendered');
     editorElement = foundEditor;
     editorWindow = editorElement.contentWindow as unknown as Window;

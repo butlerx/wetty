@@ -38,9 +38,7 @@ export class FaviconBlinker {
   }
 
   private static link(): HTMLLinkElement | null {
-    return document.querySelector<HTMLLinkElement>(
-      'link[rel="icon"][type="image/svg+xml"]',
-    );
+    return document.querySelector<HTMLLinkElement>('link[rel="icon"][type="image/svg+xml"]');
   }
 
   private static set(href: string): void {

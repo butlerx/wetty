@@ -10,8 +10,7 @@ function register(): Promise<ServiceWorkerRegistration | undefined> {
     .register(`${base}/sw.js`, { scope: `${base}/` })
     .then((registration) => {
       if (registration.active?.state === 'activated') return registration;
-      const worker =
-        registration.installing ?? registration.waiting ?? registration.active;
+      const worker = registration.installing ?? registration.waiting ?? registration.active;
       if (!worker) return undefined;
       return new Promise<ServiceWorkerRegistration | undefined>((resolve) => {
         const onStateChange = (): void => {

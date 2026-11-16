@@ -1,9 +1,6 @@
 import { login } from '../login.js';
 import { escapeShell } from './shell.js';
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from '../../protocol/socket-events.js';
+import type { ClientToServerEvents, ServerToClientEvents } from '../../protocol/socket-events.js';
 import type { ServerSession } from '../session.js';
 import type { Socket } from 'socket.io';
 

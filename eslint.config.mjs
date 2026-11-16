@@ -6,12 +6,7 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: [
-      'dist/**',
-      'build/**',
-      'node_modules/**',
-      'src/assets/**/*.{css,html,ico,json,svg}',
-    ],
+    ignores: ['dist/**', 'build/**', 'node_modules/**', 'src/assets/**/*.{css,html,ico,json,svg}'],
   },
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
@@ -42,10 +37,7 @@ export default tseslint.config(
         node: { extensions: ['.mjs', '.js', '.json', '.ts', '.d.ts'] },
       },
       'import-x/extensions': ['.js', '.mjs', '.jsx', '.ts', '.tsx', '.d.ts'],
-      'import-x/external-module-folders': [
-        'node_modules',
-        'node_modules/@types',
-      ],
+      'import-x/external-module-folders': ['node_modules', 'node_modules/@types'],
     },
     rules: {
       'array-callback-return': ['error', { allowImplicit: true }],
@@ -188,10 +180,7 @@ export default tseslint.config(
       'no-unreachable-loop': ['error', { ignore: [] }],
       'no-unsafe-finally': 'error',
       'no-unsafe-negation': 'error',
-      'no-unsafe-optional-chaining': [
-        'error',
-        { disallowArithmeticOperators: true },
-      ],
+      'no-unsafe-optional-chaining': ['error', { disallowArithmeticOperators: true }],
       'no-useless-backreference': 'error',
       'use-isnan': 'error',
       'valid-typeof': ['error', { requireStringLiterals: true }],
@@ -205,11 +194,7 @@ export default tseslint.config(
           newIsCap: true,
           newIsCapExceptions: [],
           capIsNew: false,
-          capIsNewExceptions: [
-            'Immutable.Map',
-            'Immutable.Set',
-            'Immutable.List',
-          ],
+          capIsNewExceptions: ['Immutable.Map', 'Immutable.Set', 'Immutable.List'],
         },
       ],
       'no-bitwise': 'error',
@@ -227,13 +212,11 @@ export default tseslint.config(
         },
         {
           selector: 'LabeledStatement',
-          message:
-            'Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand.',
+          message: 'Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand.',
         },
         {
           selector: 'WithStatement',
-          message:
-            '`with` is disallowed in strict mode because it makes code impossible to predict and optimize.',
+          message: '`with` is disallowed in strict mode because it makes code impossible to predict and optimize.',
         },
       ],
       'no-underscore-dangle': [
@@ -257,13 +240,11 @@ export default tseslint.config(
         'error',
         {
           name: 'isFinite',
-          message:
-            'Use Number.isFinite instead https://github.com/airbnb/javascript#standard-library--isfinite',
+          message: 'Use Number.isFinite instead https://github.com/airbnb/javascript#standard-library--isfinite',
         },
         {
           name: 'isNaN',
-          message:
-            'Use Number.isNaN instead https://github.com/airbnb/javascript#standard-library--isnan',
+          message: 'Use Number.isNaN instead https://github.com/airbnb/javascript#standard-library--isnan',
         },
         'addEventListener',
         'blur',
@@ -327,19 +308,12 @@ export default tseslint.config(
       'no-shadow-restricted-names': 'error',
       'no-undef': 'error',
       'no-undef-init': 'error',
-      'arrow-body-style': [
-        'error',
-        'as-needed',
-        { requireReturnForObjectLiteral: false },
-      ],
+      'arrow-body-style': ['error', 'as-needed', { requireReturnForObjectLiteral: false }],
       'constructor-super': 'error',
       'no-class-assign': 'error',
       'no-confusing-arrow': 'off',
       'no-const-assign': 'error',
-      'no-restricted-exports': [
-        'error',
-        { restrictedNamedExports: ['default', 'then'] },
-      ],
+      'no-restricted-exports': ['error', { restrictedNamedExports: ['default', 'then'] }],
       'no-this-before-super': 'error',
       'no-useless-computed-key': 'error',
       'no-useless-rename': [
@@ -351,19 +325,9 @@ export default tseslint.config(
         },
       ],
       'no-var': 'error',
-      'object-shorthand': [
-        'error',
-        'always',
-        { ignoreConstructors: false, avoidQuotes: true },
-      ],
-      'prefer-arrow-callback': [
-        'error',
-        { allowNamedFunctions: false, allowUnboundThis: true },
-      ],
-      'prefer-const': [
-        'error',
-        { destructuring: 'any', ignoreReadBeforeAssign: true },
-      ],
+      'object-shorthand': ['error', 'always', { ignoreConstructors: false, avoidQuotes: true }],
+      'prefer-arrow-callback': ['error', { allowNamedFunctions: false, allowUnboundThis: true }],
+      'prefer-const': ['error', { destructuring: 'any', ignoreReadBeforeAssign: true }],
       'prefer-destructuring': [
         'error',
         {
@@ -388,12 +352,13 @@ export default tseslint.config(
       'import-x/no-amd': 'error',
       'import-x/first': 'error',
       'import-x/no-duplicates': 'error',
+      // Relative specifiers point at compiled .js output (Node ESM needs the extension), so `.js` is required.
       'import-x/extensions': [
         'error',
         'ignorePackages',
         {
           ts: 'never',
-          js: 'never',
+          js: 'always',
           mjs: 'never',
           jsx: 'never',
           tsx: 'never',
@@ -402,16 +367,7 @@ export default tseslint.config(
       'import-x/order': [
         'error',
         {
-          groups: [
-            'builtin',
-            'internal',
-            'external',
-            'parent',
-            'sibling',
-            'index',
-            'object',
-            'type',
-          ],
+          groups: ['builtin', 'internal', 'external', 'parent', 'sibling', 'index', 'object', 'type'],
           pathGroups: [{ pattern: '@ev/**', group: 'internal' }],
           distinctGroup: true,
           alphabetize: { order: 'asc', caseInsensitive: false },
@@ -430,23 +386,12 @@ export default tseslint.config(
       'import-x/no-extraneous-dependencies': [
         'error',
         {
-          devDependencies: [
-            '**/*.test.*',
-            '**/*.spec.*',
-            'build.js',
-            'eslint.config.mjs',
-          ],
+          devDependencies: ['**/*.test.*', '**/*.spec.*', 'build.js', 'eslint.config.mjs'],
         },
       ],
 
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        { varsIgnorePattern: '^_', argsIgnorePattern: '^_' },
-      ],
-      '@typescript-eslint/no-use-before-define': [
-        'error',
-        { functions: false },
-      ],
+      '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_', argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-use-before-define': ['error', { functions: false }],
 
       'no-unused-vars': 'off',
       'no-use-before-define': 'off',
@@ -457,10 +402,7 @@ export default tseslint.config(
       'no-loop-func': 'off',
       '@typescript-eslint/no-loop-func': 'error',
       'no-empty-function': 'off',
-      '@typescript-eslint/no-empty-function': [
-        'error',
-        { allow: ['arrowFunctions', 'functions', 'methods'] },
-      ],
+      '@typescript-eslint/no-empty-function': ['error', { allow: ['arrowFunctions', 'functions', 'methods'] }],
       'no-useless-constructor': 'off',
       '@typescript-eslint/no-useless-constructor': 'error',
       'default-param-last': 'off',

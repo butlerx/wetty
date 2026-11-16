@@ -23,14 +23,7 @@ describe('CLI origin configuration', () => {
   });
 
   it('reports invalid origins without starting a listener', () => {
-    const result = runCli([
-      '--host',
-      '127.0.0.1',
-      '--port',
-      '0',
-      '--allowed-origin',
-      'https://terminal.example/path',
-    ]);
+    const result = runCli(['--host', '127.0.0.1', '--port', '0', '--allowed-origin', 'https://terminal.example/path']);
     expect(result.error).to.equal(undefined);
     expect(result.status).to.equal(1);
     expect(result.stdout).to.include('Invalid allowed origin');

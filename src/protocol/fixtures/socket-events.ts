@@ -1,7 +1,4 @@
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from '../socket-events.js';
+import type { ClientToServerEvents, ServerToClientEvents } from '../socket-events.js';
 
 /**
  * Version-skew compatibility fixture for the public Socket.IO wire protocol.
@@ -12,9 +9,7 @@ export const clientToServerPayloads = {
   resize: [{ cols: 80, rows: 24 }],
   commit: [262144],
 } satisfies {
-  [Event in keyof ClientToServerEvents]: Parameters<
-    ClientToServerEvents[Event]
-  >;
+  [Event in keyof ClientToServerEvents]: Parameters<ClientToServerEvents[Event]>;
 };
 
 export const serverToClientPayloads = {
@@ -23,7 +18,5 @@ export const serverToClientPayloads = {
   logout: [],
   error: ['Terminal session failed'],
 } satisfies {
-  [Event in keyof ServerToClientEvents]: Parameters<
-    ServerToClientEvents[Event]
-  >;
+  [Event in keyof ServerToClientEvents]: Parameters<ServerToClientEvents[Event]>;
 };

@@ -8,5 +8,4 @@ const filePath = dirname(
   }) ?? process.cwd(),
 );
 
-export const assetsPath = (...args: string[]) =>
-  resolve(filePath, 'build', ...args);
+export const assetsPath = (...args: string[]) => resolve(filePath, 'build', ...args);

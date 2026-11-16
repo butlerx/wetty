@@ -29,20 +29,13 @@ export function isOptions(value: unknown): value is Options {
     Number.isFinite(value.wettyVoid) &&
     typeof fontSize === 'number' &&
     Number.isFinite(fontSize) &&
-    (cols === undefined ||
-      (typeof cols === 'number' && Number.isFinite(cols))) &&
+    (cols === undefined || (typeof cols === 'number' && Number.isFinite(cols))) &&
     (rows === undefined || (typeof rows === 'number' && Number.isFinite(rows)))
   );
 }
 
-export function decodeEditorLoadMessage(
-  value: unknown,
-): EditorLoadMessage | null {
-  if (
-    !isRecord(value) ||
-    value.type !== 'wetty:load' ||
-    !isOptions(value.config)
-  ) {
+export function decodeEditorLoadMessage(value: unknown): EditorLoadMessage | null {
+  if (!isRecord(value) || value.type !== 'wetty:load' || !isOptions(value.config)) {
     return null;
   }
   return { type: 'wetty:load', config: value.config };

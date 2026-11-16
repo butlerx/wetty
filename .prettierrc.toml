@@ -1,0 +1,7 @@
+singleQuote   = true
+trailingComma = "all"
+proseWrap     = "always"
+# Shared printWidth across repos is 120.
+printWidth    = 120
+endOfLine     = "lf"
+tabWidth      = 2

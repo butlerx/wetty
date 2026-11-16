@@ -11,9 +11,7 @@ const DEFAULT_TITLE = 'Terminal';
  * @param data - payload after `OSC 777 ;`
  * @returns title and body, or undefined for commands other than `notify`
  */
-export function parseOsc777(
-  data: string,
-): { title: string; body: string } | undefined {
+export function parseOsc777(data: string): { title: string; body: string } | undefined {
   const [command, title, ...body] = data.split(';');
   if (command !== 'notify') return undefined;
   return { title: title || DEFAULT_TITLE, body: body.join(';') };
@@ -78,9 +76,7 @@ export class Notifier {
     } catch {
       // Chrome on Android (and some other browsers) only allow notifications
       // from a service worker and throw when constructing one directly.
-      void serviceWorker
-        .then((registration) => registration?.showNotification(title, options))
-        .catch(() => undefined);
+      void serviceWorker.then((registration) => registration?.showNotification(title, options)).catch(() => undefined);
     }
   }
 }

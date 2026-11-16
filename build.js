@@ -28,8 +28,7 @@ function spawnCommand(prog, args = [], detached = false) {
         resolve();
         return;
       }
-      const reason =
-        ret === null ? `signal ${String(sig)}` : `exit code ${String(ret)}`;
+      const reason = ret === null ? `signal ${String(sig)}` : `exit code ${String(ret)}`;
       reject(new Error(`${prog} failed with ${reason}`));
     });
   });
@@ -104,13 +103,7 @@ async function buildClient(watching) {
 }
 
 async function buildServer() {
-  await cmd('pnpm', [
-    'tsc',
-    '-p',
-    'tsconfig.node.json',
-    '--incremental',
-    'false',
-  ]);
+  await cmd('pnpm', ['tsc', '-p', 'tsconfig.node.json', '--incremental', 'false']);
 }
 
 /** @param {import('node:child_process').ChildProcess} proc
@@ -183,10 +176,7 @@ async function watchBuild() {
   } finally {
     process.removeListener('SIGINT', onSigint);
     process.removeListener('SIGTERM', onSigterm);
-    await Promise.allSettled([
-      stopWatcher(serverWatcher),
-      clientContext?.dispose() ?? Promise.resolve(),
-    ]);
+    await Promise.allSettled([stopWatcher(serverWatcher), clientContext?.dispose() ?? Promise.resolve()]);
   }
 }
 
@@ -204,9 +194,6 @@ export async function main() {
   await buildServer();
 }
 
-if (
-  process.argv[1] !== undefined &&
-  import.meta.url === pathToFileURL(process.argv[1]).href
-) {
+if (process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href) {
   await main();
 }

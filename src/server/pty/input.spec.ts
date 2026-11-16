@@ -31,8 +31,6 @@ describe('PTY input', () => {
     );
 
     expect(written).to.be.instanceOf(Buffer);
-    expect(written instanceof Buffer ? [...written] : []).to.deep.equal([
-      0x1b, 0x5b, 0x4d, 0x01, 0x80, 0xff,
-    ]);
+    expect(written instanceof Buffer ? [...written] : []).to.deep.equal([0x1b, 0x5b, 0x4d, 0x01, 0x80, 0xff]);
   });
 });

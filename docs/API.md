@@ -14,8 +14,7 @@ Create WeTTY server
 
 Starts WeTTY Server
 
-**Kind**: inner property of [`WeTTy`](#module_WeTTy)  
-**Returns**: `Promise` - Promise resolves once server is running
+**Kind**: inner property of [`WeTTy`](#module_WeTTy) **Returns**: `Promise` - Promise resolves once server is running
 
 | Param                     | Type       | Default                               | Description                                                                                                            |
 | :------------------------ | ---------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
@@ -46,16 +45,14 @@ Starts WeTTY Server
 | [ssl.key]                 | `string`   |                                       | Path to ssl key                                                                                                        |
 | [ssl.cert]                | `string`   |                                       | Path to ssl cert                                                                                                       |
 
-`serverConf.allowedOrigins` must contain at least one complete browser origin,
-for example `['https://terminal.example.com']`. Startup fails for an empty or
-invalid allowlist. Include the scheme and port (if nondefault), but not the base
-path, credentials, query or fragment. There is no implicit localhost,
-listen-address or request-Host trust.
+`serverConf.allowedOrigins` must contain at least one complete browser origin, for example
+`['https://terminal.example.com']`. Startup fails for an empty or invalid allowlist. Include the scheme and port (if
+nondefault), but not the base path, credentials, query or fragment. There is no implicit localhost, listen-address or
+request-Host trust.
 
 ### "connection"
 
-**Kind**: event emitted by [`WeTTy`](#module_WeTTy)  
-**Properties**
+**Kind**: event emitted by [`WeTTy`](#module_WeTTy) **Properties**
 
 | Name | Type     | Description                 |
 | ---- | -------- | --------------------------- |
@@ -66,8 +63,7 @@ listen-address or request-Host trust.
 
 Terminal process spawned
 
-**Kind**: event emitted by [`WeTTy`](#module_WeTTy)  
-**Properties**
+**Kind**: event emitted by [`WeTTy`](#module_WeTTy) **Properties**
 
 | Name    | Type     | Description                            |
 | ------- | -------- | -------------------------------------- |
@@ -79,8 +75,7 @@ Terminal process spawned
 
 Terminal process exits
 
-**Kind**: event emitted by [`WeTTy`](#module_WeTTy)  
-**Properties**
+**Kind**: event emitted by [`WeTTy`](#module_WeTTy) **Properties**
 
 | Name | Type     | Description                            |
 | ---- | -------- | -------------------------------------- |
@@ -93,8 +88,7 @@ Terminal process exits
 
 ### "server"
 
-**Kind**: event emitted by [`WeTTy`](#module_WeTTy)  
-**Properties**
+**Kind**: event emitted by [`WeTTy`](#module_WeTTy) **Properties**
 
 | Name       | Type     | Description                     |
 | ---------- | -------- | ------------------------------- |

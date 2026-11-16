@@ -16,9 +16,7 @@ function acceptsPublicTypes(_types: PublicTypes): void {}
 
 function inspectPublicFacade() {
   const facadeModule = pathToFileURL(resolve('src/server.ts')).href;
-  const loggerModule = pathToFileURL(
-    resolve('src/server/observability/logger.ts'),
-  ).href;
+  const loggerModule = pathToFileURL(resolve('src/server/observability/logger.ts')).href;
   return spawnSync(
     process.execPath,
     [

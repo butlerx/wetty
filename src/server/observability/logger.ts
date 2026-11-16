@@ -4,12 +4,7 @@ import { isDev } from '../config/environment.js';
 
 const { combine, timestamp, label, simple, json, colorize } = winston.format;
 
-const dev = combine(
-  colorize(),
-  label({ label: 'Wetty' }),
-  timestamp(),
-  simple(),
-);
+const dev = combine(colorize(), label({ label: 'Wetty' }), timestamp(), simple());
 
 const prod = combine(label({ label: 'Wetty' }), timestamp(), json());
 

@@ -13,16 +13,14 @@
 
 ![WeTTY](./docs/terminal.png?raw=true)
 
-Terminal over HTTP and https. WeTTY is an alternative to ajaxterm and anyterm
-but much better than them because WeTTY uses xterm.js which is a full fledged
-implementation of terminal emulation written entirely in JavaScript. WeTTY uses
+Terminal over HTTP and https. WeTTY is an alternative to ajaxterm and anyterm but much better than them because WeTTY
+uses xterm.js which is a full fledged implementation of terminal emulation written entirely in JavaScript. WeTTY uses
 websockets rather than Ajax and hence better response time.
 
 ## Prerequisites
 
-- node `^22.23.4 || ^24.22.1 || >=26.12.1` — only the Node lines that carry the
-  fix for the Brotli decoder RCE (CVE-2026-111497); 18, 20, 23 and 25 are EOL
-  and never get it
+- node `^22.23.4 || ^24.22.1 || >=26.12.1` — only the Node lines that carry the fix for the Brotli decoder RCE
+  (CVE-2026-111497); 18, 20, 23 and 25 are EOL and never get it
 - make
 - python
 - build-essential
@@ -91,23 +89,19 @@ Start WeTTY with an explicit trusted browser origin (required):
 wetty --allowed-origin http://yourserver:3000
 ```
 
-Open your browser on `http://yourserver:3000` and you will be prompted to login.
-Or go to `http://yourserver:3000/ssh/<username>` to specify the user beforehand.
-For local use, configure `http://localhost:3000` instead. Behind a reverse
-proxy, configure the public HTTPS origin, not the internal backend address.
-Origins never include the base path. Repeat `--allowed-origin` or set a
-comma-separated `ALLOWEDORIGINS` list to allow multiple origins.
+Open your browser on `http://yourserver:3000` and you will be prompted to login. Or go to
+`http://yourserver:3000/ssh/<username>` to specify the user beforehand. For local use, configure `http://localhost:3000`
+instead. Behind a reverse proxy, configure the public HTTPS origin, not the internal backend address. Origins never
+include the base path. Repeat `--allowed-origin` or set a comma-separated `ALLOWEDORIGINS` list to allow multiple
+origins.
 
-If you run it as root it will launch `/bin/login` (where you can specify the
-user name), else it will launch `ssh` and connect by default to `localhost`. The
-SSH connection can be forced using the `--force-ssh` option.
+If you run it as root it will launch `/bin/login` (where you can specify the user name), else it will launch `ssh` and
+connect by default to `localhost`. The SSH connection can be forced using the `--force-ssh` option.
 
-If instead you wish to connect to a remote host you can specify the `--ssh-host`
-option, the SSH port using the `--ssh-port` option and the SSH user using the
-`--ssh-user` option.
+If instead you wish to connect to a remote host you can specify the `--ssh-host` option, the SSH port using the
+`--ssh-port` option and the SSH user using the `--ssh-user` option.
 
-Check out the [Flags docs](https://butlerx.github.io/wetty/flags) for a full
-list of flags
+Check out the [Flags docs](https://butlerx.github.io/wetty/flags) for a full list of flags
 
 ### Docker container
 
@@ -118,14 +112,12 @@ To use WeTTY as a docker container, a docker image is available on
 docker run --rm -p 3000:3000 -e ALLOWEDORIGINS=http://localhost:3000 wettyoss/wetty --ssh-host=<YOUR-IP>
 ```
 
-and you will be able to open a ssh session to the host given by `YOUR-IP` under
-the URL [http://localhost:3000](http://localhost:3000).
+and you will be able to open a ssh session to the host given by `YOUR-IP` under the URL
+[http://localhost:3000](http://localhost:3000).
 
-It is recommended to drive WeTTY behind a reverse proxy to have HTTPS security
-and possibly Let’s Encrypt support. Popular containers to achieve this are
-[nginx-proxy](https://github.com/nginx-proxy/nginx-proxy) and
-[traefik](https://traefik.io/traefik/). For traefik there is an example
-docker-compose file in the containers directory.
+It is recommended to drive WeTTY behind a reverse proxy to have HTTPS security and possibly Let’s Encrypt support.
+Popular containers to achieve this are [nginx-proxy](https://github.com/nginx-proxy/nginx-proxy) and
+[traefik](https://traefik.io/traefik/). For traefik there is an example docker-compose file in the containers directory.
 
 ## FAQ
 
@@ -140,8 +132,7 @@ Check out the [docs](https://github.com/butlerx/wetty/tree/main/docs)
 
 ### What browsers are supported?
 
-WeTTY supports all browsers that
-[xterm.js supports](https://github.com/xtermjs/xterm.js#browser-support).
+WeTTY supports all browsers that [xterm.js supports](https://github.com/xtermjs/xterm.js#browser-support).
 
 ## Author
 
@@ -155,11 +146,10 @@ WeTTY supports all browsers that
 Contributions, issues and feature requests are welcome!<br />Feel free to check
 [issues page](https://github.com/butlerx/wetty/issues).
 
-Please read the [development docs](https://butlerx.github.io/wetty/development)
-for installing from source and running is dev node
+Please read the [development docs](https://butlerx.github.io/wetty/development) for installing from source and running
+is dev node
 
-Thanks goes to these wonderful people
-([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -227,9 +217,8 @@ Thanks goes to these wonderful people
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the
-[all-contributors](https://github.com/all-contributors/all-contributors)
-specification. Contributions of any kind welcome!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.
+Contributions of any kind welcome!
 
 ## Show your support
 
@@ -237,8 +226,7 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
-Copyright © 2019
-[Cian Butler <butlerx@notthe.cloud>](https://github.com/butlerx).<br /> This
-project is [MIT](https://github.com/butlerx/wetty/blob/main/LICENSE) licensed.
+Copyright © 2019 [Cian Butler <butlerx@notthe.cloud>](https://github.com/butlerx).<br /> This project is
+[MIT](https://github.com/butlerx/wetty/blob/main/LICENSE) licensed.
 
 ---

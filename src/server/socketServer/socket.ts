@@ -2,16 +2,9 @@ import http from 'http';
 import https from 'https';
 import { Server } from 'socket.io';
 
-import {
-  defaultPingInterval,
-  defaultPingTimeout,
-  positiveIntOr,
-} from '../config/defaults.js';
+import { defaultPingInterval, defaultPingTimeout, positiveIntOr } from '../config/defaults.js';
 import { logger } from '../observability/logger.js';
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from '../../protocol/socket-events.js';
+import type { ClientToServerEvents, ServerToClientEvents } from '../../protocol/socket-events.js';
 import type { SSLBuffer } from '../config/types.js';
 import type express from 'express';
 import type { IncomingMessage } from 'http';
@@ -29,11 +22,7 @@ import type { IncomingMessage } from 'http';
  * @returns a usable heartbeat value in milliseconds
  *
  */
-const heartbeat = (
-  value: number | undefined,
-  fallback: number,
-  option: string,
-): number => {
+const heartbeat = (value: number | undefined, fallback: number, option: string): number => {
   const resolved = positiveIntOr(value, fallback);
   if (value !== undefined && resolved !== value) {
     logger().warn('Ignoring invalid heartbeat value, using default', {
@@ -75,8 +64,7 @@ const originAllowed = (
     );
   }
 
-  const parsedOrigin =
-    typeof origin === 'string' ? parseOrigin(origin) : undefined;
+  const parsedOrigin = typeof origin === 'string' ? parseOrigin(origin) : undefined;
   return parsedOrigin !== undefined && allowedOrigins.has(parsedOrigin);
 };
 
@@ -125,35 +113,19 @@ export const listen = (
 ): Promise<Server<ClientToServerEvents, ServerToClientEvents>> => {
   const allowed = originAllowlist(allowedOrigins);
   // Canonical origins contain only the scheme and authority.
-  const allowedHosts = new Set(
-    [...allowed].map((origin) => origin.slice(origin.indexOf('://') + 3)),
-  );
+  const allowedHosts = new Set([...allowed].map((origin) => origin.slice(origin.indexOf('://') + 3)));
 
   const httpServer =
-    key !== undefined && cert !== undefined
-      ? https.createServer({ key, cert }, app)
-      : http.createServer(app);
-  const io = new Server<ClientToServerEvents, ServerToClientEvents>(
-    httpServer,
-    {
-      path: `${path}/socket.io`,
-      pingInterval: heartbeat(
-        pingInterval,
-        defaultPingInterval,
-        'pingInterval',
-      ),
-      pingTimeout: heartbeat(pingTimeout, defaultPingTimeout, 'pingTimeout'),
-      allowRequest: (req, callback) => {
-        const accepted = originAllowed(
-          req,
-          allowed,
-          allowedHosts,
-          allowMissingOrigin,
-        );
-        callback(accepted ? null : 'Origin not allowed', accepted);
-      },
+    key !== undefined && cert !== undefined ? https.createServer({ key, cert }, app) : http.createServer(app);
+  const io = new Server<ClientToServerEvents, ServerToClientEvents>(httpServer, {
+    path: `${path}/socket.io`,
+    pingInterval: heartbeat(pingInterval, defaultPingInterval, 'pingInterval'),
+    pingTimeout: heartbeat(pingTimeout, defaultPingTimeout, 'pingTimeout'),
+    allowRequest: (req, callback) => {
+      const accepted = originAllowed(req, allowed, allowedHosts, allowMissingOrigin);
+      callback(accepted ? null : 'Origin not allowed', accepted);
     },
-  );
+  });
 
   return new Promise((resolve, reject) => {
     function onError(error: Error): void {
@@ -168,8 +140,7 @@ export const listen = (
       } else {
         logger().info('Server started', {
           port,
-          connection:
-            key !== undefined && cert !== undefined ? 'https' : 'http',
+          connection: key !== undefined && cert !== undefined ? 'https' : 'http',
         });
       }
       resolve(io);

@@ -7,11 +7,7 @@ import type { Request, Response, NextFunction } from 'express';
  * @param res - server response
  * @param next - next middleware to call on finish
  */
-export function redirect(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void {
+export function redirect(req: Request, res: Response, next: NextFunction): void {
   if (req.path.endsWith('/') && req.path.length > 1) {
     const target = req.path.slice(0, -1) + req.url.slice(req.path.length);
     if (isSafeLocalRedirectTarget(target)) {

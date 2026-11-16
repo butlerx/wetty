@@ -119,8 +119,7 @@ export class FileDownloader {
       }
       // We're currently in the state of buffering a beginner marker...
 
-      const nextExpectedCharacter =
-        this.fileBegin[this.partialFileBegin.length];
+      const nextExpectedCharacter = this.fileBegin[this.partialFileBegin.length];
       // If the next character *is* the next character in the fileBegin sequence.
       if (character === nextExpectedCharacter) {
         this.partialFileBegin += character;
@@ -151,12 +150,7 @@ export class FileDownloader {
       this.fileBuffer.slice(-this.fileEnd.length).join('') === this.fileEnd
     ) {
       void this.onCompleteFileCallback(
-        this.fileBuffer
-          .slice(
-            this.fileBegin.length,
-            this.fileBuffer.length - this.fileEnd.length,
-          )
-          .join(''),
+        this.fileBuffer.slice(this.fileBegin.length, this.fileBuffer.length - this.fileEnd.length).join(''),
       );
       this.fileBuffer = [];
     }
@@ -167,11 +161,7 @@ export class FileDownloader {
   buffer(data: string): string {
     // This is a optimization to quickly return if we know for
     // sure we don't need to loop over each character.
-    if (
-      this.fileBuffer.length === 0 &&
-      this.partialFileBegin.length === 0 &&
-      !data.includes(this.fileBegin[0])
-    ) {
+    if (this.fileBuffer.length === 0 && this.partialFileBegin.length === 0 && !data.includes(this.fileBegin[0])) {
       return data;
     }
     return data.split('').map(this.bufferCharacter.bind(this)).join('');

@@ -43,10 +43,7 @@ export function createTerminalControls(
     if (state.status !== 'armed') return;
     const targetTerm = windowTarget.wetty_term;
     if (event.key.length === 1 && /^[a-zA-Z0-9]$/.exec(event.key)) {
-      targetTerm?.input(
-        String.fromCharCode(event.key.toUpperCase().charCodeAt(0) - 64),
-        false,
-      );
+      targetTerm?.input(String.fromCharCode(event.key.toUpperCase().charCodeAt(0) - 64), false);
       if (state.backspaceTimer !== undefined) {
         clearTimeout(state.backspaceTimer);
       }
@@ -70,9 +67,7 @@ export function createTerminalControls(
   }
 
   function toggleFunctions(): void {
-    const element = documentTarget.querySelector(
-      'div#functions > div.onscreen-buttons',
-    );
+    const element = documentTarget.querySelector('div#functions > div.onscreen-buttons');
     if (element?.classList.contains('active')) {
       element.classList.remove('active');
     } else {

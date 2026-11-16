@@ -1,4 +1,3 @@
----
 services:
   wetty:
     image: wettyoss/wetty

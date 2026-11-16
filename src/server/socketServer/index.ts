@@ -9,10 +9,7 @@ import { policies } from './security.js';
 import { assetsPath } from './shared/path.js';
 import { listen } from './socket.js';
 import { loadSSL } from './ssl.js';
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
-} from '../../protocol/socket-events.js';
+import type { ClientToServerEvents, ServerToClientEvents } from '../../protocol/socket-events.js';
 import type { SSL, SSLBuffer, Server } from '../config/types.js';
 import type { Express } from 'express';
 import type { Server as SocketServer } from 'socket.io';

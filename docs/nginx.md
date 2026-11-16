@@ -2,20 +2,17 @@
 
 As said earlier you can use Nginx to add https to WeTTY.
 
-**Note** that if your proxy is configured for https you should run WeTTY without
-SSL
+**Note** that if your proxy is configured for https you should run WeTTY without SSL
 
-If you configure nginx to use a base path other than `/`, then specify that path
-with the `--base` flag, or the `BASE` environment variable.
+If you configure nginx to use a base path other than `/`, then specify that path with the `--base` flag, or the `BASE`
+environment variable.
 
-The following confs assume you want to serve WeTTY on the url
-`https://example.com/wetty` and are running WeTTY with
-`--base /wetty --allowed-origin https://example.com` on the same server. The
-allowed origin is required and does not include `/wetty`.
+The following confs assume you want to serve WeTTY on the url `https://example.com/wetty` and are running WeTTY with
+`--base /wetty --allowed-origin https://example.com` on the same server. The allowed origin is required and does not
+include `/wetty`.
 
-For a more detailed look see the
-[nginx.conf](https://github.com/butlerx/wetty/blob/main/conf/nginx.template)
-used for testing
+For a more detailed look see the [nginx.conf](https://github.com/butlerx/wetty/blob/main/conf/nginx.template) used for
+testing
 
 Put the following configuration in your nginx conf:
 
@@ -35,14 +32,13 @@ location ^~ /wetty {
 }
 ```
 
-**Important:** Use `proxy_set_header Connection "upgrade";` (a literal string),
-**not** `proxy_set_header Connection $connection_upgrade;`. The variable form
-requires a `map` block in your `http` context. Without that map directive, nginx
-sends an empty `Connection` header which breaks WebSocket connections and
-prevents assets (CSS, JS) from loading correctly.
+**Important:** Use `proxy_set_header Connection "upgrade";` (a literal string), **not**
+`proxy_set_header Connection $connection_upgrade;`. The variable form requires a `map` block in your `http` context.
+Without that map directive, nginx sends an empty `Connection` header which breaks WebSocket connections and prevents
+assets (CSS, JS) from loading correctly.
 
-If you prefer to use the variable form, add the following `map` block inside
-your `http` block (before your `server` blocks):
+If you prefer to use the variable form, add the following `map` block inside your `http` block (before your `server`
+blocks):
 
 ```nginx
 map $http_upgrade $connection_upgrade {
@@ -51,5 +47,4 @@ map $http_upgrade $connection_upgrade {
 }
 ```
 
-Then you can use `proxy_set_header Connection $connection_upgrade;` in your
-location block.
+Then you can use `proxy_set_header Connection $connection_upgrade;` in your location block.
