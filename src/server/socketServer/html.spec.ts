@@ -11,7 +11,7 @@ function render(base: string): string {
     },
   };
 
-  html(base, 'WeTTY')({} as Request, response as unknown as Response, () => undefined);
+  html(base, 'WeTTY')({} as unknown as Request, response as unknown as Response, () => undefined);
   if (body === undefined) throw new Error('HTML response was not rendered');
   return body;
 }
