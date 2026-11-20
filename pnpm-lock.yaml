@@ -182,7 +182,7 @@ importers:
         version: 1.0.54
       globals:
         specifier: ^17.13.0
-        version: 17.13.0
+        version: 17.14.0
       jsdom:
         specifier: ^31.0.0
         version: 31.0.0
@@ -1925,8 +1925,8 @@ packages:
     resolution: {integrity: sha512-1pgFdhK3J2LeM+dVf2Pd424yHx2ou338lC0ErNP2hPx4j8eW1Sp0XqSjNxtk6Tc4Kr5wlWtSvz8cn2yb7/SG/w==}
     engines: {node: '>=20'}
 
-  globals@17.13.0:
-    resolution: {integrity: sha512-RwMTC61u7hrG3ZJMkZQOK4JLJrKS8QtoTii63EmWvFXHqycY9FObBJQCbsLxSO8kjKhWE5kV1GC+Vb1g3RI0Zg==}
+  globals@17.14.0:
+    resolution: {integrity: sha512-UtdkTVyAJePQv0J2M9Xe4L0ruNSDV314XiIJsADI2Zf40bcdAonE/D/OhAU8AT99oij9mhLByb+NvA3QWZYgCg==}
     engines: {node: '>=18'}
 
   globals@17.8.0:
@@ -2745,6 +2745,10 @@ packages:
   source-map-js@1.2.2:
     resolution: {integrity: sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==}
     engines: {node: '>=0.10.0'}
+
+  source-map-js@1.2.4:
+    resolution: {integrity: sha512-J7ZjMvHd9O1fcT/5V09QWaaSl2BbWx3F6O08spde82Namf9UB0GxRVIPiNbVsdKkoizHiSpTodo3vp2bAy91MA==}
+    engines: {node: '>=6.0.0'}
 
   stable-hash-x@0.2.0:
     resolution: {integrity: sha512-o3yWv49B/o4QZk5ZcsALc6t0+eCelPc44zZsLtCQnZPDwFpDYSWcDnrv2TtMmMbQ7uKo3J0HTURCqckw23czNQ==}
@@ -4768,7 +4772,7 @@ snapshots:
     dependencies:
       ini: 6.0.0
 
-  globals@17.13.0: {}
+  globals@17.14.0: {}
 
   globals@17.8.0: {}
 
@@ -5415,7 +5419,7 @@ snapshots:
     dependencies:
       chokidar: 5.0.0
       immutable: 5.2.1
-      source-map-js: 1.2.2
+      source-map-js: 1.2.4
     optionalDependencies:
       '@parcel/watcher': 2.6.0
     optional: true
@@ -5567,6 +5571,9 @@ snapshots:
       is-plain-obj: 2.1.0
 
   source-map-js@1.2.2: {}
+
+  source-map-js@1.2.4:
+    optional: true
 
   stable-hash-x@0.2.0: {}
 
